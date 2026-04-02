@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSK Apps — Mac Apps for Creators</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d0d0d;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .tagline {
+            font-size: 1.1rem;
+            color: #888;
+            margin-bottom: 48px;
+        }
+        .app {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+        .app h2 {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        .app .subtitle {
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+        .app p {
+            line-height: 1.6;
+            color: #bbb;
+            margin-bottom: 12px;
+        }
+        .features {
+            list-style: none;
+            padding: 0;
+            margin-top: 12px;
+        }
+        .features li {
+            padding: 4px 0;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        .features li::before {
+            content: "\2022";
+            color: #555;
+            margin-right: 8px;
+        }
+        .badge {
+            display: inline-block;
+            background: #2a2a2a;
+            color: #aaa;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-right: 6px;
+            margin-bottom: 6px;
+        }
+        .badge.macos { color: #7ac4ff; border: 1px solid #2a4a6a; background: #1a2a3a; }
+        .badge.native { color: #7aff8a; border: 1px solid #2a5a2a; background: #1a2a1a; }
+        footer {
+            text-align: center;
+            margin-top: 48px;
+            color: #555;
+            font-size: 0.85rem;
+        }
+        footer a { color: #888; text-decoration: none; }
+        footer a:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>BSK Apps</h1>
+        <p class="tagline">Native macOS apps for creators and professionals.</p>
+
+        <div class="app">
+            <h2>QuickIP</h2>
+            <p class="subtitle">Network utility for macOS</p>
+            <span class="badge macos">macOS</span>
+            <span class="badge native">Swift / SwiftUI</span>
+            <p>
+                A fast, lightweight network utility that shows your IP address and network
+                information at a glance. Lives in your menu bar for instant access.
+            </p>
+            <ul class="features">
+                <li>Local and public IP address display</li>
+                <li>Menu bar integration for quick access</li>
+                <li>Clean, native macOS interface</li>
+            </ul>
+        </div>
+
+        <div class="app">
+            <h2>Fetch Puppy</h2>
+            <p class="subtitle">Music search and collection tool for macOS</p>
+            <span class="badge macos">macOS</span>
+            <span class="badge native">Swift / SwiftUI</span>
+            <p>
+                Search, discover, and organise your music collection. Fetch Puppy finds tracks
+                across multiple sources, scores results for quality, and builds a neatly
+                tagged local library with artwork and metadata.
+            </p>
+            <ul class="features">
+                <li>Multi-source search with smart quality scoring</li>
+                <li>Automatic metadata and artwork tagging</li>
+                <li>Batch processing with drag and drop</li>
+                <li>Multiple audio formats (MP3, AAC, FLAC)</li>
+                <li>Background processing with menu bar integration</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 BSK Apps. Built with Swift and SwiftUI for macOS.</p>
+            <p><a href="https://github.com/BSKapps">GitHub</a></p>
+        </footer>
+    </div>
+</body>
+</html>
