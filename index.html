@@ -32,12 +32,23 @@
             color: #888;
             margin-bottom: 48px;
         }
+        a.app-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            margin-bottom: 24px;
+        }
         .app {
             background: #1a1a1a;
             border: 1px solid #2a2a2a;
             border-radius: 16px;
             padding: 32px;
-            margin-bottom: 24px;
+            transition: border-color 0.2s, background 0.2s;
+            cursor: pointer;
+        }
+        a.app-card:hover .app {
+            border-color: #444;
+            background: #202020;
         }
         .app h2 {
             font-size: 1.5rem;
@@ -103,6 +114,7 @@
         </div>
         <p class="tagline">Native macOS apps for AV and IT professionals.</p>
 
+        <a class="app-card" href="/quickip">
         <div class="app">
             <div class="app-header">
                 <img class="app-icon" src="images/quickip-icon.png" alt="QuickIP">
@@ -128,19 +140,21 @@
                 <li>Clean, native macOS interface</li>
             </ul>
         </div>
+        </a>
 
+        <a class="app-card" href="/multiviewport">
         <div class="app">
             <div class="app-header">
-                <img class="app-icon" src="images/mvp-icon.png" alt="MVP">
+                <img class="app-icon" src="images/mvp-icon.png" alt="MultiViewPort">
                 <div>
-                    <h2>MVP — MultiViewPort</h2>
+                    <h2>MultiViewPort</h2>
                     <p class="subtitle">Multi-window viewer for external displays</p>
                 </div>
             </div>
             <span class="badge macos">macOS</span>
             <span class="badge native">Swift / SwiftUI</span>
             <p>
-                Turn any external screen into a multi-viewer. MVP tiles 1, 2, or 4 application
+                Turn any external screen into a multi-viewer. MultiViewPort tiles 1, 2, or 4 application
                 windows onto a display with saved presets, focus modes, and a clean menu bar
                 interface. Pick apps from a visual chooser and switch layouts instantly.
             </p>
@@ -153,7 +167,9 @@
                 <li>Works with any external display</li>
             </ul>
         </div>
+        </a>
 
+        <a class="app-card" href="/labassistant">
         <div class="app">
             <div class="app-header">
                 <img class="app-icon" src="images/labassistant-icon.png" alt="Lab Assistant">
@@ -177,7 +193,9 @@
                 <li>Batch processing — set up entire shows in minutes</li>
             </ul>
         </div>
+        </a>
 
+        <a class="app-card" href="/fetchpuppy">
         <div class="app">
             <div class="app-header">
                 <img class="app-icon" src="images/fetchpuppy-icon.png" alt="Fetch Puppy">
@@ -201,10 +219,11 @@
                 <li>Background processing with menu bar integration</li>
             </ul>
         </div>
+        </a>
 
         <footer>
             <p>&copy; 2026 BSK Apps. Built with Swift and SwiftUI for macOS.</p>
-            <p><a href="https://github.com/BSKapps">GitHub</a></p>
+            <p><a href="mailto:support@bskapps.com">support@bskapps.com</a> &middot; <a href="https://github.com/BSKapps">GitHub</a></p>
         </footer>
     </div>
 </body>

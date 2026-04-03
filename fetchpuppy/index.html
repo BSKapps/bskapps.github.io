@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Puppy — Music Search and Collection for macOS</title>
+    <meta property="og:title" content="Fetch Puppy — Music Search and Collection for macOS">
+    <meta property="og:description" content="Search, discover, and organise your music collection with smart quality scoring and automatic tagging.">
+    <meta property="og:image" content="https://bskapps.com/images/fetchpuppy-icon.png">
+    <meta property="og:url" content="https://bskapps.com/fetchpuppy">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d0d0d;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+        .back {
+            display: inline-block;
+            color: #7ac4ff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 32px;
+        }
+        .back:hover { color: #fff; }
+        .app-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 12px;
+        }
+        .app-icon {
+            width: 96px;
+            height: 96px;
+            border-radius: 20px;
+        }
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #fff;
+        }
+        .subtitle {
+            font-size: 1.1rem;
+            color: #888;
+        }
+        .badges {
+            margin: 16px 0 24px;
+        }
+        .badge {
+            display: inline-block;
+            background: #2a2a2a;
+            color: #aaa;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-right: 6px;
+        }
+        .badge.macos { color: #7ac4ff; border: 1px solid #2a4a6a; background: #1a2a3a; }
+        .badge.native { color: #7aff8a; border: 1px solid #2a5a2a; background: #1a2a1a; }
+        .description {
+            line-height: 1.7;
+            color: #bbb;
+            font-size: 1.05rem;
+            margin-bottom: 32px;
+        }
+        .section {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 28px 32px;
+            margin-bottom: 24px;
+        }
+        .section h2 {
+            font-size: 1.3rem;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+        .features {
+            list-style: none;
+            padding: 0;
+        }
+        .features li {
+            padding: 5px 0;
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+        .features li::before {
+            content: "\2022";
+            color: #555;
+            margin-right: 8px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 48px;
+            color: #555;
+            font-size: 0.85rem;
+        }
+        footer a { color: #888; text-decoration: none; }
+        footer a:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/">&larr; BSK Apps</a>
+
+        <div class="app-header">
+            <img class="app-icon" src="../images/fetchpuppy-icon.png" alt="Fetch Puppy">
+            <div>
+                <h1>Fetch Puppy</h1>
+                <p class="subtitle">Music search and collection tool for macOS</p>
+            </div>
+        </div>
+
+        <div class="badges">
+            <span class="badge macos">macOS</span>
+            <span class="badge native">Swift / SwiftUI</span>
+        </div>
+
+        <p class="description">
+            Search, discover, and organise your music collection. Fetch Puppy finds tracks
+            across multiple sources, scores results for quality, and converts them into a
+            neatly tagged local library with artwork and metadata.
+        </p>
+
+        <div class="section">
+            <h2>Features</h2>
+            <ul class="features">
+                <li>Multi-source search with smart quality scoring</li>
+                <li>Best-in-class audio conversion (MP3, AAC, FLAC)</li>
+                <li>Automatic metadata and artwork tagging</li>
+                <li>Batch processing with drag and drop</li>
+                <li>Background processing with menu bar integration</li>
+                <li>Clean, native macOS interface</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a></p>
+            <p><a href="mailto:support@bskapps.com">support@bskapps.com</a></p>
+        </footer>
+    </div>
+</body>
+</html>
