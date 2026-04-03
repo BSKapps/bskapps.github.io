@@ -77,6 +77,10 @@
         }
         .badge.macos { color: #7ac4ff; border: 1px solid #2a4a6a; background: #1a2a3a; }
         .badge.native { color: #7aff8a; border: 1px solid #2a5a2a; background: #1a2a1a; }
+        .header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+        .header img { width: 56px; height: 56px; border-radius: 50%; }
+        .app-header { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+        .app-icon { width: 64px; height: 64px; border-radius: 14px; }
         footer {
             text-align: center;
             margin-top: 48px;
@@ -89,12 +93,20 @@
 </head>
 <body>
     <div class="container">
-        <h1>BSK Apps</h1>
-        <p class="tagline">Native macOS apps for creators and professionals.</p>
+        <div class="header">
+            <img src="images/bsk-logo.png" alt="BSK Apps">
+            <h1>BSK Apps</h1>
+        </div>
+        <p class="tagline">Native macOS apps for AV and IT professionals.</p>
 
         <div class="app">
-            <h2>QuickIP</h2>
-            <p class="subtitle">Network toolkit for macOS</p>
+            <div class="app-header">
+                <img class="app-icon" src="images/quickip-icon.png" alt="QuickIP">
+                <div>
+                    <h2>QuickIP</h2>
+                    <p class="subtitle">Network toolkit for macOS</p>
+                </div>
+            </div>
             <span class="badge macos">macOS</span>
             <span class="badge native">Swift / SwiftUI</span>
             <p>
@@ -114,8 +126,13 @@
         </div>
 
         <div class="app">
-            <h2>Lab Assistant</h2>
-            <p class="subtitle">QLab workspace automation for macOS</p>
+            <div class="app-header">
+                <img class="app-icon" src="images/labassistant-icon.png" alt="Lab Assistant">
+                <div>
+                    <h2>Lab Assistant</h2>
+                    <p class="subtitle">QLab workspace automation for macOS</p>
+                </div>
+            </div>
             <span class="badge macos">macOS</span>
             <span class="badge native">Swift / SwiftUI</span>
             <p>
@@ -133,8 +150,13 @@
         </div>
 
         <div class="app">
-            <h2>Fetch Puppy</h2>
-            <p class="subtitle">Music search and collection tool for macOS</p>
+            <div class="app-header">
+                <img class="app-icon" src="images/fetchpuppy-icon.png" alt="Fetch Puppy">
+                <div>
+                    <h2>Fetch Puppy</h2>
+                    <p class="subtitle">Music search and collection tool for macOS</p>
+                </div>
+            </div>
             <span class="badge macos">macOS</span>
             <span class="badge native">Swift / SwiftUI</span>
             <p>
