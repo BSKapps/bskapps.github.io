@@ -106,34 +106,6 @@
             color: #555;
             margin-right: 8px;
         }
-        .comparison {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 8px;
-        }
-        .comparison th {
-            text-align: left;
-            padding: 8px 12px;
-            color: #888;
-            font-size: 0.85rem;
-            font-weight: 500;
-            border-bottom: 1px solid #2a2a2a;
-        }
-        .comparison td {
-            padding: 8px 12px;
-            color: #aaa;
-            font-size: 0.9rem;
-            border-bottom: 1px solid #1f1f1f;
-        }
-        .comparison td:nth-child(2),
-        .comparison td:nth-child(3),
-        .comparison th:nth-child(2),
-        .comparison th:nth-child(3) {
-            text-align: center;
-            width: 80px;
-        }
-        .check { color: #7aff8a; }
-        .cross { color: #555; }
         .status-dots {
             display: flex;
             gap: 16px;
@@ -219,33 +191,7 @@
         </div>
 
         <div class="section">
-            <h2>Lite vs Pro</h2>
-            <table class="comparison">
-                <tr>
-                    <th>Feature</th>
-                    <th>Lite</th>
-                    <th>Pro</th>
-                </tr>
-                <tr><td>IP / Subnet / Gateway display</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
-                <tr><td>IPv6 &amp; MAC address</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
-                <tr><td>Public IP</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
-                <tr><td>Status dots &amp; notifications</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
-                <tr><td>Click to copy</td><td class="check">&#10003;</td><td class="check">&#10003;</td></tr>
-                <tr><td>SSID &amp; Wi-Fi details</td><td class="cross">&mdash;</td><td class="check">&#10003;</td></tr>
-                <tr><td>IP configuration (DHCP / Static)</td><td class="cross">&mdash;</td><td class="check">&#10003;</td></tr>
-                <tr><td>Saved presets</td><td class="cross">&mdash;</td><td class="check">&#10003;</td></tr>
-                <tr><td>Network scanner</td><td class="cross">&mdash;</td><td class="check">&#10003;</td></tr>
-                <tr><td>Speed test</td><td class="cross">&mdash;</td><td class="check">&#10003;</td></tr>
-                <tr><td>DHCP renewal</td><td class="cross">&mdash;</td><td class="check">&#10003;</td></tr>
-                <tr><td>Network locations</td><td class="cross">&mdash;</td><td class="check">&#10003;</td></tr>
-                <tr><td>DNS &amp; traffic stats</td><td class="cross">&mdash;</td><td class="check">&#10003;</td></tr>
-            </table>
-        </div>
-
-        <div class="section">
-            <h2>Pro Features</h2>
-
-            <h3>IP Configuration</h3>
+            <h2>IP Configuration</h2>
             <ul class="features">
                 <li>Switch between DHCP, DHCP Reserved, Static, and IPv4 Off</li>
                 <li>IP conflict detection — checks both local adapters and network</li>
