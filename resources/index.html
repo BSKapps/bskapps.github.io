@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources — BSK Apps</title>
+    <meta name="description" content="Free Reaper LUA scripts for AV professionals. Transport controls, hardware patching, and more.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/images/favicon-180.png">
+    <meta property="og:title" content="Resources — BSK Apps">
+    <meta property="og:description" content="Free Reaper LUA scripts for AV professionals. Transport controls, hardware patching, and more.">
+    <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
+    <meta property="og:url" content="https://bskapps.com/resources">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d0d0d;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+        .back {
+            display: inline-block;
+            color: #7ac4ff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 32px;
+        }
+        .back:hover { color: #fff; }
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .tagline {
+            font-size: 1.1rem;
+            color: #888;
+            margin-bottom: 48px;
+        }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .section-desc {
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        .script-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 28px 32px;
+            margin-bottom: 16px;
+        }
+        .script-card h3 {
+            font-size: 1.05rem;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        .script-card p {
+            color: #aaa;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+        .download-link {
+            display: inline-block;
+            color: #7ac4ff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .download-link:hover { color: #fff; }
+        .badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-left: 8px;
+            position: relative;
+            top: -2px;
+        }
+        .badge.lua { color: #7aff8a; border: 1px solid #2a5a2a; background: #1a2a1a; }
+        footer {
+            text-align: center;
+            margin-top: 48px;
+            color: #555;
+            font-size: 0.85rem;
+        }
+        footer a { color: #888; text-decoration: none; }
+        footer a:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/">&larr; BSK Apps</a>
+        <h1>Resources</h1>
+        <p class="tagline">Tools and scripts for AV professionals</p>
+
+        <h2 class="section-title">Free Reaper LUA Scripts</h2>
+        <p class="section-desc">Designed for live recording and virtual soundcheck. Drop these into your Reaper Scripts folder and assign them to actions or toolbar buttons.</p>
+
+        <div class="script-card">
+            <h3>BSK Transport: Play <span class="badge lua">LUA</span></h3>
+            <p>Starts playback only if stopped or paused. Does nothing if already playing or recording. Prevents accidental transport toggles.</p>
+            <a class="download-link" href="/resources/scripts/BSK_Transport_Play.lua" download>Download BSK_Transport_Play.lua</a>
+        </div>
+
+        <div class="script-card">
+            <h3>BSK Transport: Pause <span class="badge lua">LUA</span></h3>
+            <p>Pauses if playing, unpauses if paused. Does nothing if stopped or recording. Clean pause behaviour without unexpected state changes.</p>
+            <a class="download-link" href="/resources/scripts/BSK_Transport_Pause.lua" download>Download BSK_Transport_Pause.lua</a>
+        </div>
+
+        <div class="script-card">
+            <h3>BSK Transport: Record <span class="badge lua">LUA</span></h3>
+            <p>Starts recording only if not already recording. Prevents accidental double-triggers during a take.</p>
+            <a class="download-link" href="/resources/scripts/BSK_Transport_Record.lua" download>Download BSK_Transport_Record.lua</a>
+        </div>
+
+        <div class="script-card">
+            <h3>BSK AutoPatch: HW 1-to-1 Mono <span class="badge lua">LUA</span></h3>
+            <p>Patches all tracks 1:1 to mono hardware inputs and outputs. Sets pre-FX sends at unity gain, disables master send and monitoring. Shows a summary when done.</p>
+            <a class="download-link" href="/resources/scripts/BSK_AutoPatch_HW_1to1_Mono.lua" download>Download BSK_AutoPatch_HW_1to1_Mono.lua</a>
+        </div>
+
+        <div class="script-card">
+            <h3>BSK AutoPatch: HW Teardown <span class="badge lua">LUA</span></h3>
+            <p>Removes all hardware sends and restores master send and monitoring on every track. The undo button for AutoPatch.</p>
+            <a class="download-link" href="/resources/scripts/BSK_AutoPatch_HW_Teardown.lua" download>Download BSK_AutoPatch_HW_Teardown.lua</a>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 BSK Apps</p>
+            <p><a href="mailto:support@bskapps.com">support@bskapps.com</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
+        </footer>
+    </div>
+</body>
+</html>
