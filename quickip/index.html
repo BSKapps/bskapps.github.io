@@ -133,6 +133,47 @@
         .dot.orange { background: #ff9500; }
         .dot.grey { background: #8e8e93; }
         .dot.red { background: #ff3b30; }
+        .screenshot-scroll {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding: 4px 0 16px;
+            margin-bottom: 24px;
+            scrollbar-width: thin;
+            scrollbar-color: #333 transparent;
+        }
+        .screenshot-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+        .screenshot-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .screenshot-scroll::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 3px;
+        }
+        .screenshot-scroll figure {
+            margin: 0;
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+            width: 320px;
+        }
+        .screenshot-scroll img {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid #2a2a2a;
+        }
+        .screenshot-scroll figcaption {
+            text-align: center;
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 6px;
+        }
+        @media (max-width: 600px) {
+            .screenshot-scroll figure { width: 260px; }
+        }
         footer {
             text-align: center;
             margin-top: 48px;
@@ -176,6 +217,17 @@
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen>
             </iframe>
+        </div>
+
+        <div class="screenshot-scroll">
+            <figure><img src="images/QIP Main.png" alt="QuickIP main menu"><figcaption>Menu overview</figcaption></figure>
+            <figure><img src="images/QIP More info.png" alt="QuickIP more info"><figcaption>More Info details</figcaption></figure>
+            <figure><img src="images/QIP ALT.png" alt="QuickIP expanded adapters"><figcaption>Collapsed View</figcaption></figure>
+            <figure><img src="images/QIP LAN SCAN.png" alt="QuickIP LAN scan"><figcaption>LAN Scan</figcaption></figure>
+            <figure><img src="images/QIP Speed Test.png" alt="QuickIP speed test"><figcaption>Speed Test</figcaption></figure>
+            <figure><img src="images/QIP Completion Pop up.png" alt="QuickIP speed test results"><figcaption>Speed Test Results</figcaption></figure>
+            <figure><img src="images/QIP IP Input.png" alt="QuickIP static IP configuration"><figcaption>IP Configuration</figcaption></figure>
+            <figure><img src="images/QIP Settings.png" alt="QuickIP settings"><figcaption>Settings</figcaption></figure>
         </div>
 
         <div class="section">
