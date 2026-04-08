@@ -31,8 +31,12 @@ bskapps.github.io/
 │   ├── mvp-icon.png
 │   ├── fetchpuppy-icon.png
 │   └── favicon-180.png
-├── quickip/index.html      # QuickIP product page (Lite vs Pro comparison)
-├── labassistant/index.html # Lab Assistant product page (9 modules + Mint)
+├── quickip/
+│   ├── index.html          # QuickIP product page (video + screenshot gallery + features)
+│   └── images/             # 8 product screenshots (horizontal scroll gallery)
+├── labassistant/
+│   ├── index.html          # Lab Assistant product page (video + screenshot gallery + modules)
+│   └── images/             # 8 product screenshots (horizontal scroll gallery)
 ├── multiviewport/index.html# MultiViewPort product page
 ├── fetchpuppy/index.html   # Fetch Puppy product page (HIDDEN — not linked, see below)
 ├── privacy/index.html      # Privacy policy
