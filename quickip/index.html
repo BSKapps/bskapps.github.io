@@ -133,6 +133,30 @@
         .dot.orange { background: #ff9500; }
         .dot.grey { background: #8e8e93; }
         .dot.red { background: #ff3b30; }
+        .gallery-wrap {
+            position: relative;
+            margin-bottom: 24px;
+        }
+        .gallery-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #999;
+            font-size: 2rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .gallery-arrow:hover { background: rgba(255,255,255,0.2); color: #fff; }
+        .gallery-arrow.prev { left: 8px; }
+        .gallery-arrow.next { right: 8px; }
         .screenshot-scroll {
             display: flex;
             gap: 16px;
@@ -140,19 +164,10 @@
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
             padding: 4px 0 16px;
-            margin-bottom: 24px;
-            scrollbar-width: thin;
-            scrollbar-color: #333 transparent;
+            scrollbar-width: none;
         }
         .screenshot-scroll::-webkit-scrollbar {
-            height: 6px;
-        }
-        .screenshot-scroll::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .screenshot-scroll::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 3px;
+            display: none;
         }
         .screenshot-scroll figure {
             margin: 0;
@@ -238,15 +253,19 @@
             </iframe>
         </div>
 
-        <div class="screenshot-scroll">
-            <figure><img src="images/QIP Main.png" alt="QuickIP main menu"><figcaption>Menu Overview</figcaption></figure>
-            <figure><img src="images/QIP More info.png" alt="QuickIP more info with Wi-Fi details"><figcaption>More Info &amp; Wi-Fi Details</figcaption></figure>
-            <figure><img src="images/QIP Wi-Fi Menu.png" alt="QuickIP Wi-Fi configuration"><figcaption>Wi-Fi Configuration</figcaption></figure>
-            <figure><img src="images/QIP LAN SCAN.png" alt="QuickIP LAN scan results"><figcaption>LAN Scan Results</figcaption></figure>
-            <figure><img src="images/QIP Network Scan.png" alt="QuickIP network scanner"><figcaption>Network Scanner</figcaption></figure>
-            <figure><img src="images/QIP Speed Test.png" alt="QuickIP speed test"><figcaption>Speed Test</figcaption></figure>
-            <figure><img src="images/QIP Ping.png" alt="QuickIP ping tool"><figcaption>Ping</figcaption></figure>
-            <figure><img src="images/QIP Settings.png" alt="QuickIP settings"><figcaption>Settings</figcaption></figure>
+        <div class="gallery-wrap">
+            <button class="gallery-arrow prev" onclick="scrollGallery(-1)">&#8249;</button>
+            <button class="gallery-arrow next" onclick="scrollGallery(1)">&#8250;</button>
+            <div class="screenshot-scroll" id="gallery">
+                <figure><img src="images/QIP Main.png" alt="QuickIP main menu"><figcaption>Menu Overview</figcaption></figure>
+                <figure><img src="images/QIP More info.png" alt="QuickIP more info with Wi-Fi details"><figcaption>More Info &amp; Wi-Fi Details</figcaption></figure>
+                <figure><img src="images/QIP Wi-Fi Menu.png" alt="QuickIP Wi-Fi configuration"><figcaption>Wi-Fi Configuration</figcaption></figure>
+                <figure><img src="images/QIP LAN SCAN.png" alt="QuickIP LAN scan results"><figcaption>LAN Scan Results</figcaption></figure>
+                <figure><img src="images/QIP Network Scan.png" alt="QuickIP network scanner"><figcaption>Network Scanner</figcaption></figure>
+                <figure><img src="images/QIP Speed Test.png" alt="QuickIP speed test"><figcaption>Speed Test</figcaption></figure>
+                <figure><img src="images/QIP Ping.png" alt="QuickIP ping tool"><figcaption>Ping</figcaption></figure>
+                <figure><img src="images/QIP Settings.png" alt="QuickIP settings"><figcaption>Settings</figcaption></figure>
+            </div>
         </div>
 
         <div class="section">
@@ -341,6 +360,12 @@ document.querySelectorAll('.screenshot-scroll img').forEach(img => {
 document.getElementById('lightbox').addEventListener('click', function() {
     this.classList.remove('active');
 });
+function scrollGallery(dir) {
+    const g = document.getElementById('gallery');
+    const fig = g.querySelector('figure');
+    const w = fig.offsetWidth + 16;
+    g.scrollBy({ left: dir * w, behavior: 'smooth' });
+}
 </script>
 </body>
 </html>
