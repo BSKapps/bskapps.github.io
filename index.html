@@ -51,7 +51,7 @@
             transition: border-color 0.2s, background 0.2s;
             cursor: pointer;
         }
-        a.app-card:hover .app {
+        .app-card:hover .app {
             border-color: #444;
             background: #202020;
         }
@@ -141,7 +141,7 @@
         </div>
         <p class="tagline">Utilities for AV Professionals</p>
 
-        <a class="app-card" href="/quickip">
+        <div class="app-card" onclick="window.location='/quickip'" style="cursor:pointer">
         <div class="app">
             <div class="app-header">
                 <img class="app-icon" src="images/quickip-icon.png" alt="QuickIP">
@@ -171,7 +171,7 @@
             <a href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e" class="buy-btn" onclick="event.stopPropagation()">Buy - $19.99</a>
             <span class="buy-note">One-time purchase · 2 activations included</span>
         </div>
-        </a>
+        </div>
 
         <a class="app-card" href="/labassistant">
         <div class="app">
