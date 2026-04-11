@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resources — BSK Apps</title>
-    <meta name="description" content="Free Reaper LUA scripts for AV professionals. Transport controls, hardware patching, and more.">
+    <title>Free Reaper LUA Scripts for Stream Deck and Live Recording - BSK Apps</title>
+    <meta name="description" content="Free Reaper LUA scripts for Stream Deck transport control and hardware patching. Safe play, pause, record buttons and 1-to-1 mono autopatch for live recording and virtual soundcheck.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="apple-touch-icon" href="/images/favicon-180.png">
-    <meta property="og:title" content="Resources — BSK Apps">
-    <meta property="og:description" content="Free Reaper LUA scripts for AV professionals. Transport controls, hardware patching, and more.">
+    <meta property="og:title" content="Free Reaper LUA Scripts for Stream Deck and Live Recording">
+    <meta property="og:description" content="Free Reaper LUA scripts for Stream Deck transport control and hardware patching. Safe play, pause, record buttons and 1-to-1 mono autopatch.">
     <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
     <meta property="og:url" content="https://bskapps.com/resources">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://bskapps.com/resources">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7433223644933951"
          crossorigin="anonymous"></script>
     <style>
@@ -102,6 +104,62 @@
         footer a { color: #888; text-decoration: none; }
         footer a:hover { color: #fff; }
     </style>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Free Reaper LUA Scripts",
+        "description": "Free Reaper LUA scripts for Stream Deck transport control and hardware patching",
+        "numberOfItems": 5,
+        "itemListElement": [
+            {
+                "@type": "SoftwareSourceCode",
+                "position": 1,
+                "name": "BSK Transport: Play",
+                "description": "Starts playback only if stopped or paused. Designed for Stream Deck transport buttons.",
+                "programmingLanguage": "Lua",
+                "runtimePlatform": "Reaper DAW",
+                "isAccessibleForFree": true
+            },
+            {
+                "@type": "SoftwareSourceCode",
+                "position": 2,
+                "name": "BSK Transport: Pause",
+                "description": "Pauses if playing, unpauses if paused. Designed for Stream Deck transport buttons.",
+                "programmingLanguage": "Lua",
+                "runtimePlatform": "Reaper DAW",
+                "isAccessibleForFree": true
+            },
+            {
+                "@type": "SoftwareSourceCode",
+                "position": 3,
+                "name": "BSK Transport: Record",
+                "description": "Starts recording only if not already recording. Designed for Stream Deck transport buttons.",
+                "programmingLanguage": "Lua",
+                "runtimePlatform": "Reaper DAW",
+                "isAccessibleForFree": true
+            },
+            {
+                "@type": "SoftwareSourceCode",
+                "position": 4,
+                "name": "BSK AutoPatch: HW 1-to-1 Mono",
+                "description": "Patches all tracks 1:1 to mono hardware inputs and outputs for live recording and virtual soundcheck.",
+                "programmingLanguage": "Lua",
+                "runtimePlatform": "Reaper DAW",
+                "isAccessibleForFree": true
+            },
+            {
+                "@type": "SoftwareSourceCode",
+                "position": 5,
+                "name": "BSK AutoPatch: HW Teardown",
+                "description": "Removes all hardware sends and restores master send on every track. Undo for AutoPatch.",
+                "programmingLanguage": "Lua",
+                "runtimePlatform": "Reaper DAW",
+                "isAccessibleForFree": true
+            }
+        ]
+    }
+    </script>
 </head>
 <body>
     <div class="container">
