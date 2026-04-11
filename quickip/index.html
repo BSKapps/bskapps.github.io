@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuickIP — Network Toolkit for macOS</title>
+    <title>QuickIP - Network Toolkit for macOS</title>
     <meta name="description" content="A fast, lightweight network toolkit that lets you view, switch, and manage your IP configuration in seconds from the macOS menu bar.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="apple-touch-icon" href="/images/favicon-180.png">
-    <meta property="og:title" content="QuickIP — Network Toolkit for macOS">
+    <meta property="og:title" content="QuickIP - Network Toolkit for macOS">
     <meta property="og:description" content="A fast, lightweight network toolkit that lets you view, switch, and manage your IP configuration in seconds.">
     <meta property="og:image" content="https://bskapps.com/images/quickip-icon.png">
     <meta property="og:url" content="https://bskapps.com/quickip">
@@ -68,6 +68,28 @@
         }
         .badge.macos { color: #7ac4ff; border: 1px solid #2a4a6a; background: #1a2a3a; }
         .badge.native { color: #7aff8a; border: 1px solid #2a5a2a; background: #1a2a1a; }
+        .badge.pro { color: #b48aff; border: 1px solid #3a2a6a; background: #1a1a3a; }
+        .buy-section {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .buy-btn {
+            display: inline-block;
+            padding: 14px 36px;
+            background: #7ac4ff;
+            color: #000;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .buy-btn:hover { background: #9dd4ff; }
+        .buy-note {
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
         .description {
             line-height: 1.7;
             color: #bbb;
@@ -232,7 +254,12 @@
 
         <div class="badges">
             <span class="badge macos">macOS</span>
-            <span class="badge native">Swift / AppKit</span>
+            <span class="badge pro">Pro</span>
+        </div>
+
+        <div class="buy-section">
+            <a href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e" class="buy-btn">Buy - $19.99</a>
+            <p class="buy-note">One-time purchase · 2 activations included</p>
         </div>
 
         <p class="description">
@@ -272,11 +299,11 @@
         <div class="section">
             <h2>Features</h2>
             <ul class="features">
-                <li>Monitor all network adapters from the menu bar — Wi-Fi, Ethernet, USB, Thunderbolt, iPhone tethering</li>
+                <li>Monitor all network adapters from the menu bar - Wi-Fi, Ethernet, USB, Thunderbolt, iPhone tethering</li>
                 <li>Live-updating IP, subnet, gateway, and public IP display</li>
                 <li>Colour-coded status dots for instant adapter state recognition</li>
                 <li>Click to copy any IP, subnet, gateway, or MAC address</li>
-                <li>IP change notifications — know immediately when your connection changes</li>
+                <li>IP change notifications - know immediately when your connection changes</li>
                 <li>Live download/upload speed per adapter</li>
                 <li>Customisable menu bar icon with IP display, SSID, live speed, and colour status</li>
                 <li>Run at Login for always-on monitoring</li>
@@ -300,15 +327,15 @@
             <h2>IP Configuration</h2>
             <ul class="features">
                 <li>Switch between DHCP, DHCP Reserved, Static, and IPv4 Off</li>
-                <li>IP conflict and subnet overlap detection — checks both local adapters and network with visual warnings and notifications</li>
+                <li>IP conflict and subnet overlap detection - checks both local adapters and network with visual warnings and notifications</li>
                 <li>DHCP Reserved mode locks your IP while keeping auto subnet and gateway</li>
-                <li>Touch ID or password authentication — one-time toggle</li>
+                <li>Touch ID or password authentication - one-time toggle</li>
             </ul>
 
             <h3>Presets</h3>
             <ul class="features">
                 <li>Save full IP configs (mode, IP, subnet, gateway) and re-apply with one click</li>
-                <li>Global presets — any preset works on any adapter</li>
+                <li>Global presets - any preset works on any adapter</li>
                 <li>Visual indicators show which presets are active</li>
             </ul>
 
@@ -321,8 +348,8 @@
 
             <h3>Network Scanner</h3>
             <ul class="features">
-                <li>Full /24 subnet scan — see every device on your network</li>
-                <li>Custom range scan — up to 1024 hosts</li>
+                <li>Full /24 subnet scan - see every device on your network</li>
+                <li>Custom range scan - up to 1024 hosts</li>
                 <li>Single host ping with min/avg/max/loss stats</li>
                 <li>Shows IP, MAC, vendor, hostname for each device</li>
                 <li>Export results to CSV</li>
@@ -330,9 +357,9 @@
 
             <h3>AV Network Tools</h3>
             <ul class="features">
-                <li>Multicast readiness indicator — green/red per adapter for Dante and audio network compatibility</li>
-                <li>Full/half duplex detection — colour-coded to flag half-duplex connections</li>
-                <li>Subnet overlap warnings — flags conflicting adapter configurations in red</li>
+                <li>Multicast readiness indicator - green/red per adapter for Dante and audio network compatibility</li>
+                <li>Full/half duplex detection - colour-coded to flag half-duplex connections</li>
+                <li>Subnet overlap warnings - flags conflicting adapter configurations in red</li>
             </ul>
 
             <h3>Wi-Fi Details</h3>

@@ -41,13 +41,13 @@
             display: block;
             text-decoration: none;
             color: inherit;
-            margin-bottom: 24px;
         }
         .app {
             background: #1a1a1a;
             border: 1px solid #2a2a2a;
             border-radius: 16px;
             padding: 32px;
+            margin-bottom: 24px;
             transition: border-color 0.2s, background 0.2s;
             cursor: pointer;
         }
@@ -98,6 +98,27 @@
         .badge.macos { color: #7ac4ff; border: 1px solid #2a4a6a; background: #1a2a3a; }
         .badge.native { color: #7aff8a; border: 1px solid #2a5a2a; background: #1a2a1a; }
         .badge.coming-soon { color: #ffb347; border: 1px solid #5a4a2a; background: #2a2210; }
+        .badge.pro { color: #b48aff; border: 1px solid #3a2a6a; background: #1a1a3a; }
+        .buy-btn {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 10px 24px;
+            background: #7ac4ff;
+            color: #000;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .buy-btn:hover { background: #9dd4ff; }
+        .buy-note {
+            display: block;
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 6px;
+            margin-bottom: 8px;
+        }
         .header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
         .header img { width: 56px; height: 56px; border-radius: 50%; }
         .app-header { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
@@ -131,10 +152,9 @@
             </div>
             <span class="badge macos">macOS</span>
 
-            <span class="badge coming-soon">Coming Soon</span>
+            <span class="badge pro">Pro</span>
             <p>
-                A lightweight network monitor toolkit with SSID display, speed test, network scan, presets and more 
-
+                A lightweight network monitor toolkit with SSID display, speed test, network scan, presets and more
             </p>
             <ul class="features">
                 <li>Save IP presets and switch with one click</li>
@@ -146,8 +166,10 @@
                 <li>Live download/upload speed in the menu bar</li>
                 <li>IP conflict detection, subnet overlap warnings</li>
                 <li>User configurable options</li>
-                <li>Lives in the menu bar — always one click away</li>
+                <li>Lives in the menu bar, always one click away</li>
             </ul>
+            <a href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e" class="buy-btn" onclick="event.stopPropagation()">Buy - $19.99</a>
+            <span class="buy-note">One-time purchase · 2 activations included</span>
         </div>
         </a>
 
@@ -173,7 +195,7 @@
                 <li>Continue mode and fade &amp; stop</li>
                 <li>Cue numbering and colour coding</li>
                 <li>Write results to cue notes</li>
-                <li>Mint — standalone audio processor/convertor</li>
+                <li>Mint - standalone audio processor/convertor</li>
                 <li>Nine non-destructive automatic modules</li>
                 <li>QLab 4 and 5 compatible, works with free version too</li>
             </ul>
