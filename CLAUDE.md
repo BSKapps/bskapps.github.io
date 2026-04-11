@@ -20,10 +20,12 @@
 
 ```
 bskapps.github.io/
-├── index.html              # Homepage — lists QuickIP, Lab Assistant
+├── index.html              # Homepage - lists QuickIP, Lab Assistant, Resources
 ├── CNAME                   # Custom domain mapping (bskapps.com)
 ├── favicon.png
 ├── robots.txt
+├── sitemap.xml             # SEO sitemap (7 public pages)
+├── ads.txt                 # AdSense verification
 ├── images/                 # All icons and logos
 │   ├── bsk-logo.png
 │   ├── quickip-icon.png
@@ -37,8 +39,11 @@ bskapps.github.io/
 ├── labassistant/
 │   ├── index.html          # Lab Assistant product page (video + screenshot gallery + modules)
 │   └── images/             # 8 product screenshots (horizontal scroll gallery)
-├── multiviewport/index.html# MultiViewPort product page
-├── fetchpuppy/index.html   # Fetch Puppy product page (HIDDEN — not linked, see below)
+├── resources/
+│   ├── index.html          # Free Reaper LUA scripts page
+│   └── scripts/            # 5 LUA script files for download
+├── multiviewport/index.html# MultiViewPort product page (HIDDEN)
+├── fetchpuppy/index.html   # Fetch Puppy product page (HIDDEN)
 ├── privacy/index.html      # Privacy policy
 ├── terms/index.html        # Terms of service
 └── refund/index.html       # Refund policy
@@ -57,8 +62,12 @@ bskapps.github.io/
 
 ## Payments
 
-- Payments via LemonSqueezy (pending seller approval as of April 2026)
-- Buy buttons not yet added to product pages
+- Payments via LemonSqueezy (approved April 2026)
+- QuickIP Pro: $19.99 USD, buy button on homepage and /quickip page
+- Buy buttons use LemonSqueezy overlay checkout (lemon.js + `lemonsqueezy-button` class)
+- Checkout URL params: `?dark=1&desc=0&media=0` for dark backdrop, no description, no media
+- Buy button colour: green `#26A95F`, white text
+- Lab Assistant: not yet on sale (Coming Soon)
 - LemonSqueezy store: bskapps.lemonsqueezy.com
 
 ## Design Conventions
@@ -67,7 +76,8 @@ bskapps.github.io/
 - Font: system font stack (`-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto`)
 - Section cards: `border-radius: 16px`, `padding: 28px 32px`
 - Link colour: `#7ac4ff`
-- Badges: `.badge.macos` (blue) and `.badge.native` (green)
+- Badges: `.badge.macos` (blue), `.badge.pro` (purple), `.badge.coming-soon` (orange)
+- Buy button: green `#26A95F`, hover `#2fc06d`, white text
 - All pages share the same CSS inline (no external stylesheet)
 - Back link on subpages: `← BSK Apps` linking to `/`
 
@@ -78,7 +88,19 @@ All pages include a consistent footer with:
 © 2026 BSK Apps
 support@bskapps.com · Privacy · Terms · Refund Policy
 ```
-Homepage footer also includes GitHub link.
+## SEO
+
+- sitemap.xml submitted to Google Search Console
+- Canonical URLs on all pages
+- JSON-LD structured data: Organization (homepage), SoftwareApplication (QIP, LA), ItemList (resources)
+- og:type on all pages
+- robots.txt blocks AI training bots, allows Google-Extended, PerplexityBot, Applebot-Extended
+
+## Ads
+
+- AdSense only on homepage (above Resources card) and resources page (above footer)
+- AdSense script removed from all other pages (QIP, LA, privacy, terms, refund)
+- Ad slot: 7195341222
 
 ## Contact
 
@@ -89,7 +111,7 @@ Homepage footer also includes GitHub link.
 - Create pull requests or suggest PR workflows
 - Run `git push` unless explicitly asked
 - Change the dark theme, colours, fonts, or layout unless asked
-- Add external CSS frameworks or JavaScript
+- Add external CSS frameworks or JavaScript (lemon.js is the one exception)
 - Add analytics or tracking
 - Link to or mention Fetch Puppy without asking first
 - Add emojis to code or output unless asked
