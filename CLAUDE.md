@@ -34,8 +34,11 @@ bskapps.github.io/
 │   ├── fetchpuppy-icon.png
 │   └── favicon-180.png
 ├── quickip/
-│   ├── index.html          # QuickIP product page (video + screenshot gallery + features)
-│   └── images/             # 8 product screenshots (horizontal scroll gallery)
+│   ├── index.html          # QuickIP product page (redirects to /quickerip)
+│   └── images/             # Legacy screenshots (8 PNGs)
+├── quickerip/
+│   ├── index.html          # Quicker IP product page (video + 5-image gallery + features)
+│   └── images/             # 5 framed product screenshots
 ├── labassistant/
 │   ├── index.html          # Lab Assistant product page (video + screenshot gallery + modules)
 │   └── images/             # 8 product screenshots (horizontal scroll gallery)
@@ -63,7 +66,7 @@ bskapps.github.io/
 ## Payments
 
 - Payments via LemonSqueezy (approved April 2026)
-- QuickIP Pro: $19.99 USD, buy button on homepage and /quickip page
+- Quicker IP Pro: $19.99 USD, buy button on homepage and /quickerip page
 - Buy buttons use LemonSqueezy overlay checkout (lemon.js + `lemonsqueezy-button` class)
 - Checkout URL params: `?dark=1&desc=0&media=0` for dark backdrop, no description, no media
 - Buy button colour: green `#26A95F`, white text
