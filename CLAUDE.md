@@ -54,9 +54,9 @@ bskapps.github.io/
 
 ## Products Listed (homepage order)
 
-1. **QuickIP** — Network toolkit. Lite (App Store, free) + Pro (LemonSqueezy, $19.99 USD)
-2. **Lab Assistant** — QLab workspace automation. Sold via LemonSqueezy
-3. **MultiViewPort** — Multi-window viewer. Not yet built — HIDDEN from homepage (April 2026)
+1. **QuickIP** - Network toolkit. Lite (App Store, free) + Pro (LemonSqueezy, $19.99 USD)
+2. **Lab Assistant** - QLab workspace automation. Sold via LemonSqueezy
+3. **MultiViewPort** - Multi-window viewer. Not yet built - HIDDEN from homepage (April 2026)
 
 ## Hidden Products
 
@@ -98,12 +98,16 @@ support@bskapps.com · Privacy · Terms · Refund Policy
 - JSON-LD structured data: Organization (homepage), SoftwareApplication (QIP, LA), ItemList (resources)
 - og:type on all pages
 - robots.txt blocks AI training bots, allows Google-Extended, PerplexityBot, Applebot-Extended
+- All page titles use hyphens, not em dashes (e.g. "BSK Apps - Native macOS Apps")
+- Buy buttons have aria-label attributes (e.g. `aria-label="Buy Quicker IP Pro for $19.99 USD"`)
 
 ## Ads
 
-- AdSense only on homepage (above Resources card) and resources page (above footer)
+- AdSense on homepage (below Resources card) and resources page (above footer)
 - AdSense script removed from all other pages (QIP, LA, privacy, terms, refund)
 - Ad slot: 7195341222
+- Fixed 728x90 leaderboard format (`display:inline-block; width:728px; max-width:100%; height:90px`)
+- No `data-ad-format="auto"` or `data-full-width-responsive` - use fixed dimensions only
 
 ## Contact
 
