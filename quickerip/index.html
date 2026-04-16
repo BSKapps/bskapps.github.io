@@ -78,6 +78,20 @@
             align-items: center;
             gap: 80px;
         }
+        .appstore-wrap {
+            position: relative;
+            line-height: 0;
+        }
+        .appstore-label {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 4px;
+            font-size: 0.75rem;
+            color: #888;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
         .buy-btn {
             display: inline-block;
             padding: 14px 36px;
@@ -297,11 +311,11 @@
         <div class="buy-section">
             <div class="buy-row">
                 <a href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Quicker IP Pro for $19.99 USD">Buy - $19.99 USD</a>
-                <div>
+                <div class="appstore-wrap">
                     <a href="https://apps.apple.com/us/app/quicker-ip-lite/id6761874418" aria-label="Download Quicker IP Lite on the Mac App Store" style="text-decoration:none;">
                         <img src="https://tools.applemediaservices.com/api/badges/download-on-the-mac-app-store/black/en-us?size=250x83" alt="Download on the Mac App Store" style="height:44px; display:block;">
                     </a>
-                    <p style="font-size:0.75rem; color:#888; margin-top:4px;">Quicker IP Lite - Free</p>
+                    <span class="appstore-label">Quicker IP Lite - Free</span>
                 </div>
             </div>
             <p class="buy-note">One-time purchase · 2 activations included</p>
