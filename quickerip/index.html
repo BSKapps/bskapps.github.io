@@ -78,6 +78,13 @@
             align-items: center;
             gap: 180px;
             margin-bottom: 32px;
+            flex-wrap: wrap;
+            row-gap: 48px;
+        }
+        .buy-row .buy-btn { flex-shrink: 0; }
+        @media (max-width: 700px) {
+            .buy-row { flex-direction: column; align-items: flex-start; gap: 56px; }
+            .appstore-label { white-space: normal; }
         }
         .appstore-wrap {
             position: relative;
