@@ -83,8 +83,13 @@
         }
         .buy-row .buy-btn { flex-shrink: 0; }
         @media (max-width: 700px) {
-            .buy-row { flex-direction: column; align-items: flex-start; gap: 56px; }
-            .appstore-label { white-space: normal; }
+            .buy-row { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .appstore-label {
+                position: static;
+                display: block;
+                margin-top: 10px;
+                white-space: normal;
+            }
         }
         .appstore-wrap {
             position: relative;
