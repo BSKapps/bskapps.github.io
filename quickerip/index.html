@@ -75,13 +75,14 @@
         }
         .buy-row {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 180px;
             margin-bottom: 32px;
             flex-wrap: wrap;
-            row-gap: 48px;
+            row-gap: 32px;
         }
         .buy-row .buy-btn { flex-shrink: 0; }
+        .buy-col { display: flex; flex-direction: column; align-items: flex-start; }
         @media (max-width: 700px) {
             .buy-row { flex-direction: column; align-items: flex-start; gap: 16px; }
             .appstore-label {
@@ -336,7 +337,10 @@
 
         <div class="buy-section">
             <div class="buy-row">
-                <a href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Quicker IP Pro for $19.99 USD">Buy - $19.99 USD</a>
+                <div class="buy-col">
+                    <a href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Quicker IP Pro for $19.99 USD">Buy - $19.99 USD</a>
+                    <p class="buy-note">One-time purchase · 2 activations included</p>
+                </div>
                 <div class="appstore-wrap">
                     <a href="https://apps.apple.com/us/app/quicker-ip-lite/id6761874418" aria-label="Download Quicker IP Lite on the Mac App Store" style="text-decoration:none;">
                         <img src="https://tools.applemediaservices.com/api/badges/download-on-the-mac-app-store/black/en-us?size=250x83" alt="Download on the Mac App Store" style="height:44px; display:block;">
@@ -344,7 +348,6 @@
                     <span class="appstore-label"><span class="lite-pill">LITE</span>Free version on App Store</span>
                 </div>
             </div>
-            <p class="buy-note">One-time purchase · 2 activations included</p>
         </div>
 
         <p class="description">
