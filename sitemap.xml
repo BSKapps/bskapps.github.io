@@ -21,6 +21,41 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://bskapps.com/articles</loc>
+    <lastmod>2026-04-18</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bskapps.com/articles/static-ips-av-networks</loc>
+    <lastmod>2026-04-18</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://bskapps.com/articles/find-devices-on-network</loc>
+    <lastmod>2026-04-17</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://bskapps.com/articles/dante-mac-network-readiness</loc>
+    <lastmod>2026-04-15</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://bskapps.com/articles/qlab-workspace-habits</loc>
+    <lastmod>2026-04-12</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://bskapps.com/articles/reaper-lua-cue-workflows</loc>
+    <lastmod>2026-04-09</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://bskapps.com/articles/native-mac-over-electron</loc>
+    <lastmod>2026-04-04</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://bskapps.com/about</loc>
     <lastmod>2026-04-18</lastmod>
     <priority>0.5</priority>

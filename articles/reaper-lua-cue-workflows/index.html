@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reaper LUA scripting for live recording - BSK Apps</title>
+    <meta name="description" content="Why LUA is worth learning for Reaper even if you only write ten lines, with a real live-recording example: renaming a full multitrack session from a CSV.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/reaper-lua-cue-workflows">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Reaper LUA scripting for live recording">
+    <meta property="og:description" content="A short intro to Reaper LUA for live multitrack workflows.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d0d0d; color: #e0e0e0; min-height: 100vh; }
+        .container { max-width: 760px; margin: 0 auto; padding: 60px 24px; }
+        .back { display: inline-block; color: #7ac4ff; text-decoration: none; font-size: 0.9rem; margin-bottom: 32px; }
+        .back:hover { color: #fff; }
+        h1 { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+        .date { color: #666; font-size: 0.85rem; margin-bottom: 32px; }
+        article p { line-height: 1.75; color: #cfcfcf; margin-bottom: 18px; font-size: 1.02rem; }
+        article h2 { font-size: 1.25rem; color: #fff; margin: 32px 0 14px; }
+        article ul { margin: 0 0 18px 20px; color: #cfcfcf; line-height: 1.7; }
+        article ul li { margin-bottom: 8px; }
+        article a { color: #7ac4ff; text-decoration: none; }
+        article a:hover { color: #fff; }
+        article code { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 4px; padding: 1px 6px; font-size: 0.9em; color: #e0e0e0; }
+        article pre { background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 16px 18px; overflow-x: auto; margin-bottom: 18px; line-height: 1.55; font-size: 0.9rem; color: #d0d0d0; }
+        footer { text-align: center; margin-top: 56px; color: #555; font-size: 0.85rem; line-height: 1.6; border-top: 1px solid #1a1a1a; padding-top: 24px; }
+        footer a { color: #888; text-decoration: none; }
+        footer a:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>Reaper LUA scripting for live recording</h1>
+            <p class="date">9 April 2026</p>
+
+            <p>Reaper is an unusually honest DAW. Most of what you do in the UI is driven by actions, and most of those actions are exposed to a scripting language. If you record live shows or sessions and spend any time on prep, learning ten lines of LUA is one of the highest-return things you can do.</p>
+
+            <h2>Why bother</h2>
+            <p>Manual repetition is where mistakes live. Renaming forty-eight inputs to match a stage patch, colouring each channel group, consolidating every track into a new take. Doing it by hand takes an hour and a quarter of it will be wrong. A script takes the same hour to write the first time, then runs in a second forever after.</p>
+            <p>You don't need to be a programmer. You need to be able to copy, paste, and read a function reference. That is the whole bar.</p>
+
+            <h2>A real live-recording example: rename tracks from a CSV</h2>
+            <p>You turn up to a gig. The FOH engineer hands you their patch list as a CSV. Your Reaper session has forty-eight tracks called <code>Track 1</code> through <code>Track 48</code>. You want them renamed in thirty seconds, not thirty minutes.</p>
+            <p>Save a file as <code>patch.csv</code> somewhere you'll find it again. One track per line, number then name:</p>
+            <pre><code>1,Kick In
+2,Kick Out
+3,Snare Top
+4,Snare Bottom
+5,Hat
+6,Tom 1
+7,Tom 2
+8,Floor Tom</code></pre>
+            <p>Drop this script into <code>~/Library/Application Support/REAPER/Scripts/</code> and add it to the Action List:</p>
+            <pre><code>local file = io.open("/Users/you/Desktop/patch.csv", "r")
+if not file then return end
+
+for line in file:lines() do
+    local num, name = line:match("(%d+),(.+)")
+    if num and name then
+        local track = reaper.GetTrack(0, tonumber(num) - 1)
+        if track then
+            reaper.GetSetMediaTrackInfo_String(
+                track, "P_NAME", name, true)
+        end
+    end
+end
+
+file:close()
+reaper.UpdateArrange()</code></pre>
+            <p>That's it. Run the action, every track picks up the right name, ready to record. Change the CSV, run it again, names update. The same pattern works for colours, folder assignments, record-arm state, anything Reaper exposes on a track.</p>
+
+            <h2>Where to go from here</h2>
+            <ul>
+                <li>Reaper's built-in <code>reascript_api.html</code> lists every function, with LUA and Python examples for each.</li>
+                <li>The SWS/S&amp;M extension adds more actions you can drive from scripts.</li>
+                <li>Scripts live in a plain folder. Version them in git if you care about not losing them.</li>
+            </ul>
+            <p>We've written a small set of these for common show-audio tasks. They're free, on the <a href="/resources">resources page</a>. Use them as-is, or copy the patterns and adapt them to your workflow.</p>
+
+            <h2>The real lesson</h2>
+            <p>Most of what a live recording engineer does before hitting record is deterministic. Anything deterministic can be a script. The point isn't to automate everything, it's to stop doing the boring parts of the job with your hands so your head is free for the parts that actually need it.</p>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dante network readiness on a Mac - BSK Apps</title>
+    <meta name="description" content="A pre-show checklist for getting a Mac onto a Dante network: which USB Ethernet chipsets work (CDC-NCM, RTL8156), why Wi-Fi has to be off, and how to avoid subnet clashes.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/dante-mac-network-readiness">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Dante network readiness on a Mac">
+    <meta property="og:description" content="Getting a Mac stage-ready for Dante: adapters, Wi-Fi, and subnet traps.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d0d0d; color: #e0e0e0; min-height: 100vh; }
+        .container { max-width: 760px; margin: 0 auto; padding: 60px 24px; }
+        .back { display: inline-block; color: #7ac4ff; text-decoration: none; font-size: 0.9rem; margin-bottom: 32px; }
+        .back:hover { color: #fff; }
+        h1 { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+        .date { color: #666; font-size: 0.85rem; margin-bottom: 32px; }
+        article p { line-height: 1.75; color: #cfcfcf; margin-bottom: 18px; font-size: 1.02rem; }
+        article h2 { font-size: 1.25rem; color: #fff; margin: 32px 0 14px; }
+        article ul { margin: 0 0 18px 20px; color: #cfcfcf; line-height: 1.7; }
+        article ul li { margin-bottom: 8px; }
+        article a { color: #7ac4ff; text-decoration: none; }
+        article a:hover { color: #fff; }
+        article code { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 4px; padding: 1px 6px; font-size: 0.9em; color: #e0e0e0; }
+        footer { text-align: center; margin-top: 56px; color: #555; font-size: 0.85rem; line-height: 1.6; border-top: 1px solid #1a1a1a; padding-top: 24px; }
+        footer a { color: #888; text-decoration: none; }
+        footer a:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>Dante network readiness on a Mac</h1>
+            <p class="date">15 April 2026</p>
+
+            <p>Dante is usually reliable. When it isn't, it's almost always the network underneath, not Dante itself. Macs are fine Dante endpoints, but a few defaults need attention before you plug into a show. Treat this as a short pre-show checklist.</p>
+
+            <h2>Use a USB Ethernet adapter with the right chipset</h2>
+            <p>Modern MacBooks have no built-in Ethernet, so you're always using an adapter. Not all adapters are equal, and on macOS the difference is mostly about which USB class the adapter speaks.</p>
+
+            <p><strong>CDC-NCM vs CDC-ECM, in one paragraph.</strong> Both are standard USB Communications Device Class profiles for carrying Ethernet over USB. <em>CDC-ECM</em> is the older, simpler one: it wraps each Ethernet frame in a USB packet. <em>CDC-NCM</em> is newer and smarter: it batches multiple frames into one USB transfer, which is how you get reliable throughput at gigabit and 2.5 GbE without the CPU overhead. macOS has native drivers for both, but NCM is the one you want on modern rigs. Anything below that, including older ASIX chipsets that use their own vendor-specific protocol and need a kext, is where you get flaky behaviour under sustained audio load.</p>
+
+            <p>Safe chipsets on macOS for Dante work:</p>
+            <ul>
+                <li><strong>Realtek RTL8156 / RTL8156B</strong> - 2.5 GbE, CDC-NCM compliant, driverless on macOS 12+, rock solid. Most of the current crop of UGREEN, Anker, and CalDigit adapters use this chip.</li>
+                <li><strong>Realtek RTL8153</strong> - gigabit, CDC-NCM, driverless, well-supported across every recent macOS version.</li>
+                <li><strong>Apple USB-C to Gigabit Ethernet</strong> - Apple's own adapter, driverless, boring and reliable.</li>
+                <li><strong>OWC and Belkin Thunderbolt gigabit adapters</strong> - bus-powered, low latency, deterministic.</li>
+            </ul>
+            <p>What to avoid: older ASIX parts (AX88772 and similar) that use a vendor-specific protocol and require a kernel extension, any adapter that insists on its own driver download, and random unbranded Amazon dongles whose chipset isn't listed on the packaging. If the box doesn't say CDC-NCM or the chipset isn't one of the ones above, assume it will cause problems at the worst possible moment.</p>
+            <p>Confirm the negotiation is clean once plugged in. System Settings, Network, pick the adapter, Details, Hardware. You want <code>Speed: 1 Gbit/s</code> or <code>2.5 Gbit/s</code>, <code>Duplex: full-duplex</code>, <code>MTU: Standard (1500)</code>. Anything else, fix it before you trust it.</p>
+
+            <h2>Turn Wi-Fi off, not just disconnected</h2>
+            <p>Dante Controller explicitly recommends disabling Wi-Fi on the control machine. There's a good reason. If Wi-Fi is on and the Dante network has no internet path, macOS may send Dante Controller's discovery traffic out the wrong interface, or randomly prefer Wi-Fi for mDNS. You'll see devices appear and disappear, clock sync go yellow, and patch commands silently fail.</p>
+            <p>Switch Wi-Fi off from the menu bar for the duration of the show. Not "disconnect from current network". Off. If you need Wi-Fi at the same time (for cue-firing tablets, phones, a wireless mic receiver with a web UI), put it on a genuinely different subnet and set the Service Order in System Settings so Ethernet is first.</p>
+
+            <h2>Watch out for subnet clashes</h2>
+            <p>The single most common Dante-on-Mac trap: your Wi-Fi and your Dante network both sit on <code>192.168.1.x</code>. macOS now has two interfaces claiming the same subnet and has to guess which one Dante Controller should talk to. It guesses wrong. You get a nominally working Wi-Fi, a nominally working Ethernet, and a Dante Controller window full of offline devices.</p>
+            <p>Options, in order of how often they fix it:</p>
+            <ul>
+                <li>Turn Wi-Fi off.</li>
+                <li>Put the Dante network on a subnet that definitely doesn't overlap with anything else. <code>192.168.10.x</code> or <code>172.16.50.x</code> are popular choices for a reason.</li>
+                <li>Change the Wi-Fi router's LAN subnet at home so it never matches typical show subnets.</li>
+            </ul>
+
+            <h2>Static IP on the Dante subnet</h2>
+            <p>On a dedicated Dante network with no DHCP, set the Mac manually to an unused address in the same subnet as the devices, with no gateway. Vendor-supplied sheets win over improvisation. If you juggle more than one non-DHCP network, named presets are worth their weight - <a href="/articles/static-ips-av-networks">longer piece on that here</a>.</p>
+
+            <h2>Turn off energy-saving traps</h2>
+            <ul>
+                <li>Sleep when display is off - Never, on AC.</li>
+                <li>Wake for network access - off.</li>
+                <li>Screen saver waking Wi-Fi back on - disable.</li>
+                <li>Any VPN client with a kill switch or "route all traffic" toggle - off during shows.</li>
+            </ul>
+
+            <h2>Verify before the house opens</h2>
+            <p>Open Dante Controller. Every device present, green, and clocked. Run a ten-second test tone from a source you trust to a destination you trust. Look at the status dots, not just the meters. If anything's orange, it will go red under load. We built the <a href="/quickerip">Quicker IP Pro</a> status panel around exactly this check, so a sound op can glance at link state, speed, IP, and activity from the menu bar without opening three different settings panes.</p>
+
+            <h2>The whole point</h2>
+            <p>A Mac is a perfectly capable Dante endpoint. It just won't do it by accident. Ten minutes of set-up before the crew call saves an hour of troubleshooting during the show.</p>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>

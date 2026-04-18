@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finding devices and free IPs on an unfamiliar network - BSK Apps</title>
+    <meta name="description" content="Practical ways to see what's on a network and which addresses are free, on a Mac: arp, ping sweeps, Bonjour, and a tidier scanner for the show day.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/find-devices-on-network">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Finding devices and free IPs on an unfamiliar network">
+    <meta property="og:description" content="How to see what's on a LAN and pick a safe static IP, on a Mac.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d0d0d; color: #e0e0e0; min-height: 100vh; }
+        .container { max-width: 760px; margin: 0 auto; padding: 60px 24px; }
+        .back { display: inline-block; color: #7ac4ff; text-decoration: none; font-size: 0.9rem; margin-bottom: 32px; }
+        .back:hover { color: #fff; }
+        h1 { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+        .date { color: #666; font-size: 0.85rem; margin-bottom: 32px; }
+        article p { line-height: 1.75; color: #cfcfcf; margin-bottom: 18px; font-size: 1.02rem; }
+        article h2 { font-size: 1.25rem; color: #fff; margin: 32px 0 14px; }
+        article ul, article ol { margin: 0 0 18px 20px; color: #cfcfcf; line-height: 1.7; }
+        article li { margin-bottom: 8px; }
+        article a { color: #7ac4ff; text-decoration: none; }
+        article a:hover { color: #fff; }
+        article code { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 4px; padding: 1px 6px; font-size: 0.9em; color: #e0e0e0; }
+        article pre { background: #121212; border: 1px solid #2a2a2a; border-radius: 8px; padding: 16px 18px; overflow-x: auto; margin-bottom: 18px; line-height: 1.55; font-size: 0.9rem; color: #d0d0d0; }
+        footer { text-align: center; margin-top: 56px; color: #555; font-size: 0.85rem; line-height: 1.6; border-top: 1px solid #1a1a1a; padding-top: 24px; }
+        footer a { color: #888; text-decoration: none; }
+        footer a:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>Finding devices and free IPs on an unfamiliar network</h1>
+            <p class="date">17 April 2026</p>
+
+            <p>You turn up to a venue, plug into their network, and need a static IP. Or you're handed a rig nobody has documented, and half the devices are unresponsive. Or a console won't see a media server and you need to know whether it's on the network at all. Three versions of the same question: what is actually on this LAN, and which addresses are free?</p>
+
+            <p>Here are four ways to answer that on a Mac, from scrappy to tidy.</p>
+
+            <h2>1. arp - what has recently talked to you</h2>
+            <p>In Terminal:</p>
+            <pre><code>arp -a -n</code></pre>
+            <p>This lists every device your Mac has recently exchanged traffic with, by IP and MAC address. It's fast and cheap but only shows devices that have actually been talking. A device that's online but quiet won't appear until you poke it. Useful for a quick "what's around", not a complete picture.</p>
+
+            <h2>2. Ping sweep - crude and effective</h2>
+            <p>To see which addresses respond on the typical <code>192.168.1.x</code> subnet:</p>
+            <pre><code>for i in {1..254}; do ping -c 1 -W 200 192.168.1.$i > /dev/null &amp;&amp; echo "192.168.1.$i up"; done</code></pre>
+            <p>Runs in a few seconds, prints every address that replies. Then run <code>arp -a -n</code> again and you'll have a more complete list. The catch: anything configured to ignore ICMP pings (some IP cameras, a few consoles, anything behind a strict firewall) won't show up. It's a baseline, not a guarantee.</p>
+
+            <h2>3. Bonjour browser - for anything that announces itself</h2>
+            <p>Most modern AV gear (printers, AirPlay devices, QLab instances, Dante devices in Dante Controller) broadcasts its presence via Bonjour. You can see this without installing anything:</p>
+            <pre><code>dns-sd -B _services._dns-sd._udp</code></pre>
+            <p>or browse a specific service type:</p>
+            <pre><code>dns-sd -B _qlab._tcp</code></pre>
+            <p>This finds devices by name rather than IP, which is often more useful in an AV context. "Lighting console" tells you more than "192.168.1.47".</p>
+
+            <h2>4. A proper scanner for the show day</h2>
+            <p>Terminal sweeps are great when you have five minutes and a coffee. They're not great when you're standing at FOH during a sound check trying to figure out why the media server won't come up.</p>
+            <p>This is why we built a scanner into <a href="/quickerip">Quicker IP Pro</a>. One click, the current subnet is scanned, and you get a list of every responding device with IP, MAC, vendor name, hostname, and response time. Sort by anything, filter to used or free, and copy an address with one click. No terminal, no loops, no typos at 20:25.</p>
+            <p>It's the same information the command-line tools give you, presented in a way that doesn't require you to remember the syntax under pressure.</p>
+
+            <h2>Picking a free IP safely</h2>
+            <p>Once you know what's on the network, assigning yourself an address becomes a five-second job instead of a gamble. The rules that keep you out of trouble:</p>
+            <ol>
+                <li>Stay inside the subnet you're already on. If the router is <code>192.168.1.1</code> and responding devices sit in <code>192.168.1.0/24</code>, don't invent an address in <code>192.168.2.x</code>.</li>
+                <li>Avoid the low addresses (1-10) and the high ones (250-254). Those are where routers, DHCP servers, and management gear tend to live. Sit in the middle.</li>
+                <li>Double-check with <code>ping</code> before you commit. If your chosen address replies before you've configured yourself, someone else has it.</li>
+                <li>If the network has DHCP, ask the gateway for its lease range. Sit outside it, not inside it. A static address inside a DHCP pool will eventually collide.</li>
+            </ol>
+
+            <h2>The habit worth building</h2>
+            <p>Before configuring anything on a network you didn't set up yourself, spend thirty seconds looking. It changes the character of the job from guessing to knowing, and it's the difference between a clean plug-in and a pager call at midnight.</p>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>

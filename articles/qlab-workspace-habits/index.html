@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QLab workspace habits from real shows - BSK Apps</title>
+    <meta name="description" content="Real-world QLab habits from running actual shows: level consistency, mono file traps, Go button safety, panic fade times, continue modes, and the cues you should trim before tech.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/qlab-workspace-habits">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="QLab workspace habits from real shows">
+    <meta property="og:description" content="Habits that save a QLab workspace and the op behind it during tech and show.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d0d0d; color: #e0e0e0; min-height: 100vh; }
+        .container { max-width: 760px; margin: 0 auto; padding: 60px 24px; }
+        .back { display: inline-block; color: #7ac4ff; text-decoration: none; font-size: 0.9rem; margin-bottom: 32px; }
+        .back:hover { color: #fff; }
+        h1 { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+        .date { color: #666; font-size: 0.85rem; margin-bottom: 32px; }
+        article p { line-height: 1.75; color: #cfcfcf; margin-bottom: 18px; font-size: 1.02rem; }
+        article h2 { font-size: 1.25rem; color: #fff; margin: 32px 0 14px; }
+        article ul { margin: 0 0 18px 20px; color: #cfcfcf; line-height: 1.7; }
+        article ul li { margin-bottom: 8px; }
+        article a { color: #7ac4ff; text-decoration: none; }
+        article a:hover { color: #fff; }
+        article code { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 4px; padding: 1px 6px; font-size: 0.9em; color: #e0e0e0; }
+        footer { text-align: center; margin-top: 56px; color: #555; font-size: 0.85rem; line-height: 1.6; border-top: 1px solid #1a1a1a; padding-top: 24px; }
+        footer a { color: #888; text-decoration: none; }
+        footer a:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>QLab workspace habits from real shows</h1>
+            <p class="date">12 April 2026</p>
+
+            <p>A QLab workspace at the start of tech is a clean thing. Nicely numbered, sensibly named, everything fading how the designer intended. By day five it's three hundred cues deep with inconsistent numbering, a couple of orphaned groups, and at least one cue nobody remembers adding. The habits below are the small disciplines that keep that drift under control, and a few traps that have caught me out personally.</p>
+
+            <h2>Assume the levels are never the same</h2>
+            <p>Across a season you'll get files from the composer, the sound designer, the foley editor, maybe the director's phone voice-memo. They're never mixed to the same reference. One cue peaks at -1 dBFS, the next sits at -18 dBFS with no explanation. If you trust the filenames and don't listen, you will hurt someone at the matinee.</p>
+            <p>Pass every new file through QLab at a known starting point. Same output patch, same master level, same room. Set a consistent cue level based on what you hear, not what the waveform looks like. Do it once per asset, not cue by cue.</p>
+
+            <h2>Mono files will catch you out</h2>
+            <p>This one cost me a show. A mono file in a stereo cue goes to output 1 by default. Output 1 might be stage left, stage centre, or an amplifier that isn't even on tonight. You load the show, you hear it fine in your cans because you're monitoring both outputs, and the audience hears nothing or hears it from the wrong speaker.</p>
+            <p>Two habits that fix it:</p>
+            <ul>
+                <li>Check every new audio cue's patch routing. If it's mono, either explicitly route it to the outputs you want or convert it to interleaved stereo. Don't trust defaults.</li>
+                <li>Do a dry run of every audio cue from the house, on the actual system, before tech starts. Not from the op's seat with headphones.</li>
+            </ul>
+
+            <h2>Set the Go button minimum time</h2>
+            <p>QLab, Settings, General. There's a minimum time between Go presses. By default it's small. Set it to something like 500 ms. This is double-protection against the moment a stage manager's finger slips on the clicker, or your own Spacebar bounces. It won't save you from everything, but it will save you from the class of mistake where you fire cue 50 twice in a second and the show goes red.</p>
+
+            <h2>Set a panic fade time before you need it</h2>
+            <p>Workspace Settings, Workspace, has a panic fade duration. Default is very short. Set it to 3 or 4 seconds. The day you reach for Escape because something has gone catastrophically wrong, you do not want the entire bed of sound to cut instantly and leave the room in silence with everyone staring at the booth. Three to four seconds of fade out lets the house recover gracefully instead of slamming to silence.</p>
+            <p>And if the panic itself is the emergency - a runaway cue, feedback, a wrong file blasting out - double-hit Escape. QLab treats the second press as a hard stop: everything cuts immediately, panic fade ignored. Muscle memory worth practising at home.</p>
+
+            <h2>Continue modes are not an afterthought</h2>
+            <p>Every cue has a continue mode: Do Not Continue, Auto-Continue, Auto-Follow. These determine whether the next cue waits for another Go or fires automatically. Shows live or die on having these set correctly and consistently.</p>
+            <p>Walk the cue list once, end to end, in Show mode. Every cue's continue mode should be a deliberate choice, not the default from when you first dragged the file in. If the designer intended two sound effects to play together, both should fire from one Go with an Auto-Continue. If a music cue should wait for the SM's call, it should explicitly say so.</p>
+
+            <h2>Trim cues manually before tech, not during</h2>
+            <p>A five-second intro on a two-minute cue is five seconds of dead time the SM has to call early. Trim it. A piece of room tone that runs for 30 seconds after the line is dead tail that fades on the next cue's entry and muddies the transition. Trim it. QLab's in-cue start and end time fields exist for exactly this - you don't have to touch the file.</p>
+            <p>Do this before tech starts, with the designer present if possible. It is the single fastest way to make a show feel tighter without changing any content.</p>
+
+            <h2>Number on tens, name for what they do</h2>
+            <p>Number cues in tens from day one. 10, 20, 30. When the director asks for something between 10 and 20, it's 15. Between 15 and 20 it's 17. Three digits is a stop sign: rebuild the numbering rather than invent 12.5.</p>
+            <p>Name cues for what they do. <code>Thunder - top of act 2</code> beats <code>SFX 12</code> every time, and costs you nothing at read-through.</p>
+
+            <h2>The clean-up problem</h2>
+            <p>Renumbering forty cues, applying consistent fade and stop actions, batching level changes, all by hand, is the job no one wants. It's also what turns a messy workspace into a reliable one.</p>
+            <p>This is exactly why we built <a href="/labassistant">Lab Assistant</a>. It takes a workspace, renumbers on tens, applies consistent fade and continue modes, batches level changes, and backs the original up first. What used to be a slow end-of-day chore takes a minute.</p>
+
+            <h2>Save a clean copy before every run</h2>
+            <p>Before the first tech run each day, save a dated copy of the workspace. <code>Show v03 - 2026-04-12.qlab5</code>. If you or the designer wreck something during the run, you have a known-good state ten minutes old. QLab's undo is fine for the last few moves. It's not a recovery strategy for a bad half hour.</p>
+
+            <h2>The common thread</h2>
+            <p>None of this is clever. It's friction removed, and a couple of traps sign-posted. Every minute you don't spend hunting for a cue, guessing at a level, or explaining a mono-file mistake during tech is a minute you can spend on something that actually matters to the show.</p>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>

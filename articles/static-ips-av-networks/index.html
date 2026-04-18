@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running multiple network adapters on a Mac - BSK Apps</title>
+    <meta name="description" content="How to run a Mac with several network adapters at once without routing chaos: service order, per-interface DNS, when to use DHCP, reservation, static, or link-local.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/static-ips-av-networks">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Running multiple network adapters on a Mac">
+    <meta property="og:description" content="A working setup for a Mac juggling Wi-Fi, a show control LAN, and an audio network at the same time.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d0d0d; color: #e0e0e0; min-height: 100vh; }
+        .container { max-width: 760px; margin: 0 auto; padding: 60px 24px; }
+        .back { display: inline-block; color: #7ac4ff; text-decoration: none; font-size: 0.9rem; margin-bottom: 32px; }
+        .back:hover { color: #fff; }
+        h1 { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+        .date { color: #666; font-size: 0.85rem; margin-bottom: 32px; }
+        article p { line-height: 1.75; color: #cfcfcf; margin-bottom: 18px; font-size: 1.02rem; }
+        article h2 { font-size: 1.25rem; color: #fff; margin: 32px 0 14px; }
+        article ul, article ol { margin: 0 0 18px 20px; color: #cfcfcf; line-height: 1.7; }
+        article li { margin-bottom: 8px; }
+        article a { color: #7ac4ff; text-decoration: none; }
+        article a:hover { color: #fff; }
+        article code { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 4px; padding: 1px 6px; font-size: 0.9em; color: #e0e0e0; }
+        footer { text-align: center; margin-top: 56px; color: #555; font-size: 0.85rem; line-height: 1.6; border-top: 1px solid #1a1a1a; padding-top: 24px; }
+        footer a { color: #888; text-decoration: none; }
+        footer a:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>Running multiple network adapters on a Mac</h1>
+            <p class="date">18 April 2026</p>
+
+            <p>A MacBook used in live production rarely has one network connection. Touring rigs, installs, and even small corporate shows often have the same Mac on Wi-Fi, a wired control LAN, and a dedicated audio network at the same time. Each wants its own settings. macOS will happily run all three concurrently, but it will also happily route traffic out the wrong interface if you don't set it up.</p>
+
+            <p>Here's a working approach.</p>
+
+            <h2>Why you end up with multiple adapters</h2>
+            <p>Typical setups that push you past a single interface:</p>
+            <ul>
+                <li><strong>Wi-Fi</strong> for internet access, remote support, and software updates.</li>
+                <li><strong>One wired Ethernet adapter</strong> for a show control LAN: consoles, media servers, lighting, OSC traffic.</li>
+                <li><strong>A second wired adapter</strong>, often on a Thunderbolt dock or second USB-C port, for the audio network (Dante, AVB, NDI).</li>
+            </ul>
+            <p>Three networks, three different subnets, three different rulesets. None of which should be talking to each other.</p>
+
+            <h2>Pick the right addressing per network</h2>
+            <p>Four options, and the right one depends on the network, not your habit.</p>
+            <ul>
+                <li><strong>DHCP</strong> - router hands out an address. Default for Wi-Fi, home, office, most venue back-of-house. Leave it alone.</li>
+                <li><strong>DHCP reservation</strong> - router is configured to always hand your Mac the same address. Useful when something needs a stable address on a Wi-Fi network.</li>
+                <li><strong>Static IP</strong> - Mac is set manually. The only option when the network has no DHCP server, or when the vendor has assigned you an address.</li>
+                <li><strong>Link-local (169.254.x.x)</strong> - no DHCP server answers, so the Mac auto-assigns itself an unused address in 169.254.0.0/16. Set Configure IPv4 to "Using DHCP" and leave it. If there's nothing to respond, macOS falls through to link-local on its own after a short delay. This is how most Dante networks actually run day to day: every device falls to link-local, discovery still works, nobody has to configure anything. Don't dismiss it just because it feels like a fallback.</li>
+            </ul>
+
+            <h2>Service order is where it gets situational</h2>
+            <p>System Settings, Network, three-dots menu, Set Service Order. This is the setting that tells macOS which interface to prefer for things like default route and DNS when more than one is active. The right order is not universal.</p>
+            <p>Two common configurations:</p>
+            <ul>
+                <li><strong>Office or prep day</strong>: Wi-Fi on top, so general internet traffic goes out Wi-Fi. Wired networks still work for their own subnets, they just don't try to be the default route. Useful when you need software updates, cloud storage, or remote support while also on a show LAN.</li>
+                <li><strong>Show day</strong>: audio network on top, Wi-Fi below or off entirely. For a lot of rigs, the audio interface needs to win any tie-break - discovery, multicast, the lot. Pushing it to the top of the service order keeps macOS from preferring Wi-Fi for traffic that should stay wired.</li>
+            </ul>
+            <p>Having to reorder this by hand every time you switch contexts is where Locations earn their keep. A "Show" Location with audio on top, a "Prep" Location with Wi-Fi on top, and you swap between them instead of dragging rows in System Settings under pressure. <a href="/quickerip">Quicker IP</a> shows the current service order in the menu bar and changes it automatically when you switch presets, so "Show" and "Prep" are one click apart with no System Settings detour.</p>
+
+            <h2>Give each adapter only what it needs</h2>
+            <p>Each interface has its own IPv4, DNS, and router settings. A common mistake is filling in all of them on every interface, which then fights with itself.</p>
+            <ul>
+                <li>The internet-facing interface gets IP, subnet, router, and DNS. Usually all via DHCP.</li>
+                <li>A control LAN that has no internet access gets IP and subnet only. No router. No DNS.</li>
+                <li>An audio network on link-local gets nothing at all. Leave Configure IPv4 on "Using DHCP" and let macOS fall through to a 169.254.x.x address automatically. No router, no DNS.</li>
+            </ul>
+            <p>If an interface doesn't need a gateway, don't give it one. Two interfaces with gateways will silently fight about which one is the default route and you'll spend an hour on it at the worst possible time.</p>
+
+            <h2>The switching problem</h2>
+            <p>All of this is fine when the Mac lives in the one rig. The moment it travels - same laptop, different venue, different networks - each of those interfaces needs a different configuration. macOS makes that slow. System Settings, Network, interface, Details, TCP/IP, switch from DHCP to Manually, enter four fields, switch to DNS, enter more fields, click OK, back out. Ten steps per interface. Three interfaces, thirty steps. Every show day.</p>
+            <p>macOS has a built-in feature called Locations (Network pane, three-dots menu) that saves the whole set and lets you swap between them. It works, but it's buried and only stores the top-level config.</p>
+            <p>This is the problem <a href="/quickerip">Quicker IP</a> is built for. Named presets per network, per interface, switched from the menu bar in one click. No System Settings detour.</p>
+
+            <h2>The honest summary</h2>
+            <p>Multiple adapters is the normal state of a touring Mac, not an edge case. Set the service order deliberately, give each interface only what it actually needs, and have a fast way to swap configurations when the rig moves. Do that and you stop fighting your own laptop.</p>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>
