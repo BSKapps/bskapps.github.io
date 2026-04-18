@@ -66,6 +66,9 @@
             padding: 28px 32px;
             margin-bottom: 16px;
         }
+        .script-card.transport { border-left: 4px solid #7aff8a; }
+        .script-card.hardware { border-left: 4px solid #b48aff; }
+        .script-card.setup { background: #141414; border-style: dashed; border-color: #333; }
         .script-card h3 {
             font-size: 1.05rem;
             color: #fff;
@@ -174,31 +177,31 @@
         <h2 class="section-title">Free Reaper LUA Scripts</h2>
         <p class="section-desc">Designed for live recording and virtual soundcheck. Drop these into your Reaper Scripts folder and assign them to actions or toolbar buttons.</p>
 
-        <div class="script-card">
+        <div class="script-card transport">
             <h3>BSK Transport: Play <span class="badge lua">LUA</span></h3>
             <p>Starts playback only if stopped or paused. Does nothing if already playing or recording. Designed to make your Stream Deck transport buttons safe.</p>
             <a class="download-link" href="/resources/scripts/BSK_Transport_Play.lua" download>Download BSK_Transport_Play.lua</a>
         </div>
 
-        <div class="script-card">
+        <div class="script-card transport">
             <h3>BSK Transport: Pause <span class="badge lua">LUA</span></h3>
             <p>Pauses if playing, unpauses if paused. Does nothing if stopped or recording. Designed to make your Stream Deck transport buttons safe.</p>
             <a class="download-link" href="/resources/scripts/BSK_Transport_Pause.lua" download>Download BSK_Transport_Pause.lua</a>
         </div>
 
-        <div class="script-card">
+        <div class="script-card transport">
             <h3>BSK Transport: Record <span class="badge lua">LUA</span></h3>
             <p>Starts recording only if not already recording. Designed to make your Stream Deck transport buttons safe.</p>
             <a class="download-link" href="/resources/scripts/BSK_Transport_Record.lua" download>Download BSK_Transport_Record.lua</a>
         </div>
 
-        <div class="script-card">
+        <div class="script-card hardware">
             <h3>BSK AutoPatch: HW 1-to-1 Mono <span class="badge lua">LUA</span></h3>
             <p>Patches all tracks 1:1 to mono hardware inputs and outputs. Sets pre-FX sends at unity gain, disables master send and monitoring. Shows a summary when done.</p>
             <a class="download-link" href="/resources/scripts/BSK_AutoPatch_HW_1to1_Mono.lua" download>Download BSK_AutoPatch_HW_1to1_Mono.lua</a>
         </div>
 
-        <div class="script-card">
+        <div class="script-card hardware">
             <h3>BSK AutoPatch: HW Teardown <span class="badge lua">LUA</span></h3>
             <p>Removes all hardware sends and restores master send and monitoring on every track. An extreme undo button for AutoPatch.</p>
             <a class="download-link" href="/resources/scripts/BSK_AutoPatch_HW_Teardown.lua" download>Download BSK_AutoPatch_HW_Teardown.lua</a>
@@ -206,7 +209,7 @@
 
         <h2 class="section-title" style="margin-top: 40px; margin-bottom: 16px;">How to Install</h2>
 
-        <div class="script-card">
+        <div class="script-card setup">
             <h3>Manual Install</h3>
             <p>Add scripts directly to Reaper from the downloaded files.</p>
             <ol class="steps">
@@ -218,7 +221,7 @@
             </ol>
         </div>
 
-        <div class="script-card">
+        <div class="script-card setup">
             <h3>Via ReaPack</h3>
             <p>Install and update scripts automatically using ReaPack. Requires <a class="download-link" href="https://reapack.com" target="_blank" rel="noopener">ReaPack</a> to be installed.</p>
             <ol class="steps">
@@ -231,7 +234,7 @@
 
         <h2 class="section-title" style="margin-top: 40px; margin-bottom: 16px;">Stream Deck via Companion</h2>
 
-        <div class="script-card">
+        <div class="script-card setup">
             <h3>Assign scripts to Stream Deck buttons using Bitfocus Companion</h3>
             <p>Companion's Reaper module uses Reaper's web interface to trigger actions remotely.</p>
             <ol class="steps">
@@ -256,7 +259,7 @@
 
         <footer>
             <p>&copy; 2026 BSK Apps &middot; ABN 75 146 604 896</p>
-            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/articles">Articles</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
         </footer>
     </div>
 </body>
