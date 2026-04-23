@@ -271,6 +271,28 @@
             max-height: 90vh;
             border-radius: 12px;
         }
+        .lightbox-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: #fff;
+            font-size: 36px;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+        .lightbox.active ~ .lightbox-arrow { display: flex; }
+        .lightbox-arrow:hover { background: rgba(255,255,255,0.3); }
+        .lightbox-arrow.prev { left: 20px; }
+        .lightbox-arrow.next { right: 20px; }
         .screenshot-scroll figcaption {
             text-align: center;
             color: #666;
@@ -505,16 +527,29 @@
         </footer>
     </div>
 <div class="lightbox" id="lightbox"><img src="" alt=""></div>
+<button class="lightbox-arrow prev" id="lb-prev">&#8249;</button>
+<button class="lightbox-arrow next" id="lb-next">&#8250;</button>
 <script>
-document.querySelectorAll('.screenshot-scroll img').forEach(img => {
-    img.addEventListener('click', () => {
-        const lb = document.getElementById('lightbox');
-        lb.querySelector('img').src = img.src;
-        lb.classList.add('active');
-    });
+let lbImgs = [], lbIdx = 0;
+const lb = document.getElementById('lightbox');
+const lbImg = lb.querySelector('img');
+function lbShow(i) {
+    lbIdx = (i + lbImgs.length) % lbImgs.length;
+    lbImg.src = lbImgs[lbIdx].src;
+    lb.classList.add('active');
+}
+document.querySelectorAll('.screenshot-scroll img').forEach((img, i) => {
+    lbImgs.push(img);
+    img.addEventListener('click', (e) => { e.stopPropagation(); lbShow(i); });
 });
-document.getElementById('lightbox').addEventListener('click', function() {
-    this.classList.remove('active');
+lb.addEventListener('click', function() { this.classList.remove('active'); });
+document.getElementById('lb-prev').addEventListener('click', (e) => { e.stopPropagation(); lbShow(lbIdx - 1); });
+document.getElementById('lb-next').addEventListener('click', (e) => { e.stopPropagation(); lbShow(lbIdx + 1); });
+document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('active')) return;
+    if (e.key === 'ArrowLeft') lbShow(lbIdx - 1);
+    if (e.key === 'ArrowRight') lbShow(lbIdx + 1);
+    if (e.key === 'Escape') lb.classList.remove('active');
 });
 function scrollGallery(dir) {
     const g = document.getElementById('gallery');
