@@ -410,7 +410,7 @@
             </div>
             <button class="gallery-arrow" onclick="scrollGallery(1)">&#8250;</button>
         </div>
-        <div id="gallery-counter" style="text-align:center; color:#666; font-size:0.8rem; margin-bottom:24px;">1 of 5</div>
+        <div id="gallery-counter" style="text-align:center; color:#666; font-size:0.8rem; margin-bottom:24px;"></div>
 
         <div class="section" style="padding: 20px 24px; margin-bottom: 24px;">
             <h2 style="margin-bottom:14px;">Lite vs Pro</h2>
@@ -528,16 +528,18 @@
             <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
         </footer>
     </div>
-<div class="lightbox" id="lightbox"><img src="" alt=""></div>
+<div class="lightbox" id="lightbox"><img src="" alt=""><span id="lb-counter" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.6);font-size:14px;pointer-events:none;"></span></div>
 <button class="lightbox-arrow prev" id="lb-prev">&#8249;</button>
 <button class="lightbox-arrow next" id="lb-next">&#8250;</button>
 <script>
 let lbImgs = [], lbIdx = 0;
 const lb = document.getElementById('lightbox');
 const lbImg = lb.querySelector('img');
+const lbCounter = document.getElementById('lb-counter');
 function lbShow(i) {
     lbIdx = (i + lbImgs.length) % lbImgs.length;
     lbImg.src = lbImgs[lbIdx].src;
+    lbCounter.textContent = (lbIdx + 1) + ' / ' + lbImgs.length;
     lb.classList.add('active');
 }
 document.querySelectorAll('.screenshot-scroll img').forEach((img, i) => {
@@ -567,6 +569,7 @@ function updateCounter() {
     document.getElementById('gallery-counter').textContent = idx + ' of ' + figs.length;
 }
 document.getElementById('gallery').addEventListener('scroll', updateCounter);
+window.addEventListener('load', updateCounter);
 const g = document.getElementById('gallery');
 let isDown = false, startX, scrollLeft;
 g.addEventListener('mousedown', e => { isDown = true; g.style.cursor = 'grabbing'; startX = e.pageX - g.offsetLeft; scrollLeft = g.scrollLeft; });
