@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Companion on macOS: network setup and stability - BSK Apps</title>
+    <meta name="description" content="How to run Bitfocus Companion reliably on a Mac with multiple network adapters: interface binding, service order, and avoiding the routing traps that make modules drop out.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/companion-macos-network">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Companion on macOS: network setup and stability">
+    <meta property="og:description" content="How to run Bitfocus Companion reliably on a Mac with multiple network adapters: interface binding, service order, and the routing traps that make modules drop out.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d0d0d; color: #e0e0e0; min-height: 100vh; }
+        .container { max-width: 760px; margin: 0 auto; padding: 60px 24px; }
+        .back { display: inline-block; color: #7ac4ff; text-decoration: none; font-size: 0.9rem; margin-bottom: 32px; }
+        .back:hover { color: #fff; }
+        h1 { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+        .date { color: #666; font-size: 0.85rem; margin-bottom: 32px; }
+        article p { line-height: 1.75; color: #cfcfcf; margin-bottom: 18px; font-size: 1.02rem; }
+        article h2 { font-size: 1.25rem; color: #fff; margin: 32px 0 14px; }
+        article ul, article ol { margin: 0 0 18px 20px; color: #cfcfcf; line-height: 1.7; }
+        article li { margin-bottom: 8px; }
+        article a { color: #7ac4ff; text-decoration: none; }
+        article a:hover { color: #fff; }
+        article code { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 4px; padding: 1px 6px; font-size: 0.9em; color: #e0e0e0; }
+        footer { text-align: center; margin-top: 56px; color: #555; font-size: 0.85rem; line-height: 1.6; border-top: 1px solid #1a1a1a; padding-top: 24px; }
+        footer a { color: #888; text-decoration: none; }
+        footer a:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>Companion on macOS: network setup and stability</h1>
+            <p class="date">25 April 2026</p>
+
+            <p>Bitfocus Companion runs as a local server on your Mac. It opens connections out to devices on the network -- consoles, media servers, QLab, lighting desks -- and listens for incoming connections from Stream Decks and remote surfaces. When it works, it's seamless. When it doesn't, the failure mode is usually not Companion itself but the Mac's network configuration underneath it.</p>
+
+            <p>Most of the traps here are the same ones covered in the multi-adapter networking articles: <a href="/articles/static-ips-av-networks">setup and service order</a>, and <a href="/articles/mac-routing-table">how the routing table decides which adapter to use</a>. This article applies those principles specifically to Companion.</p>
+
+            <h2>How Companion uses the network</h2>
+            <p>Companion has two sides to its networking:</p>
+            <ul>
+                <li><strong>Outbound connections</strong> -- Companion connects to devices using whatever protocol the module requires: TCP, UDP, OSC, HTTP, Telnet, or a device's proprietary protocol. Each of those connections goes out through an interface, chosen by the routing table based on the destination address.</li>
+                <li><strong>Inbound connections</strong> -- Companion's web UI and API listen on port 8888. Stream Decks connected via USB talk to Companion directly. Remote surfaces (Stream Decks on other machines, phone-based surfaces) connect back to Companion over the network on a separate port.</li>
+            </ul>
+            <p>The web UI and API bind to all interfaces by default, so you can reach them at <code>localhost:8888</code> or at any of the machine's IP addresses. That part mostly just works. The outbound side is where routing causes trouble.</p>
+
+            <h2>The routing problem in practice</h2>
+            <p>Say you have a show control LAN on 192.168.10.x and Wi-Fi on 192.168.1.x. You have a lighting console at 192.168.10.50 and a media server at 192.168.10.80. Companion's modules for those devices have their IPs configured correctly. But if the routing table sends traffic to 192.168.10.x out the wrong adapter -- or the 192.168.10.x route doesn't exist because that adapter isn't connected yet when Companion starts -- those modules will sit in a disconnected state.</p>
+            <p>The most common version of this: Companion launches at startup while the wired adapter is still initialising. The routing table builds without the show LAN route, Companion tries to connect, fails, and marks the modules as offline. They may reconnect automatically once the adapter comes up, or they may not, depending on the module's reconnect behaviour. Restarting Companion after the network is fully up clears it every time -- but that's not a great habit to depend on.</p>
+            <p>The fix is making sure the wired adapter is up before Companion launches, and that service order puts it in the right position. If the show LAN is on a dedicated wired interface with no gateway, traffic to 192.168.10.x goes out that interface directly via the connected route. No routing ambiguity, no service order fight.</p>
+
+            <h2>The same-subnet trap</h2>
+            <p>This one catches people who set up a dedicated Ethernet adapter for the show LAN but happen to land on the same subnet as their Wi-Fi -- usually both end up on 192.168.1.x because that's the default for most consumer gear.</p>
+            <p>With two adapters on the same subnet, the routing table has two competing entries for 192.168.1.0/24. The kernel picks one. Companion's traffic to a device at, say, 192.168.1.50 goes out whichever adapter won -- which may not be the one physically connected to the device. The module shows as offline even though the device is right there. Flipping the service order or disconnecting Wi-Fi usually makes it start working, which confirms the diagnosis.</p>
+            <p>The reliable fix is different subnets on different adapters. If you can't change the show LAN, turn Wi-Fi off. <a href="/quickerip">Quicker IP Pro</a> shows a red warning when two active adapters share a subnet and both have a gateway -- useful for catching this before Companion starts throwing connection errors.</p>
+
+            <h2>Service order for a Companion rig</h2>
+            <p>A typical setup has Companion on the same Mac as QLab, with Wi-Fi for general use and one or two wired adapters for the show. A workable service order for show day:</p>
+            <ul>
+                <li>Show control LAN (wired) -- first, so traffic to devices on that subnet goes out the right adapter</li>
+                <li>Audio network (wired, if applicable) -- second</li>
+                <li>Wi-Fi -- last, or off entirely during the show</li>
+            </ul>
+            <p>If you are only running Wi-Fi and expect Companion to talk to devices over it, that is fine as long as all the devices are on the same Wi-Fi network and there is no competing wired interface on a conflicting subnet.</p>
+
+            <h2>Remote surfaces and the Companion satellite</h2>
+            <p>If you are running a Stream Deck on a separate machine -- a stage manager's laptop, a FOH operator's computer -- that machine runs Companion Satellite and connects back to the main Companion instance over the network. Satellite needs to reach Companion's IP on the satellite port (default 16622).</p>
+            <p>The common failure here is the satellite machine being on a different network segment to the Companion machine. If the main rig is on a show control LAN and the satellite is on a venue Wi-Fi, they may not be able to reach each other at all. Either put both on the same subnet, or make sure there is a routed path between them. Companion itself doesn't require anything exotic -- it just needs a TCP connection on that port.</p>
+
+            <h2>Checking the state</h2>
+            <p>If a module is showing as disconnected and you think it should be working, confirm the basics before assuming a Companion bug:</p>
+            <ul>
+                <li>Can the Mac ping the device? If not, the problem is the network, not Companion.</li>
+                <li>Is the route for the device's subnet present? <code>netstat -rn -f inet</code> shows the current routing table. Look for an entry covering the device's IP range.</li>
+                <li>Is the adapter the route uses actually the one connected to the device? The <code>Netif</code> column in the routing table output shows which interface the route exits on.</li>
+                <li>Did Companion launch before the adapter was fully up? Restart Companion and check if the module reconnects.</li>
+            </ul>
+            <p>Most disconnected-module problems resolve at step one. Getting Companion working reliably on a multi-adapter Mac is mostly just getting the network configuration right first.</p>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>
