@@ -40,7 +40,7 @@
 
             <p>A MacBook used in live production rarely has one network connection. Touring rigs, installs, and even small corporate shows often have the same Mac on Wi-Fi, a wired control LAN, and a dedicated audio network at the same time. Each wants its own settings. macOS will happily run all three concurrently, but it will also happily route traffic out the wrong interface if you don't set it up.</p>
 
-            <p>Here's a working approach.</p>
+            <p>Here's a working approach. If you want to understand the routing mechanics behind why these rules exist, there's a companion piece: <a href="/articles/mac-routing-table">Part 2 -- how macOS routes traffic across multiple adapters</a>.</p>
 
             <h2>Why you end up with multiple adapters</h2>
             <p>Typical setups that push you past a single interface:</p>
@@ -52,7 +52,7 @@
             <p>Three networks, three different subnets, three different rulesets. None of which should be talking to each other.</p>
 
             <h2>Pick the right addressing per network</h2>
-            <p>Four options, and the right one depends on the network, not your habit.</p>
+            <p>Four options, and which is right depends on the network:</p>
             <ul>
                 <li><strong>DHCP</strong> - router hands out an address. Default for Wi-Fi, home, office, most venue back-of-house. Leave it alone.</li>
                 <li><strong>DHCP reservation</strong> - router is configured to always hand your Mac the same address. Useful when something needs a stable address on a Wi-Fi network.</li>
@@ -76,15 +76,14 @@
                 <li>A control LAN that has no internet access gets IP and subnet only. No router. No DNS.</li>
                 <li>An audio network on link-local gets nothing at all. Leave Configure IPv4 on "Using DHCP" and let macOS fall through to a 169.254.x.x address automatically. No router, no DNS.</li>
             </ul>
-            <p>If an interface doesn't need a gateway, don't give it one. Two interfaces with gateways will silently fight about which one is the default route and you'll spend an hour on it at the worst possible time.</p>
+            <p>If an interface doesn't need a gateway, don't give it one. Two interfaces with gateways will silently fight about which one is the default route and you'll spend an hour on it at the worst possible time. <a href="/quickerip">Quicker IP Pro</a> detects this automatically -- a red "Overlap detected" warning appears next to the subnet field of any affected adapter when two active interfaces share a subnet and both have a gateway configured.</p>
 
             <h2>The switching problem</h2>
             <p>All of this is fine when the Mac lives in the one rig. The moment it travels - same laptop, different venue, different networks - each of those interfaces needs a different configuration. macOS makes that slow. System Settings, Network, interface, Details, TCP/IP, switch from DHCP to Manually, enter four fields, switch to DNS, enter more fields, click OK, back out. Ten steps per interface. Three interfaces, thirty steps. Every show day.</p>
             <p>macOS has a built-in feature called Locations (Network pane, three-dots menu) that saves the whole set and lets you swap between them. It works, but it's buried and only stores the top-level config.</p>
             <p>This is the problem <a href="/quickerip">Quicker IP</a> is built for. Named presets per network, per interface, switched from the menu bar in one click. No System Settings detour.</p>
 
-            <h2>The honest summary</h2>
-            <p>Multiple adapters is the normal state of a touring Mac, not an edge case. Set the service order deliberately, give each interface only what it actually needs, and have a fast way to swap configurations when the rig moves. Do that and you stop fighting your own laptop.</p>
+            <p>Multiple adapters is the normal state of a touring Mac. Set the service order deliberately, give each interface only what it needs, and have a quick way to switch configurations when the rig moves. None of it is complicated once you've done it the first time -- it just doesn't happen automatically.</p>
         </article>
 
         <footer>
