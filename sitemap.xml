@@ -22,12 +22,27 @@
   </url>
   <url>
     <loc>https://bskapps.com/articles</loc>
-    <lastmod>2026-04-18</lastmod>
+    <lastmod>2026-04-25</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://bskapps.com/articles/companion-module-setup</loc>
+    <lastmod>2026-04-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://bskapps.com/articles/companion-macos-network</loc>
+    <lastmod>2026-04-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://bskapps.com/articles/mac-routing-table</loc>
+    <lastmod>2026-04-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://bskapps.com/articles/static-ips-av-networks</loc>
-    <lastmod>2026-04-18</lastmod>
+    <lastmod>2026-04-25</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -37,7 +52,7 @@
   </url>
   <url>
     <loc>https://bskapps.com/articles/dante-mac-network-readiness</loc>
-    <lastmod>2026-04-15</lastmod>
+    <lastmod>2026-04-25</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
