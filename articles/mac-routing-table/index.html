@@ -31,7 +31,13 @@
         footer { text-align: center; margin-top: 56px; color: #555; font-size: 0.85rem; line-height: 1.6; border-top: 1px solid #1a1a1a; padding-top: 24px; }
         footer a { color: #888; text-decoration: none; }
         footer a:hover { color: #fff; }
-    </style>
+    
+        .article-cta { margin: 36px 0 8px; padding: 22px 24px; background: linear-gradient(160deg, #1f2a3a 0%, #141820 100%); border: 1px solid #2a4a6a; border-radius: 12px; }
+        .article-cta h3 { color: #7ac4ff; font-size: 1.05rem; margin: 0 0 8px; }
+        .article-cta p { color: #cfcfcf; line-height: 1.6; margin: 0 0 12px; font-size: 0.95rem; }
+        .article-cta a.cta-link { display: inline-block; color: #7ac4ff; font-weight: 600; text-decoration: none; font-size: 0.95rem; }
+        .article-cta a.cta-link:hover { color: #fff; }
+</style>
 </head>
 <body>
     <div class="container">
@@ -108,6 +114,12 @@ default            192.168.1.1        UGScg     en0
                 <li><strong>Remove the gateway from the adapter that doesn't need it.</strong> If one of the two is a closed network (no internet), clear the router field. This eliminates the gateway conflict and reduces the connected-route problem to a grey warning rather than a red one.</li>
             </ul>
             <p>The underlying cause is almost always that someone assigned static IPs without checking whether the subnet range they chose was already in use elsewhere on the same machine. A fresh venue Wi-Fi on 192.168.1.x is probably the most common trigger. The fix is simple once you know where to look.</p>
+        
+            <div class="article-cta">
+                <h3>See what your routing table is doing</h3>
+                <p>Quicker IP shows your active adapters, the IPs they hold, and warns when two adapters are competing for the same subnet. The visual version of the netstat output above.</p>
+                <a class="cta-link" href="/quickerip">Quicker IP &rarr;</a>
+            </div>
         </article>
 
         <div style="overflow:hidden; margin-top:24px; text-align:center">
