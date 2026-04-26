@@ -133,17 +133,21 @@
             margin-top: 2px;
             letter-spacing: 0.01em;
         }
-        .learn-more {
-            display: inline-block;
-            color: #7ac4ff;
+        .app h2 a {
+            color: inherit;
             text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-top: 16px;
-            margin-left: 16px;
-            padding: 10px 4px;
         }
-        .learn-more:hover { color: #fff; }
+        .app h2 a .chev {
+            color: #7ac4ff;
+            margin-left: 8px;
+            font-weight: 400;
+            transition: transform 0.2s, color 0.2s;
+            display: inline-block;
+        }
+        .app h2 a:hover .chev {
+            color: #fff;
+            transform: translateX(3px);
+        }
         .header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
         .header img { width: 56px; height: 56px; border-radius: 50%; }
         .app-header { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
@@ -193,7 +197,7 @@
             <div class="app-header">
                 <img class="app-icon" src="images/quickip-icon.png" alt="Quicker IP">
                 <div>
-                    <h2>Quicker IP</h2>
+                    <h2><a href="quickerip/" onclick="event.stopPropagation()">Quicker IP <span class="chev">&rarr;</span></a></h2>
                     <p class="subtitle">Network toolkit for macOS</p>
                 </div>
             </div>
@@ -219,10 +223,7 @@
             </ul>
             <div class="qip-buy-row" style="display:flex; align-items:flex-start; gap:180px; margin-top:28px; flex-wrap:wrap; row-gap:32px;">
                 <div class="qip-buy-col" style="display:flex; flex-direction:column; align-items:flex-start;">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <a href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Quicker IP Pro for $19.99 USD" onclick="event.stopPropagation()" style="margin-top:0;">Buy - $19.99 USD</a>
-                        <a href="quickerip/" class="learn-more" onclick="event.stopPropagation()" style="margin-top:0; margin-left:0;">Learn more &rarr;</a>
-                    </div>
+                    <a href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Quicker IP Pro for $19.99 USD" onclick="event.stopPropagation()" style="margin-top:0;">Buy - $19.99 USD</a>
                     <span class="buy-note" style="margin-top:8px;">One-time purchase · 2 activations included</span>
                     <span class="version-line">v2.2 · Released 26 April 2026</span>
                 </div>
@@ -241,7 +242,7 @@
             <div class="app-header">
                 <img class="app-icon" src="images/labassistant-icon.png" alt="Lab Assistant">
                 <div>
-                    <h2>Lab Assistant</h2>
+                    <h2><a href="labassistant/" onclick="event.stopPropagation()">Lab Assistant <span class="chev">&rarr;</span></a></h2>
                     <p class="subtitle">QLab workspace automation for macOS</p>
                 </div>
             </div>
@@ -263,7 +264,6 @@
             <div style="margin-top: 16px;">
                 <span class="buy-note" style="margin-bottom: 4px;">Introductory Price</span>
                 <a href="https://bskapps.lemonsqueezy.com/checkout/buy/efb96677-ac6d-43c1-8697-e465e62d1d00?dark=1&desc=0&media=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Lab Assistant for $14.99 USD" onclick="event.stopPropagation()" style="margin-top: 0;">Buy - $14.99 USD</a>
-                <a href="labassistant/" class="learn-more" onclick="event.stopPropagation()" style="margin-top:0;">Learn more &rarr;</a>
                 <span class="buy-note">One-time purchase · 2 activations included</span>
                 <span class="version-line">v2.0 · Released 15 April 2026</span>
             </div>
@@ -276,7 +276,7 @@
             <div class="app-header">
                 <img class="app-icon" src="images/ewp-icon.png" alt="EWP">
                 <div>
-                    <h2>EWP</h2>
+                    <h2><a href="ewp/" onclick="event.stopPropagation()">EWP <span class="chev">&rarr;</span></a></h2>
                     <p class="subtitle">Elevated Work Platform</p>
                 </div>
             </div>
@@ -294,7 +294,6 @@
             </ul>
             <div style="margin-top: 16px;">
                 <a href="https://bskapps.lemonsqueezy.com/checkout/buy/c3235a75-6837-4d32-b495-a941806e9b90?dark=1&media=0&desc=0" class="buy-btn lemonsqueezy-button" aria-label="Buy EWP for $4.99 USD" onclick="event.stopPropagation()" style="margin-top: 0;">Buy - $4.99 USD</a>
-                <a href="ewp/" class="learn-more" onclick="event.stopPropagation()" style="margin-top:0;">Learn more &rarr;</a>
                 <span class="buy-note">One-time purchase &middot; 2 activations included</span>
                 <span class="version-line">v1.0 &middot; Released 20 April 2026</span>
             </div>
@@ -306,7 +305,7 @@
             <div class="app-header">
                 <img class="app-icon" src="images/fetchpuppy-icon.png" alt="Fetch Puppy">
                 <div>
-                    <h2>Fetch Puppy</h2>
+                    <h2><a href="fetchpuppy/" onclick="event.stopPropagation()">Fetch Puppy <span class="chev">&rarr;</span></a></h2>
                     <p class="subtitle">Find and save music and video for your projects</p>
                 </div>
             </div>
@@ -325,7 +324,6 @@
             </ul>
             <div style="margin-top: 16px;">
                 <a href="https://bskapps.lemonsqueezy.com/checkout/buy/99a45e24-5f0c-4ef7-86a9-be1cf7c555af?dark=1&media=0&desc=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Fetch Puppy for $14.99 USD" onclick="event.stopPropagation()" style="margin-top: 0;">Buy - $14.99 USD</a>
-                <a href="fetchpuppy/" class="learn-more" onclick="event.stopPropagation()" style="margin-top:0;">Learn more &rarr;</a>
                 <span class="buy-note">One-time purchase · 2 activations included</span>
                 <span class="version-line">v2.0.1 · Released 19 April 2026</span>
             </div>
