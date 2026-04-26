@@ -126,15 +126,20 @@
         .buy-btn {
             display: inline-block;
             padding: 14px 36px;
-            background: #26A95F;
+            background: linear-gradient(180deg, #2db86a, #26A95F);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 0 0 4px rgba(38,169,95,0.10), 0 4px 14px rgba(38,169,95,0.22);
             color: #fff;
             font-size: 1.1rem;
             font-weight: 600;
             border-radius: 12px;
             text-decoration: none;
-            transition: background 0.2s;
+            transition: background 0.25s, box-shadow 0.25s, transform 0.15s;
         }
-        .buy-btn:hover { background: #2fc06d; }
+        .buy-btn:hover {
+            background: linear-gradient(180deg, #34c777, #2fc06d);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.28), 0 0 0 6px rgba(38,169,95,0.16), 0 6px 20px rgba(38,169,95,0.35);
+            transform: translateY(-1px);
+        }
         .lemonsqueezy-checkout-overlay { background: rgba(0,0,0,0.85) !important; }
         .buy-note {
             color: #666;
