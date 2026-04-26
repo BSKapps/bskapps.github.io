@@ -47,9 +47,9 @@
             <p>Companion has two sides to its networking:</p>
             <ul>
                 <li><strong>Outbound connections</strong> -- Companion connects to devices using whatever protocol the module requires: TCP, UDP, OSC, HTTP, Telnet, or a device's proprietary protocol. Each of those connections goes out through an interface, chosen by the routing table based on the destination address.</li>
-                <li><strong>Inbound connections</strong> -- Companion's web UI and API listen on port 8888. Stream Decks connected via USB talk to Companion directly. Remote surfaces (Stream Decks on other machines, phone-based surfaces) connect back to Companion over the network on a separate port.</li>
+                <li><strong>Inbound connections</strong> -- Companion's web UI and API listen on port 8000 by default. Stream Decks connected via USB talk to Companion directly. Remote surfaces (Stream Decks on other machines, phone-based surfaces) connect back to Companion over the network on a separate port.</li>
             </ul>
-            <p>The web UI and API bind to all interfaces by default, so you can reach them at <code>localhost:8888</code> or at any of the machine's IP addresses. That part mostly just works. The outbound side is where routing causes trouble.</p>
+            <p>The web UI and API bind to all interfaces by default, so you can reach them at <code>localhost:8000</code> or at any of the machine's IP addresses. That part mostly just works. The outbound side is where routing causes trouble.</p>
 
             <h2>The routing problem in practice</h2>
             <p>Say you have a show control LAN on 192.168.10.x and Wi-Fi on 192.168.1.x. You have a lighting console at 192.168.10.50 and a media server at 192.168.10.80. Companion's modules for those devices have their IPs configured correctly. But if the routing table sends traffic to 192.168.10.x out the wrong adapter -- or the 192.168.10.x route doesn't exist because that adapter isn't connected yet when Companion starts -- those modules will sit in a disconnected state.</p>

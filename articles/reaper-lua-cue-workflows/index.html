@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reaper LUA scripting for live recording - BSK Apps</title>
-    <meta name="description" content="Why LUA is worth learning for Reaper even if you only write ten lines, with a real live-recording example: renaming a full multitrack session from a CSV.">
+    <title>Reaper Lua scripting for live recording - BSK Apps</title>
+    <meta name="description" content="Why Lua is worth learning for Reaper even if you only write ten lines, with a real live-recording example: renaming a full multitrack session from a CSV.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7433223644933951" crossorigin="anonymous"></script>
     <link rel="canonical" href="https://bskapps.com/articles/reaper-lua-cue-workflows">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Reaper LUA scripting for live recording">
-    <meta property="og:description" content="A short intro to Reaper LUA for live multitrack workflows.">
+    <meta property="og:title" content="Reaper Lua scripting for live recording">
+    <meta property="og:description" content="A short intro to Reaper Lua for live multitrack workflows.">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d0d0d; color: #e0e0e0; min-height: 100vh; }
@@ -37,16 +37,17 @@
         <a class="back" href="/articles">&larr; Articles</a>
 
         <article>
-            <h1>Reaper LUA scripting for live recording</h1>
+            <h1>Reaper Lua scripting for live recording</h1>
             <p class="date">9 April 2026</p>
 
-            <p>Reaper is an unusually honest DAW. Most of what you do in the UI is driven by actions, and most of those actions are exposed to a scripting language. If you record live shows or sessions and spend any time on prep, learning ten lines of LUA is one of the highest-return things you can do.</p>
+            <p>Reaper is an unusually honest DAW. Most of what you do in the UI is driven by actions, and most of those actions are exposed to a scripting language. If you record live shows or sessions and spend any time on prep, learning ten lines of Lua is one of the highest-return things you can do.</p>
 
             <h2>Why bother</h2>
             <p>Manual repetition is where mistakes live. Renaming forty-eight inputs to match a stage patch, colouring each channel group, consolidating every track into a new take. Doing it by hand takes an hour and a quarter of it will be wrong. A script takes the same hour to write the first time, then runs in a second forever after.</p>
             <p>You don't need to be a programmer. You need to be able to copy, paste, and read a function reference. That is the whole bar.</p>
 
             <h2>A real live-recording example: rename tracks from a CSV</h2>
+            <p>This example uses Lua, the small scripting language Reaper exposes through ReaScript. The code below is one file you save and run from Reaper's Action List.</p>
             <p>You turn up to a gig. The FOH engineer hands you their patch list as a CSV. Your Reaper session has forty-eight tracks called <code>Track 1</code> through <code>Track 48</code>. You want them renamed in thirty seconds, not thirty minutes.</p>
             <p>Save a file as <code>patch.csv</code> somewhere you'll find it again. One track per line, number then name:</p>
             <pre><code>1,Kick In
@@ -78,7 +79,7 @@ reaper.UpdateArrange()</code></pre>
 
             <h2>Where to go from here</h2>
             <ul>
-                <li>Reaper's built-in <code>reascript_api.html</code> lists every function, with LUA and Python examples for each.</li>
+                <li>Reaper's built-in ReaScript documentation (Help menu, ReaScript documentation, or the <code>reascripthelp.html</code> file in your Reaper install) lists every function, with Lua and Python examples for each.</li>
                 <li>The SWS/S&amp;M extension adds more actions you can drive from scripts.</li>
                 <li>Scripts live in a plain folder. Version them in git if you care about not losing them.</li>
             </ul>
