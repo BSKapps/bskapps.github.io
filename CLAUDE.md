@@ -59,7 +59,7 @@ bskapps.github.io/
 ├── contact/index.html      # Contact page (support email, ABN)
 ├── about/index.html        # About page (who/what/how)
 ├── multiviewport/index.html# MultiViewPort product page (HIDDEN)
-├── fetchpuppy/index.html   # Fetch Puppy product page (HIDDEN)
+├── fetchpuppy/index.html   # Fetch Puppy product page (LIVE on homepage)
 ├── privacy/index.html      # Privacy policy
 ├── terms/index.html        # Terms of service
 └── refund/index.html       # Refund policy
@@ -74,8 +74,9 @@ bskapps.github.io/
 
 ## Hidden Products
 
-- **Fetch Puppy** — Removed from homepage and unlinked (April 2026) for LemonSqueezy approval. The `/fetchpuppy/` page and icon still exist in the repo. Content saved in memory for re-adding later. Do not link or reference on the site without asking first.
-- **MultiViewPort** — Removed from homepage (April 2026) for LemonSqueezy approval — not yet built, no demo available. The `/multiviewport/` page and icon still exist in the repo. Content saved in memory for re-adding later. Do not link or reference on the site without asking first.
+- **MultiViewPort** - Removed from homepage (April 2026) for LemonSqueezy approval - not yet built, no demo available. The `/multiviewport/` page and icon still exist in the repo. Content saved in memory for re-adding later. Do not link or reference on the site without asking first.
+
+(Fetch Puppy was previously hidden but has been re-added to the homepage and is live.)
 
 ## Payments
 
