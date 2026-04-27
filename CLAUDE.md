@@ -20,7 +20,7 @@
 
 ```
 bskapps.github.io/
-├── index.html              # Homepage - lists QuickIP, Lab Assistant, EWP, Resources
+├── index.html              # Homepage - lists Quicker IP, Lab Assistant, EWP, Resources
 ├── CNAME                   # Custom domain mapping (bskapps.com)
 ├── favicon.png
 ├── robots.txt
@@ -33,9 +33,6 @@ bskapps.github.io/
 │   ├── mvp-icon.png
 │   ├── fetchpuppy-icon.png
 │   └── favicon-180.png
-├── quickip/
-│   ├── index.html          # QuickIP product page (redirects to /quickerip)
-│   └── images/             # Legacy screenshots (8 PNGs)
 ├── quickerip/
 │   ├── index.html          # Quicker IP product page (video + 10-image gallery + features)
 │   └── images/             # 10 framed product screenshots (ss-*.png, purple gradient 1280x800)
@@ -67,7 +64,7 @@ bskapps.github.io/
 
 ## Products Listed (homepage order)
 
-1. **QuickIP** - Network toolkit. Lite (App Store, free) + Pro (LemonSqueezy, $19.99 USD)
+1. **Quicker IP** - Network toolkit. Lite (App Store, free) + Pro (LemonSqueezy, $19.99 USD)
 2. **Lab Assistant** - QLab workspace automation. Sold via LemonSqueezy
 3. **EWP** - Elevated Work Platform, window layout snapper. LemonSqueezy, $4.99 USD
 4. **MultiViewPort** - Multi-window viewer. Not yet built - HIDDEN from homepage (April 2026)
