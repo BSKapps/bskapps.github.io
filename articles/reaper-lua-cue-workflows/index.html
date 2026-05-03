@@ -49,8 +49,8 @@
             <p>Reaper is an unusually honest DAW. Most of what you do in the UI is driven by actions, and most of those actions are exposed to a scripting language. If you record live shows or sessions and spend any time on prep, learning ten lines of Lua is one of the highest-return things you can do.</p>
 
             <h2>Why bother</h2>
-            <p>Manual repetition is where mistakes live. Renaming forty-eight inputs to match a stage patch, colouring each channel group, consolidating every track into a new take. Doing it by hand takes an hour and a quarter of it will be wrong. A script takes the same hour to write the first time, then runs in a second forever after.</p>
-            <p>You don't need to be a programmer. You need to be able to copy, paste, and read a function reference. That is the whole bar.</p>
+            <p>Manual repetition is where you make mistakes. Renaming forty-eight inputs to match a stage patch, colouring each channel group, consolidating every track into a new take. Doing it by hand takes an hour and a quarter of it will be wrong. A script takes the same hour to write the first time, then runs in a second forever after.</p>
+            <p>You don't need to be a programmer. You need to copy, paste, and read a function reference.</p>
 
             <h2>A real live-recording example: rename tracks from a CSV</h2>
             <p>This example uses Lua, the small scripting language Reaper exposes through ReaScript. The code below is one file you save and run from Reaper's Action List.</p>
@@ -83,7 +83,7 @@ file:close()
 reaper.UpdateArrange()</code></pre>
             <p>That's it. Run the action, every track picks up the right name, ready to record. Change the CSV, run it again, names update. The same pattern works for colours, folder assignments, record-arm state, anything Reaper exposes on a track.</p>
 
-            <h2>Where to go from here</h2>
+            <h2>Going further</h2>
             <ul>
                 <li>Reaper's built-in ReaScript documentation (Help menu, ReaScript documentation, or the <code>reascripthelp.html</code> file in your Reaper install) lists every function, with Lua and Python examples for each.</li>
                 <li>The SWS/S&amp;M extension adds more actions you can drive from scripts.</li>
@@ -91,8 +91,7 @@ reaper.UpdateArrange()</code></pre>
             </ul>
             <p>We've written a small set of these for common show-audio tasks. They're free, on the <a href="/resources">resources page</a>. Use them as-is, or copy the patterns and adapt them to your workflow.</p>
 
-            <h2>The real lesson</h2>
-            <p>Most of what a live recording engineer does before hitting record is deterministic. Anything deterministic can be a script. The point isn't to automate everything, it's to stop doing the boring parts of the job with your hands so your head is free for the parts that actually need it.</p>
+            <p>Most of what a live recording engineer does before hitting record is deterministic, and anything deterministic can be a script. Don't try to automate everything, just stop doing the boring stuff by hand.</p>
         
             <div class="article-cta">
                 <h3>Working scripts to start from</h3>

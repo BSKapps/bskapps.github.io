@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finding devices and free IPs on an unfamiliar network - BSK Apps</title>
+    <title>Find devices and free IPs on a network - BSK Apps</title>
     <meta name="description" content="Practical ways to see what's on a network and which addresses are free, on a Mac: arp, ping sweeps, Bonjour, and a tidier scanner for the show day.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="canonical" href="https://bskapps.com/articles/find-devices-on-network">
@@ -46,9 +46,9 @@
             <h1>Finding devices and free IPs on an unfamiliar network</h1>
             <p class="date">17 April 2026</p>
 
-            <p>You turn up to a venue, plug into their network, and need a static IP. Or you're handed a rig nobody has documented, and half the devices are unresponsive. Or a console won't see a media server and you need to know whether it's on the network at all. Three versions of the same question: what is actually on this LAN, and which addresses are free?</p>
+            <p>You turn up to a venue, plug into their network, and need a static IP. Or you're handed a rig nobody has documented, and half the devices are unresponsive. Or a console won't see a media server and you need to know whether it's on the network at all. Same question each time: what's on this LAN, and which addresses are free?</p>
 
-            <p>Here are four ways to answer that on a Mac, from scrappy to tidy.</p>
+            <p>Four ways to answer that on a Mac.</p>
 
             <h2>1. arp - what has recently talked to you</h2>
             <p>In Terminal:</p>
@@ -72,8 +72,8 @@
             <p>This is why we built a scanner into <a href="/quickerip">Quicker IP Pro</a>. One click, the current subnet is scanned, and you get a list of every responding device with IP, MAC, vendor name, hostname, and response time. Sort by anything, filter to used or free, and copy an address with one click. No terminal, no loops, no typos at 20:25.</p>
             <p>It's the same information the command-line tools give you, presented in a way that doesn't require you to remember the syntax under pressure.</p>
 
-            <h2>Picking a free IP safely</h2>
-            <p>Once you know what's on the network, assigning yourself an address becomes a five-second job instead of a gamble. The rules that keep you out of trouble:</p>
+            <h2>Picking a free IP</h2>
+            <p>Once you know what's on the network, picking an address is quick. A few rules:</p>
             <ol>
                 <li>Stay inside the subnet you're already on. If the router is <code>192.168.1.1</code> and responding devices sit in <code>192.168.1.0/24</code>, don't invent an address in <code>192.168.2.x</code>.</li>
                 <li>Avoid the low addresses (1-10) and the high ones (250-254). Those are where routers, DHCP servers, and management gear tend to live. Sit in the middle.</li>
@@ -81,8 +81,7 @@
                 <li>If the network has DHCP, ask the gateway for its lease range. Sit outside it, not inside it. A static address inside a DHCP pool will eventually collide.</li>
             </ol>
 
-            <h2>The habit worth building</h2>
-            <p>Before configuring anything on a network you didn't set up yourself, spend thirty seconds looking. It changes the character of the job from guessing to knowing, and it's the difference between a clean plug-in and a pager call at midnight.</p>
+            <p>Before configuring anything on a network you didn't set up yourself, spend thirty seconds looking. Saves a lot of pain later.</p>
         
             <div class="article-cta">
                 <h3>Built for finding devices on the network</h3>

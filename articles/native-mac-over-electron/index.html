@@ -49,23 +49,23 @@
             <p>That has quietly reversed for utilities. The big web-first apps are still here, but the Mac is crawling back with tools that do small things, fast, and feel like the OS. There's a reason for that.</p>
 
             <h2>Memory and battery are not abstract</h2>
-            <p>An Electron menu bar app will sit at 150 MB of RAM and wake the CPU often enough to show up in Activity Monitor. A Swift menu bar app doing the same job runs at 30 MB and the fan never notices. On a MacBook running a long show day on battery, that is not a technicality. It's an hour of runtime.</p>
+            <p>An Electron menu bar app will sit at 150 MB of RAM and wake the CPU often enough to show up in Activity Monitor. A Swift menu bar app doing the same job runs at 30 MB and the fan never notices. On a MacBook running a long show day on battery, that's an hour of runtime.</p>
 
-            <h2>The OS gives you a lot for free</h2>
+            <h2>You get the OS for free</h2>
             <p>Native means you get the dark mode the user already set, the font they already like, the system dialogs they already know, the keychain they already trust, and the keyboard shortcuts they already have in muscle memory. An Electron app reimplements each of those, badly, or skips them.</p>
-            <p>Right-clicking a file and getting a predictable macOS context menu feels like nothing. Right-clicking it and getting a web-styled menu that can't do half of what Finder does is the kind of small friction that adds up over a day.</p>
+            <p>Right-clicking a file and getting the macOS context menu is invisible until you don't have it. Right-clicking it and getting a web-styled menu that can't do half of what Finder does is friction that piles up over a day.</p>
 
             <h2>Scripting</h2>
             <p>Native Mac apps tend to expose useful surfaces to AppleScript and shell tools. A Swift-built utility can be asked to do things from the command line or from another app. An Electron wrapper almost never can. If you automate anything, native is the only real option.</p>
 
             <h2>Updates that don't feel invasive</h2>
-            <p>Sparkle has been the native Mac update framework for twenty years. It downloads a signed update in the background, applies it on next launch, and never interrupts you. Most Electron apps either force you to close the window mid-task or silently re-download the whole Chromium runtime every few weeks to apply a cosmetic change. The difference in feel is enormous.</p>
+            <p>Sparkle has been the native Mac update framework for twenty years. It downloads a signed update in the background, applies it on next launch, and never interrupts you. Most Electron apps either force you to close the window mid-task or silently re-download the whole Chromium runtime every few weeks to apply a cosmetic change.</p>
 
             <h2>When Electron still makes sense</h2>
             <p>Cross-platform parity, teams with no Swift experience, apps that are genuinely web-first (editors, collaborative docs, video conferencing). For those, Electron is a reasonable trade. For a small utility that lives in the menu bar and does one job, it's the wrong tool.</p>
 
-            <h2>Our position</h2>
-            <p>Every BSK app is native Swift, signed and notarised by Apple, shipped as a small signed package. No Electron, no cross-platform wrappers, no third-party trackers. It costs us the option of a Windows or Linux build. We're comfortable with that. The apps feel like Mac apps because they are Mac apps.</p>
+            <h2>What we ship</h2>
+            <p>Every BSK app is native Swift, signed and notarised by Apple, shipped as a small signed package. No Electron, no cross-platform wrappers, no third-party trackers. It costs us the option of a Windows or Linux build. We're fine with that.</p>
         
             <div class="article-cta">
                 <h3>Native Mac apps from BSK Apps</h3>

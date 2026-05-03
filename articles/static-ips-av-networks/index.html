@@ -67,7 +67,7 @@
                 <li><strong>Link-local (169.254.x.x)</strong> - no DHCP server answers, so the Mac auto-assigns itself an unused address in 169.254.0.0/16. Set Configure IPv4 to "Using DHCP" and leave it. If there's nothing to respond, macOS falls through to link-local on its own after a short delay. This is how most Dante networks actually run day to day: every device falls to link-local, discovery still works, nobody has to configure anything. Don't dismiss it just because it feels like a fallback.</li>
             </ul>
 
-            <h2>Service order is where it gets situational</h2>
+            <h2>Service order depends on the day</h2>
             <p>System Settings, Network, three-dots menu, Set Service Order. This is the setting that tells macOS which interface to prefer for things like default route and DNS when more than one is active. The right order is not universal.</p>
             <p>Two common configurations:</p>
             <ul>
@@ -85,12 +85,12 @@
             </ul>
             <p>If an interface doesn't need a gateway, don't give it one. Two interfaces with gateways will silently fight about which one is the default route and you'll spend an hour on it at the worst possible time. <a href="/quickerip">Quicker IP Pro</a> detects this automatically -- a red "Overlap detected" warning appears next to the subnet field of any affected adapter when two active interfaces share a subnet and both have a gateway configured.</p>
 
-            <h2>The switching problem</h2>
+            <h2>Switching between rigs</h2>
             <p>All of this is fine when the Mac lives in the one rig. The moment it travels - same laptop, different venue, different networks - each of those interfaces needs a different configuration. macOS makes that slow. System Settings, Network, interface, Details, TCP/IP, switch from DHCP to Manually, enter four fields, switch to DNS, enter more fields, click OK, back out. Ten steps per interface. Three interfaces, thirty steps. Every show day.</p>
             <p>macOS has a built-in feature called Locations (Network pane, three-dots menu) that saves the whole set and lets you swap between them. It works, but it's buried and only stores the top-level config.</p>
             <p>This is the problem <a href="/quickerip">Quicker IP</a> is built for. Named presets per network, per interface, switched from the menu bar in one click. No System Settings detour.</p>
 
-            <p>Multiple adapters is the normal state of a touring Mac. Set the service order deliberately, give each interface only what it needs, and have a quick way to switch configurations when the rig moves. None of it is complicated once you've done it the first time -- it just doesn't happen automatically.</p>
+            <p>Multiple adapters is the normal state of a touring Mac. Set the service order deliberately, give each interface only what it needs, and have a way to switch configurations quickly when the rig moves.</p>
         
             <div class="article-cta">
                 <h3>A faster way to manage AV-network IPs</h3>

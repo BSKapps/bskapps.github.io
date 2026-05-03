@@ -48,7 +48,7 @@
             <p>A QLab workspace at the start of tech is a clean thing. Nicely numbered, sensibly named, everything fading how the designer intended. By day five it's three hundred cues deep with inconsistent numbering, a couple of orphaned groups, and at least one cue nobody remembers adding. The habits below are the small disciplines that keep that drift under control, and a few traps that have caught me out personally.</p>
 
             <h2>Assume the levels are never the same</h2>
-            <p>Across a season you'll get files from the composer, the sound designer, the foley editor, maybe the director's phone voice-memo. They're never mixed to the same reference. One cue peaks at -1 dBFS, the next sits at -18 dBFS with no explanation. If you trust the filenames and don't listen, you will hurt someone at the matinee.</p>
+            <p>Across a season you'll get files from the composer, the sound designer, the foley editor, maybe the director's phone voice-memo. They're never mixed to the same reference. One cue peaks at -1 dBFS, the next sits at -18 dBFS with no explanation. If you trust the filenames and don't listen, the matinee will be loud in places it shouldn't be.</p>
             <p>Pass every new file through QLab at a known starting point. Same output patch, same master level, same room. Set a consistent cue level based on what you hear, not what the waveform looks like. Do it once per asset, not cue by cue.</p>
 
             <h2>Mono files will catch you out</h2>
@@ -66,13 +66,13 @@
             <p>Workspace Settings, Workspace, has a panic fade duration. Default is very short. Set it to 3 or 4 seconds. The day you reach for Escape because something has gone catastrophically wrong, you do not want the entire bed of sound to cut instantly and leave the room in silence with everyone staring at the booth. Three to four seconds of fade out lets the house recover gracefully instead of slamming to silence.</p>
             <p>And if the panic itself is the emergency - a runaway cue, feedback, a wrong file blasting out - double-hit Escape. QLab treats the second press as a hard stop: everything cuts immediately, panic fade ignored. Muscle memory worth practising at home.</p>
 
-            <h2>Continue modes are not an afterthought</h2>
-            <p>Every cue has a continue mode: Do Not Continue, Auto-Continue, Auto-Follow. These determine whether the next cue waits for another Go or fires automatically. Shows live or die on having these set correctly and consistently.</p>
+            <h2>Walk every continue mode by hand</h2>
+            <p>Every cue has a continue mode: Do Not Continue, Auto-Continue, Auto-Follow. These determine whether the next cue waits for another Go or fires automatically. Get them wrong and the show stops cold or fires twice.</p>
             <p>Walk the cue list once, end to end, in Show mode. Every cue's continue mode should be a deliberate choice, not the default from when you first dragged the file in. If the designer intended two sound effects to play together, both should fire from one Go with an Auto-Continue. If a music cue should wait for the SM's call, it should explicitly say so.</p>
 
             <h2>Trim cues manually before tech, not during</h2>
             <p>A five-second intro on a two-minute cue is five seconds of dead time the SM has to call early. Trim it. A piece of room tone that runs for 30 seconds after the line is dead tail that fades on the next cue's entry and muddies the transition. Trim it. QLab's in-cue start and end time fields exist for exactly this - you don't have to touch the file.</p>
-            <p>Do this before tech starts, with the designer present if possible. It is the single fastest way to make a show feel tighter without changing any content.</p>
+            <p>Do this before tech starts, with the designer present if possible. It tightens a show faster than any other single thing you can do without touching the content.</p>
 
             <h2>Number on tens, name for what they do</h2>
             <p>Number cues in tens from day one. 10, 20, 30. When the director asks for something between 10 and 20, it's 15. Between 15 and 20 it's 17. Three digits is a stop sign: rebuild the numbering rather than invent 12.5.</p>
@@ -85,8 +85,7 @@
             <h2>Save a clean copy before every run</h2>
             <p>Before the first tech run each day, save a dated copy of the workspace. <code>Show v03 - 2026-04-12.qlab5</code>. If you or the designer wreck something during the run, you have a known-good state ten minutes old. QLab's undo is fine for the last few moves. It's not a recovery strategy for a bad half hour.</p>
 
-            <h2>The common thread</h2>
-            <p>None of this is clever. It's friction removed, and a couple of traps sign-posted. Every minute you don't spend hunting for a cue, guessing at a level, or explaining a mono-file mistake during tech is a minute you can spend on something that actually matters to the show.</p>
+            <p>None of this is clever. It's friction removed and a couple of traps sign-posted. Time you don't spend hunting for a cue or explaining a mono-file mistake during tech is time on the actual show.</p>
         
             <div class="article-cta">
                 <h3>Make these habits a one-click job</h3>
