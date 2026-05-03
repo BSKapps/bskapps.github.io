@@ -390,9 +390,9 @@
             </div>
         </div>
 
-        <div id="api-setup-section" class="api-setup">
-            <h3>Connect your APIs for live stats</h3>
-            <p>Enter your API keys once to see live visit counts, order numbers, and conversion rate. Stored only in your browser.</p>
+        <div class="api-setup">
+            <h3>API Keys</h3>
+            <p>Enter your API keys to see live stats. Stored only in your browser.</p>
             <div class="api-fields">
                 <div class="api-field">
                     <label>Cloudflare API Token</label>
@@ -739,9 +739,6 @@ async function loadStats(cfToken, lsKey) {
         document.getElementById('stat-conversion').textContent = rate + '%';
     }
 
-    if (cfToken || lsKey) {
-        document.getElementById('api-setup-section').style.display = 'none';
-    }
 }
 
 // ---- TABS ----
