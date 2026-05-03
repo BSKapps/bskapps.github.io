@@ -395,11 +395,11 @@
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
             <div class="section-title" style="margin:0;">Live Stats</div>
             <div style="display:flex; gap:6px;">
-                <button class="range-btn active" onclick="setRange(1, this)">24h</button>
-                <button class="range-btn" onclick="setRange(7, this)">7d</button>
-                <button class="range-btn" onclick="setRange(30, this)">30d</button>
-                <button class="range-btn" onclick="setRange(90, this)">90d</button>
-                <button class="range-btn" onclick="setRange('fy', this)">FY</button>
+                <button class="range-btn active" data-range="1" onclick="setRange(1, this)">24h</button>
+                <button class="range-btn" data-range="7" onclick="setRange(7, this)">7d</button>
+                <button class="range-btn" data-range="30" onclick="setRange(30, this)">30d</button>
+                <button class="range-btn" data-range="90" onclick="setRange(90, this)">90d</button>
+                <button class="range-btn" data-range="fy" onclick="setRange('fy', this)">FY</button>
             </div>
         </div>
         <div id="stats-grid" class="stats-grid">
@@ -541,6 +541,7 @@ async function init() {
     originalJSON = JSON.stringify(data);
     renderForm();
     restoreTab();
+    restoreRange();
     loadApiKeys();
 }
 
@@ -715,9 +716,20 @@ function fyDays() {
 
 function setRange(days, btn) {
     currentRange = days === 'fy' ? fyDays() : days;
+    localStorage.setItem('bsk_range', days === 'fy' ? 'fy' : days);
     document.querySelectorAll('.range-btn').forEach(function(b) { b.classList.remove('active'); });
     btn.classList.add('active');
     loadStats();
+}
+
+function restoreRange() {
+    const saved = localStorage.getItem('bsk_range') || '1';
+    const btn = document.querySelector('.range-btn[data-range="' + saved + '"]');
+    if (btn) {
+        currentRange = saved === 'fy' ? fyDays() : parseInt(saved);
+        document.querySelectorAll('.range-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+    }
 }
 
 function toggleApiSetup() {
