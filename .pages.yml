@@ -1,0 +1,103 @@
+media:
+  input: images
+  output: /images
+
+content:
+  - name: homepage
+    label: Homepage
+    path: index.html
+    type: file
+    fields:
+      - name: body
+        label: Content
+        type: code
+        options:
+          lang: html
+
+  - name: quickerip
+    label: Quicker IP
+    path: quickerip/index.html
+    type: file
+    fields:
+      - name: body
+        label: Content
+        type: code
+        options:
+          lang: html
+
+  - name: labassistant
+    label: Lab Assistant
+    path: labassistant/index.html
+    type: file
+    fields:
+      - name: body
+        label: Content
+        type: code
+        options:
+          lang: html
+
+  - name: ewp
+    label: EWP
+    path: ewp/index.html
+    type: file
+    fields:
+      - name: body
+        label: Content
+        type: code
+        options:
+          lang: html
+
+  - name: fetchpuppy
+    label: Fetch Puppy
+    path: fetchpuppy/index.html
+    type: file
+    fields:
+      - name: body
+        label: Content
+        type: code
+        options:
+          lang: html
+
+  - name: about
+    label: About
+    path: about/index.html
+    type: file
+    fields:
+      - name: body
+        label: Content
+        type: code
+        options:
+          lang: html
+
+  - name: contact
+    label: Contact
+    path: contact/index.html
+    type: file
+    fields:
+      - name: body
+        label: Content
+        type: code
+        options:
+          lang: html
+
+  - name: resources
+    label: Resources
+    path: resources/index.html
+    type: file
+    fields:
+      - name: body
+        label: Content
+        type: code
+        options:
+          lang: html
+
+  - name: privacy
+    label: Privacy Policy
+    path: privacy/index.html
+    type: file
+    fields:
+      - name: body
+        label: Content
+        type: code
+        options:
+          lang: html
