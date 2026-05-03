@@ -394,7 +394,10 @@
     <!-- ANALYTICS TAB -->
     <div id="pane-analytics" class="pane">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
-            <div class="section-title" style="margin:0;">Live Stats</div>
+            <div style="display:flex; align-items:baseline; gap:10px;">
+                <div class="section-title" style="margin:0;">Live Stats</div>
+                <span id="stats-updated" style="font-size:0.75rem; color:#444;"></span>
+            </div>
             <div style="display:flex; gap:6px;">
                 <button class="range-btn active" data-range="1" onclick="setRange(1, this)">24h</button>
                 <button class="range-btn" data-range="7" onclick="setRange(7, this)">7d</button>
@@ -785,7 +788,8 @@ async function loadStats() {
         if (cf && !cf.error) {
             document.getElementById('stat-visits').textContent = cf.visits.toLocaleString();
             document.getElementById('stat-pageviews').textContent = cf.pageviews.toLocaleString();
-            document.getElementById('stat-visits-err').textContent = updated ? 'Updated ' + updated : 'Cloudflare';
+            document.getElementById('stat-visits-err').textContent = 'Cloudflare';
+            if (updated) document.getElementById('stats-updated').textContent = 'Updated ' + updated;
         } else {
             document.getElementById('stat-visits').textContent = cf ? cf.error : '--';
         }
