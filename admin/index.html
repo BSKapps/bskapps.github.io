@@ -432,6 +432,16 @@
                 <div class="stat-value" id="stat-conversion">--</div>
                 <div class="stat-sub">visits to sales</div>
             </div>
+            <div class="stat-box">
+                <div class="stat-label" id="label-ad-earnings">Ad Earnings</div>
+                <div class="stat-value" id="stat-ad-earnings">--</div>
+                <div class="stat-sub">AdSense</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label" id="label-ad-impressions">Impressions</div>
+                <div class="stat-value" id="stat-ad-impressions">--</div>
+                <div class="stat-sub" id="stat-ad-clicks"></div>
+            </div>
         </div>
 
         <div class="api-setup" id="api-setup">
@@ -806,6 +816,18 @@ async function loadStats() {
         } else {
             document.getElementById('stat-orders').textContent = ls ? ls.error : '--';
             document.getElementById('stat-revenue').textContent = '--';
+        }
+
+        const as = stats.adsense && stats.adsense[key];
+        document.getElementById('label-ad-earnings').textContent = 'Ad Earnings (' + days + 'd)';
+        document.getElementById('label-ad-impressions').textContent = 'Impressions (' + days + 'd)';
+        if (as && !as.error) {
+            document.getElementById('stat-ad-earnings').textContent = '$' + as.earnings.toFixed(2);
+            document.getElementById('stat-ad-impressions').textContent = as.impressions.toLocaleString();
+            document.getElementById('stat-ad-clicks').textContent = as.clicks + ' clicks';
+        } else {
+            document.getElementById('stat-ad-earnings').textContent = as && as.error ? as.error : '--';
+            document.getElementById('stat-ad-impressions').textContent = '--';
         }
     } catch (e) {
         document.getElementById('stat-visits').textContent = 'Error';

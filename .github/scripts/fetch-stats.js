@@ -3,6 +3,9 @@ const https = require('https');
 const CF_ACCOUNT = '304c227c3868c2cd96c3d6a840b7ef13';
 const CF_TOKEN = process.env.CF_API_TOKEN;
 const LS_KEY = process.env.LS_API_KEY;
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const GOOGLE_REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
 
 function request(options, body) {
     return new Promise(function(resolve, reject) {
@@ -64,6 +67,49 @@ async function fetchLS(days) {
     return { orders, revenue: Math.round(revenue * 100) / 100 };
 }
 
+async function getGoogleAccessToken() {
+    const body = new URLSearchParams({
+        client_id: GOOGLE_CLIENT_ID,
+        client_secret: GOOGLE_CLIENT_SECRET,
+        refresh_token: GOOGLE_REFRESH_TOKEN,
+        grant_type: 'refresh_token'
+    }).toString();
+    const res = await request({
+        hostname: 'oauth2.googleapis.com',
+        path: '/token',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': Buffer.byteLength(body) }
+    }, body);
+    if (!res.body.access_token) throw new Error('Failed to get Google access token');
+    return res.body.access_token;
+}
+
+async function fetchAdSense(days, accessToken) {
+    const end = new Date().toISOString().split('T')[0];
+    const start = new Date(Date.now() - days * 86400000).toISOString().split('T')[0];
+    const params = new URLSearchParams({
+        'dateRange': 'CUSTOM',
+        'startDate.year': start.split('-')[0],
+        'startDate.month': start.split('-')[1],
+        'startDate.day': start.split('-')[2],
+        'endDate.year': end.split('-')[0],
+        'endDate.month': end.split('-')[1],
+        'endDate.day': end.split('-')[2],
+        'metrics': 'ESTIMATED_EARNINGS,IMPRESSIONS,CLICKS,PAGE_VIEWS'
+    });
+    const res = await request({
+        hostname: 'adsense.googleapis.com',
+        path: '/v2/accounts/-/reports:generate?' + params.toString(),
+        method: 'GET',
+        headers: { 'Authorization': 'Bearer ' + accessToken }
+    });
+    if (res.status !== 200) throw new Error('AdSense API error: ' + res.status);
+    const rows = res.body.rows || [];
+    if (!rows.length) return { earnings: 0, impressions: 0, clicks: 0, pageviews: 0 };
+    const vals = rows[0].cells.map(function(c) { return parseFloat(c.value) || 0; });
+    return { earnings: Math.round(vals[0] * 100) / 100, impressions: vals[1], clicks: vals[2], pageviews: vals[3] };
+}
+
 function fyDays() {
     const now = new Date();
     const fyStart = new Date(now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1, 6, 1);
@@ -71,7 +117,13 @@ function fyDays() {
 }
 
 async function main() {
-    const stats = { updated: new Date().toISOString(), cloudflare: {}, lemonsqueezy: {} };
+    const stats = { updated: new Date().toISOString(), cloudflare: {}, lemonsqueezy: {}, adsense: {} };
+
+    let googleToken = null;
+    if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && GOOGLE_REFRESH_TOKEN) {
+        try { googleToken = await getGoogleAccessToken(); }
+        catch (e) { console.error('Google auth error:', e.message); }
+    }
 
     for (const days of [1, 7, 30, 90, fyDays()]) {
         if (CF_TOKEN) {
@@ -89,6 +141,14 @@ async function main() {
             } catch (e) {
                 console.error('LS ' + days + 'd error:', e.message);
                 stats.lemonsqueezy[days + 'd'] = { error: e.message };
+            }
+        }
+        if (googleToken) {
+            try {
+                stats.adsense[days + 'd'] = await fetchAdSense(days, googleToken);
+            } catch (e) {
+                console.error('AdSense ' + days + 'd error:', e.message);
+                stats.adsense[days + 'd'] = { error: e.message };
             }
         }
     }
