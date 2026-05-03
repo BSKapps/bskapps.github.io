@@ -64,10 +64,16 @@ async function fetchLS(days) {
     return { orders, revenue: Math.round(revenue * 100) / 100 };
 }
 
+function fyDays() {
+    const now = new Date();
+    const fyStart = new Date(now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1, 6, 1);
+    return Math.ceil((now - fyStart) / 86400000);
+}
+
 async function main() {
     const stats = { updated: new Date().toISOString(), cloudflare: {}, lemonsqueezy: {} };
 
-    for (const days of [7, 30, 90]) {
+    for (const days of [1, 7, 30, 90, fyDays()]) {
         if (CF_TOKEN) {
             try {
                 stats.cloudflare[days + 'd'] = await fetchCF(days);
