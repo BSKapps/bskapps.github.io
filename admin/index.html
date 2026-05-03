@@ -708,9 +708,7 @@ function setRange(days, btn) {
     currentRange = days;
     document.querySelectorAll('.range-btn').forEach(function(b) { b.classList.remove('active'); });
     btn.classList.add('active');
-    const cfToken = localStorage.getItem('bsk_cf_token');
-    const lsKey = localStorage.getItem('bsk_ls_key');
-    loadStats(cfToken, lsKey);
+    loadStats();
 }
 
 function toggleApiSetup() {
@@ -722,7 +720,7 @@ function loadApiKeys() {
     const lsKey = localStorage.getItem('bsk_ls_key');
     if (cfToken) document.getElementById('cf-token').value = cfToken;
     if (lsKey) document.getElementById('ls-key').value = lsKey;
-    if (cfToken || lsKey) loadStats(cfToken, lsKey);
+    loadStats();
 }
 
 function saveApiKeys() {
@@ -730,71 +728,52 @@ function saveApiKeys() {
     const lsKey = document.getElementById('ls-key').value.trim();
     if (cfToken) localStorage.setItem('bsk_cf_token', cfToken);
     if (lsKey) localStorage.setItem('bsk_ls_key', lsKey);
-    loadStats(cfToken, lsKey);
+    document.getElementById('api-setup').classList.remove('open');
+    alert('Keys saved. They will be used by the GitHub Action to fetch stats hourly.');
 }
 
-function statErr(id, msg) {
-    document.getElementById(id).textContent = 'Error';
-    const sub = document.getElementById(id + '-err');
-    if (sub) sub.textContent = msg;
-}
-
-async function loadStats(cfToken, lsKey) {
+async function loadStats() {
     const days = currentRange;
-    const end = new Date().toISOString().split('T')[0];
-    const start = new Date(Date.now() - days * 86400000).toISOString().split('T')[0];
+    const key = days + 'd';
 
     document.getElementById('label-visits').textContent = 'Visits (' + days + 'd)';
     document.getElementById('label-pageviews').textContent = 'Page Views (' + days + 'd)';
     document.getElementById('label-orders').textContent = 'Orders (' + days + 'd)';
 
-    let visits = null, pageviews = null, orders = null;
+    try {
+        const res = await ghFetch('GET', 'repos/' + REPO + '/contents/_data/stats.json');
+        if (!res.ok) {
+            document.getElementById('stat-visits').textContent = 'No data yet';
+            document.getElementById('stat-visits-err').textContent = 'Run the GitHub Action first';
+            return;
+        }
+        const file = await res.json();
+        const stats = JSON.parse(atob(file.content.replace(/\n/g, '')));
 
-    if (cfToken) {
-        document.getElementById('stat-visits').textContent = '...';
-        document.getElementById('stat-pageviews').textContent = '...';
-        try {
-            const query = `{ viewer { accounts(filter: {accountTag: "${CF_ACCOUNT}"}) { rumPageloadEventsAdaptiveGroups(filter: {AND: [{date_geq: "${start}"}, {date_leq: "${end}"}]} limit: 5000) { count sum { visits } } } } }`;
-            const res = await fetch('https://api.cloudflare.com/client/v4/graphql', {
-                method: 'POST',
-                headers: { 'Authorization': 'Bearer ' + cfToken, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ query: query })
-            });
-            const json = await res.json();
-            if (json.errors) {
-                statErr('stat-visits', json.errors[0].message);
-                statErr('stat-pageviews', '');
-            } else {
-                const groups = json.data.viewer.accounts[0].rumPageloadEventsAdaptiveGroups;
-                pageviews = groups.reduce(function(a, g) { return a + g.count; }, 0);
-                visits = groups.reduce(function(a, g) { return a + (g.sum.visits || 0); }, 0);
-                document.getElementById('stat-visits').textContent = visits.toLocaleString();
-                document.getElementById('stat-pageviews').textContent = pageviews.toLocaleString();
-                document.getElementById('stat-visits-err').textContent = 'Cloudflare';
+        const cf = stats.cloudflare && stats.cloudflare[key];
+        const ls = stats.lemonsqueezy && stats.lemonsqueezy[key];
+        const updated = stats.updated ? new Date(stats.updated).toLocaleString() : '';
+
+        if (cf && !cf.error) {
+            document.getElementById('stat-visits').textContent = cf.visits.toLocaleString();
+            document.getElementById('stat-pageviews').textContent = cf.pageviews.toLocaleString();
+            document.getElementById('stat-visits-err').textContent = updated ? 'Updated ' + updated : 'Cloudflare';
+        } else {
+            document.getElementById('stat-visits').textContent = cf ? cf.error : '--';
+        }
+
+        if (ls && !ls.error) {
+            document.getElementById('stat-orders').textContent = ls.orders;
+            document.getElementById('stat-orders-err').textContent = ls.revenue ? '$' + ls.revenue.toFixed(2) + ' revenue' : 'LemonSqueezy';
+            if (cf && cf.visits > 0) {
+                document.getElementById('stat-conversion').textContent = ((ls.orders / cf.visits) * 100).toFixed(2) + '%';
             }
-        } catch (e) { statErr('stat-visits', e.message); }
-    }
-
-    if (lsKey) {
-        document.getElementById('stat-orders').textContent = '...';
-        try {
-            const res = await fetch('https://api.lemonsqueezy.com/v1/orders?page[size]=100', {
-                headers: { 'Authorization': 'Bearer ' + lsKey, 'Accept': 'application/vnd.api+json' }
-            });
-            const json = await res.json();
-            if (!res.ok) {
-                statErr('stat-orders', json.errors ? json.errors[0].detail : 'Auth failed');
-            } else {
-                const cutoff = new Date(Date.now() - days * 86400000);
-                orders = json.data.filter(function(o) { return new Date(o.attributes.created_at) >= cutoff; }).length;
-                document.getElementById('stat-orders').textContent = orders;
-                document.getElementById('stat-orders-err').textContent = 'LemonSqueezy';
-            }
-        } catch (e) { statErr('stat-orders', e.message); }
-    }
-
-    if (visits !== null && orders !== null && visits > 0) {
-        document.getElementById('stat-conversion').textContent = ((orders / visits) * 100).toFixed(2) + '%';
+        } else {
+            document.getElementById('stat-orders').textContent = ls ? ls.error : '--';
+        }
+    } catch (e) {
+        document.getElementById('stat-visits').textContent = 'Error';
+        document.getElementById('stat-visits-err').textContent = e.message;
     }
 }
 
@@ -805,6 +784,13 @@ function showTab(name, btn) {
     document.querySelectorAll('.pane').forEach(function(p) { p.classList.remove('active'); });
     btn.classList.add('active');
     document.getElementById('pane-' + name).classList.add('active');
+    localStorage.setItem('bsk_tab', name);
+}
+
+function restoreTab() {
+    const saved = localStorage.getItem('bsk_tab') || 'content';
+    const btn = document.querySelector('.tab[data-tab="' + saved + '"]');
+    if (btn) showTab(saved, btn);
 }
 
 // ---- UTILS ----
