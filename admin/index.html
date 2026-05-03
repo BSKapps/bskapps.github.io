@@ -744,9 +744,10 @@ function saveApiKeys() {
 async function loadStats() {
     const days = currentRange;
     const key = days + 'd';
+    const cfDays = Math.min(days, 90);
 
-    document.getElementById('label-visits').textContent = 'Visits (' + days + 'd)';
-    document.getElementById('label-pageviews').textContent = 'Page Views (' + days + 'd)';
+    document.getElementById('label-visits').textContent = 'Visits (' + cfDays + 'd)';
+    document.getElementById('label-pageviews').textContent = 'Page Views (' + cfDays + 'd)';
     document.getElementById('label-orders').textContent = 'Orders (' + days + 'd)';
 
     try {

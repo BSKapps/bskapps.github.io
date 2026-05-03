@@ -75,8 +75,9 @@ async function main() {
 
     for (const days of [1, 7, 30, 90, fyDays()]) {
         if (CF_TOKEN) {
+            const cfDays = Math.min(days, 90);
             try {
-                stats.cloudflare[days + 'd'] = await fetchCF(days);
+                stats.cloudflare[days + 'd'] = await fetchCF(cfDays);
             } catch (e) {
                 console.error('CF ' + days + 'd error:', e.message);
                 stats.cloudflare[days + 'd'] = { error: e.message };
