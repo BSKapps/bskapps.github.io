@@ -325,6 +325,19 @@
         }
         .api-save-btn:hover { background: #253525; }
 
+        .range-btn {
+            padding: 5px 14px;
+            background: none;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            color: #555;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .range-btn:hover { color: #fff; border-color: #444; }
+        .range-btn.active { background: #1a2a3a; border-color: #2a4a6a; color: #7ac4ff; }
+
         .section-title {
             font-size: 0.8rem;
             font-weight: 700;
@@ -379,22 +392,29 @@
 
     <!-- ANALYTICS TAB -->
     <div id="pane-analytics" class="pane">
-        <div class="section-title">Live Stats</div>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+            <div class="section-title" style="margin:0;">Live Stats</div>
+            <div style="display:flex; gap:6px;">
+                <button class="range-btn active" onclick="setRange(7, this)">7d</button>
+                <button class="range-btn" onclick="setRange(30, this)">30d</button>
+                <button class="range-btn" onclick="setRange(90, this)">90d</button>
+            </div>
+        </div>
         <div id="stats-grid" class="stats-grid">
             <div class="stat-box">
-                <div class="stat-label">Visits (30d)</div>
+                <div class="stat-label" id="label-visits">Visits</div>
                 <div class="stat-value" id="stat-visits">--</div>
-                <div class="stat-sub">Cloudflare</div>
+                <div class="stat-sub" id="stat-visits-err"></div>
             </div>
             <div class="stat-box">
-                <div class="stat-label">Page Views (30d)</div>
+                <div class="stat-label" id="label-pageviews">Page Views</div>
                 <div class="stat-value" id="stat-pageviews">--</div>
                 <div class="stat-sub">Cloudflare</div>
             </div>
             <div class="stat-box">
-                <div class="stat-label">Orders (30d)</div>
+                <div class="stat-label" id="label-orders">Orders</div>
                 <div class="stat-value" id="stat-orders">--</div>
-                <div class="stat-sub">LemonSqueezy</div>
+                <div class="stat-sub" id="stat-orders-err"></div>
             </div>
             <div class="stat-box highlight">
                 <div class="stat-label">Conversion</div>
@@ -682,6 +702,21 @@ async function save() {
 
 // ---- ANALYTICS ----
 
+let currentRange = 7;
+
+function setRange(days, btn) {
+    currentRange = days;
+    document.querySelectorAll('.range-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    const cfToken = localStorage.getItem('bsk_cf_token');
+    const lsKey = localStorage.getItem('bsk_ls_key');
+    loadStats(cfToken, lsKey);
+}
+
+function toggleApiSetup() {
+    document.getElementById('api-setup').classList.toggle('open');
+}
+
 function loadApiKeys() {
     const cfToken = localStorage.getItem('bsk_cf_token');
     const lsKey = localStorage.getItem('bsk_ls_key');
@@ -698,66 +733,69 @@ function saveApiKeys() {
     loadStats(cfToken, lsKey);
 }
 
+function statErr(id, msg) {
+    document.getElementById(id).textContent = 'Error';
+    const sub = document.getElementById(id + '-err');
+    if (sub) sub.textContent = msg;
+}
+
 async function loadStats(cfToken, lsKey) {
+    const days = currentRange;
+    const end = new Date().toISOString().split('T')[0];
+    const start = new Date(Date.now() - days * 86400000).toISOString().split('T')[0];
+
+    document.getElementById('label-visits').textContent = 'Visits (' + days + 'd)';
+    document.getElementById('label-pageviews').textContent = 'Page Views (' + days + 'd)';
+    document.getElementById('label-orders').textContent = 'Orders (' + days + 'd)';
+
     let visits = null, pageviews = null, orders = null;
 
     if (cfToken) {
+        document.getElementById('stat-visits').textContent = '...';
+        document.getElementById('stat-pageviews').textContent = '...';
         try {
-            const end = new Date().toISOString().split('T')[0];
-            const start = new Date(Date.now() - 30 * 86400000).toISOString().split('T')[0];
-            const query = `{
-                viewer {
-                    accounts(filter: {accountTag: "${CF_ACCOUNT}"}) {
-                        rumPageloadEventsAdaptiveGroups(
-                            filter: {AND: [{date_geq: "${start}"}, {date_leq: "${end}"}]}
-                            limit: 5000
-                        ) {
-                            count
-                            sum { visits }
-                        }
-                    }
-                }
-            }`;
+            const query = `{ viewer { accounts(filter: {accountTag: "${CF_ACCOUNT}"}) { rumPageloadEventsAdaptiveGroups(filter: {AND: [{date_geq: "${start}"}, {date_leq: "${end}"}]} limit: 5000) { count sum { visits } } } } }`;
             const res = await fetch('https://api.cloudflare.com/client/v4/graphql', {
                 method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + cfToken,
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Authorization': 'Bearer ' + cfToken, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query: query })
             });
-            if (res.ok) {
-                const json = await res.json();
-                const groups = json.data && json.data.viewer.accounts[0].rumPageloadEventsAdaptiveGroups;
-                if (groups) {
-                    pageviews = groups.reduce(function(a, g) { return a + g.count; }, 0);
-                    visits = groups.reduce(function(a, g) { return a + (g.sum.visits || 0); }, 0);
-                }
+            const json = await res.json();
+            if (json.errors) {
+                statErr('stat-visits', json.errors[0].message);
+                statErr('stat-pageviews', '');
+            } else {
+                const groups = json.data.viewer.accounts[0].rumPageloadEventsAdaptiveGroups;
+                pageviews = groups.reduce(function(a, g) { return a + g.count; }, 0);
+                visits = groups.reduce(function(a, g) { return a + (g.sum.visits || 0); }, 0);
+                document.getElementById('stat-visits').textContent = visits.toLocaleString();
+                document.getElementById('stat-pageviews').textContent = pageviews.toLocaleString();
+                document.getElementById('stat-visits-err').textContent = 'Cloudflare';
             }
-        } catch (e) { console.error('CF error', e); }
+        } catch (e) { statErr('stat-visits', e.message); }
     }
 
     if (lsKey) {
+        document.getElementById('stat-orders').textContent = '...';
         try {
-            const since = new Date(Date.now() - 30 * 86400000).toISOString();
-            const res = await fetch('https://api.lemonsqueezy.com/v1/orders?filter[created_at_gte]=' + encodeURIComponent(since) + '&page[size]=100', {
-                headers: { 'Authorization': 'Bearer ' + lsKey }
+            const res = await fetch('https://api.lemonsqueezy.com/v1/orders?page[size]=100', {
+                headers: { 'Authorization': 'Bearer ' + lsKey, 'Accept': 'application/vnd.api+json' }
             });
-            if (res.ok) {
-                const json = await res.json();
-                orders = json.meta ? json.meta.page.total : (json.data ? json.data.length : null);
+            const json = await res.json();
+            if (!res.ok) {
+                statErr('stat-orders', json.errors ? json.errors[0].detail : 'Auth failed');
+            } else {
+                const cutoff = new Date(Date.now() - days * 86400000);
+                orders = json.data.filter(function(o) { return new Date(o.attributes.created_at) >= cutoff; }).length;
+                document.getElementById('stat-orders').textContent = orders;
+                document.getElementById('stat-orders-err').textContent = 'LemonSqueezy';
             }
-        } catch (e) {}
+        } catch (e) { statErr('stat-orders', e.message); }
     }
 
-    if (visits !== null) document.getElementById('stat-visits').textContent = visits.toLocaleString();
-    if (pageviews !== null) document.getElementById('stat-pageviews').textContent = pageviews.toLocaleString();
-    if (orders !== null) document.getElementById('stat-orders').textContent = orders;
     if (visits !== null && orders !== null && visits > 0) {
-        const rate = ((orders / visits) * 100).toFixed(2);
-        document.getElementById('stat-conversion').textContent = rate + '%';
+        document.getElementById('stat-conversion').textContent = ((orders / visits) * 100).toFixed(2) + '%';
     }
-
 }
 
 // ---- TABS ----
