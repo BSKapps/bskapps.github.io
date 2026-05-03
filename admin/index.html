@@ -433,7 +433,7 @@
                 <div class="stat-sub">visits to sales</div>
             </div>
             <div class="stat-box">
-                <div class="stat-label" id="label-ad-earnings">Ad Earnings</div>
+                <div class="stat-label" id="label-ad-earnings">Ad Revenue</div>
                 <div class="stat-value" id="stat-ad-earnings">--</div>
                 <div class="stat-sub">AdSense</div>
             </div>
@@ -819,7 +819,7 @@ async function loadStats() {
         }
 
         const as = stats.adsense && stats.adsense[key];
-        document.getElementById('label-ad-earnings').textContent = 'Ad Earnings (' + days + 'd)';
+        document.getElementById('label-ad-earnings').textContent = 'Ad Revenue (' + days + 'd)';
         document.getElementById('label-ad-impressions').textContent = 'Impressions (' + days + 'd)';
         if (as && !as.error) {
             document.getElementById('stat-ad-earnings').textContent = '$' + as.earnings.toFixed(2);
