@@ -79,6 +79,10 @@
             gap: 4px;
             padding: 20px 28px 0;
             border-bottom: 1px solid #1e1e1e;
+            position: sticky;
+            top: 53px;
+            background: #0d0d0d;
+            z-index: 40;
         }
         .tab {
             padding: 8px 20px;
@@ -249,6 +253,7 @@
         .stat-box .stat-sub { font-size: 0.8rem; color: #444; margin-top: 4px; }
         .stat-box.highlight .stat-value { color: #7aff8a; }
         .stat-box.revenue .stat-value { color: #ffd700; }
+        .stat-box.total-revenue .stat-value { color: #b48aff; }
 
         .analytics-row {
             display: flex;
@@ -432,7 +437,7 @@
                 <div class="stat-value" id="stat-conversion">--</div>
                 <div class="stat-sub">visits to sales</div>
             </div>
-            <div class="stat-box highlight revenue">
+            <div class="stat-box highlight total-revenue">
                 <div class="stat-label" id="label-total-revenue">Total Revenue</div>
                 <div class="stat-value" id="stat-total-revenue">--</div>
                 <div class="stat-sub">Sales + Ads</div>

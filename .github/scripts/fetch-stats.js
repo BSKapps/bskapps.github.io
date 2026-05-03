@@ -84,7 +84,20 @@ async function getGoogleAccessToken() {
     return res.body.access_token;
 }
 
-async function fetchAdSense(days, accessToken) {
+async function getAdSenseAccountId(accessToken) {
+    const res = await request({
+        hostname: 'adsense.googleapis.com',
+        path: '/v2/accounts',
+        method: 'GET',
+        headers: { 'Authorization': 'Bearer ' + accessToken }
+    });
+    if (res.status !== 200) throw new Error('AdSense accounts error: ' + res.status);
+    const accounts = res.body.accounts || [];
+    if (!accounts.length) throw new Error('No AdSense accounts found');
+    return accounts[0].name;
+}
+
+async function fetchAdSense(days, accessToken, accountName) {
     const end = new Date().toISOString().split('T')[0];
     const start = new Date(Date.now() - days * 86400000).toISOString().split('T')[0];
     const params = new URLSearchParams({
@@ -95,19 +108,19 @@ async function fetchAdSense(days, accessToken) {
         'endDate.year': end.split('-')[0],
         'endDate.month': end.split('-')[1],
         'endDate.day': end.split('-')[2],
-        'metrics': 'ESTIMATED_EARNINGS,IMPRESSIONS,CLICKS,PAGE_VIEWS'
+        'metrics': 'ESTIMATED_EARNINGS,IMPRESSIONS,CLICKS'
     });
     const res = await request({
         hostname: 'adsense.googleapis.com',
-        path: '/v2/accounts/-/reports:generate?' + params.toString(),
+        path: '/v2/' + accountName + '/reports:generate?' + params.toString(),
         method: 'GET',
         headers: { 'Authorization': 'Bearer ' + accessToken }
     });
-    if (res.status !== 200) throw new Error('AdSense API error: ' + res.status);
+    if (res.status !== 200) throw new Error('AdSense API error: ' + res.status + ' ' + JSON.stringify(res.body));
     const rows = res.body.rows || [];
-    if (!rows.length) return { earnings: 0, impressions: 0, clicks: 0, pageviews: 0 };
+    if (!rows.length) return { earnings: 0, clicks: 0 };
     const vals = rows[0].cells.map(function(c) { return parseFloat(c.value) || 0; });
-    return { earnings: Math.round(vals[0] * 100) / 100, impressions: vals[1], clicks: vals[2], pageviews: vals[3] };
+    return { earnings: Math.round(vals[0] * 100) / 100, clicks: vals[2] };
 }
 
 function fyDays() {
@@ -120,8 +133,13 @@ async function main() {
     const stats = { updated: new Date().toISOString(), cloudflare: {}, lemonsqueezy: {}, adsense: {} };
 
     let googleToken = null;
+    let adSenseAccount = null;
     if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && GOOGLE_REFRESH_TOKEN) {
-        try { googleToken = await getGoogleAccessToken(); }
+        try {
+            googleToken = await getGoogleAccessToken();
+            adSenseAccount = await getAdSenseAccountId(googleToken);
+            console.log('AdSense account:', adSenseAccount);
+        }
         catch (e) { console.error('Google auth error:', e.message); }
     }
 
@@ -143,9 +161,9 @@ async function main() {
                 stats.lemonsqueezy[days + 'd'] = { error: e.message };
             }
         }
-        if (googleToken) {
+        if (googleToken && adSenseAccount) {
             try {
-                stats.adsense[days + 'd'] = await fetchAdSense(days, googleToken);
+                stats.adsense[days + 'd'] = await fetchAdSense(days, googleToken, adSenseAccount);
             } catch (e) {
                 console.error('AdSense ' + days + 'd error:', e.message);
                 stats.adsense[days + 'd'] = { error: e.message };
