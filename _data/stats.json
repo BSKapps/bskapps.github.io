@@ -1,5 +1,28 @@
 {
-  "updated": "2026-05-03T01:46:32.603Z",
-  "cloudflare": {},
-  "lemonsqueezy": {}
+  "updated": "2026-05-03T01:53:47.919Z",
+  "cloudflare": {
+    "7d": {
+      "error": "Authentication failed (status: 400)"
+    },
+    "30d": {
+      "error": "Authentication failed (status: 400)"
+    },
+    "90d": {
+      "error": "Authentication failed (status: 400)"
+    }
+  },
+  "lemonsqueezy": {
+    "7d": {
+      "orders": 2,
+      "revenue": 17.99
+    },
+    "30d": {
+      "orders": 14,
+      "revenue": 121.84
+    },
+    "90d": {
+      "orders": 14,
+      "revenue": 121.84
+    }
+  }
 }
