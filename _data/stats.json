@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-03T01:58:37.899Z",
+  "updated": "2026-05-03T02:01:33.113Z",
   "cloudflare": {
     "1d": {
       "visits": 5,
@@ -18,7 +18,8 @@
       "pageviews": 650
     },
     "307d": {
-      "error": "account \"304c227c3868c2cd96c3d6a840b7ef13\" cannot request a time range wider than 13w2d, but your query time range spans 43w6d1h58m42s315ms280us673ns"
+      "visits": 240,
+      "pageviews": 650
     }
   },
   "lemonsqueezy": {
