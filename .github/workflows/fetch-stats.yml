@@ -12,8 +12,6 @@ on:
 jobs:
   fetch:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -23,10 +21,15 @@ jobs:
           LS_API_KEY: ${{ secrets.LS_API_KEY }}
         run: node .github/scripts/fetch-stats.js
 
-      - name: Commit stats
+      - name: Push stats to private repo
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
+          git clone https://x-access-token:${GH_PAT}@github.com/BSKapps/bsk-stats.git /tmp/bsk-stats
+          cp _data/stats.json /tmp/bsk-stats/stats.json
+          cd /tmp/bsk-stats
           git config user.name 'github-actions'
           git config user.email 'github-actions@github.com'
-          git add _data/stats.json
+          git add stats.json
           git diff --staged --quiet || git commit -m "Update analytics stats"
           git push

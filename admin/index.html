@@ -503,6 +503,7 @@
 
 <script>
 const REPO = 'BSKapps/bskapps.github.io';
+const STATS_REPO = 'BSKapps/bsk-stats';
 const DATA_FILE = '_data/content.json';
 const BRANCH = 'main';
 const CF_ACCOUNT = '304c227c3868c2cd96c3d6a840b7ef13';
@@ -772,7 +773,7 @@ async function loadStats() {
     document.getElementById('label-orders').textContent = 'Orders (' + days + 'd)';
 
     try {
-        const res = await ghFetch('GET', 'repos/' + REPO + '/contents/_data/stats.json');
+        const res = await ghFetch('GET', 'repos/' + STATS_REPO + '/contents/stats.json');
         if (!res.ok) {
             document.getElementById('stat-visits').textContent = 'No data yet';
             document.getElementById('stat-visits-err').textContent = 'Run the GitHub Action first';
