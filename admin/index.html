@@ -248,6 +248,7 @@
         .stat-box .stat-value { font-size: 1.8rem; font-weight: 700; color: #fff; }
         .stat-box .stat-sub { font-size: 0.8rem; color: #444; margin-top: 4px; }
         .stat-box.highlight .stat-value { color: #7aff8a; }
+        .stat-box.revenue .stat-value { color: #ffd700; font-size: 2.2rem; }
 
         .analytics-row {
             display: flex;
@@ -417,6 +418,11 @@
                 <div class="stat-label" id="label-orders">Orders</div>
                 <div class="stat-value" id="stat-orders">--</div>
                 <div class="stat-sub" id="stat-orders-err"></div>
+            </div>
+            <div class="stat-box highlight revenue">
+                <div class="stat-label" id="label-revenue">Revenue</div>
+                <div class="stat-value" id="stat-revenue">--</div>
+                <div class="stat-sub">LemonSqueezy</div>
             </div>
             <div class="stat-box highlight">
                 <div class="stat-label">Conversion</div>
@@ -786,12 +792,15 @@ async function loadStats() {
 
         if (ls && !ls.error) {
             document.getElementById('stat-orders').textContent = ls.orders;
-            document.getElementById('stat-orders-err').textContent = ls.revenue ? '$' + ls.revenue.toFixed(2) + ' revenue' : 'LemonSqueezy';
+            document.getElementById('stat-orders-err').textContent = 'LemonSqueezy';
+            document.getElementById('stat-revenue').textContent = ls.revenue ? '$' + ls.revenue.toFixed(2) : '$0.00';
+            document.getElementById('label-revenue').textContent = 'Revenue (' + days + 'd)';
             if (cf && cf.visits > 0) {
                 document.getElementById('stat-conversion').textContent = ((ls.orders / cf.visits) * 100).toFixed(2) + '%';
             }
         } else {
             document.getElementById('stat-orders').textContent = ls ? ls.error : '--';
+            document.getElementById('stat-revenue').textContent = '--';
         }
     } catch (e) {
         document.getElementById('stat-visits').textContent = 'Error';
