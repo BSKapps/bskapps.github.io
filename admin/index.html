@@ -423,7 +423,7 @@
                 <div class="stat-sub" id="stat-orders-err"></div>
             </div>
             <div class="stat-box highlight revenue">
-                <div class="stat-label" id="label-revenue">Revenue</div>
+                <div class="stat-label" id="label-revenue">Sales Revenue</div>
                 <div class="stat-value" id="stat-revenue">--</div>
                 <div class="stat-sub">LemonSqueezy</div>
             </div>
@@ -443,9 +443,9 @@
                 <div class="stat-sub">AdSense</div>
             </div>
             <div class="stat-box">
-                <div class="stat-label" id="label-ad-impressions">Ad Clicks</div>
-                <div class="stat-value" id="stat-ad-impressions">--</div>
-                <div class="stat-sub" id="stat-ad-clicks"></div>
+                <div class="stat-label" id="label-ad-clicks">Ad Clicks</div>
+                <div class="stat-value" id="stat-ad-clicks-val">--</div>
+                <div class="stat-sub">AdSense</div>
             </div>
         </div>
 
@@ -814,7 +814,7 @@ async function loadStats() {
             document.getElementById('stat-orders').textContent = ls.orders;
             document.getElementById('stat-orders-err').textContent = 'LemonSqueezy';
             document.getElementById('stat-revenue').textContent = ls.revenue ? '$' + ls.revenue.toFixed(2) : '$0.00';
-            document.getElementById('label-revenue').textContent = 'Revenue (' + days + 'd)';
+            document.getElementById('label-revenue').textContent = 'Sales Revenue (' + days + 'd)';
             if (cf && cf.visits > 0) {
                 document.getElementById('stat-conversion').textContent = ((ls.orders / cf.visits) * 100).toFixed(2) + '%';
             }
@@ -829,8 +829,8 @@ async function loadStats() {
         document.getElementById('label-ad-impressions').textContent = 'Impressions (' + days + 'd)';
         if (as && !as.error) {
             document.getElementById('stat-ad-earnings').textContent = '$' + as.earnings.toFixed(2);
-            document.getElementById('stat-ad-impressions').textContent = as.clicks.toLocaleString();
-            document.getElementById('stat-ad-clicks').textContent = 'AdSense';
+            document.getElementById('stat-ad-clicks-val').textContent = as.clicks.toLocaleString();
+            document.getElementById('label-ad-clicks').textContent = 'Ad Clicks (' + days + 'd)';
             const lsRev = (ls && !ls.error && ls.revenue) ? ls.revenue : 0;
             document.getElementById('stat-total-revenue').textContent = '$' + (lsRev + as.earnings).toFixed(2);
         } else {
