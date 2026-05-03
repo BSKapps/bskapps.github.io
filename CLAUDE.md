@@ -148,6 +148,6 @@ Do NOT add an Articles link to the footer — article discovery happens via the 
 - Run `git push` unless explicitly asked
 - Change the dark theme, colours, fonts, or layout unless asked
 - Add external CSS frameworks or JavaScript (lemon.js is the one exception)
-- Add analytics or tracking beyond Cloudflare Web Analytics (already enabled via Cloudflare proxy)
+- Add analytics or tracking
 - Link to or mention Fetch Puppy without asking first
 - Add emojis to code or output unless asked
