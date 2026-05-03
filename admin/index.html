@@ -278,12 +278,25 @@
 
         .api-setup {
             background: #111;
-            border: 1px dashed #2a2a2a;
+            border: 1px solid #1e1e1e;
             border-radius: 10px;
-            padding: 20px 24px;
             margin-bottom: 16px;
+            overflow: hidden;
         }
-        .api-setup h3 { color: #fff; font-size: 0.95rem; margin-bottom: 6px; }
+        .api-setup-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .api-setup-toggle:hover { background: #161616; }
+        .api-setup-toggle h3 { color: #555; font-size: 0.85rem; font-weight: 600; }
+        .api-chevron { color: #333; font-size: 0.7rem; transition: transform 0.2s; }
+        .api-setup.open .api-chevron { transform: rotate(180deg); }
+        .api-setup-body { display: none; padding: 0 20px 20px; }
+        .api-setup.open .api-setup-body { display: block; }
         .api-setup p { color: #555; font-size: 0.85rem; margin-bottom: 14px; line-height: 1.5; }
         .api-fields { display: flex; flex-direction: column; gap: 10px; }
         .api-field { display: flex; flex-direction: column; gap: 4px; }
@@ -390,20 +403,25 @@
             </div>
         </div>
 
-        <div class="api-setup">
-            <h3>API Keys</h3>
-            <p>Enter your API keys to see live stats. Stored only in your browser.</p>
-            <div class="api-fields">
-                <div class="api-field">
-                    <label>Cloudflare API Token</label>
-                    <input type="password" id="cf-token" placeholder="Cloudflare token with Account Analytics: Read">
-                </div>
-                <div class="api-field">
-                    <label>LemonSqueezy API Key</label>
-                    <input type="password" id="ls-key" placeholder="Your LemonSqueezy API key">
-                </div>
+        <div class="api-setup" id="api-setup">
+            <div class="api-setup-toggle" onclick="toggleApiSetup()">
+                <h3>API Keys</h3>
+                <span class="api-chevron">&#9660;</span>
             </div>
-            <button class="api-save-btn" onclick="saveApiKeys()">Save &amp; Load Stats</button>
+            <div class="api-setup-body">
+                <p>Stored only in your browser. Never sent anywhere except the respective API.</p>
+                <div class="api-fields">
+                    <div class="api-field">
+                        <label>Cloudflare API Token</label>
+                        <input type="password" id="cf-token" placeholder="Cloudflare token with Account Analytics: Read">
+                    </div>
+                    <div class="api-field">
+                        <label>LemonSqueezy API Key</label>
+                        <input type="password" id="ls-key" placeholder="Your LemonSqueezy API key">
+                    </div>
+                </div>
+                <button class="api-save-btn" onclick="saveApiKeys()">Save &amp; Load Stats</button>
+            </div>
         </div>
 
         <div class="section-title">Open Dashboards</div>
@@ -690,11 +708,12 @@ async function loadStats(cfToken, lsKey) {
             const query = `{
                 viewer {
                     accounts(filter: {accountTag: "${CF_ACCOUNT}"}) {
-                        rumWebsiteMetricsAdaptiveGroups(
-                            filter: {date_geq: "${start}", date_leq: "${end}"}
-                            limit: 1
+                        rumPageloadEventsAdaptiveGroups(
+                            filter: {AND: [{date_geq: "${start}"}, {date_leq: "${end}"}]}
+                            limit: 5000
                         ) {
-                            sum { visits pageViews }
+                            count
+                            sum { visits }
                         }
                     }
                 }
@@ -709,13 +728,13 @@ async function loadStats(cfToken, lsKey) {
             });
             if (res.ok) {
                 const json = await res.json();
-                const groups = json.data && json.data.viewer.accounts[0].rumWebsiteMetricsAdaptiveGroups;
-                if (groups && groups[0]) {
-                    visits = groups[0].sum.visits;
-                    pageviews = groups[0].sum.pageViews;
+                const groups = json.data && json.data.viewer.accounts[0].rumPageloadEventsAdaptiveGroups;
+                if (groups) {
+                    pageviews = groups.reduce(function(a, g) { return a + g.count; }, 0);
+                    visits = groups.reduce(function(a, g) { return a + (g.sum.visits || 0); }, 0);
                 }
             }
-        } catch (e) {}
+        } catch (e) { console.error('CF error', e); }
     }
 
     if (lsKey) {
@@ -762,6 +781,10 @@ function ghFetch(method, path, body, tok) {
     };
     if (body) opts.body = JSON.stringify(body);
     return fetch('https://api.github.com/' + path, opts);
+}
+
+function toggleApiSetup() {
+    document.getElementById('api-setup').classList.toggle('open');
 }
 
 function getPath(obj, path) {
