@@ -1,0 +1,64 @@
+{
+  "site": {
+    "title": "BSK Apps",
+    "tagline": "Utilities for AV Professionals"
+  },
+  "apps": {
+    "quickerip": {
+      "name": "Quicker IP",
+      "subtitle": "Network toolkit for macOS",
+      "tagline": "Catch network problems before they catch you out.",
+      "price": "$19.99 USD",
+      "macos": "macOS 14.6+",
+      "version": "v2.2",
+      "released": "26 April 2026",
+      "features": [
+        "IP presets and Network Locations - switch configs in one click",
+        "Live speed, SSID, and system info in the menu bar",
+        "LAN scanner, ping, and Dante network readiness"
+      ]
+    },
+    "labassistant": {
+      "name": "Lab Assistant",
+      "subtitle": "QLab workspace automation for macOS",
+      "tagline": "Let the assistant prep the cues. You run the show.",
+      "price": "$14.99 USD",
+      "macos": "macOS 14.0+",
+      "version": "v2.0",
+      "released": "15 April 2026",
+      "features": [
+        "LUFS normalisation and automatic level setting",
+        "Mono routing, silence trimming, and cue numbering",
+        "BPM and key detection with Camelot reordering"
+      ]
+    },
+    "ewp": {
+      "name": "EWP",
+      "subtitle": "Elevated Work Platform",
+      "tagline": "Set up your screens once. Snap into any layout instantly.",
+      "price": "$4.99 USD",
+      "macos": "macOS 14.0+",
+      "version": "v1.0",
+      "released": "20 April 2026",
+      "features": [
+        "Spotter panel - drag apps in, EWP arranges them instantly",
+        "6 layout modes across multiple monitors",
+        "Lift and Drop - raise your layout or clear the desktop in one click"
+      ]
+    },
+    "fetchpuppy": {
+      "name": "Fetch Puppy",
+      "subtitle": "Find and save music and video for your projects",
+      "tagline": "Find, save, and convert media for any project.",
+      "price": "$14.99 USD",
+      "macos": "macOS 14.0+",
+      "version": "v2.0.1",
+      "released": "19 April 2026",
+      "features": [
+        "Search and save from YouTube with smart quality scoring",
+        "Drag in a Spotify or Apple Music playlist - find every track automatically",
+        "Save videos from TikTok, Instagram, X, Facebook, Reddit and more"
+      ]
+    }
+  }
+}

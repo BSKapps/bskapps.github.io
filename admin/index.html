@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSK Apps Admin</title>
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d0d0d;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        /* LOGIN */
+        #login {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 12px;
+            padding: 24px;
+        }
+        #login h1 { color: #fff; font-size: 1.6rem; margin-bottom: 4px; }
+        #login p { color: #666; font-size: 0.9rem; text-align: center; max-width: 360px; line-height: 1.5; }
+        #login input {
+            width: 100%;
+            max-width: 360px;
+            padding: 12px 16px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            margin-top: 8px;
+        }
+        #login input:focus { border-color: #7ac4ff; }
+        #login .btn-primary {
+            width: 100%;
+            max-width: 360px;
+            padding: 11px;
+            background: #7ac4ff;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+        #login .btn-primary:hover { background: #9dd4ff; }
+        #login a { color: #7ac4ff; font-size: 0.8rem; text-decoration: none; }
+        #login a:hover { color: #fff; }
+        #login-error { color: #ff6b6b; font-size: 0.85rem; display: none; }
+
+        /* DASHBOARD */
+        #dashboard { display: none; }
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 28px;
+            border-bottom: 1px solid #1e1e1e;
+            background: #111;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .topbar h1 { color: #fff; font-size: 1.1rem; font-weight: 700; }
+        .topbar-right { display: flex; align-items: center; gap: 16px; }
+        .topbar a { color: #555; font-size: 0.85rem; text-decoration: none; cursor: pointer; }
+        .topbar a:hover { color: #fff; }
+
+        .tabs {
+            display: flex;
+            gap: 4px;
+            padding: 20px 28px 0;
+            border-bottom: 1px solid #1e1e1e;
+        }
+        .tab {
+            padding: 8px 20px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: -1px;
+        }
+        .tab.active { color: #fff; border-bottom-color: #7ac4ff; }
+        .tab:hover { color: #ccc; }
+
+        .pane { display: none; padding: 28px; max-width: 860px; }
+        .pane.active { display: block; }
+
+        /* CARDS */
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #252525;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+        .card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card-title .app-badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #7ac4ff;
+            background: #1a2a3a;
+            border: 1px solid #2a4a6a;
+            border-radius: 6px;
+            padding: 2px 8px;
+            letter-spacing: 0.3px;
+        }
+
+        /* FIELDS */
+        .field-row { display: flex; gap: 12px; margin-bottom: 14px; }
+        .field { flex: 1; }
+        .field label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 5px;
+        }
+        .field input, .field textarea {
+            width: 100%;
+            padding: 9px 12px;
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-size: 0.9rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        .field input:focus, .field textarea:focus { border-color: #7ac4ff; }
+        .field textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
+
+        /* FEATURES */
+        .features-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 8px;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .feature-item input {
+            flex: 1;
+            padding: 9px 12px;
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-size: 0.9rem;
+            font-family: inherit;
+            outline: none;
+        }
+        .feature-item input:focus { border-color: #7ac4ff; }
+        .feature-item .remove-btn {
+            background: none;
+            border: none;
+            color: #444;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 4px 6px;
+            border-radius: 6px;
+            line-height: 1;
+        }
+        .feature-item .remove-btn:hover { color: #ff6b6b; background: #2a1a1a; }
+        .add-feature-btn {
+            background: none;
+            border: 1px dashed #2a2a2a;
+            border-radius: 8px;
+            color: #555;
+            padding: 7px 14px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 4px;
+        }
+        .add-feature-btn:hover { border-color: #7ac4ff; color: #7ac4ff; }
+
+        /* SAVE BAR */
+        #save-bar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: #161616;
+            border-top: 1px solid #252525;
+            padding: 14px 28px;
+            display: none;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 14px;
+            z-index: 100;
+        }
+        #save-bar.show { display: flex; }
+        #save-status { color: #666; font-size: 0.85rem; }
+        #save-btn {
+            padding: 9px 28px;
+            background: linear-gradient(180deg, #229155, #1a7a48);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        #save-btn:hover { background: linear-gradient(180deg, #27a862, #229155); }
+        #save-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        /* ANALYTICS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .stat-box {
+            background: #1a1a1a;
+            border: 1px solid #252525;
+            border-radius: 10px;
+            padding: 18px 20px;
+        }
+        .stat-box .stat-label { font-size: 0.75rem; color: #555; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .stat-box .stat-value { font-size: 1.8rem; font-weight: 700; color: #fff; }
+        .stat-box .stat-sub { font-size: 0.8rem; color: #444; margin-top: 4px; }
+        .stat-box.highlight .stat-value { color: #7aff8a; }
+
+        .analytics-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .analytics-link-card {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            background: #1a1a1a;
+            border: 1px solid #252525;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #e0e0e0;
+            transition: border-color 0.15s;
+        }
+        .analytics-link-card:hover { border-color: #7ac4ff; }
+        .analytics-link-card .alc-icon { font-size: 1.6rem; }
+        .analytics-link-card .alc-text strong { display: block; font-size: 0.9rem; color: #fff; }
+        .analytics-link-card .alc-text span { font-size: 0.8rem; color: #555; }
+        .analytics-link-card .alc-arrow { margin-left: auto; color: #333; font-size: 1rem; }
+        .analytics-link-card:hover .alc-arrow { color: #7ac4ff; }
+
+        .api-setup {
+            background: #111;
+            border: 1px dashed #2a2a2a;
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+        }
+        .api-setup h3 { color: #fff; font-size: 0.95rem; margin-bottom: 6px; }
+        .api-setup p { color: #555; font-size: 0.85rem; margin-bottom: 14px; line-height: 1.5; }
+        .api-fields { display: flex; flex-direction: column; gap: 10px; }
+        .api-field { display: flex; flex-direction: column; gap: 4px; }
+        .api-field label { font-size: 0.75rem; color: #555; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .api-field input {
+            padding: 8px 12px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-size: 0.85rem;
+            font-family: monospace;
+            outline: none;
+        }
+        .api-field input:focus { border-color: #7ac4ff; }
+        .api-save-btn {
+            margin-top: 12px;
+            padding: 8px 20px;
+            background: #1e2e1e;
+            border: 1px solid #2a4a2a;
+            border-radius: 8px;
+            color: #7aff8a;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .api-save-btn:hover { background: #253525; }
+
+        .section-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 10px;
+            margin-top: 24px;
+        }
+        .section-title:first-child { margin-top: 0; }
+
+        @media (max-width: 600px) {
+            .pane { padding: 16px; }
+            .field-row { flex-direction: column; }
+            .tabs { padding: 16px 16px 0; }
+            .topbar { padding: 12px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+    <h1>BSK Apps Admin</h1>
+    <p>Enter your GitHub token to manage site content and view analytics.</p>
+    <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off">
+    <div id="login-error">Invalid token or no repo access. Check it has "repo" scope.</div>
+    <button class="btn-primary" onclick="login()">Sign In</button>
+    <a href="https://github.com/settings/tokens/new?scopes=repo&description=BSK+Apps+Admin" target="_blank">Create a GitHub token (repo scope) &rarr;</a>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+    <div class="topbar">
+        <h1>BSK Apps Admin</h1>
+        <div class="topbar-right">
+            <a href="/" target="_blank">View site &rarr;</a>
+            <a onclick="logout()">Sign out</a>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="showTab('content', this)">Content</button>
+        <button class="tab" onclick="showTab('analytics', this)">Analytics</button>
+    </div>
+
+    <!-- CONTENT TAB -->
+    <div id="pane-content" class="pane active">
+        <div id="content-form"></div>
+        <div style="height: 80px;"></div>
+    </div>
+
+    <!-- ANALYTICS TAB -->
+    <div id="pane-analytics" class="pane">
+        <div class="section-title">Live Stats</div>
+        <div id="stats-grid" class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-label">Visits (30d)</div>
+                <div class="stat-value" id="stat-visits">--</div>
+                <div class="stat-sub">Cloudflare</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Page Views (30d)</div>
+                <div class="stat-value" id="stat-pageviews">--</div>
+                <div class="stat-sub">Cloudflare</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Orders (30d)</div>
+                <div class="stat-value" id="stat-orders">--</div>
+                <div class="stat-sub">LemonSqueezy</div>
+            </div>
+            <div class="stat-box highlight">
+                <div class="stat-label">Conversion</div>
+                <div class="stat-value" id="stat-conversion">--</div>
+                <div class="stat-sub">visits to sales</div>
+            </div>
+        </div>
+
+        <div id="api-setup-section" class="api-setup">
+            <h3>Connect your APIs for live stats</h3>
+            <p>Enter your API keys once to see live visit counts, order numbers, and conversion rate. Stored only in your browser.</p>
+            <div class="api-fields">
+                <div class="api-field">
+                    <label>Cloudflare API Token</label>
+                    <input type="password" id="cf-token" placeholder="Cloudflare token with Account Analytics: Read">
+                </div>
+                <div class="api-field">
+                    <label>LemonSqueezy API Key</label>
+                    <input type="password" id="ls-key" placeholder="Your LemonSqueezy API key">
+                </div>
+            </div>
+            <button class="api-save-btn" onclick="saveApiKeys()">Save &amp; Load Stats</button>
+        </div>
+
+        <div class="section-title">Open Dashboards</div>
+        <div class="analytics-row">
+            <a class="analytics-link-card" href="https://dash.cloudflare.com/304c227c3868c2cd96c3d6a840b7ef13/web-analytics/overview" target="_blank">
+                <div class="alc-icon">&#9729;&#65039;</div>
+                <div class="alc-text">
+                    <strong>Cloudflare Analytics</strong>
+                    <span>Visits, countries, devices</span>
+                </div>
+                <div class="alc-arrow">&#8599;</div>
+            </a>
+            <a class="analytics-link-card" href="https://app.lemonsqueezy.com/orders" target="_blank">
+                <div class="alc-icon">&#128176;</div>
+                <div class="alc-text">
+                    <strong>LemonSqueezy Orders</strong>
+                    <span>Sales, revenue, customers</span>
+                </div>
+                <div class="alc-arrow">&#8599;</div>
+            </a>
+        </div>
+        <div class="analytics-row">
+            <a class="analytics-link-card" href="https://github.com/BSKapps/bskapps.github.io/graphs/traffic" target="_blank">
+                <div class="alc-icon">&#128202;</div>
+                <div class="alc-text">
+                    <strong>GitHub Traffic</strong>
+                    <span>Repo views and clones</span>
+                </div>
+                <div class="alc-arrow">&#8599;</div>
+            </a>
+            <a class="analytics-link-card" href="https://search.google.com/search-console" target="_blank">
+                <div class="alc-icon">&#128269;</div>
+                <div class="alc-text">
+                    <strong>Search Console</strong>
+                    <span>SEO, search performance</span>
+                </div>
+                <div class="alc-arrow">&#8599;</div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- SAVE BAR -->
+<div id="save-bar">
+    <span id="save-status">Unsaved changes</span>
+    <button id="save-btn" onclick="save()">Save &amp; Publish</button>
+</div>
+
+<script>
+const REPO = 'BSKapps/bskapps.github.io';
+const DATA_FILE = '_data/content.json';
+const BRANCH = 'main';
+const CF_ACCOUNT = '304c227c3868c2cd96c3d6a840b7ef13';
+
+let data = null;
+let fileSha = '';
+let originalJSON = '';
+let dirty = false;
+
+// ---- AUTH ----
+
+async function login() {
+    const token = document.getElementById('gh-token').value.trim();
+    if (!token) return;
+    const err = document.getElementById('login-error');
+    err.style.display = 'none';
+    try {
+        const res = await ghFetch('GET', 'repos/' + REPO + '/contents/' + DATA_FILE, null, token);
+        if (!res.ok) throw new Error();
+        localStorage.setItem('bsk_token', token);
+        init();
+    } catch (e) {
+        err.style.display = 'block';
+    }
+}
+
+function logout() {
+    localStorage.removeItem('bsk_token');
+    location.reload();
+}
+
+function token() { return localStorage.getItem('bsk_token'); }
+
+// ---- INIT ----
+
+async function init() {
+    if (!token()) return;
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+
+    const res = await ghFetch('GET', 'repos/' + REPO + '/contents/' + DATA_FILE);
+    const file = await res.json();
+    fileSha = file.sha;
+    data = JSON.parse(atob(file.content.replace(/\n/g, '')));
+    originalJSON = JSON.stringify(data);
+    renderForm();
+    loadApiKeys();
+}
+
+// ---- FORM ----
+
+function renderForm() {
+    const container = document.getElementById('content-form');
+    container.innerHTML = '';
+
+    // Site card
+    container.appendChild(makeCard('Site', null, [
+        makeFieldRow([
+            makeField('Title', 'site.title', data.site.title),
+            makeField('Tagline', 'site.tagline', data.site.tagline)
+        ])
+    ]));
+
+    // App cards
+    const appLabels = { quickerip: 'Quicker IP', labassistant: 'Lab Assistant', ewp: 'EWP', fetchpuppy: 'Fetch Puppy' };
+    Object.keys(data.apps).forEach(function(key) {
+        const app = data.apps[key];
+        const card = makeCard(appLabels[key], 'APP', [
+            makeFieldRow([
+                makeField('Name', 'apps.' + key + '.name', app.name),
+                makeField('Subtitle', 'apps.' + key + '.subtitle', app.subtitle)
+            ]),
+            makeFieldRow([
+                makeField('Tagline', 'apps.' + key + '.tagline', app.tagline)
+            ]),
+            makeFieldRow([
+                makeField('Price', 'apps.' + key + '.price', app.price),
+                makeField('macOS', 'apps.' + key + '.macos', app.macos),
+                makeField('Version', 'apps.' + key + '.version', app.version),
+                makeField('Released', 'apps.' + key + '.released', app.released)
+            ]),
+            makeFeaturesField('Features', 'apps.' + key + '.features', app.features)
+        ]);
+        container.appendChild(card);
+    });
+}
+
+function makeCard(title, badge, children) {
+    const div = document.createElement('div');
+    div.className = 'card';
+    const titleEl = document.createElement('div');
+    titleEl.className = 'card-title';
+    titleEl.textContent = title;
+    if (badge) {
+        const b = document.createElement('span');
+        b.className = 'app-badge';
+        b.textContent = badge;
+        titleEl.appendChild(b);
+    }
+    div.appendChild(titleEl);
+    children.forEach(function(c) { div.appendChild(c); });
+    return div;
+}
+
+function makeFieldRow(fields) {
+    const row = document.createElement('div');
+    row.className = 'field-row';
+    fields.forEach(function(f) { row.appendChild(f); });
+    return row;
+}
+
+function makeField(label, path, value) {
+    const wrap = document.createElement('div');
+    wrap.className = 'field';
+    const lbl = document.createElement('label');
+    lbl.textContent = label;
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.value = value;
+    inp.dataset.path = path;
+    inp.addEventListener('input', function() {
+        setPath(data, path, inp.value);
+        markDirty();
+    });
+    wrap.appendChild(lbl);
+    wrap.appendChild(inp);
+    return wrap;
+}
+
+function makeFeaturesField(label, path, features) {
+    const wrap = document.createElement('div');
+    const lbl = document.createElement('div');
+    lbl.className = 'features-label';
+    lbl.textContent = label;
+    wrap.appendChild(lbl);
+
+    const list = document.createElement('div');
+    list.className = 'features-list';
+    list.dataset.path = path;
+
+    function rebuildArray() {
+        const inputs = list.querySelectorAll('input');
+        const arr = Array.from(inputs).map(function(i) { return i.value; });
+        setPath(data, path, arr);
+        markDirty();
+    }
+
+    function addItem(val) {
+        const item = document.createElement('div');
+        item.className = 'feature-item';
+        const inp = document.createElement('input');
+        inp.type = 'text';
+        inp.value = val;
+        inp.addEventListener('input', rebuildArray);
+        const btn = document.createElement('button');
+        btn.className = 'remove-btn';
+        btn.textContent = 'x';
+        btn.onclick = function() { item.remove(); rebuildArray(); };
+        item.appendChild(inp);
+        item.appendChild(btn);
+        list.appendChild(item);
+    }
+
+    features.forEach(addItem);
+    wrap.appendChild(list);
+
+    const addBtn = document.createElement('button');
+    addBtn.className = 'add-feature-btn';
+    addBtn.textContent = '+ Add feature';
+    addBtn.onclick = function() { addItem(''); rebuildArray(); list.lastElementChild.querySelector('input').focus(); };
+    wrap.appendChild(addBtn);
+    return wrap;
+}
+
+// ---- SAVE ----
+
+function markDirty() {
+    dirty = JSON.stringify(data) !== originalJSON;
+    document.getElementById('save-bar').classList.toggle('show', dirty);
+    document.getElementById('save-status').textContent = 'Unsaved changes';
+}
+
+async function save() {
+    const btn = document.getElementById('save-btn');
+    const status = document.getElementById('save-status');
+    btn.disabled = true;
+    status.textContent = 'Saving...';
+    try {
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2) + '\n')));
+        const res = await ghFetch('PUT', 'repos/' + REPO + '/contents/' + DATA_FILE, {
+            message: 'Update site content via admin',
+            content: content,
+            sha: fileSha,
+            branch: BRANCH
+        });
+        if (!res.ok) throw new Error((await res.json()).message);
+        const result = await res.json();
+        fileSha = result.content.sha;
+        originalJSON = JSON.stringify(data);
+        dirty = false;
+        status.textContent = 'Saved! Site updating...';
+        setTimeout(function() { document.getElementById('save-bar').classList.remove('show'); }, 3000);
+    } catch (e) {
+        status.textContent = 'Error: ' + e.message;
+    }
+    btn.disabled = false;
+}
+
+// ---- ANALYTICS ----
+
+function loadApiKeys() {
+    const cfToken = localStorage.getItem('bsk_cf_token');
+    const lsKey = localStorage.getItem('bsk_ls_key');
+    if (cfToken) document.getElementById('cf-token').value = cfToken;
+    if (lsKey) document.getElementById('ls-key').value = lsKey;
+    if (cfToken || lsKey) loadStats(cfToken, lsKey);
+}
+
+function saveApiKeys() {
+    const cfToken = document.getElementById('cf-token').value.trim();
+    const lsKey = document.getElementById('ls-key').value.trim();
+    if (cfToken) localStorage.setItem('bsk_cf_token', cfToken);
+    if (lsKey) localStorage.setItem('bsk_ls_key', lsKey);
+    loadStats(cfToken, lsKey);
+}
+
+async function loadStats(cfToken, lsKey) {
+    let visits = null, pageviews = null, orders = null;
+
+    if (cfToken) {
+        try {
+            const end = new Date().toISOString().split('T')[0];
+            const start = new Date(Date.now() - 30 * 86400000).toISOString().split('T')[0];
+            const query = `{
+                viewer {
+                    accounts(filter: {accountTag: "${CF_ACCOUNT}"}) {
+                        rumWebsiteMetricsAdaptiveGroups(
+                            filter: {date_geq: "${start}", date_leq: "${end}"}
+                            limit: 1
+                        ) {
+                            sum { visits pageViews }
+                        }
+                    }
+                }
+            }`;
+            const res = await fetch('https://api.cloudflare.com/client/v4/graphql', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + cfToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ query: query })
+            });
+            if (res.ok) {
+                const json = await res.json();
+                const groups = json.data && json.data.viewer.accounts[0].rumWebsiteMetricsAdaptiveGroups;
+                if (groups && groups[0]) {
+                    visits = groups[0].sum.visits;
+                    pageviews = groups[0].sum.pageViews;
+                }
+            }
+        } catch (e) {}
+    }
+
+    if (lsKey) {
+        try {
+            const since = new Date(Date.now() - 30 * 86400000).toISOString();
+            const res = await fetch('https://api.lemonsqueezy.com/v1/orders?filter[created_at_gte]=' + encodeURIComponent(since) + '&page[size]=100', {
+                headers: { 'Authorization': 'Bearer ' + lsKey }
+            });
+            if (res.ok) {
+                const json = await res.json();
+                orders = json.meta ? json.meta.page.total : (json.data ? json.data.length : null);
+            }
+        } catch (e) {}
+    }
+
+    if (visits !== null) document.getElementById('stat-visits').textContent = visits.toLocaleString();
+    if (pageviews !== null) document.getElementById('stat-pageviews').textContent = pageviews.toLocaleString();
+    if (orders !== null) document.getElementById('stat-orders').textContent = orders;
+    if (visits !== null && orders !== null && visits > 0) {
+        const rate = ((orders / visits) * 100).toFixed(2);
+        document.getElementById('stat-conversion').textContent = rate + '%';
+    }
+
+    if (cfToken || lsKey) {
+        document.getElementById('api-setup-section').style.display = 'none';
+    }
+}
+
+// ---- TABS ----
+
+function showTab(name, btn) {
+    document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.pane').forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('pane-' + name).classList.add('active');
+}
+
+// ---- UTILS ----
+
+function ghFetch(method, path, body, tok) {
+    const opts = {
+        method: method,
+        headers: {
+            'Authorization': 'Bearer ' + (tok || token()),
+            'Content-Type': 'application/json'
+        }
+    };
+    if (body) opts.body = JSON.stringify(body);
+    return fetch('https://api.github.com/' + path, opts);
+}
+
+function getPath(obj, path) {
+    return path.split('.').reduce(function(o, k) { return o && o[k]; }, obj);
+}
+
+function setPath(obj, path, val) {
+    const parts = path.split('.');
+    let cur = obj;
+    for (let i = 0; i < parts.length - 1; i++) cur = cur[parts[i]];
+    cur[parts[parts.length - 1]] = val;
+}
+
+// Start
+init();
+</script>
+</body>
+</html>
