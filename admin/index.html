@@ -380,8 +380,8 @@
     </div>
 
     <div class="tabs">
-        <button class="tab active" onclick="showTab('content', this)">Content</button>
-        <button class="tab" onclick="showTab('analytics', this)">Analytics</button>
+        <button class="tab active" data-tab="content" onclick="showTab('content', this)">Content</button>
+        <button class="tab" data-tab="analytics" onclick="showTab('analytics', this)">Analytics</button>
     </div>
 
     <!-- CONTENT TAB -->
@@ -538,6 +538,7 @@ async function init() {
     data = JSON.parse(atob(file.content.replace(/\n/g, '')));
     originalJSON = JSON.stringify(data);
     renderForm();
+    restoreTab();
     loadApiKeys();
 }
 
