@@ -1,20 +1,24 @@
 {
-  "updated": "2026-05-03T01:58:18.547Z",
+  "updated": "2026-05-03T01:58:37.899Z",
   "cloudflare": {
     "1d": {
-      "error": "Authentication failed (status: 400)"
+      "visits": 5,
+      "pageviews": 11
     },
     "7d": {
-      "error": "Authentication failed (status: 400)"
+      "visits": 14,
+      "pageviews": 32
     },
     "30d": {
-      "error": "Authentication failed (status: 400)"
+      "visits": 240,
+      "pageviews": 650
     },
     "90d": {
-      "error": "Authentication failed (status: 400)"
+      "visits": 240,
+      "pageviews": 650
     },
     "307d": {
-      "error": "Authentication failed (status: 400)"
+      "error": "account \"304c227c3868c2cd96c3d6a840b7ef13\" cannot request a time range wider than 13w2d, but your query time range spans 43w6d1h58m42s315ms280us673ns"
     }
   },
   "lemonsqueezy": {
