@@ -50,7 +50,7 @@
             <h2>Use a USB Ethernet adapter with the right chipset</h2>
             <p>Modern MacBooks have no built-in Ethernet, so you're always using an adapter. Not all adapters are equal, and on macOS the difference is mostly about which USB class the adapter speaks.</p>
 
-            <p><strong>CDC-NCM vs CDC-ECM.</strong> Both are standard USB Communications Device Class profiles for carrying Ethernet over USB. <em>CDC-ECM</em> is the older, simpler one: it wraps each Ethernet frame in a USB packet. <em>CDC-NCM</em> is newer and smarter: it batches multiple frames into one USB transfer, which is how you get reliable throughput at gigabit and 2.5 GbE without the CPU overhead. macOS has native drivers for both, but NCM is the one you want on modern rigs. Anything below that, including older ASIX chipsets that use their own vendor-specific protocol and need a kext, is where you get flaky behaviour under sustained audio load.</p>
+            <p>Stick to USB-C / Thunderbolt adapters that macOS handles natively (CDC-NCM class). Avoid older ASIX chipsets that need a kernel extension - they tend to drop packets under sustained audio load.</p>
 
             <p>What works reliably on macOS for Dante:</p>
             <ul>
@@ -58,9 +58,9 @@
                 <li><strong>Apple USB-C to Gigabit Ethernet</strong> - driverless, deterministic, no surprises.</li>
                 <li><strong>Thunderbolt 3 to Thunderbolt 2 adapter chained with a Thunderbolt 2 to Gigabit Ethernet adapter</strong> - goes through the Thunderbolt bus entirely, bypasses USB, and behaves very cleanly on macOS. More cable to manage but a solid option if you already have the adapters from an older rig.</li>
             </ul>
-            <p>The RTL8153 used to be a safe recommendation and still works in many setups, but there have been enough reports of instability under sustained audio load in recent macOS versions that it's no longer something to buy new for Dante work. If you have one already and it's been reliable, keep it, but the 8156 is the better buy today.</p>
+            <p>The older RTL8153 is best avoided for Dante work - Audinate's own guidance flags packet loss issues with that chipset. If you have one already and it's been reliable for you, keep it, but the 8156 is the better buy today.</p>
             <p>What to avoid: older ASIX parts (AX88772 and similar) that use a vendor-specific protocol and require a kernel extension, any adapter that insists on its own driver download, and random unbranded dongles whose chipset isn't listed anywhere on the packaging.</p>
-            <p>Confirm the negotiation is clean once plugged in. System Settings, Network, pick the adapter, Details, Hardware. You want <code>Speed: 1 Gbit/s</code> or <code>2.5 Gbit/s</code>, <code>Duplex: full-duplex</code>, <code>MTU: Standard (1500)</code>. Anything else, fix it before you trust it.</p>
+            <p>Confirm the negotiation is clean once plugged in. System Settings, Network, pick the adapter, Details, Hardware. You want <code>Speed: 1 Gbit/s</code> or <code>2.5 Gbit/s</code>, <code>Duplex: full-duplex</code>, <code>MTU: Standard (1500)</code> for Dante audio. Anything else, fix it before you trust it. (If you're running Dante Video or other multicast-heavy traffic on the same network, that side may want jumbo frames - separate decision, separate setting.)</p>
 
             <h2>Turn Wi-Fi off, not just disconnected</h2>
             <p>Dante Controller explicitly recommends disabling Wi-Fi on the control machine. There's a good reason. If Wi-Fi is on and the Dante network has no internet path, macOS may send Dante Controller's discovery traffic out the wrong interface, or randomly prefer Wi-Fi for mDNS. You'll see devices appear and disappear, clock sync go yellow, and patch commands silently fail.</p>

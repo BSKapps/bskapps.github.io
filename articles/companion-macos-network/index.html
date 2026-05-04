@@ -77,7 +77,7 @@
             <p>If you are only running Wi-Fi and expect Companion to talk to devices over it, that is fine as long as all the devices are on the same Wi-Fi network and there is no competing wired interface on a conflicting subnet.</p>
 
             <h2>Remote surfaces and the Companion satellite</h2>
-            <p>If you are running a Stream Deck on a separate machine - a stage manager's laptop, a FOH operator's computer - that machine runs Companion Satellite and connects back to the main Companion instance over the network. Satellite needs to reach Companion's IP on the satellite port (default 16622).</p>
+            <p>If you are running a Stream Deck on a separate machine - a stage manager's laptop, a FOH operator's computer - that machine runs Companion Satellite and connects back to the main Companion instance over the network. Satellite needs to reach Companion's IP on the satellite port set in Companion's settings.</p>
             <p>The common failure here is the satellite machine being on a different network segment to the Companion machine. If the main rig is on a show control LAN and the satellite is on a venue Wi-Fi, they may not be able to reach each other at all. Either put both on the same subnet, or make sure there is a routed path between them. Companion itself doesn't require anything exotic - it just needs a TCP connection on that port.</p>
 
             <h2>Checking the state</h2>
