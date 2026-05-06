@@ -20,7 +20,7 @@
 
 ```
 bskapps.github.io/
-├── index.html              # Homepage - lists Quicker IP, Lab Assistant, EWP, Resources
+├── index.html              # Homepage - lists QIP, LA, Target Trace, Fetch Puppy, EWP, Resources, Articles, Go Games
 ├── CNAME                   # Custom domain mapping (bskapps.com)
 ├── favicon.png
 ├── robots.txt
@@ -32,6 +32,7 @@ bskapps.github.io/
 │   ├── labassistant-icon.png
 │   ├── mvp-icon.png
 │   ├── fetchpuppy-icon.png
+│   ├── targettrace-icon.png
 │   └── favicon-180.png
 ├── quickerip/
 │   ├── index.html          # Quicker IP product page (video + 10-image gallery + features)
@@ -53,6 +54,12 @@ bskapps.github.io/
 │   ├── qlab-workspace-habits/        # Levels, mono files, panic fade, continue modes
 │   ├── reaper-lua-cue-workflows/     # LUA intro + CSV rename example
 │   └── native-mac-over-electron/     # Native vs Electron
+├── targettrace/
+│   ├── index.html          # Target Trace product page (video + 4-image gallery + features)
+│   └── images/             # 4 screenshots + demo video
+├── gogames/
+│   ├── index.html          # Go Games page (Sudoku, Solitaire, Minesweeper - all 3 on one page)
+│   └── images/             # 3 game icons + 3 gameplay screenshots
 ├── contact/index.html      # Contact page (support email, ABN)
 ├── about/index.html        # About page (who/what/how)
 ├── multiviewport/index.html# MultiViewPort product page (HIDDEN)
@@ -66,8 +73,11 @@ bskapps.github.io/
 
 1. **Quicker IP** - Network toolkit. Lite (App Store, free) + Pro (LemonSqueezy, $19.99 USD)
 2. **Lab Assistant** - QLab workspace automation. Sold via LemonSqueezy
-3. **EWP** - Elevated Work Platform, window layout snapper. LemonSqueezy, $4.99 USD
-4. **MultiViewPort** - Multi-window viewer. Not yet built - HIDDEN from homepage (April 2026)
+3. **Target Trace** - Smaart target curve editor. Coming soon, $9.99 USD
+4. **Fetch Puppy** - Media downloader. LemonSqueezy, $14.99 USD
+5. **EWP** - Elevated Work Platform, window layout snapper. LemonSqueezy, $4.99 USD
+6. **Go Games** - Sudoku, Solitaire, Minesweeper. iOS + Mac, App Store (coming soon)
+7. **MultiViewPort** - Multi-window viewer. Not yet built - HIDDEN from homepage (April 2026)
 
 ## Hidden Products
 
