@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Games - BSK Apps</title>
+    <meta name="description" content="Classic puzzle games for iPad and Mac. Sudoku, Solitaire, and Minesweeper - built for downtime between shows.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/images/favicon-180.png">
+    <meta property="og:title" content="Go Games - BSK Apps">
+    <meta property="og:description" content="Classic puzzle games for iPad and Mac. Sudoku, Solitaire, and Minesweeper.">
+    <meta property="og:url" content="https://bskapps.com/gogames">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://bskapps.com/gogames">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d0d0d;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+        .back {
+            display: inline-block;
+            color: #7ac4ff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 32px;
+        }
+        .back:hover { color: #fff; }
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            font-size: 1.1rem;
+            color: #888;
+            margin-bottom: 32px;
+        }
+        .game-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .game-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 18px;
+            flex-shrink: 0;
+        }
+        .game-info { flex: 1; }
+        .game-info h2 {
+            font-size: 1.3rem;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .game-info .game-sub {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        .game-info p {
+            color: #aaa;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .badge {
+            display: inline-block;
+            background: #2a2a2a;
+            color: #aaa;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-right: 6px;
+        }
+        .badge.ios { color: #7ac4ff; border: 1px solid #2a4a6a; background: #1a2a3a; }
+        .badge.macos { color: #7ac4ff; border: 1px solid #2a4a6a; background: #1a2a3a; }
+        .appstore-badge {
+            display: inline-block;
+            margin-top: 8px;
+        }
+        .appstore-badge img {
+            height: 40px;
+        }
+        .screenshot-row {
+            display: flex;
+            gap: 16px;
+            margin-top: 32px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .screenshot-row figure {
+            margin: 0;
+            flex: 1 1 220px;
+            max-width: 250px;
+            text-align: center;
+        }
+        .screenshot-row img {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid #2a2a2a;
+        }
+        .screenshot-row figcaption {
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 6px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 48px;
+            color: #555;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+        footer a { color: #888; text-decoration: none; }
+        footer a:hover { color: #fff; }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .game-card { flex-direction: column; align-items: center; text-align: center; }
+            .game-icon { width: 64px; height: 64px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/">&larr; BSK Apps</a>
+
+        <h1>Go Games</h1>
+        <p class="subtitle">Classic puzzles for downtime on gigs. iOS and Mac.</p>
+
+        <div class="game-card">
+            <img class="game-icon" src="images/gosudoku-icon.png" alt="Go Sudoku">
+            <div class="game-info">
+                <h2>Go Sudoku</h2>
+                <p class="game-sub">Classic number puzzle</p>
+                <span class="badge ios">iOS 17+</span> <span class="badge macos">macOS 14+</span>
+                <p>6x6, 9x9, 12x12, and 16x16 grids. Easy, Medium, and Hard difficulty. Four colour themes. Timer, mistake tracking, hints, and pencil marks.</p>
+                <!-- TODO: Add App Store link when approved -->
+                <span style="color:#888; font-size:0.85rem;">Coming soon on the App Store</span>
+            </div>
+        </div>
+
+        <div class="game-card">
+            <img class="game-icon" src="images/gosolitaire-icon.png" alt="Go Solitaire">
+            <div class="game-info">
+                <h2>Go Solitaire</h2>
+                <p class="game-sub">Klondike</p>
+                <span class="badge ios">iOS 17+</span> <span class="badge macos">macOS 14+</span>
+                <p>Draw 1 and Draw 3 modes. Four card back designs and table colour themes. Timer and move counter.</p>
+                <!-- TODO: Add App Store link when approved -->
+                <span style="color:#888; font-size:0.85rem;">Coming soon on the App Store</span>
+            </div>
+        </div>
+
+        <div class="game-card">
+            <img class="game-icon" src="images/gominesweeper-icon.png" alt="Go Minesweeper">
+            <div class="game-info">
+                <h2>Go Minesweeper</h2>
+                <p class="game-sub">Clear the minefield</p>
+                <span class="badge ios">iOS 17+</span> <span class="badge macos">macOS 14+</span>
+                <p>9x9, 16x16, and 30x16 grids. Easy, Medium, and Hard difficulty. Four colour themes. Flag placement and mine counter.</p>
+                <!-- TODO: Add App Store link when approved -->
+                <span style="color:#888; font-size:0.85rem;">Coming soon on the App Store</span>
+            </div>
+        </div>
+
+        <div class="screenshot-row">
+            <figure>
+                <img src="images/ss-sudoku.png" alt="Go Sudoku 12x12 grid">
+                <figcaption>Go Sudoku</figcaption>
+            </figure>
+            <figure>
+                <img src="images/ss-solitaire.png" alt="Go Solitaire Klondike">
+                <figcaption>Go Solitaire</figcaption>
+            </figure>
+            <figure>
+                <img src="images/ss-minesweeper.png" alt="Go Minesweeper grid">
+                <figcaption>Go Minesweeper</figcaption>
+            </figure>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
+        </footer>
+    </div>
+</body>
+</html>
