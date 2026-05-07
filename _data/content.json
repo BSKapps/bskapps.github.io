@@ -32,18 +32,18 @@
         "BPM and key detection with Camelot reordering"
       ]
     },
-    "ewp": {
-      "name": "EWP",
-      "subtitle": "Elevated Work Platform",
-      "tagline": "Set up your screens once. Snap into any layout instantly.",
-      "price": "$4.99 USD",
+    "targettrace": {
+      "name": "Target Trace",
+      "subtitle": "Target curve editor for Smaart",
+      "tagline": "Build precise target curves for Smaart - from presets, from scratch, or from your own measurements.",
+      "price": "$9.99 USD",
       "macos": "macOS 14.0+",
       "version": "v1.0",
-      "released": "20 April 2026",
+      "released": "Coming soon",
       "features": [
-        "Spotter panel - drag apps in, EWP arranges them instantly",
-        "6 layout modes across multiple monitors",
-        "Lift and Drop - raise your layout or clear the desktop in one click"
+        "Drag-and-drop control point editing",
+        "Freehand draw mode",
+        "Export .crv files directly to Smaart"
       ]
     },
     "fetchpuppy": {
@@ -58,6 +58,35 @@
         "Search and save from YouTube with smart quality scoring",
         "Drag in a Spotify or Apple Music playlist - find every track automatically",
         "Save videos from TikTok, Instagram, X, Facebook, Reddit and more"
+      ]
+    },
+    "ewp": {
+      "name": "EWP",
+      "subtitle": "Elevated Work Platform",
+      "tagline": "Set up your screens once. Snap into any layout instantly.",
+      "price": "$4.99 USD",
+      "macos": "macOS 14.0+",
+      "version": "v1.0",
+      "released": "20 April 2026",
+      "features": [
+        "Spotter panel - drag apps in, EWP arranges them instantly",
+        "6 layout modes across multiple monitors",
+        "Lift and Drop - raise your layout or clear the desktop in one click"
+      ]
+    },
+    "gogames": {
+      "name": "Go Games",
+      "subtitle": "Classic puzzle games for iPad and Mac",
+      "tagline": "Classic puzzles for downtime on gigs. iOS and Mac.",
+      "price": "Free - $1.99 to unlock all levels and themes",
+      "macos": "iOS 17+ / macOS 14+",
+      "version": "v1.0",
+      "released": "7 May 2026",
+      "features": [
+        "Sudoku - 4 grid sizes, 3 difficulty levels, hints and pencil marks",
+        "Solitaire - Draw 1 and Draw 3 Klondike, 4 card back designs",
+        "Minesweeper - 3 grid sizes, Easy to Hard difficulty",
+        "No ads. Real dark mode."
       ]
     }
   }

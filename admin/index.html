@@ -574,7 +574,7 @@ function renderForm() {
     ]));
 
     // App cards
-    const appLabels = { quickerip: 'Quicker IP', labassistant: 'Lab Assistant', ewp: 'EWP', fetchpuppy: 'Fetch Puppy' };
+    const appLabels = { quickerip: 'Quicker IP', labassistant: 'Lab Assistant', targettrace: 'Target Trace', fetchpuppy: 'Fetch Puppy', ewp: 'EWP', gogames: 'Go Games' };
     Object.keys(data.apps).forEach(function(key) {
         const app = data.apps[key];
         const card = makeCard(appLabels[key], 'APP', [
