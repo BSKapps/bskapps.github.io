@@ -24,8 +24,8 @@
       "tagline": "Let the assistant prep the cues. You run the show.",
       "price": "$14.99 USD",
       "macos": "macOS 14.0+",
-      "version": "v2.0",
-      "released": "15 April 2026",
+      "version": "v2.1",
+      "released": "7 May 2026",
       "features": [
         "LUFS normalisation and automatic level setting",
         "Mono routing, silence trimming, and cue numbering",
@@ -52,8 +52,8 @@
       "tagline": "Find, save, and convert media for any project.",
       "price": "$14.99 USD",
       "macos": "macOS 14.0+",
-      "version": "v2.0.1",
-      "released": "19 April 2026",
+      "version": "v2.1",
+      "released": "7 May 2026",
       "features": [
         "Search and save from YouTube with smart quality scoring",
         "Drag in a Spotify or Apple Music playlist - find every track automatically",
