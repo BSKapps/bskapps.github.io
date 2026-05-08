@@ -259,8 +259,10 @@
 
         <div class="script-card companion">
             <h3>BSK Spotify <span class="badge companion">Companion</span></h3>
-            <p>Full-featured Spotify Web API controller for Companion. Cue-point playback from a timestamp, named bookmarks, volume fades, album art grids (1x1, 2x2, 3x3), playlist control, and around 98 ready-made presets. Requires a Spotify Premium account and a free Spotify Developer app.</p>
-            <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-spotify" target="_blank" rel="noopener">View on GitHub &rarr;</a>
+            <p>Full-featured Spotify Web API controller for Companion. Cue-point playback from a timestamp, named bookmarks, volume fades, album art grids (1x1, 2x2, 3x3), playlist control, and around 99 ready-made presets. Requires a Spotify Premium account and a free Spotify Developer app.</p>
+            <p style="color:#aaa; font-size:0.88rem; margin-top:-6px;"><strong style="color:#4affda;">macOS offline fallback:</strong> if the Web API drops out mid-show, transport actions keep working via AppleScript and the local Spotify app. Auto-recovers when the API returns.</p>
+            <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-spotify/releases/latest" target="_blank" rel="noopener">Download latest release &rarr;</a>
+            &nbsp; <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-spotify" target="_blank" rel="noopener">View on GitHub &rarr;</a>
         </div>
 
         <h2 class="section-title" style="margin-top: 32px; margin-bottom: 16px;">How to Install a Companion Module Manually</h2>
@@ -269,7 +271,7 @@
             <h3>Add the module to Companion</h3>
             <p>Companion 3.0 and later supports loading developer modules from a local folder. Use this until the module is published to the official Companion module list.</p>
             <ol class="steps">
-                <li>Download the latest release <code>.tgz</code> from the module's GitHub Releases page, or clone the repo with <code>git clone</code>.</li>
+                <li>Download <code>bsk-spotify-X.Y.Z.tgz</code> from the <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-spotify/releases/latest" target="_blank" rel="noopener">latest release</a>, or clone the repo with <code>git clone</code>.</li>
                 <li>If you downloaded a <code>.tgz</code>, extract it. You should end up with a folder containing <code>package.json</code>, <code>main.js</code>, and a <code>src</code> directory.</li>
                 <li>Move the folder somewhere stable, for example <code>~/Documents/companion-modules/</code>.</li>
                 <li>Open Companion. Go to <code>Settings &gt; Developer modules path</code> and point it at the parent folder (the one containing your module folders, not the module folder itself).</li>
