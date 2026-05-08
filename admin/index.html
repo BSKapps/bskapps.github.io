@@ -371,6 +371,39 @@
         }
         .section-title:first-child { margin-top: 0; }
 
+        /* ARTICLES */
+        .article-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            background: #1a1a1a;
+            border: 1px solid #252525;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+        }
+        .article-row:hover { border-color: #2a4a6a; background: #1d1f24; }
+        .article-row .article-slug { color: #fff; font-size: 0.95rem; font-weight: 600; }
+        .article-row .article-arrow { color: #444; font-size: 1rem; }
+        .article-row:hover .article-arrow { color: #7ac4ff; }
+        .articles-back {
+            display: inline-block;
+            color: #7ac4ff;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-bottom: 18px;
+        }
+        .articles-back:hover { color: #fff; }
+        .article-body-field textarea {
+            min-height: 520px;
+            font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+            font-size: 0.82rem;
+            line-height: 1.6;
+        }
+
         @media (max-width: 600px) {
             .pane { padding: 16px; }
             .field-row { flex-direction: column; }
@@ -404,12 +437,19 @@
 
     <div class="tabs">
         <button class="tab active" data-tab="content" onclick="showTab('content', this)">Content</button>
+        <button class="tab" data-tab="articles" onclick="showTab('articles', this)">Articles</button>
         <button class="tab" data-tab="analytics" onclick="showTab('analytics', this)">Analytics</button>
     </div>
 
     <!-- CONTENT TAB -->
     <div id="pane-content" class="pane active">
         <div id="content-form"></div>
+        <div style="height: 80px;"></div>
+    </div>
+
+    <!-- ARTICLES TAB -->
+    <div id="pane-articles" class="pane">
+        <div id="articles-view"></div>
         <div style="height: 80px;"></div>
     </div>
 
@@ -534,6 +574,12 @@ let data = null;
 let fileSha = '';
 let originalJSON = '';
 let dirty = false;
+
+// Articles state
+let articlesIndex = null;
+let currentArticle = null;
+let originalArticleFields = '';
+let articleDirty = false;
 
 // ---- AUTH ----
 
@@ -706,12 +752,30 @@ function makeFeaturesField(label, path, features) {
 
 function markDirty() {
     dirty = JSON.stringify(data) !== originalJSON;
-    document.getElementById('save-bar').classList.toggle('show', dirty);
+    refreshSaveBar();
+}
+
+function markArticleDirty() {
+    articleDirty = currentArticle && JSON.stringify(currentArticle.fields) !== originalArticleFields;
+    refreshSaveBar();
+}
+
+function refreshSaveBar() {
+    const isDirty = dirty || articleDirty;
+    document.getElementById('save-bar').classList.toggle('show', isDirty);
     document.getElementById('save-status').textContent = 'Unsaved changes';
-    document.getElementById('topbar-save-btn').classList.toggle('active', dirty);
+    document.getElementById('topbar-save-btn').classList.toggle('active', isDirty);
 }
 
 async function save() {
+    if (articleDirty) {
+        await saveArticle();
+    } else if (dirty) {
+        await saveContent();
+    }
+}
+
+async function saveContent() {
     const btn = document.getElementById('save-btn');
     const tbBtn = document.getElementById('topbar-save-btn');
     const status = document.getElementById('save-status');
@@ -743,6 +807,214 @@ async function save() {
         tbBtn.disabled = false;
     }
     btn.disabled = false;
+}
+
+async function saveArticle() {
+    const btn = document.getElementById('save-btn');
+    const tbBtn = document.getElementById('topbar-save-btn');
+    const status = document.getElementById('save-status');
+    btn.disabled = true;
+    tbBtn.disabled = true;
+    tbBtn.textContent = 'Saving...';
+    status.textContent = 'Saving...';
+    try {
+        const newRaw = reconstructArticle(currentArticle.rawContent, currentArticle.fields);
+        const content = btoa(unescape(encodeURIComponent(newRaw)));
+        const res = await ghFetch('PUT', 'repos/' + REPO + '/contents/' + currentArticle.path, {
+            message: 'Update article ' + currentArticle.slug + ' via admin',
+            content: content,
+            sha: currentArticle.sha,
+            branch: BRANCH
+        });
+        if (!res.ok) throw new Error((await res.json()).message);
+        const result = await res.json();
+        currentArticle.sha = result.content.sha;
+        currentArticle.rawContent = newRaw;
+        originalArticleFields = JSON.stringify(currentArticle.fields);
+        articleDirty = false;
+        status.textContent = 'Saved! Site updating...';
+        tbBtn.textContent = 'Save & Publish';
+        tbBtn.classList.remove('active');
+        tbBtn.disabled = false;
+        setTimeout(function() { document.getElementById('save-bar').classList.remove('show'); }, 3000);
+    } catch (e) {
+        status.textContent = 'Error: ' + e.message;
+        tbBtn.textContent = 'Save & Publish';
+        tbBtn.disabled = false;
+    }
+    btn.disabled = false;
+}
+
+// ---- ARTICLES ----
+
+async function loadArticlesIndex() {
+    if (articlesIndex !== null) return;
+    const res = await ghFetch('GET', 'repos/' + REPO + '/contents/articles');
+    const items = await res.json();
+    articlesIndex = items
+        .filter(function(i) { return i.type === 'dir'; })
+        .map(function(i) { return i.name; })
+        .sort();
+}
+
+async function showArticlesPane() {
+    const view = document.getElementById('articles-view');
+    if (currentArticle) {
+        renderArticleEditor();
+        return;
+    }
+    view.innerHTML = '<div style="color:#666; font-size:0.85rem;">Loading articles...</div>';
+    try {
+        await loadArticlesIndex();
+        renderArticlesList();
+    } catch (e) {
+        view.innerHTML = '<div style="color:#ff6b6b;">Error loading articles: ' + e.message + '</div>';
+    }
+}
+
+function renderArticlesList() {
+    const view = document.getElementById('articles-view');
+    view.innerHTML = '';
+    const intro = document.createElement('div');
+    intro.style.cssText = 'color:#666; font-size:0.85rem; margin-bottom:14px;';
+    intro.textContent = 'Click an article to edit its title, description, heading, date, or body HTML.';
+    view.appendChild(intro);
+    articlesIndex.forEach(function(slug) {
+        const row = document.createElement('div');
+        row.className = 'article-row';
+        const left = document.createElement('span');
+        left.className = 'article-slug';
+        left.textContent = slug;
+        const right = document.createElement('span');
+        right.className = 'article-arrow';
+        right.textContent = '→';
+        row.appendChild(left);
+        row.appendChild(right);
+        row.onclick = function() { loadArticle(slug); };
+        view.appendChild(row);
+    });
+}
+
+async function loadArticle(slug) {
+    const view = document.getElementById('articles-view');
+    view.innerHTML = '<div style="color:#666; font-size:0.85rem;">Loading...</div>';
+    try {
+        const path = 'articles/' + slug + '/index.html';
+        const res = await ghFetch('GET', 'repos/' + REPO + '/contents/' + path);
+        const file = await res.json();
+        const raw = decodeURIComponent(escape(atob(file.content.replace(/\n/g, ''))));
+        currentArticle = {
+            slug: slug,
+            path: path,
+            sha: file.sha,
+            rawContent: raw,
+            fields: parseArticleFields(raw)
+        };
+        originalArticleFields = JSON.stringify(currentArticle.fields);
+        articleDirty = false;
+        renderArticleEditor();
+        refreshSaveBar();
+    } catch (e) {
+        view.innerHTML = '<div style="color:#ff6b6b;">Error loading article: ' + e.message + '</div>';
+    }
+}
+
+function parseArticleFields(content) {
+    const fields = { title: '', description: '', h1: '', date: '', body: '' };
+    const t = content.match(/<title>([\s\S]*?)<\/title>/);
+    if (t) fields.title = t[1];
+    const d = content.match(/<meta name="description" content="([^"]*)"/);
+    if (d) fields.description = d[1];
+    const h = content.match(/<article>[\s\S]*?<h1>([\s\S]*?)<\/h1>/);
+    if (h) fields.h1 = h[1];
+    const dt = content.match(/<p class="date">([\s\S]*?)<\/p>/);
+    if (dt) fields.date = dt[1];
+    const b = content.match(/<p class="date">[\s\S]*?<\/p>\s*([\s\S]+?)(?:\s*<div class="article-cta">|\s*<\/article>)/);
+    if (b) fields.body = b[1].trim();
+    return fields;
+}
+
+function reconstructArticle(raw, fields) {
+    let r = raw;
+    r = r.replace(/<title>[\s\S]*?<\/title>/, function() { return '<title>' + fields.title + '</title>'; });
+    r = r.replace(/<meta name="description" content="[^"]*"/, function() { return '<meta name="description" content="' + fields.description.replace(/"/g, '&quot;') + '"'; });
+    r = r.replace(/(<article>[\s\S]*?<h1>)[\s\S]*?(<\/h1>)/, function(m, a, b) { return a + fields.h1 + b; });
+    r = r.replace(/<p class="date">[\s\S]*?<\/p>/, function() { return '<p class="date">' + fields.date + '</p>'; });
+    r = r.replace(/(<p class="date">[\s\S]*?<\/p>\s*)[\s\S]+?(?=\s*(?:<div class="article-cta">|<\/article>))/, function(m, a) { return a + fields.body; });
+    return r;
+}
+
+function renderArticleEditor() {
+    const view = document.getElementById('articles-view');
+    view.innerHTML = '';
+
+    const back = document.createElement('a');
+    back.className = 'articles-back';
+    back.textContent = '← Back to articles';
+    back.onclick = function() {
+        if (articleDirty && !confirm('Discard unsaved article changes?')) return;
+        currentArticle = null;
+        articleDirty = false;
+        refreshSaveBar();
+        renderArticlesList();
+    };
+    view.appendChild(back);
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    const title = document.createElement('div');
+    title.className = 'card-title';
+    title.textContent = currentArticle.slug;
+    const badge = document.createElement('span');
+    badge.className = 'app-badge';
+    badge.textContent = 'ARTICLE';
+    title.appendChild(badge);
+    card.appendChild(title);
+
+    card.appendChild(makeArticleField('Page Title', 'title'));
+    card.appendChild(makeArticleField('Description (meta)', 'description'));
+    card.appendChild(makeArticleField('Heading (h1)', 'h1'));
+    card.appendChild(makeArticleField('Date', 'date'));
+    card.appendChild(makeArticleBodyField('Body HTML', 'body'));
+
+    view.appendChild(card);
+}
+
+function makeArticleField(label, key) {
+    const row = document.createElement('div');
+    row.className = 'field-row';
+    const wrap = document.createElement('div');
+    wrap.className = 'field';
+    const lbl = document.createElement('label');
+    lbl.textContent = label;
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.value = currentArticle.fields[key];
+    inp.addEventListener('input', function() {
+        currentArticle.fields[key] = inp.value;
+        markArticleDirty();
+    });
+    wrap.appendChild(lbl);
+    wrap.appendChild(inp);
+    row.appendChild(wrap);
+    return row;
+}
+
+function makeArticleBodyField(label, key) {
+    const wrap = document.createElement('div');
+    wrap.className = 'field article-body-field';
+    wrap.style.marginTop = '14px';
+    const lbl = document.createElement('label');
+    lbl.textContent = label;
+    const ta = document.createElement('textarea');
+    ta.value = currentArticle.fields[key];
+    ta.addEventListener('input', function() {
+        currentArticle.fields[key] = ta.value;
+        markArticleDirty();
+    });
+    wrap.appendChild(lbl);
+    wrap.appendChild(ta);
+    return wrap;
 }
 
 // ---- ANALYTICS ----
@@ -853,6 +1125,7 @@ function showTab(name, btn) {
     btn.classList.add('active');
     document.getElementById('pane-' + name).classList.add('active');
     localStorage.setItem('bsk_tab', name);
+    if (name === 'articles') showArticlesPane();
 }
 
 function restoreTab() {
