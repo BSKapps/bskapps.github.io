@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Reaper Lua Scripts for Stream Deck - BSK Apps</title>
+    <meta name="description" content="Free Reaper Lua scripts for Stream Deck transport control and hardware patching. Safe play/pause/record and mono autopatch for live recording.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/images/favicon-180.png">
+    <meta property="og:title" content="Free Reaper Lua Scripts for Stream Deck and Live Recording">
+    <meta property="og:description" content="Free Reaper Lua scripts for Stream Deck transport control and hardware patching. Safe play, pause, record buttons and 1-to-1 mono autopatch.">
+    <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
+    <meta property="og:url" content="https://bskapps.com/resources/reaper">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://bskapps.com/resources/reaper">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(ellipse 900px 500px at 50% -120px, rgba(122,196,255,0.07), transparent 70%), linear-gradient(180deg, #161616 0%, #0d0d0d 700px) #0d0d0d; background-attachment: fixed;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+        .back {
+            display: inline-block;
+            color: #7ac4ff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 32px;
+        }
+        .back:hover { color: #fff; }
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .tagline {
+            font-size: 1.1rem;
+            color: #888;
+            margin-bottom: 48px;
+        }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .section-desc {
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        .script-card {
+            background: linear-gradient(160deg, #252525 0%, #1a1a1a 60%, #141414 100%);
+            border: 1px solid #3a3a3a;
+            border-radius: 16px;
+            padding: 28px 32px;
+            margin-bottom: 16px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), inset 0 0 0 1px rgba(255,255,255,0.03), 0 4px 14px rgba(0,0,0,0.4);
+            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+        }
+        .script-card:hover {
+            border-color: #4a4a4a;
+            background: linear-gradient(160deg, #2d2d2d 0%, #222 60%, #1a1a1a 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), inset 0 0 0 1px rgba(255,255,255,0.04), 0 6px 20px rgba(0,0,0,0.5);
+        }
+        .script-card.transport { border-left: 4px solid #7aff8a; }
+        .script-card.hardware { border-left: 4px solid #b48aff; }
+        .script-card.setup { background: #141414; border-style: dashed; border-color: #333; }
+        .script-card h3 {
+            font-size: 1.05rem;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        .script-card p {
+            color: #aaa;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+        .download-link {
+            display: inline-block;
+            color: #7ac4ff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .download-link:hover { color: #fff; }
+        .badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-left: 8px;
+            position: relative;
+            top: -2px;
+        }
+        .badge.lua { color: #7aff8a; border: 1px solid #2a5a2a; background: #1a2a1a; }
+        .steps { color: #aaa; font-size: 0.9rem; line-height: 1.6; padding-left: 20px; margin: 0; }
+        .steps li { margin-bottom: 8px; }
+        .steps code { background: #2a2a2a; color: #e0e0e0; padding: 1px 6px; border-radius: 4px; font-size: 0.85rem; }
+        footer {
+            text-align: center;
+            margin-top: 48px;
+            color: #555;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+        footer a { color: #888; text-decoration: none; }
+        footer a:hover { color: #fff; }
+    </style>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Free Reaper Lua Scripts",
+        "description": "Free Reaper Lua scripts for Stream Deck transport control and hardware patching",
+        "numberOfItems": 5,
+        "itemListElement": [
+            {
+                "@type": "SoftwareSourceCode",
+                "position": 1,
+                "name": "BSK Transport: Play",
+                "description": "Starts playback only if stopped or paused. Designed for Stream Deck transport buttons.",
+                "programmingLanguage": "Lua",
+                "runtimePlatform": "Reaper DAW",
+                "isAccessibleForFree": true
+            },
+            {
+                "@type": "SoftwareSourceCode",
+                "position": 2,
+                "name": "BSK Transport: Pause",
+                "description": "Pauses if playing, unpauses if paused. Designed for Stream Deck transport buttons.",
+                "programmingLanguage": "Lua",
+                "runtimePlatform": "Reaper DAW",
+                "isAccessibleForFree": true
+            },
+            {
+                "@type": "SoftwareSourceCode",
+                "position": 3,
+                "name": "BSK Transport: Record",
+                "description": "Starts recording only if not already recording. Designed for Stream Deck transport buttons.",
+                "programmingLanguage": "Lua",
+                "runtimePlatform": "Reaper DAW",
+                "isAccessibleForFree": true
+            },
+            {
+                "@type": "SoftwareSourceCode",
+                "position": 4,
+                "name": "BSK AutoPatch: HW 1-to-1 Mono",
+                "description": "Patches all tracks 1:1 to mono hardware inputs and outputs for live recording and virtual soundcheck.",
+                "programmingLanguage": "Lua",
+                "runtimePlatform": "Reaper DAW",
+                "isAccessibleForFree": true
+            },
+            {
+                "@type": "SoftwareSourceCode",
+                "position": 5,
+                "name": "BSK AutoPatch: HW Teardown",
+                "description": "Removes all hardware sends and restores master send on every track. Undo for AutoPatch.",
+                "programmingLanguage": "Lua",
+                "runtimePlatform": "Reaper DAW",
+                "isAccessibleForFree": true
+            }
+        ]
+    }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/resources">&larr; Resources</a>
+        <h1>Reaper Lua Scripts</h1>
+        <p class="tagline">Designed for live recording and virtual soundcheck.</p>
+
+        <h2 class="section-title">Free Reaper Lua Scripts</h2>
+        <p class="section-desc">Drop these into your Reaper Scripts folder and assign them to actions or toolbar buttons.</p>
+
+        <div class="script-card transport">
+            <h3>BSK Transport: Play <span class="badge lua">Lua</span></h3>
+            <p>Starts playback only if stopped or paused. Does nothing if already playing or recording. Designed to make your Stream Deck transport buttons safe.</p>
+            <a class="download-link" href="/resources/scripts/BSK_Transport_Play.lua" download>Download BSK_Transport_Play.lua</a>
+        </div>
+
+        <div class="script-card transport">
+            <h3>BSK Transport: Pause <span class="badge lua">Lua</span></h3>
+            <p>Pauses if playing, unpauses if paused. Does nothing if stopped or recording. Designed to make your Stream Deck transport buttons safe.</p>
+            <a class="download-link" href="/resources/scripts/BSK_Transport_Pause.lua" download>Download BSK_Transport_Pause.lua</a>
+        </div>
+
+        <div class="script-card transport">
+            <h3>BSK Transport: Record <span class="badge lua">Lua</span></h3>
+            <p>Starts recording only if not already recording. Designed to make your Stream Deck transport buttons safe.</p>
+            <a class="download-link" href="/resources/scripts/BSK_Transport_Record.lua" download>Download BSK_Transport_Record.lua</a>
+        </div>
+
+        <div class="script-card hardware">
+            <h3>BSK AutoPatch: HW 1-to-1 Mono <span class="badge lua">Lua</span></h3>
+            <p>Patches all tracks 1:1 to mono hardware inputs and outputs. Sets pre-FX sends at unity gain, disables master send and monitoring. Shows a summary when done.</p>
+            <a class="download-link" href="/resources/scripts/BSK_AutoPatch_HW_1to1_Mono.lua" download>Download BSK_AutoPatch_HW_1to1_Mono.lua</a>
+        </div>
+
+        <div class="script-card hardware">
+            <h3>BSK AutoPatch: HW Teardown <span class="badge lua">Lua</span></h3>
+            <p>Removes all hardware sends and restores master send and monitoring on every track. An extreme undo button for AutoPatch.</p>
+            <a class="download-link" href="/resources/scripts/BSK_AutoPatch_HW_Teardown.lua" download>Download BSK_AutoPatch_HW_Teardown.lua</a>
+        </div>
+
+        <h2 class="section-title" style="margin-top: 40px; margin-bottom: 16px;">How to Install</h2>
+
+        <div class="script-card setup">
+            <h3>Manual Install</h3>
+            <p>Add scripts directly to Reaper from the downloaded files.</p>
+            <ol class="steps">
+                <li>Download the scripts using the links above.</li>
+                <li>In Reaper, open the Actions list: <code>Actions &gt; Show action list</code></li>
+                <li>Click <code>ReaScript: Load</code> and browse to the downloaded <code>.lua</code> file.</li>
+                <li>Repeat for each script. They will appear in the Actions list ready to run.</li>
+                <li>To assign a keyboard shortcut or toolbar button, right-click the action in the list.</li>
+            </ol>
+        </div>
+
+        <div class="script-card setup">
+            <h3>Via ReaPack</h3>
+            <p>Install and update scripts automatically using ReaPack. Requires <a class="download-link" href="https://reapack.com" target="_blank" rel="noopener">ReaPack</a> to be installed.</p>
+            <ol class="steps">
+                <li>In Reaper: <code>Extensions &gt; ReaPack &gt; Import a repository</code></li>
+                <li>Paste this URL: <code>https://raw.githubusercontent.com/BSKapps/BSK-Reaper-Scripts-/main/index.xml</code></li>
+                <li>Browse and install via <code>Extensions &gt; ReaPack &gt; Browse packages</code></li>
+                <li>Future updates will be flagged automatically when you sync.</li>
+            </ol>
+        </div>
+
+        <h2 class="section-title" style="margin-top: 40px; margin-bottom: 16px;">Stream Deck via Companion</h2>
+
+        <div class="script-card setup">
+            <h3>Assign scripts to Stream Deck buttons using Bitfocus Companion</h3>
+            <p>Companion's Reaper module uses Reaper's web interface to trigger actions remotely.</p>
+            <ol class="steps">
+                <li>Enable Reaper's web interface: <code>Preferences &gt; Control/OSC/web &gt; Web browser interface</code> - enable it and note the port (default 8080).</li>
+                <li>Install your scripts in Reaper as above, then open the Actions list and find each script.</li>
+                <li>Right-click the action and choose <code>Copy selected action command ID</code> - it will look like <code>_RS3a4f...</code>. Note this for each script.</li>
+                <li>In Companion, add a new connection using the <strong>Reaper</strong> module. Set the host to your Reaper machine IP and the port to match.</li>
+                <li>Create a button, add the <strong>Run action</strong> action, and paste the action command ID.</li>
+                <li>Repeat for each script and assign the buttons to your Stream Deck.</li>
+            </ol>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 BSK Apps &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
+        </footer>
+    </div>
+</body>
+</html>
