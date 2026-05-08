@@ -143,17 +143,32 @@
                 <li>Restart Companion. The new module will appear in the connection list under its name.</li>
                 <li>Add a new connection using that module and configure it as you would any other.</li>
             </ol>
+            <p style="margin-top:14px; color:#888; font-size:0.85rem;"><strong style="color:#ffb347;">After Companion updates:</strong> the module folder itself stays where you put it, but Companion's "Developer modules path" setting may not survive a major version upgrade. If the module disappears from the connection list after a Companion update, re-point the path in Settings and restart. The connection settings (Client ID, Client Secret, tokens) are kept in Companion's database and are usually preserved.</p>
         </div>
 
         <div class="script-card setup">
             <h3>Spotify Developer app for the BSK Spotify module</h3>
-            <p>The Spotify module needs a free Spotify Developer app for OAuth. One per Companion install is enough.</p>
+            <p>The Spotify module needs a free Spotify Developer app for OAuth. One per Companion install is enough. Your normal Spotify account is fine; you do not need a paid developer subscription.</p>
             <ol class="steps">
-                <li>Sign in at <a class="download-link" href="https://developer.spotify.com" target="_blank" rel="noopener">developer.spotify.com</a> with your normal Spotify account.</li>
-                <li>Create a new app. Set the Redirect URI to <code>http://127.0.0.1:4115/callback</code> exactly.</li>
-                <li>Copy the Client ID and Client Secret into the Companion connection settings.</li>
-                <li>Click Authenticate. The OAuth flow opens in your browser, you sign in once, and Companion stores the token from then on.</li>
+                <li>Go to <a class="download-link" href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">developer.spotify.com/dashboard</a> and sign in with your normal Spotify account.</li>
+                <li>Click <strong>Create app</strong> (top right).</li>
+                <li>Fill in the form:
+                    <ul style="margin-top:6px; margin-left:18px; list-style:disc;">
+                        <li><strong>App name:</strong> anything works, only you see it. Suggestion: <code>Companion Spotify</code> or <code>BSK Spotify</code>.</li>
+                        <li><strong>App description:</strong> short, e.g. <code>Personal Companion control</code>.</li>
+                        <li><strong>Website:</strong> leave blank.</li>
+                        <li><strong>Redirect URIs:</strong> type <code>http://127.0.0.1:4115/callback</code> exactly, then click <strong>Add</strong>. The URL must appear as a chip below the input or in the list. The port (4115) must match.</li>
+                        <li><strong>Bundle IDs / Android packages:</strong> leave blank.</li>
+                        <li><strong>Which API/SDKs are you planning to use?</strong> tick <strong>Web API</strong>. Leave the others unticked.</li>
+                    </ul>
+                </li>
+                <li>Tick the Terms of Service box and click <strong>Save</strong>.</li>
+                <li>You will land on the app's page. Click <strong>Settings</strong> (top right).</li>
+                <li>Copy the <strong>Client ID</strong>. Click <strong>View client secret</strong> and copy that too. Both go into the Companion connection's <em>Client ID</em> and <em>Client Secret</em> fields.</li>
+                <li>Switch to the <strong>User Management</strong> tab on the same app page. Click <strong>Add user</strong> and enter <em>your own</em> full name and the email address tied to your Spotify account. This is required because the app starts in "Development mode" - only listed users can authenticate. You can add up to 5.</li>
+                <li>Back in Companion, click <strong>Authenticate</strong> on the BSK Spotify connection. A browser tab opens, you sign in to Spotify (the regular user account, the one you just added in step 7), and authorize. Companion stores the refresh token from then on.</li>
             </ol>
+            <p style="margin-top:14px; color:#888; font-size:0.85rem;">If Authenticate fails with "INVALID_CLIENT" or similar, the most common cause is the Redirect URI in your Spotify app does not exactly match <code>http://127.0.0.1:4115/callback</code>. Whitespace, https vs http, or a trailing slash will all break it. If it fails with an "access denied" style error, the Spotify account you signed in with is not in the User Management list.</p>
         </div>
 
         <footer>

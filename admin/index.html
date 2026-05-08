@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BSK Apps Admin</title>
     <meta name="robots" content="noindex, nofollow">
+    <script type="module">
+        import sodium from 'https://cdn.jsdelivr.net/npm/libsodium-wrappers@0.7.15/+esm';
+        window.sodiumReady = sodium.ready.then(function() { window.sodium = sodium; return sodium; });
+    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -502,7 +506,7 @@
                 <span class="api-chevron">&#9660;</span>
             </div>
             <div class="api-setup-body">
-                <p>Stored only in your browser. Never sent anywhere except the respective API.</p>
+                <p>Used by the hourly stats Action. Saving writes encrypted values directly to the bskapps.github.io repo's Action secrets (CF_API_TOKEN, LS_API_KEY). Fields stay empty after a sign-in because GitHub will not return secret values; only fill in to rotate.</p>
                 <div class="api-fields">
                     <div class="api-field">
                         <label>Cloudflare API Token</label>
@@ -513,7 +517,8 @@
                         <input type="password" id="ls-key" placeholder="Your LemonSqueezy API key">
                     </div>
                 </div>
-                <button class="api-save-btn" onclick="saveApiKeys()">Save &amp; Load Stats</button>
+                <button class="api-save-btn" onclick="saveApiKeys()">Save to GitHub Secrets</button>
+                <span id="api-save-status" style="margin-left:12px; font-size:0.85rem; color:#666;"></span>
             </div>
         </div>
 
@@ -1063,20 +1068,62 @@ function toggleApiSetup() {
 }
 
 function loadApiKeys() {
-    const cfToken = localStorage.getItem('bsk_cf_token');
-    const lsKey = localStorage.getItem('bsk_ls_key');
-    if (cfToken) document.getElementById('cf-token').value = cfToken;
-    if (lsKey) document.getElementById('ls-key').value = lsKey;
+    // GitHub does not return secret values, so fields start empty.
+    // We only need to load stats from the existing stats.json.
     loadStats();
 }
 
-function saveApiKeys() {
+async function encryptForRepo(publicKeyBase64, value) {
+    const sodium = await window.sodiumReady;
+    const binkey = sodium.from_base64(publicKeyBase64, sodium.base64_variants.ORIGINAL);
+    const binsec = sodium.from_string(value);
+    const encBytes = sodium.crypto_box_seal(binsec, binkey);
+    return sodium.to_base64(encBytes, sodium.base64_variants.ORIGINAL);
+}
+
+async function putRepoSecret(name, value, publicKey) {
+    const encrypted_value = await encryptForRepo(publicKey.key, value);
+    const res = await ghFetch('PUT', 'repos/' + REPO + '/actions/secrets/' + name, {
+        encrypted_value: encrypted_value,
+        key_id: publicKey.key_id
+    });
+    if (!res.ok && res.status !== 201 && res.status !== 204) {
+        const err = await res.json().catch(function() { return { message: 'HTTP ' + res.status }; });
+        throw new Error(name + ': ' + (err.message || 'unknown error'));
+    }
+}
+
+async function saveApiKeys() {
     const cfToken = document.getElementById('cf-token').value.trim();
     const lsKey = document.getElementById('ls-key').value.trim();
-    if (cfToken) localStorage.setItem('bsk_cf_token', cfToken);
-    if (lsKey) localStorage.setItem('bsk_ls_key', lsKey);
-    document.getElementById('api-setup').classList.remove('open');
-    alert('Keys saved. They will be used by the GitHub Action to fetch stats hourly.');
+    const status = document.getElementById('api-save-status');
+
+    if (!cfToken && !lsKey) {
+        status.textContent = 'Nothing to save - paste a token first';
+        status.style.color = '#ff6b6b';
+        return;
+    }
+
+    status.textContent = 'Saving...';
+    status.style.color = '#666';
+
+    try {
+        const keyRes = await ghFetch('GET', 'repos/' + REPO + '/actions/secrets/public-key');
+        if (!keyRes.ok) throw new Error('Could not fetch repo public key (HTTP ' + keyRes.status + ')');
+        const publicKey = await keyRes.json();
+
+        if (cfToken) await putRepoSecret('CF_API_TOKEN', cfToken, publicKey);
+        if (lsKey) await putRepoSecret('LS_API_KEY', lsKey, publicKey);
+
+        document.getElementById('cf-token').value = '';
+        document.getElementById('ls-key').value = '';
+        status.textContent = 'Saved to GitHub Action secrets';
+        status.style.color = '#7aff8a';
+        setTimeout(function() { status.textContent = ''; }, 4000);
+    } catch (e) {
+        status.textContent = 'Error: ' + e.message;
+        status.style.color = '#ff6b6b';
+    }
 }
 
 async function loadStats() {
