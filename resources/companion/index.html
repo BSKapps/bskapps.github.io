@@ -105,6 +105,20 @@
         .steps { color: #aaa; font-size: 0.9rem; line-height: 1.6; padding-left: 20px; margin: 0; }
         .steps li { margin-bottom: 8px; }
         .steps code { background: #2a2a2a; color: #e0e0e0; padding: 1px 6px; border-radius: 4px; font-size: 0.85rem; }
+        .step-shot {
+            display: block;
+            max-width: 100%;
+            margin: 14px 0 6px;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+        }
+        .step-caption {
+            display: block;
+            font-size: 0.78rem;
+            color: #666;
+            margin-bottom: 14px;
+            font-style: italic;
+        }
         footer {
             text-align: center;
             margin-top: 48px;
@@ -151,7 +165,10 @@
             <p>The Spotify module needs a free Spotify Developer app for OAuth. One per Companion install is enough. Your normal Spotify account is fine; you do not need a paid developer subscription.</p>
             <ol class="steps">
                 <li>Go to <a class="download-link" href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">developer.spotify.com/dashboard</a> and sign in with your normal Spotify account.</li>
-                <li>Click <strong>Create app</strong> (top right).</li>
+                <li>Click <strong>Create app</strong> (top right).
+                    <img class="step-shot" src="/resources/companion/images/spotify-dashboard.png" alt="Spotify Developer Dashboard with the Create app button at top right">
+                    <span class="step-caption">The Spotify Developer Dashboard. Existing apps appear here once created.</span>
+                </li>
                 <li>Fill in the form:
                     <ul style="margin-top:6px; margin-left:18px; list-style:disc;">
                         <li><strong>App name:</strong> anything works, only you see it. Suggestion: <code>Companion Spotify</code> or <code>BSK Spotify</code>.</li>
@@ -161,6 +178,8 @@
                         <li><strong>Bundle IDs / Android packages:</strong> leave blank.</li>
                         <li><strong>Which API/SDKs are you planning to use?</strong> tick <strong>Web API</strong>. Leave the others unticked.</li>
                     </ul>
+                    <img class="step-shot" src="/resources/companion/images/spotify-app-form.png" alt="Spotify app edit form showing Redirect URIs list, API/SDKs checkboxes with Web API ticked, and Save button">
+                    <span class="step-caption">Lower half of the app edit form: redirect URIs at the top, API/SDKs section near the bottom, Save at the very bottom.</span>
                 </li>
                 <li>Tick the Terms of Service box and click <strong>Save</strong>.</li>
                 <li>You will land on the app's page. Click <strong>Settings</strong> (top right).</li>
