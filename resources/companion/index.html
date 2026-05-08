@@ -108,16 +108,9 @@
         .step-shot {
             display: block;
             max-width: 100%;
-            margin: 14px 0 6px;
+            margin: 14px 0;
             border: 1px solid #2a2a2a;
             border-radius: 8px;
-        }
-        .step-caption {
-            display: block;
-            font-size: 0.78rem;
-            color: #666;
-            margin-bottom: 14px;
-            font-style: italic;
         }
         footer {
             text-align: center;
@@ -167,7 +160,6 @@
                 <li>Go to <a class="download-link" href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">developer.spotify.com/dashboard</a> and sign in with your normal Spotify account.</li>
                 <li>Click <strong>Create app</strong> (top right).
                     <img class="step-shot" src="/resources/companion/images/spotify-dashboard.png" alt="Spotify Developer Dashboard with the Create app button at top right">
-                    <span class="step-caption">The Spotify Developer Dashboard. Existing apps appear here once created.</span>
                 </li>
                 <li>Fill in the form:
                     <ul style="margin-top:6px; margin-left:18px; list-style:disc;">
@@ -179,7 +171,6 @@
                         <li><strong>Which API/SDKs are you planning to use?</strong> tick <strong>Web API</strong>. Leave the others unticked.</li>
                     </ul>
                     <img class="step-shot" src="/resources/companion/images/spotify-app-form.png" alt="Spotify app edit form showing Redirect URIs list, API/SDKs checkboxes with Web API ticked, and Save button">
-                    <span class="step-caption">Lower half of the app edit form: redirect URIs at the top, API/SDKs section near the bottom, Save at the very bottom.</span>
                 </li>
                 <li>Tick the Terms of Service box and click <strong>Save</strong>.</li>
                 <li>You will land on the app's page. Click <strong>Settings</strong> (top right).</li>
@@ -187,7 +178,6 @@
                 <li>Back in Companion, click <strong>Authenticate</strong> on the BSK Spotify connection. A browser tab opens, you sign in to Spotify with your normal account, and authorize. Companion stores the refresh token from then on.</li>
                 <li><em>Only if Authenticate fails with an "access denied" or "user not registered" error:</em> go back to the Spotify dev page, switch to the <strong>User Management</strong> tab, click <strong>Add user</strong>, and enter your full name and the email tied to your Spotify account. Apps in Development mode sometimes require the authenticating user to be listed here (up to 5 allowed). Then retry Authenticate.
                     <img class="step-shot" src="/resources/companion/images/spotify-user-mgmt.png" alt="Spotify app User Management tab with Full Name and Email fields and Add user button">
-                    <span class="step-caption">User Management tab. Add yourself here only if Authenticate failed with an access-denied error.</span>
                 </li>
             </ol>
             <p style="margin-top:14px; color:#888; font-size:0.85rem;"><strong>If Authenticate fails with "INVALID_CLIENT" or similar:</strong> the most common cause is the Redirect URI in your Spotify app does not match <code>http://127.0.0.1:4115/callback</code> exactly. Whitespace, https vs http, or a trailing slash will all break it. Double-check it appears in the Redirect URIs list and re-save the Spotify app if needed.</p>
