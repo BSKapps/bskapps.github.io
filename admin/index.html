@@ -1020,6 +1020,7 @@ function makeArticleBodyField(label, key) {
 // ---- ANALYTICS ----
 
 let currentRange = 1;
+let currentKey = '1d';
 
 function fyDays() {
     const now = new Date();
@@ -1028,7 +1029,13 @@ function fyDays() {
 }
 
 function setRange(days, btn) {
-    currentRange = days === 'fy' ? fyDays() : days;
+    if (days === 'fy') {
+        currentRange = fyDays();
+        currentKey = 'fy';
+    } else {
+        currentRange = days;
+        currentKey = days + 'd';
+    }
     localStorage.setItem('bsk_range', days === 'fy' ? 'fy' : days);
     document.querySelectorAll('.range-btn').forEach(function(b) { b.classList.remove('active'); });
     btn.classList.add('active');
@@ -1039,7 +1046,13 @@ function restoreRange() {
     const saved = localStorage.getItem('bsk_range') || '1';
     const btn = document.querySelector('.range-btn[data-range="' + saved + '"]');
     if (btn) {
-        currentRange = saved === 'fy' ? fyDays() : parseInt(saved);
+        if (saved === 'fy') {
+            currentRange = fyDays();
+            currentKey = 'fy';
+        } else {
+            currentRange = parseInt(saved);
+            currentKey = saved + 'd';
+        }
         document.querySelectorAll('.range-btn').forEach(function(b) { b.classList.remove('active'); });
         btn.classList.add('active');
     }
@@ -1068,12 +1081,15 @@ function saveApiKeys() {
 
 async function loadStats() {
     const days = currentRange;
-    const key = days + 'd';
+    const key = currentKey;
     const cfDays = Math.min(days, 90);
+    const isFy = key === 'fy';
+    const ordersLabelSuffix = isFy ? 'FY' : days + 'd';
+    const cfLabelSuffix = isFy ? 'FY, capped 90d' : cfDays + 'd';
 
-    document.getElementById('label-visits').textContent = 'Visits (' + cfDays + 'd)';
-    document.getElementById('label-pageviews').textContent = 'Page Views (' + cfDays + 'd)';
-    document.getElementById('label-orders').textContent = 'Orders (' + days + 'd)';
+    document.getElementById('label-visits').textContent = 'Visits (' + cfLabelSuffix + ')';
+    document.getElementById('label-pageviews').textContent = 'Page Views (' + cfLabelSuffix + ')';
+    document.getElementById('label-orders').textContent = 'Orders (' + ordersLabelSuffix + ')';
 
     try {
         const res = await ghFetch('GET', 'repos/' + STATS_REPO + '/contents/stats.json');
@@ -1102,7 +1118,7 @@ async function loadStats() {
             document.getElementById('stat-orders').textContent = ls.orders;
             document.getElementById('stat-orders-err').textContent = 'LemonSqueezy';
             document.getElementById('stat-revenue').textContent = ls.revenue ? '$' + ls.revenue.toFixed(2) : '$0.00';
-            document.getElementById('label-revenue').textContent = 'Sales Revenue (' + days + 'd)';
+            document.getElementById('label-revenue').textContent = 'Sales Revenue (' + ordersLabelSuffix + ')';
             if (cf && cf.visits > 0) {
                 document.getElementById('stat-conversion').textContent = ((ls.orders / cf.visits) * 100).toFixed(2) + '%';
             }

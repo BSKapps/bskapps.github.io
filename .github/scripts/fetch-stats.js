@@ -143,30 +143,39 @@ async function main() {
         catch (e) { console.error('Google auth error:', e.message); }
     }
 
-    for (const days of [1, 7, 30, 90, fyDays()]) {
+    const fyD = fyDays();
+    stats.fyDays = fyD;
+    const ranges = [
+        { days: 1, key: '1d' },
+        { days: 7, key: '7d' },
+        { days: 30, key: '30d' },
+        { days: 90, key: '90d' },
+        { days: fyD, key: 'fy' }
+    ];
+    for (const { days, key } of ranges) {
         if (CF_TOKEN) {
             const cfDays = Math.min(days, 90);
             try {
-                stats.cloudflare[days + 'd'] = await fetchCF(cfDays);
+                stats.cloudflare[key] = await fetchCF(cfDays);
             } catch (e) {
-                console.error('CF ' + days + 'd error:', e.message);
-                stats.cloudflare[days + 'd'] = { error: e.message };
+                console.error('CF ' + key + ' error:', e.message);
+                stats.cloudflare[key] = { error: e.message };
             }
         }
         if (LS_KEY) {
             try {
-                stats.lemonsqueezy[days + 'd'] = await fetchLS(days);
+                stats.lemonsqueezy[key] = await fetchLS(days);
             } catch (e) {
-                console.error('LS ' + days + 'd error:', e.message);
-                stats.lemonsqueezy[days + 'd'] = { error: e.message };
+                console.error('LS ' + key + ' error:', e.message);
+                stats.lemonsqueezy[key] = { error: e.message };
             }
         }
         if (googleToken && adSenseAccount) {
             try {
-                stats.adsense[days + 'd'] = await fetchAdSense(days, googleToken, adSenseAccount);
+                stats.adsense[key] = await fetchAdSense(days, googleToken, adSenseAccount);
             } catch (e) {
-                console.error('AdSense ' + days + 'd error:', e.message);
-                stats.adsense[days + 'd'] = { error: e.message };
+                console.error('AdSense ' + key + ' error:', e.message);
+                stats.adsense[key] = { error: e.message };
             }
         }
     }
