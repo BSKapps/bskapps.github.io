@@ -1,3 +1,5 @@
+---
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -222,23 +224,22 @@
                 <img class="app-icon" src="images/quickip-icon.png" alt="Quicker IP">
                 <div>
                     <h2><a href="quickerip/" onclick="event.stopPropagation()">Quicker IP</a></h2>
-                    <p class="subtitle">Network toolkit for macOS</p>
+                    <p class="subtitle">{{ site.data.content.apps.quickerip.subtitle }}</p>
                 </div>
             </div>
-            <p class="outcome">Catch network problems before they catch you out.</p>
-            <span class="badge macos">macOS 14.6+</span>
+            <p class="outcome">{{ site.data.content.apps.quickerip.tagline }}</p>
+            <span class="badge macos">{{ site.data.content.apps.quickerip.macos }}</span>
 
             <span class="badge pro">Pro</span>
             <ul class="features">
-                <li>IP presets and Network Locations - switch configs in one click</li>
-                <li>Live speed, SSID, and system info in the menu bar</li>
-                <li>LAN scanner, ping, and Dante network readiness</li>
+                {% for feature in site.data.content.apps.quickerip.features %}<li>{{ feature }}</li>
+                {% endfor %}
             </ul>
             <div class="qip-buy-row" style="display:flex; align-items:flex-start; gap:180px; margin-top:28px; flex-wrap:wrap; row-gap:32px;">
                 <div class="qip-buy-col" style="display:flex; flex-direction:column; align-items:flex-start;">
-                    <a href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Quicker IP Pro for $19.99 USD" onclick="event.stopPropagation()" style="margin-top:0;">Buy - $19.99 USD</a>
+                    <a href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Quicker IP Pro for {{ site.data.content.apps.quickerip.price }}" onclick="event.stopPropagation()" style="margin-top:0;">Buy - {{ site.data.content.apps.quickerip.price }}</a>
                     <span class="buy-note" style="margin-top:8px;">One-time purchase · 2 activations</span>
-                    <span class="version-line">v2.2 · Released 26 April 2026</span>
+                    <span class="version-line">{{ site.data.content.apps.quickerip.version }} · Released {{ site.data.content.apps.quickerip.released }}</span>
                 </div>
                 <div style="position:relative; line-height:0;">
                     <a href="https://apps.apple.com/us/app/quicker-ip-lite/id6761874418" aria-label="Download Quicker IP Lite on the Mac App Store" onclick="event.stopPropagation()" style="text-decoration:none;">
@@ -257,20 +258,19 @@
                 <img class="app-icon" src="images/labassistant-icon.png" alt="Lab Assistant">
                 <div>
                     <h2><a href="labassistant/" onclick="event.stopPropagation()">Lab Assistant</a></h2>
-                    <p class="subtitle">QLab workspace automation for macOS</p>
+                    <p class="subtitle">{{ site.data.content.apps.labassistant.subtitle }}</p>
                 </div>
             </div>
-            <p class="outcome">Let the assistant prep the cues. You run the show.</p>
-            <span class="badge macos">macOS 14.0+</span>
+            <p class="outcome">{{ site.data.content.apps.labassistant.tagline }}</p>
+            <span class="badge macos">{{ site.data.content.apps.labassistant.macos }}</span>
             <ul class="features">
-                <li>LUFS normalisation and automatic level setting</li>
-                <li>Mono routing, silence trimming, and cue numbering</li>
-                <li>BPM and key detection with Camelot reordering</li>
+                {% for feature in site.data.content.apps.labassistant.features %}<li>{{ feature }}</li>
+                {% endfor %}
             </ul>
             <div style="margin-top: 16px;">
-                <a href="https://bskapps.lemonsqueezy.com/checkout/buy/efb96677-ac6d-43c1-8697-e465e62d1d00?dark=1&desc=0&media=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Lab Assistant for $14.99 USD" onclick="event.stopPropagation()">Buy - $14.99 USD</a>
+                <a href="https://bskapps.lemonsqueezy.com/checkout/buy/efb96677-ac6d-43c1-8697-e465e62d1d00?dark=1&desc=0&media=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Lab Assistant for {{ site.data.content.apps.labassistant.price }}" onclick="event.stopPropagation()">Buy - {{ site.data.content.apps.labassistant.price }}</a>
                 <span class="buy-note">One-time purchase · 2 activations</span>
-                <span class="version-line">v2.1 · Released 7 May 2026</span>
+                <span class="version-line">{{ site.data.content.apps.labassistant.version }} · Released {{ site.data.content.apps.labassistant.released }}</span>
             </div>
         </div>
         </div>
@@ -283,19 +283,18 @@
                 <img class="app-icon" src="images/targettrace-icon.png" alt="Target Trace">
                 <div>
                     <h2><a href="targettrace/" onclick="event.stopPropagation()">Target Trace</a></h2>
-                    <p class="subtitle">Target curve editor for Smaart</p>
+                    <p class="subtitle">{{ site.data.content.apps.targettrace.subtitle }}</p>
                 </div>
             </div>
-            <p class="outcome">Build precise target curves for Smaart - from presets, from scratch, or from your own measurements.</p>
-            <span class="badge macos">macOS 14.0+</span>
+            <p class="outcome">{{ site.data.content.apps.targettrace.tagline }}</p>
+            <span class="badge macos">{{ site.data.content.apps.targettrace.macos }}</span>
             <ul class="features">
-                <li>Drag-and-drop control point editing and freehand draw mode</li>
-                <li>Preset shapes, trace simplification, and tolerance bands</li>
-                <li>Save to Smaart or export as REW house curve</li>
+                {% for feature in site.data.content.apps.targettrace.features %}<li>{{ feature }}</li>
+                {% endfor %}
             </ul>
             <div style="margin-top: 16px;">
                 <span class="badge coming-soon">Coming Soon</span>
-                <span class="version-line">$8.99 USD</span>
+                <span class="version-line">{{ site.data.content.apps.targettrace.price }}</span>
             </div>
         </div>
         </div>
@@ -307,20 +306,19 @@
                 <img class="app-icon" src="images/fetchpuppy-icon.png" alt="Fetch Puppy">
                 <div>
                     <h2><a href="fetchpuppy/" onclick="event.stopPropagation()">Fetch Puppy</a></h2>
-                    <p class="subtitle">Find and save music and video for your projects</p>
+                    <p class="subtitle">{{ site.data.content.apps.fetchpuppy.subtitle }}</p>
                 </div>
             </div>
-            <p class="outcome">Find, save, and convert media for any project.</p>
-            <span class="badge macos">macOS 14.0+</span>
+            <p class="outcome">{{ site.data.content.apps.fetchpuppy.tagline }}</p>
+            <span class="badge macos">{{ site.data.content.apps.fetchpuppy.macos }}</span>
             <ul class="features">
-                <li>Search and save from YouTube with smart quality scoring</li>
-                <li>Drag in a Spotify or Apple Music playlist - find every track automatically</li>
-                <li>Save videos from TikTok, Instagram, X, Facebook, Reddit and more</li>
+                {% for feature in site.data.content.apps.fetchpuppy.features %}<li>{{ feature }}</li>
+                {% endfor %}
             </ul>
             <div style="margin-top: 16px;">
-                <a href="https://bskapps.lemonsqueezy.com/checkout/buy/99a45e24-5f0c-4ef7-86a9-be1cf7c555af?dark=1&media=0&desc=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Fetch Puppy for $14.99 USD" onclick="event.stopPropagation()" style="margin-top: 0;">Buy - $14.99 USD</a>
+                <a href="https://bskapps.lemonsqueezy.com/checkout/buy/99a45e24-5f0c-4ef7-86a9-be1cf7c555af?dark=1&media=0&desc=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Fetch Puppy for {{ site.data.content.apps.fetchpuppy.price }}" onclick="event.stopPropagation()" style="margin-top: 0;">Buy - {{ site.data.content.apps.fetchpuppy.price }}</a>
                 <span class="buy-note">One-time purchase · 2 activations</span>
-                <span class="version-line">v2.1 · Released 7 May 2026</span>
+                <span class="version-line">{{ site.data.content.apps.fetchpuppy.version }} · Released {{ site.data.content.apps.fetchpuppy.released }}</span>
             </div>
         </div>
         </div>
@@ -332,20 +330,19 @@
                 <img class="app-icon" src="images/ewp-icon.png" alt="EWP">
                 <div>
                     <h2><a href="ewp/" onclick="event.stopPropagation()">EWP</a></h2>
-                    <p class="subtitle">Elevated Work Platform</p>
+                    <p class="subtitle">{{ site.data.content.apps.ewp.subtitle }}</p>
                 </div>
             </div>
-            <p class="outcome">Set up your screens once. Snap into any layout instantly.</p>
-            <span class="badge macos">macOS 14.0+</span>
+            <p class="outcome">{{ site.data.content.apps.ewp.tagline }}</p>
+            <span class="badge macos">{{ site.data.content.apps.ewp.macos }}</span>
             <ul class="features">
-                <li>Spotter panel - drag apps in, EWP arranges them instantly</li>
-                <li>6 layout modes across multiple monitors</li>
-                <li>Lift and Drop - raise your layout or clear the desktop in one click</li>
+                {% for feature in site.data.content.apps.ewp.features %}<li>{{ feature }}</li>
+                {% endfor %}
             </ul>
             <div style="margin-top: 16px;">
-                <a href="https://bskapps.lemonsqueezy.com/checkout/buy/c3235a75-6837-4d32-b495-a941806e9b90?dark=1&media=0&desc=0" class="buy-btn lemonsqueezy-button" aria-label="Buy EWP for $4.99 USD" onclick="event.stopPropagation()" style="margin-top: 0;">Buy - $4.99 USD</a>
+                <a href="https://bskapps.lemonsqueezy.com/checkout/buy/c3235a75-6837-4d32-b495-a941806e9b90?dark=1&media=0&desc=0" class="buy-btn lemonsqueezy-button" aria-label="Buy EWP for {{ site.data.content.apps.ewp.price }}" onclick="event.stopPropagation()" style="margin-top: 0;">Buy - {{ site.data.content.apps.ewp.price }}</a>
                 <span class="buy-note">One-time purchase &middot; 2 activations</span>
-                <span class="version-line">v1.0 &middot; Released 20 April 2026</span>
+                <span class="version-line">{{ site.data.content.apps.ewp.version }} &middot; Released {{ site.data.content.apps.ewp.released }}</span>
             </div>
         </div>
         </div>

@@ -73,6 +73,23 @@
         .topbar-right { display: flex; align-items: center; gap: 16px; }
         .topbar a { color: #555; font-size: 0.85rem; text-decoration: none; cursor: pointer; }
         .topbar a:hover { color: #fff; }
+        #topbar-save-btn {
+            padding: 7px 20px;
+            background: linear-gradient(180deg, #229155, #1a7a48);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            opacity: 0.35;
+            pointer-events: none;
+        }
+        #topbar-save-btn.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #topbar-save-btn.active:hover { background: linear-gradient(180deg, #27a862, #229155); }
 
         .tabs {
             display: flex;
@@ -380,6 +397,7 @@
         <h1>BSK Apps Admin</h1>
         <div class="topbar-right">
             <a href="/" target="_blank">View site &rarr;</a>
+            <button id="topbar-save-btn" onclick="save()">Save &amp; Publish</button>
             <a onclick="logout()">Sign out</a>
         </div>
     </div>
@@ -690,12 +708,16 @@ function markDirty() {
     dirty = JSON.stringify(data) !== originalJSON;
     document.getElementById('save-bar').classList.toggle('show', dirty);
     document.getElementById('save-status').textContent = 'Unsaved changes';
+    document.getElementById('topbar-save-btn').classList.toggle('active', dirty);
 }
 
 async function save() {
     const btn = document.getElementById('save-btn');
+    const tbBtn = document.getElementById('topbar-save-btn');
     const status = document.getElementById('save-status');
     btn.disabled = true;
+    tbBtn.disabled = true;
+    tbBtn.textContent = 'Saving...';
     status.textContent = 'Saving...';
     try {
         const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2) + '\n')));
@@ -711,9 +733,14 @@ async function save() {
         originalJSON = JSON.stringify(data);
         dirty = false;
         status.textContent = 'Saved! Site updating...';
+        tbBtn.textContent = 'Save & Publish';
+        tbBtn.classList.remove('active');
+        tbBtn.disabled = false;
         setTimeout(function() { document.getElementById('save-bar').classList.remove('show'); }, 3000);
     } catch (e) {
         status.textContent = 'Error: ' + e.message;
+        tbBtn.textContent = 'Save & Publish';
+        tbBtn.disabled = false;
     }
     btn.disabled = false;
 }
