@@ -185,7 +185,10 @@
                 <li>You will land on the app's page. Click <strong>Settings</strong> (top right).</li>
                 <li>Copy the <strong>Client ID</strong>. Click <strong>View client secret</strong> and copy that too. Both go into the Companion connection's <em>Client ID</em> and <em>Client Secret</em> fields.</li>
                 <li>Back in Companion, click <strong>Authenticate</strong> on the BSK Spotify connection. A browser tab opens, you sign in to Spotify with your normal account, and authorize. Companion stores the refresh token from then on.</li>
-                <li><em>Only if Authenticate fails with an "access denied" or "user not registered" error:</em> go back to the Spotify dev page, switch to the <strong>User Management</strong> tab, click <strong>Add user</strong>, and enter your full name and the email tied to your Spotify account. Apps in Development mode sometimes require the authenticating user to be listed here (up to 5 allowed). Then retry Authenticate.</li>
+                <li><em>Only if Authenticate fails with an "access denied" or "user not registered" error:</em> go back to the Spotify dev page, switch to the <strong>User Management</strong> tab, click <strong>Add user</strong>, and enter your full name and the email tied to your Spotify account. Apps in Development mode sometimes require the authenticating user to be listed here (up to 5 allowed). Then retry Authenticate.
+                    <img class="step-shot" src="/resources/companion/images/spotify-user-mgmt.png" alt="Spotify app User Management tab with Full Name and Email fields and Add user button">
+                    <span class="step-caption">User Management tab. Add yourself here only if Authenticate failed with an access-denied error.</span>
+                </li>
             </ol>
             <p style="margin-top:14px; color:#888; font-size:0.85rem;"><strong>If Authenticate fails with "INVALID_CLIENT" or similar:</strong> the most common cause is the Redirect URI in your Spotify app does not match <code>http://127.0.0.1:4115/callback</code> exactly. Whitespace, https vs http, or a trailing slash will all break it. Double-check it appears in the Redirect URIs list and re-save the Spotify app if needed.</p>
         </div>
