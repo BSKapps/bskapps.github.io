@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QLab script cues for Spotify control - BSK Apps</title>
-    <meta name="description" content="Use QLab script cues to drive Spotify on macOS via AppleScript: play a specific track or playlist, pause cleanly, fade volume in and out, and cue from a timestamp.">
+    <meta name="description" content="Use QLab script cues to drive Spotify on macOS via AppleScript: play a specific track, pause cleanly, fade volume in and out, and where the limits are.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="canonical" href="https://bskapps.com/articles/qlab-script-cues-spotify">
     <meta property="og:type" content="article">
     <meta property="og:title" content="QLab script cues for Spotify control">
-    <meta property="og:description" content="Use QLab script cues to drive Spotify on macOS via AppleScript: play a specific track or playlist, pause cleanly, fade volume in and out, and cue from a timestamp.">
+    <meta property="og:description" content="Use QLab script cues to drive Spotify on macOS via AppleScript: play a specific track, pause cleanly, fade volume in and out, and where the limits are.">
     <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -63,36 +63,23 @@ end tell</code></pre>
 
             <p>That is the simplest version. It resumes whatever was last playing. The interesting cues are the ones that target a specific track, fade in cleanly, or recover a known starting point on demand.</p>
 
-            <h2>Play a specific track or playlist</h2>
-            <p>Spotify accepts URIs in the form <code>spotify:track:&lt;id&gt;</code> and <code>spotify:playlist:&lt;id&gt;</code>. To get a URI, right-click a track or playlist in Spotify, choose Share, then Copy Spotify URI.</p>
+            <h2>Play a specific track</h2>
+            <p>Spotify's AppleScript dictionary accepts URIs in the form <code>spotify:track:&lt;id&gt;</code>. To get a URI, right-click a track in Spotify, choose Share, then Copy Spotify URI.</p>
 
             <pre><code>tell application "Spotify"
     play track "spotify:track:4iV5W9uYEdYUVa79Axb7Rh"
 end tell</code></pre>
 
-            <p>Same syntax for a playlist:</p>
+            <p>This is the workhorse for cued tracks. Walk-out song after the bows, sting between scenes, a specific recording for a tribute. Each cue is one line plus the wrapper.</p>
 
-            <pre><code>tell application "Spotify"
-    play track "spotify:playlist:37i9dQZF1DXcBWIGoYBM5M"
-end tell</code></pre>
+            <h2>What AppleScript cannot do cleanly</h2>
+            <p>Two things you might expect to work but do not, both because of how Spotify treats AppleScript versus the Web API:</p>
+            <ul>
+                <li><strong>Timestamp cueing.</strong> AppleScript can set <code>player position</code>, but Spotify always plays from position 0 for a moment before the seek takes effect. The room hears the first half second of the track every time. Volume mute workarounds exist but the result is not clean enough for live use.</li>
+                <li><strong>Playlist playback.</strong> <code>play track "spotify:playlist:..."</code> looks like it should work, but AppleScript does not load the playlist as a playback context. You cannot reliably start a playlist via AppleScript.</li>
+            </ul>
 
-            <p>This is the workhorse. Walk-in playlist on the pre-show cue, swap track for the bows, change again for post-show. Each cue is one line plus the wrapper.</p>
-
-            <h2>Cue from a specific timestamp</h2>
-            <p>Useful when a track has a long intro you do not want, or when you are running a stem of a song that needs to start at a downbeat. There is a Spotify quirk to deal with: when you call <code>play track</code>, Spotify always starts playback from position 0 for a short moment before the seek takes effect. If you go straight from play to seek, the room hears the first half-second of the track. This is a Spotify API limitation, not an AppleScript issue.</p>
-
-            <p>The practical fix is to mute, play, seek, then bring the volume back up:</p>
-
-            <pre><code>tell application "Spotify"
-    set startVol to sound volume
-    set sound volume to 0
-    play track "spotify:track:4iV5W9uYEdYUVa79Axb7Rh"
-    delay 0.3
-    set player position to 45
-    set sound volume to startVol
-end tell</code></pre>
-
-            <p>Position is in seconds. 45 means the cue starts 45 seconds into the track. If 0.3 seconds is not enough on a slow network, bump the delay to 0.5. The volume snap back to <code>startVol</code> is instant, so for a softer entry combine this with the fade pattern below: leave volume at 0 after the seek and let the fade ramp it up over a couple of seconds.</p>
+            <p>Both of these are exactly why the <a href="https://github.com/BSKapps/companion-module-bsk-spotify">BSK Spotify Companion module</a> exists. It uses the Web API directly, which supports both a position parameter on the play call and proper playlist context loading. The Timestamp Cue and Play Playlist presets handle these cleanly. If your show needs either, drive Spotify from Companion instead of AppleScript, and trigger the Companion buttons from QLab if you want a unified Go.</p>
 
             <h2>Fade volume in or out</h2>
             <p>Spotify exposes <code>sound volume</code> as a 0 to 100 integer. There is no native fade command, so you do it with a short loop that ramps the value over time. This pattern is what would otherwise need an audio cue with a volume envelope, except here the audio is coming from Spotify directly.</p>
