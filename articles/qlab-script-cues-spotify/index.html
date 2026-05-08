@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QLab script cues for Spotify control - BSK Apps</title>
+    <meta name="description" content="Use QLab script cues to drive Spotify on macOS via AppleScript: play a specific track or playlist, pause cleanly, fade volume in and out, and cue from a timestamp.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/qlab-script-cues-spotify">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="QLab script cues for Spotify control">
+    <meta property="og:description" content="Use QLab script cues to drive Spotify on macOS via AppleScript: play a specific track or playlist, pause cleanly, fade volume in and out, and cue from a timestamp.">
+    <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: radial-gradient(ellipse 900px 500px at 50% -120px, rgba(122,196,255,0.07), transparent 70%), linear-gradient(180deg, #161616 0%, #0d0d0d 700px) #0d0d0d; background-attachment: fixed; color: #e0e0e0; min-height: 100vh; }
+        .container { max-width: 760px; margin: 0 auto; padding: 60px 24px; }
+        .back { display: inline-block; color: #7ac4ff; text-decoration: none; font-size: 0.9rem; margin-bottom: 32px; }
+        .back:hover { color: #fff; }
+        h1 { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+        .date { color: #666; font-size: 0.85rem; margin-bottom: 32px; }
+        article p { line-height: 1.75; color: #cfcfcf; margin-bottom: 18px; font-size: 1.02rem; }
+        article h2 { font-size: 1.25rem; color: #fff; margin: 32px 0 14px; }
+        article ul { margin: 0 0 18px 20px; color: #cfcfcf; line-height: 1.7; }
+        article ul li { margin-bottom: 8px; }
+        article a { color: #7ac4ff; text-decoration: none; }
+        article a:hover { color: #fff; }
+        article code { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 4px; padding: 1px 6px; font-size: 0.9em; color: #e0e0e0; }
+        article pre { background: #111; border: 1px solid #222; border-radius: 8px; padding: 16px 18px; overflow-x: auto; margin: 0 0 18px; }
+        article pre code { background: none; border: none; padding: 0; font-size: 0.85em; line-height: 1.55; color: #d8d8d8; }
+        article .note { background: #1a2030; border: 1px solid #2a4a6a; border-radius: 10px; padding: 14px 18px; margin: 0 0 18px; font-size: 0.95rem; color: #cfcfcf; }
+        footer { text-align: center; margin-top: 56px; color: #555; font-size: 0.85rem; line-height: 1.6; border-top: 1px solid #1a1a1a; padding-top: 24px; }
+        footer a { color: #888; text-decoration: none; }
+        footer a:hover { color: #fff; }
+
+        .article-cta { margin: 36px 0 8px; padding: 22px 24px; background: linear-gradient(160deg, #1f2a3a 0%, #141820 100%); border: 1px solid #2a4a6a; border-radius: 12px; }
+        .article-cta h3 { color: #7ac4ff; font-size: 1.05rem; margin: 0 0 8px; }
+        .article-cta p { color: #cfcfcf; line-height: 1.6; margin: 0 0 12px; font-size: 0.95rem; }
+        .article-cta a.cta-link { display: inline-block; color: #7ac4ff; font-weight: 600; text-decoration: none; font-size: 0.95rem; margin-right: 18px; }
+        .article-cta a.cta-link:hover { color: #fff; }
+</style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>QLab script cues for Spotify control</h1>
+            <p class="date">9 May 2026</p>
+
+            <p>Spotify is not a traditional show source, but it shows up all the time. Pre-show music, walk-in playlists, post-show cover beds, between-band changeovers. If you are running QLab anyway, you can drive Spotify from cues using AppleScript inside a Script cue, which keeps the operator on one Go button instead of switching apps mid-show.</p>
+
+            <div class="note">
+                <strong>License note.</strong> Script cues only run in licensed QLab. The free version will load a Script cue, but it will not execute on Go. If you are evaluating, you can still build the workspace, you just cannot fire the script in playback. Audio cues, MIDI cues, and Group cues continue to work on the free tier.
+            </div>
+
+            <h2>The shape of a Spotify Script cue</h2>
+            <p>A Script cue in QLab takes AppleScript directly. The Spotify app on macOS has its own scripting dictionary, so you address it by name and send commands. Every example below goes into the script field of a single Script cue.</p>
+
+            <pre><code>tell application "Spotify"
+    play
+end tell</code></pre>
+
+            <p>That is the simplest version. It resumes whatever was last playing. The interesting cues are the ones that target a specific track, fade in cleanly, or recover a known starting point on demand.</p>
+
+            <h2>Play a specific track or playlist</h2>
+            <p>Spotify accepts URIs in the form <code>spotify:track:&lt;id&gt;</code> and <code>spotify:playlist:&lt;id&gt;</code>. To get a URI, right-click a track or playlist in Spotify, choose Share, then Copy Spotify URI.</p>
+
+            <pre><code>tell application "Spotify"
+    play track "spotify:track:4iV5W9uYEdYUVa79Axb7Rh"
+end tell</code></pre>
+
+            <p>Same syntax for a playlist:</p>
+
+            <pre><code>tell application "Spotify"
+    play track "spotify:playlist:37i9dQZF1DXcBWIGoYBM5M"
+end tell</code></pre>
+
+            <p>This is the workhorse. Walk-in playlist on the pre-show cue, swap track for the bows, change again for post-show. Each cue is one line plus the wrapper.</p>
+
+            <h2>Cue from a specific timestamp</h2>
+            <p>Useful when a track has a long intro you do not want, or when you are running a stem of a song that needs to start at a downbeat. AppleScript needs a small delay between starting playback and seeking, because Spotify takes a fraction of a second to load the track before it will accept a position change.</p>
+
+            <pre><code>tell application "Spotify"
+    play track "spotify:track:4iV5W9uYEdYUVa79Axb7Rh"
+    delay 0.3
+    set player position to 45
+end tell</code></pre>
+
+            <p>Position is in seconds. 45 means the cue starts 45 seconds into the track. If 0.3 seconds is not enough on a slow network, bump it to 0.5.</p>
+
+            <h2>Fade volume in or out</h2>
+            <p>Spotify exposes <code>sound volume</code> as a 0 to 100 integer. There is no native fade command, so you do it with a short loop that ramps the value over time. This pattern is what would otherwise need an audio cue with a volume envelope, except here the audio is coming from Spotify directly.</p>
+
+            <pre><code>tell application "Spotify"
+    set sound volume to 0
+    play
+    set targetVol to 80
+    set fadeSteps to 40
+    set fadeDuration to 4
+    repeat with i from 1 to fadeSteps
+        set sound volume to (targetVol * i / fadeSteps) as integer
+        delay (fadeDuration / fadeSteps)
+    end repeat
+end tell</code></pre>
+
+            <p>Four seconds, 40 steps, every 100 ms. Smooth enough that the room will not hear the staircase. Reverse the maths for a fade out: start at the current volume, ramp down to 0, then call <code>pause</code> at the end so the next track does not start silently.</p>
+
+            <h2>Pause cleanly on a Stop cue</h2>
+            <p>Pair every Spotify play cue with a way to stop it. Easy as a Script cue at the end of a group:</p>
+
+            <pre><code>tell application "Spotify"
+    pause
+end tell</code></pre>
+
+            <p>If the SM hits panic and your panic fade is set to a sensible 3 or 4 seconds, your QLab audio cues will fade gracefully. Spotify will not, because it is not part of QLab's audio engine. A Stop cue with the pause script wired to the same group lets you treat Spotify like another device that responds to the show's stop logic.</p>
+
+            <h2>Combine with the rest of the show</h2>
+            <p>None of this exists in isolation. Two ways the same cues end up tying back to other tools:</p>
+            <ul>
+                <li><strong>Audio side.</strong> If your show has actual QLab audio cues alongside the Spotify cues, the level discipline still matters. <a href="/labassistant">Lab Assistant</a> can normalise the audio cues to a consistent LUFS target before tech, so when Spotify is doing the walk-in at -14 LUFS and your show audio is at -23, you can choose the offset deliberately rather than discover it during the dry run.</li>
+                <li><strong>Operator side.</strong> If you are also running Bitfocus Companion on a Stream Deck or iPad, a separate Spotify connection from Companion gives the operator dedicated buttons (play, pause, next, fade, bookmarks). The <a href="https://github.com/BSKapps/companion-module-bsk-spotify">BSK Spotify module</a> is open source and free. Useful when QLab is doing the show and Companion is doing the room, and you want both to control the same playback.</li>
+            </ul>
+
+            <h2>What to watch out for</h2>
+            <ul>
+                <li>Spotify must be running and signed in. AppleScript launches it if needed, but the first cue may take a second longer while it boots.</li>
+                <li>An active playback device matters. Spotify will refuse <code>play</code> commands if there is no active output. The simplest fix is to play one track manually before the show to wake the device, then leave it.</li>
+                <li>URIs change if a track is re-released. If a cue suddenly misses, copy a fresh URI from Spotify rather than assuming the AppleScript is broken.</li>
+                <li>Volume fades touch the system Spotify volume, not your audio interface. If Spotify is going through a Loopback or BlackHole route, sanity check that nothing else gets muted by the same fade.</li>
+            </ul>
+
+            <p>Script cues will not replace a properly designed audio cue list, but they make Spotify behave like a real source instead of a separate app the operator has to remember to drive.</p>
+
+            <div class="article-cta">
+                <h3>Tools that pair with this</h3>
+                <p>Lab Assistant cleans up the audio side of the workspace. The BSK Spotify module brings Companion users the same control surface for free.</p>
+                <a class="cta-link" href="/labassistant">Lab Assistant &rarr;</a>
+                <a class="cta-link" href="https://github.com/BSKapps/companion-module-bsk-spotify">BSK Spotify module &rarr;</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>

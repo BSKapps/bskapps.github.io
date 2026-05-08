@@ -103,6 +103,8 @@
             top: -2px;
         }
         .badge.lua { color: #7aff8a; border: 1px solid #2a5a2a; background: #1a2a1a; }
+        .badge.companion { color: #4affda; border: 1px solid #1a5a4a; background: #0d2a25; }
+        .script-card.companion { border-left: 4px solid #4affda; }
         .steps { color: #aaa; font-size: 0.9rem; line-height: 1.6; padding-left: 20px; margin: 0; }
         .steps li { margin-bottom: 8px; }
         .steps code { background: #2a2a2a; color: #e0e0e0; padding: 1px 6px; border-radius: 4px; font-size: 0.85rem; }
@@ -249,6 +251,41 @@
                 <li>In Companion, add a new connection using the <strong>Reaper</strong> module. Set the host to your Reaper machine IP and the port to match.</li>
                 <li>Create a button, add the <strong>Run action</strong> action, and paste the action command ID.</li>
                 <li>Repeat for each script and assign the buttons to your Stream Deck.</li>
+            </ol>
+        </div>
+
+        <h2 class="section-title" style="margin-top: 40px; margin-bottom: 8px;">Companion Modules</h2>
+        <p class="section-desc">Open source Bitfocus Companion modules. Free to use, MIT licensed.</p>
+
+        <div class="script-card companion">
+            <h3>BSK Spotify <span class="badge companion">Companion</span></h3>
+            <p>Full-featured Spotify Web API controller for Companion. Cue-point playback from a timestamp, named bookmarks, volume fades, album art grids (1x1, 2x2, 3x3), playlist control, and around 98 ready-made presets. Requires a Spotify Premium account and a free Spotify Developer app.</p>
+            <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-spotify" target="_blank" rel="noopener">View on GitHub &rarr;</a>
+        </div>
+
+        <h2 class="section-title" style="margin-top: 32px; margin-bottom: 16px;">How to Install a Companion Module Manually</h2>
+
+        <div class="script-card setup">
+            <h3>Add the module to Companion</h3>
+            <p>Companion 3.0 and later supports loading developer modules from a local folder. Use this until the module is published to the official Companion module list.</p>
+            <ol class="steps">
+                <li>Download the latest release <code>.tgz</code> from the module's GitHub Releases page, or clone the repo with <code>git clone</code>.</li>
+                <li>If you downloaded a <code>.tgz</code>, extract it. You should end up with a folder containing <code>package.json</code>, <code>main.js</code>, and a <code>src</code> directory.</li>
+                <li>Move the folder somewhere stable, for example <code>~/Documents/companion-modules/</code>.</li>
+                <li>Open Companion. Go to <code>Settings &gt; Developer modules path</code> and point it at the parent folder (the one containing your module folders, not the module folder itself).</li>
+                <li>Restart Companion. The new module will appear in the connection list under its name.</li>
+                <li>Add a new connection using that module and configure it as you would any other.</li>
+            </ol>
+        </div>
+
+        <div class="script-card setup">
+            <h3>Spotify Developer app for the BSK Spotify module</h3>
+            <p>The Spotify module needs a free Spotify Developer app for OAuth. One per Companion install is enough.</p>
+            <ol class="steps">
+                <li>Sign in at <a class="download-link" href="https://developer.spotify.com" target="_blank" rel="noopener">developer.spotify.com</a> with your normal Spotify account.</li>
+                <li>Create a new app. Set the Redirect URI to <code>http://127.0.0.1:4115/callback</code> exactly.</li>
+                <li>Copy the Client ID and Client Secret into the Companion connection settings.</li>
+                <li>Click Authenticate. The OAuth flow opens in your browser, you sign in once, and Companion stores the token from then on.</li>
             </ol>
         </div>
 

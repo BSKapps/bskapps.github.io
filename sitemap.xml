@@ -37,13 +37,18 @@
   </url>
   <url>
     <loc>https://bskapps.com/resources</loc>
-    <lastmod>2026-04-26</lastmod>
+    <lastmod>2026-05-09</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles</loc>
-    <lastmod>2026-04-26</lastmod>
+    <lastmod>2026-05-09</lastmod>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bskapps.com/articles/qlab-script-cues-spotify</loc>
+    <lastmod>2026-05-09</lastmod>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/companion-module-setup</loc>
