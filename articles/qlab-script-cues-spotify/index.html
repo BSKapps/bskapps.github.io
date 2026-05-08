@@ -79,15 +79,20 @@ end tell</code></pre>
             <p>This is the workhorse. Walk-in playlist on the pre-show cue, swap track for the bows, change again for post-show. Each cue is one line plus the wrapper.</p>
 
             <h2>Cue from a specific timestamp</h2>
-            <p>Useful when a track has a long intro you do not want, or when you are running a stem of a song that needs to start at a downbeat. AppleScript needs a small delay between starting playback and seeking, because Spotify takes a fraction of a second to load the track before it will accept a position change.</p>
+            <p>Useful when a track has a long intro you do not want, or when you are running a stem of a song that needs to start at a downbeat. There is a Spotify quirk to deal with: when you call <code>play track</code>, Spotify always starts playback from position 0 for a short moment before the seek takes effect. If you go straight from play to seek, the room hears the first half-second of the track. This is a Spotify API limitation, not an AppleScript issue.</p>
+
+            <p>The practical fix is to mute, play, seek, then bring the volume back up:</p>
 
             <pre><code>tell application "Spotify"
+    set startVol to sound volume
+    set sound volume to 0
     play track "spotify:track:4iV5W9uYEdYUVa79Axb7Rh"
     delay 0.3
     set player position to 45
+    set sound volume to startVol
 end tell</code></pre>
 
-            <p>Position is in seconds. 45 means the cue starts 45 seconds into the track. If 0.3 seconds is not enough on a slow network, bump it to 0.5.</p>
+            <p>Position is in seconds. 45 means the cue starts 45 seconds into the track. If 0.3 seconds is not enough on a slow network, bump the delay to 0.5. The volume snap back to <code>startVol</code> is instant, so for a softer entry combine this with the fade pattern below: leave volume at 0 after the seek and let the fade ramp it up over a couple of seconds.</p>
 
             <h2>Fade volume in or out</h2>
             <p>Spotify exposes <code>sound volume</code> as a 0 to 100 integer. There is no native fade command, so you do it with a short loop that ramps the value over time. This pattern is what would otherwise need an audio cue with a volume envelope, except here the audio is coming from Spotify directly.</p>
