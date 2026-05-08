@@ -108,7 +108,6 @@ end tell</code></pre>
             <p>If the SM hits panic and your panic fade is set to a sensible 3 or 4 seconds, your QLab audio cues will fade gracefully. Spotify will not, because it is not part of QLab's audio engine. A Stop cue with the pause script wired to the same group lets you treat Spotify like another device that responds to the show's stop logic.</p>
 
             <h2>Combine with the rest of the show</h2>
-            <p>None of this exists in isolation. Two ways the same setup ends up tying back to other tools:</p>
             <ul>
                 <li><strong>Free QLab users still need consistent levels.</strong> Without a license, Script cues are off the table, and so are any AppleScript-based level routines. <a href="/labassistant">Lab Assistant</a> works with any QLab workspace, free or paid. Drop one in, pick a LUFS target, and every audio cue gets normalised.</li>
                 <li><strong>Stream Deck control for both QLab and Spotify.</strong> If you are running Bitfocus Companion, the <a href="https://github.com/BSKapps/companion-module-bsk-spotify">BSK Spotify module</a> gives you direct Spotify control on a button grid (play, pause, next, fade, bookmarks, album art). Pair it with the official <strong>Figure 53: QLab</strong> Companion module to fire your QLab cues from the same Stream Deck, including the Script cues from this article. One surface, both apps, no app switching mid-show.</li>
