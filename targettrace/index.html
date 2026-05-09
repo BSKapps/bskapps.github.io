@@ -394,7 +394,15 @@
         if (!g) return;
         const fig = g.querySelector('figure');
         const w = fig.offsetWidth + 16;
-        g.scrollBy({ left: dir * w, behavior: 'smooth' });
+        const maxScroll = g.scrollWidth - g.clientWidth;
+        // Loop: at the end with next, jump to start. At the start with prev, jump to end.
+        if (dir > 0 && g.scrollLeft >= maxScroll - 4) {
+            g.scrollTo({ left: 0, behavior: 'smooth' });
+        } else if (dir < 0 && g.scrollLeft <= 4) {
+            g.scrollTo({ left: maxScroll, behavior: 'smooth' });
+        } else {
+            g.scrollBy({ left: dir * w, behavior: 'smooth' });
+        }
     }
     function updateCounter() {
         const g = document.getElementById('gallery');
