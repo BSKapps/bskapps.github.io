@@ -149,6 +149,21 @@
             scrollbar-width: none;
         }
         .screenshot-scroll::-webkit-scrollbar { display: none; }
+        .demo-wrap, .demo-wrap *, .demo-wrap video {
+            outline: none !important;
+            border: none !important;
+            box-shadow: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .demo-wrap video {
+            width: 100%;
+            display: block;
+            border-radius: 16px;
+            background: transparent;
+        }
+        .demo-wrap video:focus,
+        .demo-wrap video:focus-visible,
+        .demo-wrap video:active { outline: none !important; box-shadow: none !important; }
         .screenshot-scroll figure {
             margin: 0;
             flex: 0 0 100%;
@@ -303,8 +318,8 @@
             <p class="version-line">1.0 &middot; Released today</p>
         </div>
 
-        <div style="margin-bottom: 24px; border-radius: 16px; overflow: hidden; background: linear-gradient(180deg, #0a1628, #162840);">
-            <video autoplay loop muted playsinline style="width: 100%; display: block; border-radius: 16px; outline: none; border: none;">
+        <div class="demo-wrap" style="margin-bottom: 24px; border-radius: 16px; overflow: hidden; background: linear-gradient(180deg, #0a1628, #162840);">
+            <video autoplay loop muted playsinline disablepictureinpicture controlslist="nodownload nofullscreen noremoteplayback">
                 <source src="images/tt-demo.mov" type="video/quicktime">
                 <source src="images/tt-demo.mov" type="video/mp4">
             </video>
