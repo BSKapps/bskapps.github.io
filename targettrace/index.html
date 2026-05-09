@@ -167,9 +167,12 @@
             border-radius: 12px;
             cursor: pointer;
             outline: none;
+            border: none;
             -webkit-tap-highlight-color: transparent;
         }
-        .screenshot-scroll img:focus { outline: none; }
+        .screenshot-scroll img:focus,
+        .screenshot-scroll img:focus-visible,
+        .screenshot-scroll img:active { outline: none !important; box-shadow: none !important; }
         .screenshot-scroll figcaption {
             text-align: center;
             color: #666;
