@@ -288,11 +288,15 @@
             </div>
             <p class="outcome">{{ site.data.content.apps.targettrace.tagline }}</p>
             <span class="badge macos">{{ site.data.content.apps.targettrace.macos }}</span>
-            <span class="badge coming-soon">Coming Soon</span>
             <ul class="features">
                 {% for feature in site.data.content.apps.targettrace.features %}<li>{{ feature }}</li>
                 {% endfor %}
             </ul>
+            <div style="margin-top: 16px;">
+                <a href="https://bskapps.lemonsqueezy.com/checkout/buy/2d6a5745-536e-4e65-9953-ad34ad59fdb7?dark=1&media=0&desc=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Target Trace for {{ site.data.content.apps.targettrace.price }}" onclick="event.stopPropagation()" style="margin-top: 0;">Buy - {{ site.data.content.apps.targettrace.price }}</a>
+                <span class="buy-note">One-time purchase · 2 activations</span>
+                <span class="version-line">{{ site.data.content.apps.targettrace.version }} · Released {{ site.data.content.apps.targettrace.released }}</span>
+            </div>
         </div>
         </div>
 
