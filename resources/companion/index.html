@@ -149,7 +149,7 @@
                 <li>Click <strong>Connections</strong> in the left sidebar, then add a new connection. Search for <code>BSK Spotify</code> and select it.</li>
                 <li>Configure the connection with your Client ID and Client Secret (see the Spotify Developer app section below).</li>
             </ol>
-            <p style="margin-top:14px; color:#888; font-size:0.85rem;"><strong style="color:#ffb347;">After Companion updates:</strong> if the BSK Spotify connection disappears after a Companion update, re-import the <code>.tgz</code> from the latest release and re-add the connection. Your Client ID, Client Secret, and tokens are kept in Companion's database and are usually preserved.</p>
+            <p style="margin-top:14px; color:#888; font-size:0.85rem;"><strong style="color:#ffb347;">After Companion updates:</strong> in our testing the module survived a version update intact, but we can't guarantee every update will preserve it. If the BSK Spotify connection disappears after an update, re-import the <code>.tgz</code> from the latest release and re-add the connection. Your Client ID, Client Secret, and tokens are kept in Companion's database and are usually preserved.</p>
         </div>
 
         <div class="script-card setup">
@@ -162,10 +162,10 @@
                 </li>
                 <li>Fill in the form:
                     <ul style="margin-top:6px; margin-left:18px; list-style:disc;">
-                        <li><strong>App name:</strong> anything works, only you see it. Suggestion: <code>Companion Spotify</code> or <code>BSK Spotify</code>.</li>
-                        <li><strong>App description:</strong> short, e.g. <code>Personal Companion control</code>.</li>
+                        <li><strong>App name:</strong> anything works, only you see it. Suggestion: <code>Spotify Control</code> or <code>Companion Spotify</code>.</li>
+                        <li><strong>App description:</strong> leave blank, or add something short, e.g. <code>BSK Spotify</code>. Only you see it.</li>
                         <li><strong>Website:</strong> leave blank.</li>
-                        <li><strong>Redirect URIs:</strong> type <code>http://127.0.0.1:4115/callback</code> exactly, then click <strong>Add</strong>. The URL must appear as a chip below the input or in the list. The port (4115) must match.</li>
+                        <li><strong>Redirect URIs:</strong> type <code>http://127.0.0.1:4115/callback</code> exactly, then click <strong>Add</strong>. Check that it appears in the list below the input -- if it doesn't, it wasn't saved. The URL must be entered exactly as shown, including the port number.</li>
                         <li><strong>Bundle IDs / Android packages:</strong> leave blank.</li>
                         <li><strong>Which API/SDKs are you planning to use?</strong> tick <strong>Web API</strong>. Leave the others unticked.</li>
                     </ul>
