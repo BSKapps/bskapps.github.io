@@ -84,7 +84,7 @@
             <p>Authentication is via an API key from your Stage Timer account settings. The Generic HTTP module handles the GET and POST requests. Stage Timer's API documentation lists all available endpoints; the timer control and message endpoints are the ones most worth wiring up to a Stream Deck.</p>
 
             <h2>Spotify</h2>
-            <p>The Spotify module connects via the Spotify Web API and requires OAuth authentication - you register a developer application in Spotify's developer portal, get a client ID and secret, and authorise the connection through Companion's web UI. This sounds involved but is a one-time setup.</p>
+            <p>The Spotify module connects via the Spotify Web API and requires OAuth authentication and a Spotify Premium account. You register a developer application in Spotify's developer portal, get a client ID and secret, and authorise the connection through Companion's web UI. This sounds involved but is a one-time setup.</p>
             <p>Once connected, actions cover playback control, volume, next/previous track, shuffle and repeat, and switching between playback devices. Feedback shows currently playing track and artist on a button. The practical use case is venue background music: an operator running a pre-show playlist from a Stream Deck without touching the computer running the show stack. Keep Spotify on a Spotify Connect device rather than the main show Mac if possible - having Spotify's audio routing coexist with QLab on the same machine is manageable but adds an audio configuration step.</p>
 
             <h2>When a module stays disconnected</h2>
