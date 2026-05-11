@@ -141,16 +141,15 @@
 
         <div class="script-card setup">
             <h3>Add the module to Companion</h3>
-            <p>Companion 3.0 and later supports loading developer modules from a local folder. Use this until the module is published to the official Companion module list.</p>
+            <p>Companion 4.x lets you import a module directly from a <code>.tgz</code> file. Use this until the module is published to the official Companion module list.</p>
             <ol class="steps">
-                <li>Download <code>bsk-spotify-X.Y.Z.tgz</code> from the <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-spotify/releases/latest" target="_blank" rel="noopener">latest release</a>, or clone the repo with <code>git clone</code>.</li>
-                <li>If you downloaded a <code>.tgz</code>, extract it. You should end up with a folder containing <code>package.json</code>, <code>main.js</code>, and a <code>src</code> directory.</li>
-                <li>Move the folder somewhere stable, for example <code>~/Documents/companion-modules/</code>.</li>
-                <li>Open Companion. Go to <code>Settings &gt; Developer modules path</code> and point it at the parent folder (the one containing your module folders, not the module folder itself).</li>
-                <li>Restart Companion. The new module will appear in the connection list under its name.</li>
-                <li>Add a new connection using that module and configure it as you would any other.</li>
+                <li>Download <code>bsk-spotify-X.Y.Z.tgz</code> from the <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-spotify/releases/latest" target="_blank" rel="noopener">latest release</a>. Do not extract it.</li>
+                <li>In Companion, click <strong>Modules</strong> in the left sidebar.</li>
+                <li>Click <strong>Import module package</strong> (the orange button) and select the downloaded <code>.tgz</code> file.</li>
+                <li>Click <strong>Connections</strong> in the left sidebar, then add a new connection. Search for <code>BSK Spotify</code> and select it.</li>
+                <li>Configure the connection with your Client ID and Client Secret (see the Spotify Developer app section below).</li>
             </ol>
-            <p style="margin-top:14px; color:#888; font-size:0.85rem;"><strong style="color:#ffb347;">After Companion updates:</strong> the module folder itself stays where you put it, but Companion's "Developer modules path" setting may not survive a major version upgrade. If the module disappears from the connection list after a Companion update, re-point the path in Settings and restart. The connection settings (Client ID, Client Secret, tokens) are kept in Companion's database and are usually preserved.</p>
+            <p style="margin-top:14px; color:#888; font-size:0.85rem;"><strong style="color:#ffb347;">After Companion updates:</strong> if the BSK Spotify connection disappears after a Companion update, re-import the <code>.tgz</code> from the latest release and re-add the connection. Your Client ID, Client Secret, and tokens are kept in Companion's database and are usually preserved.</p>
         </div>
 
         <div class="script-card setup">
