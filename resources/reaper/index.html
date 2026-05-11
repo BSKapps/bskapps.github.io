@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Reaper Lua Scripts for Stream Deck - BSK Apps</title>
-    <meta name="description" content="Free Reaper Lua scripts for Stream Deck transport control and hardware patching. Safe play/pause/record and mono autopatch for live recording.">
+    <title>Free REAPER Lua Scripts for Stream Deck - BSK Apps</title>
+    <meta name="description" content="Free REAPER Lua scripts for Stream Deck transport control and hardware patching. Safe play/pause/record and mono autopatch for live recording.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="apple-touch-icon" href="/images/favicon-180.png">
-    <meta property="og:title" content="Free Reaper Lua Scripts for Stream Deck and Live Recording">
-    <meta property="og:description" content="Free Reaper Lua scripts for Stream Deck transport control and hardware patching. Safe play, pause, record buttons and 1-to-1 mono autopatch.">
+    <meta property="og:title" content="Free REAPER Lua Scripts for Stream Deck and Live Recording">
+    <meta property="og:description" content="Free REAPER Lua scripts for Stream Deck transport control and hardware patching. Safe play, pause, record buttons and 1-to-1 mono autopatch.">
     <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
     <meta property="og:url" content="https://bskapps.com/resources/reaper">
     <meta property="og:type" content="website">
@@ -120,8 +120,8 @@
     {
         "@context": "https://schema.org",
         "@type": "ItemList",
-        "name": "Free Reaper Lua Scripts",
-        "description": "Free Reaper Lua scripts for Stream Deck transport control and hardware patching",
+        "name": "Free REAPER Lua Scripts",
+        "description": "Free REAPER Lua scripts for Stream Deck transport control and hardware patching",
         "numberOfItems": 5,
         "itemListElement": [
             {
@@ -130,7 +130,7 @@
                 "name": "BSK Transport: Play",
                 "description": "Starts playback only if stopped or paused. Designed for Stream Deck transport buttons.",
                 "programmingLanguage": "Lua",
-                "runtimePlatform": "Reaper DAW",
+                "runtimePlatform": "REAPER DAW",
                 "isAccessibleForFree": true
             },
             {
@@ -139,7 +139,7 @@
                 "name": "BSK Transport: Pause",
                 "description": "Pauses if playing, unpauses if paused. Designed for Stream Deck transport buttons.",
                 "programmingLanguage": "Lua",
-                "runtimePlatform": "Reaper DAW",
+                "runtimePlatform": "REAPER DAW",
                 "isAccessibleForFree": true
             },
             {
@@ -148,7 +148,7 @@
                 "name": "BSK Transport: Record",
                 "description": "Starts recording only if not already recording. Designed for Stream Deck transport buttons.",
                 "programmingLanguage": "Lua",
-                "runtimePlatform": "Reaper DAW",
+                "runtimePlatform": "REAPER DAW",
                 "isAccessibleForFree": true
             },
             {
@@ -157,7 +157,7 @@
                 "name": "BSK AutoPatch: HW 1-to-1 Mono",
                 "description": "Patches all tracks 1:1 to mono hardware inputs and outputs for live recording and virtual soundcheck.",
                 "programmingLanguage": "Lua",
-                "runtimePlatform": "Reaper DAW",
+                "runtimePlatform": "REAPER DAW",
                 "isAccessibleForFree": true
             },
             {
@@ -166,7 +166,7 @@
                 "name": "BSK AutoPatch: HW Teardown",
                 "description": "Removes all hardware sends and restores master send on every track. Undo for AutoPatch.",
                 "programmingLanguage": "Lua",
-                "runtimePlatform": "Reaper DAW",
+                "runtimePlatform": "REAPER DAW",
                 "isAccessibleForFree": true
             }
         ]
@@ -176,11 +176,11 @@
 <body>
     <div class="container">
         <a class="back" href="/resources">&larr; Resources</a>
-        <h1>Reaper Lua Scripts</h1>
+        <h1>REAPER Lua Scripts</h1>
         <p class="tagline">Designed for live recording and virtual soundcheck.</p>
 
-        <h2 class="section-title">Free Reaper Lua Scripts</h2>
-        <p class="section-desc">Drop these into your Reaper Scripts folder and assign them to actions or toolbar buttons.</p>
+        <h2 class="section-title">Free REAPER Lua Scripts</h2>
+        <p class="section-desc">Drop these into your REAPER Scripts folder and assign them to actions or toolbar buttons.</p>
 
         <div class="script-card transport">
             <h3>BSK Transport: Play <span class="badge lua">Lua</span></h3>
@@ -216,10 +216,10 @@
 
         <div class="script-card setup">
             <h3>Manual Install</h3>
-            <p>Add scripts directly to Reaper from the downloaded files.</p>
+            <p>Add scripts directly to REAPER from the downloaded files.</p>
             <ol class="steps">
                 <li>Download the scripts using the links above.</li>
-                <li>In Reaper, open the Actions list: <code>Actions &gt; Show action list</code></li>
+                <li>In REAPER, open the Actions list: <code>Actions &gt; Show action list</code></li>
                 <li>Click <code>ReaScript: Load</code> and browse to the downloaded <code>.lua</code> file.</li>
                 <li>Repeat for each script. They will appear in the Actions list ready to run.</li>
                 <li>To assign a keyboard shortcut or toolbar button, right-click the action in the list.</li>
@@ -230,7 +230,7 @@
             <h3>Via ReaPack</h3>
             <p>Install and update scripts automatically using ReaPack. Requires <a class="download-link" href="https://reapack.com" target="_blank" rel="noopener">ReaPack</a> to be installed.</p>
             <ol class="steps">
-                <li>In Reaper: <code>Extensions &gt; ReaPack &gt; Import a repository</code></li>
+                <li>In REAPER: <code>Extensions &gt; ReaPack &gt; Import a repository</code></li>
                 <li>Paste this URL: <code>https://raw.githubusercontent.com/BSKapps/BSK-Reaper-Scripts-/main/index.xml</code></li>
                 <li>Browse and install via <code>Extensions &gt; ReaPack &gt; Browse packages</code></li>
                 <li>Future updates will be flagged automatically when you sync.</li>
@@ -241,12 +241,12 @@
 
         <div class="script-card setup">
             <h3>Assign scripts to Stream Deck buttons using Bitfocus Companion</h3>
-            <p>Companion's Reaper module uses Reaper's web interface to trigger actions remotely.</p>
+            <p>Companion's REAPER module uses REAPER's web interface to trigger actions remotely.</p>
             <ol class="steps">
-                <li>Enable Reaper's web interface: <code>Preferences &gt; Control/OSC/web &gt; Web browser interface</code> - enable it and note the port (default 8080).</li>
-                <li>Install your scripts in Reaper as above, then open the Actions list and find each script.</li>
+                <li>Enable REAPER's web interface: <code>Preferences &gt; Control/OSC/web &gt; Web browser interface</code> - enable it and note the port (default 8080).</li>
+                <li>Install your scripts in REAPER as above, then open the Actions list and find each script.</li>
                 <li>Right-click the action and choose <code>Copy selected action command ID</code> - it will look like <code>_RS3a4f...</code>. Note this for each script.</li>
-                <li>In Companion, add a new connection using the <strong>Reaper</strong> module. Set the host to your Reaper machine IP and the port to match.</li>
+                <li>In Companion, add a new connection using the <strong>REAPER</strong> module. Set the host to your REAPER machine IP and the port to match.</li>
                 <li>Create a button, add the <strong>Run action</strong> action, and paste the action command ID.</li>
                 <li>Repeat for each script and assign the buttons to your Stream Deck.</li>
             </ol>

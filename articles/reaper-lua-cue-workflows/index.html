@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reaper Lua scripting for live recording - BSK Apps</title>
-    <meta name="description" content="Why Lua is worth learning for Reaper even if you only write ten lines, with a real live-recording example: renaming a full multitrack session from a CSV.">
+    <title>REAPER Lua scripting for live recording - BSK Apps</title>
+    <meta name="description" content="Why Lua is worth learning for REAPER even if you only write ten lines, with a real live-recording example: renaming a full multitrack session from a CSV.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="canonical" href="https://bskapps.com/articles/reaper-lua-cue-workflows">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Reaper Lua scripting for live recording">
-    <meta property="og:description" content="A short intro to Reaper Lua for live multitrack workflows.">
+    <meta property="og:title" content="REAPER Lua scripting for live recording">
+    <meta property="og:description" content="A short intro to REAPER Lua for live multitrack workflows.">
     <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -43,18 +43,18 @@
         <a class="back" href="/articles">&larr; Articles</a>
 
         <article>
-            <h1>Reaper Lua scripting for live recording</h1>
+            <h1>REAPER Lua scripting for live recording</h1>
             <p class="date">9 April 2026</p>
 
-            <p>Reaper is an unusually honest DAW. Most of what you do in the UI is driven by actions, and most of those actions are exposed to a scripting language. If you record live shows or sessions and spend any time on prep, learning ten lines of Lua is one of the highest-return things you can do.</p>
+            <p>REAPER is an unusually honest DAW. Most of what you do in the UI is driven by actions, and most of those actions are exposed to a scripting language. If you record live shows or sessions and spend any time on prep, learning ten lines of Lua is one of the highest-return things you can do.</p>
 
             <h2>Why bother</h2>
             <p>Manual repetition is where you make mistakes. Renaming forty-eight inputs to match a stage patch, colouring each channel group, consolidating every track into a new take. Doing it by hand takes an hour and a quarter of it will be wrong. A script takes the same hour to write the first time, then runs in a second forever after.</p>
             <p>You don't need to be a programmer. You need to copy, paste, and read a function reference.</p>
 
             <h2>A real live-recording example: rename tracks from a CSV</h2>
-            <p>This example uses Lua, the small scripting language Reaper exposes through ReaScript. The code below is one file you save and run from Reaper's Action List.</p>
-            <p>You turn up to a gig. The FOH engineer hands you their patch list as a CSV. Your Reaper session has forty-eight tracks called <code>Track 1</code> through <code>Track 48</code>. You want them renamed in thirty seconds, not thirty minutes.</p>
+            <p>This example uses Lua, the small scripting language REAPER exposes through ReaScript. The code below is one file you save and run from REAPER's Action List.</p>
+            <p>You turn up to a gig. The FOH engineer hands you their patch list as a CSV. Your REAPER session has forty-eight tracks called <code>Track 1</code> through <code>Track 48</code>. You want them renamed in thirty seconds, not thirty minutes.</p>
             <p>Save a file as <code>patch.csv</code> somewhere you'll find it again. One track per line, number then name:</p>
             <pre><code>1,Kick In
 2,Kick Out
@@ -81,11 +81,11 @@ end
 
 file:close()
 reaper.UpdateArrange()</code></pre>
-            <p>That's it. Run the action, every track picks up the right name, ready to record. Change the CSV, run it again, names update. The same pattern works for colours, folder assignments, record-arm state, anything Reaper exposes on a track.</p>
+            <p>That's it. Run the action, every track picks up the right name, ready to record. Change the CSV, run it again, names update. The same pattern works for colours, folder assignments, record-arm state, anything REAPER exposes on a track.</p>
 
             <h2>Going further</h2>
             <ul>
-                <li>Reaper's built-in ReaScript documentation (Help menu, ReaScript documentation, or the <code>reascripthelp.html</code> file in your Reaper install) lists every function, with Lua and Python examples for each.</li>
+                <li>REAPER's built-in ReaScript documentation (Help menu, ReaScript documentation, or the <code>reascripthelp.html</code> file in your REAPER install) lists every function, with Lua and Python examples for each.</li>
                 <li>The SWS/S&amp;M extension adds more actions you can drive from scripts.</li>
                 <li>Scripts live in a plain folder. Version them in git if you care about not losing them.</li>
             </ul>
@@ -95,8 +95,8 @@ reaper.UpdateArrange()</code></pre>
         
             <div class="article-cta">
                 <h3>Working scripts to start from</h3>
-                <p>We have published a small set of Reaper Lua scripts for transport control, hardware patching, and live-recording prep. Free, on the resources page.</p>
-                <a class="cta-link" href="/resources">Free Reaper Lua scripts &rarr;</a>
+                <p>We have published a small set of REAPER Lua scripts for transport control, hardware patching, and live-recording prep. Free, on the resources page.</p>
+                <a class="cta-link" href="/resources">Free REAPER Lua scripts &rarr;</a>
             </div>
         </article>
 

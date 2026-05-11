@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Companion module setup for common AV gear - BSK Apps</title>
-    <meta name="description" content="Practical Companion module setup for QLab, Reaper, Spotify, Shure ULXD and Axient, Blackmagic ATEM, Barco Event Controller, vMix, Millumin, and Stage Timer.">
+    <meta name="description" content="Practical Companion module setup for QLab, REAPER, Spotify, Shure ULXD and Axient, Blackmagic ATEM, Barco Event Controller, vMix, Millumin, and Stage Timer.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="canonical" href="https://bskapps.com/articles/companion-module-setup">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Companion module setup for common AV gear">
-    <meta property="og:description" content="Practical Companion module setup for QLab, Reaper, Shure wireless, ATEM, Barco, vMix, Millumin, Spotify, and Stage Timer.">
+    <meta property="og:description" content="Practical Companion module setup for QLab, REAPER, Shure wireless, ATEM, Barco, vMix, Millumin, Spotify, and Stage Timer.">
     <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -53,9 +53,9 @@
             <p>Useful actions: fire a cue by number or name, go (fires the selected cue), stop, panic, toggle pause. The module also supports feedback, so you can show cue state on a Stream Deck button - running, paused, broken. If you are running multiple QLab workspaces, you can add multiple instances of the module targeting each workspace by name.</p>
             <p>For more on how QLab itself is organised for shows, the <a href="/articles/qlab-workspace-habits">QLab workspace habits article</a> covers the setup side.</p>
 
-            <h2>Reaper</h2>
-            <p>Reaper has built-in OSC support that Companion can talk to directly via the Generic OSC module, or via the dedicated Reaper module if it is available in your Companion version. In Reaper, go to Preferences, Control Surfaces, and add a new OSC surface. Set it to listen on a port of your choice - 8000 is common. Enable "Allow binding to IP" and set the outgoing port back to Companion if you want feedback on button state.</p>
-            <p>Actions like transport control (play, stop, record, rewind), track muting, and marker navigation all work over OSC. If you are using Reaper for multitrack live recording, triggering record-arm and record-start from a Stream Deck at the FOH position is a clean way to avoid walking back to the stage machine between takes.</p>
+            <h2>REAPER</h2>
+            <p>REAPER has built-in OSC support that Companion can talk to directly via the Generic OSC module, or via the dedicated REAPER module if it is available in your Companion version. In REAPER, go to Preferences, Control Surfaces, and add a new OSC surface. Set it to listen on a port of your choice - 8000 is common. Enable "Allow binding to IP" and set the outgoing port back to Companion if you want feedback on button state.</p>
+            <p>Actions like transport control (play, stop, record, rewind), track muting, and marker navigation all work over OSC. If you are using REAPER for multitrack live recording, triggering record-arm and record-start from a Stream Deck at the FOH position is a clean way to avoid walking back to the stage machine between takes.</p>
 
             <h2>Shure ULXD and Axient Digital</h2>
             <p>Shure's networked wireless receivers - ULXD4, ULXD4D, ULXD4Q and the Axient Digital AD4 series - support remote control over Ethernet using Shure's proprietary TCP protocol. The dedicated Shure Wireless module handles the connection and exposes actions for muting channels, reading RF and audio levels, setting gain, and monitoring battery status.</p>
