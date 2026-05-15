@@ -493,6 +493,11 @@
                 <div class="stat-value" id="stat-revenue">--</div>
                 <div class="stat-sub">LemonSqueezy</div>
             </div>
+            <div class="stat-box highlight revenue">
+                <div class="stat-label" id="label-apple">Apple IAP</div>
+                <div class="stat-value" id="stat-apple">--</div>
+                <div class="stat-sub">App Store (multi-cur)</div>
+            </div>
             <div class="stat-box highlight">
                 <div class="stat-label">Conversion</div>
                 <div class="stat-value" id="stat-conversion">--</div>
@@ -515,6 +520,22 @@
                     <div class="api-field">
                         <label>LemonSqueezy API Key</label>
                         <input type="password" id="ls-key" placeholder="Your LemonSqueezy API key">
+                    </div>
+                    <div class="api-field" style="margin-top:12px; padding-top:12px; border-top:1px solid #1e1e1e;">
+                        <label>Apple Key ID</label>
+                        <input type="text" id="apple-key-id" placeholder="XXXXXXXXXX (10 characters, from App Store Connect)">
+                    </div>
+                    <div class="api-field">
+                        <label>Apple Issuer ID</label>
+                        <input type="text" id="apple-issuer-id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+                    </div>
+                    <div class="api-field">
+                        <label>Apple Vendor Number</label>
+                        <input type="text" id="apple-vendor-number" placeholder="Found in Payments and Financial Reports">
+                    </div>
+                    <div class="api-field">
+                        <label>Apple Private Key (.p8 contents)</label>
+                        <textarea id="apple-private-key" placeholder="-----BEGIN PRIVATE KEY-----&#10;...&#10;-----END PRIVATE KEY-----" style="padding:8px 12px; background:#1a1a1a; border:1px solid #2a2a2a; border-radius:8px; color:#e0e0e0; font-size:0.82rem; font-family:monospace; outline:none; width:100%; min-height:80px; resize:vertical;"></textarea>
                     </div>
                 </div>
                 <button class="api-save-btn" onclick="saveApiKeys()">Save to GitHub Secrets</button>
@@ -1096,9 +1117,13 @@ async function putRepoSecret(name, value, publicKey) {
 async function saveApiKeys() {
     const cfToken = document.getElementById('cf-token').value.trim();
     const lsKey = document.getElementById('ls-key').value.trim();
+    const appleKeyId = document.getElementById('apple-key-id').value.trim();
+    const appleIssuerId = document.getElementById('apple-issuer-id').value.trim();
+    const appleVendorNumber = document.getElementById('apple-vendor-number').value.trim();
+    const applePrivateKey = document.getElementById('apple-private-key').value.trim();
     const status = document.getElementById('api-save-status');
 
-    if (!cfToken && !lsKey) {
+    if (!cfToken && !lsKey && !appleKeyId && !appleIssuerId && !appleVendorNumber && !applePrivateKey) {
         status.textContent = 'Nothing to save - paste a token first';
         status.style.color = '#ff6b6b';
         return;
@@ -1114,9 +1139,17 @@ async function saveApiKeys() {
 
         if (cfToken) await putRepoSecret('CF_API_TOKEN', cfToken, publicKey);
         if (lsKey) await putRepoSecret('LS_API_KEY', lsKey, publicKey);
+        if (appleKeyId) await putRepoSecret('APPLE_KEY_ID', appleKeyId, publicKey);
+        if (appleIssuerId) await putRepoSecret('APPLE_ISSUER_ID', appleIssuerId, publicKey);
+        if (appleVendorNumber) await putRepoSecret('APPLE_VENDOR_NUMBER', appleVendorNumber, publicKey);
+        if (applePrivateKey) await putRepoSecret('APPLE_PRIVATE_KEY', applePrivateKey, publicKey);
 
         document.getElementById('cf-token').value = '';
         document.getElementById('ls-key').value = '';
+        document.getElementById('apple-key-id').value = '';
+        document.getElementById('apple-issuer-id').value = '';
+        document.getElementById('apple-vendor-number').value = '';
+        document.getElementById('apple-private-key').value = '';
         status.textContent = 'Saved to GitHub Action secrets';
         status.style.color = '#7aff8a';
         setTimeout(function() { status.textContent = ''; }, 4000);
@@ -1172,6 +1205,14 @@ async function loadStats() {
         } else {
             document.getElementById('stat-orders').textContent = ls ? ls.error : '--';
             document.getElementById('stat-revenue').textContent = '--';
+        }
+
+        const apple = stats.apple && stats.apple[key];
+        if (apple && !apple.error) {
+            document.getElementById('stat-apple').textContent = apple.proceeds != null ? '$' + apple.proceeds.toFixed(2) : '$0.00';
+            document.getElementById('label-apple').textContent = 'Apple IAP (' + ordersLabelSuffix + ')';
+        } else {
+            document.getElementById('stat-apple').textContent = apple ? (apple.error || '--') : '--';
         }
 
     } catch (e) {

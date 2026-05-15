@@ -1,4 +1,6 @@
 const https = require('https');
+const crypto = require('crypto');
+const zlib = require('zlib');
 
 const CF_ACCOUNT = '304c227c3868c2cd96c3d6a840b7ef13';
 const CF_TOKEN = process.env.CF_API_TOKEN;
@@ -6,6 +8,135 @@ const LS_KEY = process.env.LS_API_KEY;
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const GOOGLE_REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
+const APPLE_KEY_ID = process.env.APPLE_KEY_ID;
+const APPLE_ISSUER_ID = process.env.APPLE_ISSUER_ID;
+const APPLE_VENDOR_NUMBER = process.env.APPLE_VENDOR_NUMBER;
+const APPLE_PRIVATE_KEY = process.env.APPLE_PRIVATE_KEY;
+
+function requestRaw(options) {
+    return new Promise(function(resolve, reject) {
+        const req = https.request(options, function(res) {
+            const chunks = [];
+            res.on('data', function(chunk) { chunks.push(chunk); });
+            res.on('end', function() { resolve({ status: res.statusCode, headers: res.headers, buffer: Buffer.concat(chunks) }); });
+        });
+        req.on('error', reject);
+        req.end();
+    });
+}
+
+function generateAppleJWT() {
+    const now = Math.floor(Date.now() / 1000);
+    const header = Buffer.from(JSON.stringify({ alg: 'ES256', kid: APPLE_KEY_ID, typ: 'JWT' })).toString('base64url');
+    const payload = Buffer.from(JSON.stringify({ iss: APPLE_ISSUER_ID, iat: now, exp: now + 1200, aud: 'appstoreconnect-v1' })).toString('base64url');
+    const signingInput = header + '.' + payload;
+    const sign = crypto.createSign('SHA256');
+    sign.update(signingInput);
+    sign.end();
+    const sig = sign.sign({ key: APPLE_PRIVATE_KEY, dsaEncoding: 'ieee-p1363' }).toString('base64url');
+    return signingInput + '.' + sig;
+}
+
+async function fetchAppleReport(jwt, reportDate, frequency) {
+    const params = new URLSearchParams({
+        'filter[frequency]': frequency,
+        'filter[reportType]': 'SALES',
+        'filter[reportSubType]': 'SUMMARY',
+        'filter[vendorNumber]': APPLE_VENDOR_NUMBER,
+        'filter[reportDate]': reportDate
+    });
+    const res = await requestRaw({
+        hostname: 'api.appstoreconnect.apple.com',
+        path: '/v1/salesReports?' + params.toString(),
+        method: 'GET',
+        headers: { 'Authorization': 'Bearer ' + jwt, 'Accept': 'application/a-gzip' }
+    });
+    if (res.status === 404 || res.status === 400) return null;
+    const contentType = res.headers['content-type'] || '';
+    if (contentType.includes('json')) {
+        const err = JSON.parse(res.buffer.toString());
+        throw new Error(JSON.stringify((err.errors || [{ detail: res.status }])[0]));
+    }
+    if (res.status !== 200) throw new Error('Apple API HTTP ' + res.status);
+    const tsv = await new Promise(function(resolve, reject) {
+        zlib.gunzip(res.buffer, function(e, r) { if (e) reject(e); else resolve(r.toString('utf8')); });
+    });
+    const lines = tsv.split('\n').filter(function(l) { return l.trim(); });
+    if (lines.length < 2) return { units: 0, proceeds: 0 };
+    const headers = lines[0].split('\t');
+    const unitsIdx = headers.indexOf('Units');
+    const proceedsIdx = headers.indexOf('Developer Proceeds');
+    let units = 0, proceeds = 0;
+    for (let i = 1; i < lines.length; i++) {
+        const cols = lines[i].split('\t');
+        units += parseInt(cols[unitsIdx]) || 0;
+        proceeds += parseFloat(cols[proceedsIdx]) || 0;
+    }
+    return { units, proceeds: Math.round(proceeds * 100) / 100 };
+}
+
+async function fetchApple() {
+    const jwt = generateAppleJWT();
+    const result = {};
+    const monthlyCache = {};
+
+    function dateStr(daysAgo) {
+        const d = new Date(Date.now() - daysAgo * 86400000);
+        return d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
+    }
+    function monthStr(monthsAgo) {
+        const now = new Date();
+        const d = new Date(now.getFullYear(), now.getMonth() - monthsAgo, 1);
+        return d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0');
+    }
+
+    // Fetch last 7 daily reports for 1d and 7d windows
+    const daily = [];
+    for (let i = 1; i <= 7; i++) {
+        try {
+            daily.push(await fetchAppleReport(jwt, dateStr(i), 'DAILY') || { units: 0, proceeds: 0 });
+        } catch (e) {
+            console.error('Apple daily d-' + i + ':', e.message);
+            daily.push({ units: 0, proceeds: 0 });
+        }
+    }
+    result['1d'] = daily[0];
+    result['7d'] = daily.reduce(function(a, r) { return { units: a.units + r.units, proceeds: Math.round((a.proceeds + r.proceeds) * 100) / 100 }; }, { units: 0, proceeds: 0 });
+
+    // Fetch monthly reports for 30d, 90d, FY
+    async function getMonth(m) {
+        if (monthlyCache[m] !== undefined) return monthlyCache[m];
+        try {
+            monthlyCache[m] = await fetchAppleReport(jwt, m, 'MONTHLY') || { units: 0, proceeds: 0 };
+        } catch (e) {
+            console.error('Apple monthly ' + m + ':', e.message);
+            monthlyCache[m] = { units: 0, proceeds: 0 };
+        }
+        return monthlyCache[m];
+    }
+    function sumMonths(months) {
+        return months.reduce(function(a, r) { return { units: a.units + r.units, proceeds: Math.round((a.proceeds + r.proceeds) * 100) / 100 }; }, { units: 0, proceeds: 0 });
+    }
+
+    const m30 = await Promise.all([getMonth(monthStr(0)), getMonth(monthStr(1))]);
+    result['30d'] = sumMonths(m30);
+
+    const m90 = await Promise.all([getMonth(monthStr(0)), getMonth(monthStr(1)), getMonth(monthStr(2)), getMonth(monthStr(3))]);
+    result['90d'] = sumMonths(m90);
+
+    const now = new Date();
+    const fyStartYear = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
+    const fyMonths = [];
+    for (let m = 6; m <= 17; m++) {
+        const d = new Date(fyStartYear, m, 1);
+        if (d > now) break;
+        fyMonths.push(d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0'));
+    }
+    const fyData = await Promise.all(fyMonths.map(getMonth));
+    result['fy'] = sumMonths(fyData);
+
+    return result;
+}
 
 function request(options, body) {
     return new Promise(function(resolve, reject) {
@@ -130,7 +261,7 @@ function fyDays() {
 }
 
 async function main() {
-    const stats = { updated: new Date().toISOString(), cloudflare: {}, lemonsqueezy: {}, adsense: {} };
+    const stats = { updated: new Date().toISOString(), cloudflare: {}, lemonsqueezy: {}, adsense: {}, apple: {} };
 
     let googleToken = null;
     let adSenseAccount = null;
@@ -176,6 +307,17 @@ async function main() {
             } catch (e) {
                 console.error('AdSense ' + key + ' error:', e.message);
                 stats.adsense[key] = { error: e.message };
+            }
+        }
+    }
+
+    if (APPLE_KEY_ID && APPLE_ISSUER_ID && APPLE_VENDOR_NUMBER && APPLE_PRIVATE_KEY) {
+        try {
+            stats.apple = await fetchApple();
+        } catch (e) {
+            console.error('Apple error:', e.message);
+            for (const key of ['1d', '7d', '30d', '90d', 'fy']) {
+                stats.apple[key] = { error: e.message };
             }
         }
     }
