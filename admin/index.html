@@ -1089,6 +1089,7 @@ function displayStats() {
     const isFy = key === 'fy';
     const ordersLabelSuffix = isFy ? 'FY' : currentRange + 'd';
     const updated = stats.updated ? new Date(stats.updated).toLocaleString() : '';
+    const audRate = (stats.exchange_rates && stats.exchange_rates['AUD']) || 1.55;
 
     const cf = stats.cloudflare && stats.cloudflare[key];
     if (cf && !cf.error) {
@@ -1102,7 +1103,12 @@ function displayStats() {
 
     const ls = stats.lemonsqueezy && stats.lemonsqueezy[key];
     if (ls && !ls.error) {
-        const lsRevenue = currentCurrency === 'AUD' ? ls.revenue_aud : ls.revenue;
+        let lsRevenue;
+        if (currentCurrency === 'AUD') {
+            lsRevenue = ls.revenue_aud != null ? ls.revenue_aud : (ls.revenue != null ? Math.round(ls.revenue * audRate * 100) / 100 : null);
+        } else {
+            lsRevenue = ls.revenue;
+        }
         document.getElementById('stat-orders').textContent = ls.orders;
         document.getElementById('stat-orders-err').textContent = 'LemonSqueezy';
         document.getElementById('stat-revenue').textContent = lsRevenue != null ? '$' + lsRevenue.toFixed(2) : '$0.00';
@@ -1118,7 +1124,12 @@ function displayStats() {
 
     const apple = stats.apple && stats.apple[key];
     if (apple && !apple.error) {
-        const appleRevenue = currentCurrency === 'AUD' ? apple.proceeds_aud : apple.proceeds_usd;
+        let appleRevenue;
+        if (currentCurrency === 'AUD') {
+            appleRevenue = apple.proceeds_aud != null ? apple.proceeds_aud : (apple.proceeds_usd != null ? Math.round(apple.proceeds_usd * audRate * 100) / 100 : null);
+        } else {
+            appleRevenue = apple.proceeds_usd;
+        }
         document.getElementById('stat-apple').textContent = appleRevenue != null ? '$' + appleRevenue.toFixed(2) : '$0.00';
         document.getElementById('label-apple').textContent = 'Apple IAP ' + currentCurrency + ' (' + ordersLabelSuffix + ')';
         document.getElementById('stat-apple-sub').textContent = 'App Store · ' + currentCurrency;
