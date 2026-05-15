@@ -66,16 +66,31 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
     const headers = lines[0].split('\t');
     const unitsIdx = headers.indexOf('Units');
     const proceedsIdx = headers.indexOf('Developer Proceeds');
-    let units = 0, proceeds = 0;
+    const currencyIdx = headers.indexOf('Currency of Proceeds');
+    let units = 0;
+    const proceedsByCurrency = {};
     for (let i = 1; i < lines.length; i++) {
         const cols = lines[i].split('\t');
         units += parseInt(cols[unitsIdx]) || 0;
-        proceeds += parseFloat(cols[proceedsIdx]) || 0;
+        const currency = cols[currencyIdx] || 'USD';
+        const amount = parseFloat(cols[proceedsIdx]) || 0;
+        proceedsByCurrency[currency] = Math.round(((proceedsByCurrency[currency] || 0) + amount) * 100) / 100;
     }
-    return { units, proceeds: Math.round(proceeds * 100) / 100 };
+    return { units, proceeds_by_currency: proceedsByCurrency };
 }
 
-async function fetchApple() {
+async function fetchExchangeRates() {
+    const res = await request({
+        hostname: 'api.frankfurter.app',
+        path: '/latest?from=USD',
+        method: 'GET',
+        headers: {}
+    });
+    if (res.status !== 200) throw new Error('Exchange rates HTTP ' + res.status);
+    return res.body.rates;
+}
+
+async function fetchApple(rates) {
     const jwt = generateAppleJWT();
     const result = {};
     const monthlyCache = {};
@@ -89,40 +104,61 @@ async function fetchApple() {
         const d = new Date(now.getFullYear(), now.getMonth() - monthsAgo, 1);
         return d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0');
     }
+    function mergeCurrencies(a, b) {
+        const r = Object.assign({}, a);
+        for (const cur in b) { r[cur] = Math.round(((r[cur] || 0) + b[cur]) * 100) / 100; }
+        return r;
+    }
+    function convertProceeds(byCurrency) {
+        const audRate = (rates && rates['AUD']) || 1.55;
+        let usd = 0;
+        for (const currency in byCurrency) {
+            const amount = byCurrency[currency];
+            usd += currency === 'USD' ? amount : (rates && rates[currency] ? amount / rates[currency] : 0);
+        }
+        return { proceeds_usd: Math.round(usd * 100) / 100, proceeds_aud: Math.round(usd * audRate * 100) / 100 };
+    }
+    function sumReports(reports) {
+        return reports.reduce(function(a, r) {
+            return { units: a.units + r.units, proceeds_by_currency: mergeCurrencies(a.proceeds_by_currency, r.proceeds_by_currency) };
+        }, { units: 0, proceeds_by_currency: {} });
+    }
+    const empty = { units: 0, proceeds_by_currency: {} };
 
     // Fetch last 7 daily reports for 1d and 7d windows
     const daily = [];
     for (let i = 1; i <= 7; i++) {
         try {
-            daily.push(await fetchAppleReport(jwt, dateStr(i), 'DAILY') || { units: 0, proceeds: 0 });
+            daily.push(await fetchAppleReport(jwt, dateStr(i), 'DAILY') || empty);
         } catch (e) {
             console.error('Apple daily d-' + i + ':', e.message);
-            daily.push({ units: 0, proceeds: 0 });
+            daily.push(empty);
         }
     }
-    result['1d'] = daily[0];
-    result['7d'] = daily.reduce(function(a, r) { return { units: a.units + r.units, proceeds: Math.round((a.proceeds + r.proceeds) * 100) / 100 }; }, { units: 0, proceeds: 0 });
+    const d1 = daily[0];
+    result['1d'] = Object.assign({ units: d1.units }, convertProceeds(d1.proceeds_by_currency));
+    const d7 = sumReports(daily);
+    result['7d'] = Object.assign({ units: d7.units }, convertProceeds(d7.proceeds_by_currency));
 
     // Fetch monthly reports for 30d, 90d, FY
     async function getMonth(m) {
         if (monthlyCache[m] !== undefined) return monthlyCache[m];
         try {
-            monthlyCache[m] = await fetchAppleReport(jwt, m, 'MONTHLY') || { units: 0, proceeds: 0 };
+            monthlyCache[m] = await fetchAppleReport(jwt, m, 'MONTHLY') || empty;
         } catch (e) {
             console.error('Apple monthly ' + m + ':', e.message);
-            monthlyCache[m] = { units: 0, proceeds: 0 };
+            monthlyCache[m] = empty;
         }
         return monthlyCache[m];
     }
-    function sumMonths(months) {
-        return months.reduce(function(a, r) { return { units: a.units + r.units, proceeds: Math.round((a.proceeds + r.proceeds) * 100) / 100 }; }, { units: 0, proceeds: 0 });
-    }
 
     const m30 = await Promise.all([getMonth(monthStr(0)), getMonth(monthStr(1))]);
-    result['30d'] = sumMonths(m30);
+    const s30 = sumReports(m30);
+    result['30d'] = Object.assign({ units: s30.units }, convertProceeds(s30.proceeds_by_currency));
 
     const m90 = await Promise.all([getMonth(monthStr(0)), getMonth(monthStr(1)), getMonth(monthStr(2)), getMonth(monthStr(3))]);
-    result['90d'] = sumMonths(m90);
+    const s90 = sumReports(m90);
+    result['90d'] = Object.assign({ units: s90.units }, convertProceeds(s90.proceeds_by_currency));
 
     const now = new Date();
     const fyStartYear = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
@@ -133,7 +169,8 @@ async function fetchApple() {
         fyMonths.push(d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0'));
     }
     const fyData = await Promise.all(fyMonths.map(getMonth));
-    result['fy'] = sumMonths(fyData);
+    const sfy = sumReports(fyData);
+    result['fy'] = Object.assign({ units: sfy.units }, convertProceeds(sfy.proceeds_by_currency));
 
     return result;
 }
@@ -311,9 +348,26 @@ async function main() {
         }
     }
 
+    let exchangeRates = {};
+    try {
+        exchangeRates = await fetchExchangeRates();
+        stats.exchange_rates = exchangeRates;
+    } catch (e) {
+        console.error('Exchange rates error:', e.message);
+    }
+
+    if (exchangeRates['AUD']) {
+        for (const key of Object.keys(stats.lemonsqueezy)) {
+            const ls = stats.lemonsqueezy[key];
+            if (ls && ls.revenue != null) {
+                ls.revenue_aud = Math.round(ls.revenue * exchangeRates['AUD'] * 100) / 100;
+            }
+        }
+    }
+
     if (APPLE_KEY_ID && APPLE_ISSUER_ID && APPLE_VENDOR_NUMBER && APPLE_PRIVATE_KEY) {
         try {
-            stats.apple = await fetchApple();
+            stats.apple = await fetchApple(exchangeRates);
         } catch (e) {
             console.error('Apple error:', e.message);
             for (const key of ['1d', '7d', '30d', '90d', 'fy']) {

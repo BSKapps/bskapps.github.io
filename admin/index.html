@@ -470,6 +470,9 @@
                 <button class="range-btn" data-range="30" onclick="setRange(30, this)">30d</button>
                 <button class="range-btn" data-range="90" onclick="setRange(90, this)">90d</button>
                 <button class="range-btn" data-range="fy" onclick="setRange('fy', this)">FY</button>
+                <span style="color:#333; margin:0 4px;">|</span>
+                <button class="range-btn currency-btn active" id="cur-usd" onclick="setCurrency('USD', this)">USD</button>
+                <button class="range-btn currency-btn" id="cur-aud" onclick="setCurrency('AUD', this)">AUD</button>
             </div>
         </div>
         <div id="stats-grid" class="stats-grid">
@@ -491,12 +494,12 @@
             <div class="stat-box highlight revenue">
                 <div class="stat-label" id="label-revenue">Sales Revenue</div>
                 <div class="stat-value" id="stat-revenue">--</div>
-                <div class="stat-sub">LemonSqueezy</div>
+                <div class="stat-sub" id="stat-revenue-sub">LemonSqueezy</div>
             </div>
             <div class="stat-box highlight revenue">
                 <div class="stat-label" id="label-apple">Apple IAP</div>
                 <div class="stat-value" id="stat-apple">--</div>
-                <div class="stat-sub">App Store (multi-cur)</div>
+                <div class="stat-sub" id="stat-apple-sub">App Store</div>
             </div>
             <div class="stat-box highlight">
                 <div class="stat-label">Conversion</div>
@@ -646,6 +649,7 @@ async function init() {
     renderForm();
     restoreTab();
     restoreRange();
+    restoreCurrency();
     loadApiKeys();
 }
 
@@ -1047,6 +1051,71 @@ function makeArticleBodyField(label, key) {
 
 let currentRange = 1;
 let currentKey = '1d';
+let currentCurrency = 'USD';
+let cachedStats = null;
+
+function setCurrency(cur, btn) {
+    currentCurrency = cur;
+    localStorage.setItem('bsk_currency', cur);
+    document.querySelectorAll('.currency-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    displayStats();
+}
+
+function restoreCurrency() {
+    const saved = localStorage.getItem('bsk_currency') || 'USD';
+    currentCurrency = saved;
+    const btn = document.getElementById('cur-' + saved.toLowerCase());
+    if (btn) {
+        document.querySelectorAll('.currency-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+    }
+}
+
+function displayStats() {
+    if (!cachedStats) return;
+    const stats = cachedStats;
+    const key = currentKey;
+    const isFy = key === 'fy';
+    const ordersLabelSuffix = isFy ? 'FY' : currentRange + 'd';
+    const updated = stats.updated ? new Date(stats.updated).toLocaleString() : '';
+
+    const cf = stats.cloudflare && stats.cloudflare[key];
+    if (cf && !cf.error) {
+        document.getElementById('stat-visits').textContent = cf.visits.toLocaleString();
+        document.getElementById('stat-pageviews').textContent = cf.pageviews.toLocaleString();
+        document.getElementById('stat-visits-err').textContent = 'Cloudflare';
+        if (updated) document.getElementById('stats-updated').textContent = 'Updated ' + updated;
+    } else {
+        document.getElementById('stat-visits').textContent = cf ? cf.error : '--';
+    }
+
+    const ls = stats.lemonsqueezy && stats.lemonsqueezy[key];
+    if (ls && !ls.error) {
+        const lsRevenue = currentCurrency === 'AUD' ? ls.revenue_aud : ls.revenue;
+        document.getElementById('stat-orders').textContent = ls.orders;
+        document.getElementById('stat-orders-err').textContent = 'LemonSqueezy';
+        document.getElementById('stat-revenue').textContent = lsRevenue != null ? '$' + lsRevenue.toFixed(2) : '$0.00';
+        document.getElementById('label-revenue').textContent = 'LS Revenue ' + currentCurrency + ' (' + ordersLabelSuffix + ')';
+        document.getElementById('stat-revenue-sub').textContent = 'LemonSqueezy · ' + currentCurrency;
+        if (cf && cf.visits > 0) {
+            document.getElementById('stat-conversion').textContent = ((ls.orders / cf.visits) * 100).toFixed(2) + '%';
+        }
+    } else {
+        document.getElementById('stat-orders').textContent = ls ? ls.error : '--';
+        document.getElementById('stat-revenue').textContent = '--';
+    }
+
+    const apple = stats.apple && stats.apple[key];
+    if (apple && !apple.error) {
+        const appleRevenue = currentCurrency === 'AUD' ? apple.proceeds_aud : apple.proceeds_usd;
+        document.getElementById('stat-apple').textContent = appleRevenue != null ? '$' + appleRevenue.toFixed(2) : '$0.00';
+        document.getElementById('label-apple').textContent = 'Apple IAP ' + currentCurrency + ' (' + ordersLabelSuffix + ')';
+        document.getElementById('stat-apple-sub').textContent = 'App Store · ' + currentCurrency;
+    } else {
+        document.getElementById('stat-apple').textContent = apple ? (apple.error || '--') : '--';
+    }
+}
 
 function fyDays() {
     const now = new Date();
@@ -1164,8 +1233,8 @@ async function loadStats() {
     const key = currentKey;
     const cfDays = Math.min(days, 90);
     const isFy = key === 'fy';
-    const ordersLabelSuffix = isFy ? 'FY' : days + 'd';
     const cfLabelSuffix = isFy ? 'FY, capped 90d' : cfDays + 'd';
+    const ordersLabelSuffix = isFy ? 'FY' : days + 'd';
 
     document.getElementById('label-visits').textContent = 'Visits (' + cfLabelSuffix + ')';
     document.getElementById('label-pageviews').textContent = 'Page Views (' + cfLabelSuffix + ')';
@@ -1179,42 +1248,8 @@ async function loadStats() {
             return;
         }
         const file = await res.json();
-        const stats = JSON.parse(atob(file.content.replace(/\n/g, '')));
-
-        const cf = stats.cloudflare && stats.cloudflare[key];
-        const ls = stats.lemonsqueezy && stats.lemonsqueezy[key];
-        const updated = stats.updated ? new Date(stats.updated).toLocaleString() : '';
-
-        if (cf && !cf.error) {
-            document.getElementById('stat-visits').textContent = cf.visits.toLocaleString();
-            document.getElementById('stat-pageviews').textContent = cf.pageviews.toLocaleString();
-            document.getElementById('stat-visits-err').textContent = 'Cloudflare';
-            if (updated) document.getElementById('stats-updated').textContent = 'Updated ' + updated;
-        } else {
-            document.getElementById('stat-visits').textContent = cf ? cf.error : '--';
-        }
-
-        if (ls && !ls.error) {
-            document.getElementById('stat-orders').textContent = ls.orders;
-            document.getElementById('stat-orders-err').textContent = 'LemonSqueezy';
-            document.getElementById('stat-revenue').textContent = ls.revenue ? '$' + ls.revenue.toFixed(2) : '$0.00';
-            document.getElementById('label-revenue').textContent = 'Sales Revenue (' + ordersLabelSuffix + ')';
-            if (cf && cf.visits > 0) {
-                document.getElementById('stat-conversion').textContent = ((ls.orders / cf.visits) * 100).toFixed(2) + '%';
-            }
-        } else {
-            document.getElementById('stat-orders').textContent = ls ? ls.error : '--';
-            document.getElementById('stat-revenue').textContent = '--';
-        }
-
-        const apple = stats.apple && stats.apple[key];
-        if (apple && !apple.error) {
-            document.getElementById('stat-apple').textContent = apple.proceeds != null ? '$' + apple.proceeds.toFixed(2) : '$0.00';
-            document.getElementById('label-apple').textContent = 'Apple IAP (' + ordersLabelSuffix + ')';
-        } else {
-            document.getElementById('stat-apple').textContent = apple ? (apple.error || '--') : '--';
-        }
-
+        cachedStats = JSON.parse(atob(file.content.replace(/\n/g, '')));
+        displayStats();
     } catch (e) {
         document.getElementById('stat-visits').textContent = 'Error';
         document.getElementById('stat-visits-err').textContent = e.message;
