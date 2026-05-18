@@ -83,6 +83,7 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
         const price = (customerPriceIdx >= 0 ? parseFloat(cols[customerPriceIdx]) : 0) || 0;
         salesByCurrency[salesCur] = (salesByCurrency[salesCur] || 0) + price * u;
     }
+    console.log('Apple raw proceeds_by_currency:', JSON.stringify(proceedsByCurrency), 'sales_by_currency:', JSON.stringify(salesByCurrency));
     return { units, proceeds_by_currency: proceedsByCurrency, sales_by_currency: salesByCurrency };
 }
 
