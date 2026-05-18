@@ -97,12 +97,12 @@ async function fetchApple(rates) {
 
     function dateStr(daysAgo) {
         const d = new Date(Date.now() - daysAgo * 86400000);
-        return d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
+        return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
     }
     function monthStr(monthsAgo) {
         const now = new Date();
         const d = new Date(now.getFullYear(), now.getMonth() - monthsAgo, 1);
-        return d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0');
+        return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
     }
     function mergeCurrencies(a, b) {
         const r = Object.assign({}, a);
