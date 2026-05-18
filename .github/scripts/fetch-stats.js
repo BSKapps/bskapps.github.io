@@ -89,8 +89,8 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
 
 async function fetchExchangeRates() {
     const res = await request({
-        hostname: 'www.frankfurter.app',
-        path: '/latest?from=USD',
+        hostname: 'open.er-api.com',
+        path: '/v6/latest/USD',
         method: 'GET',
         headers: {}
     });
