@@ -62,21 +62,29 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
         zlib.gunzip(res.buffer, function(e, r) { if (e) reject(e); else resolve(r.toString('utf8')); });
     });
     const lines = tsv.split('\n').filter(function(l) { return l.trim(); });
-    if (lines.length < 2) return { units: 0, proceeds: 0 };
+    if (lines.length < 2) return { units: 0, proceeds_by_currency: {}, sales_by_currency: {} };
     const headers = lines[0].split('\t');
     const unitsIdx = headers.indexOf('Units');
     const proceedsIdx = headers.indexOf('Developer Proceeds');
     const currencyIdx = headers.indexOf('Currency of Proceeds');
+    const customerPriceIdx = headers.indexOf('Customer Price');
+    const customerCurrencyIdx = headers.indexOf('Customer Currency');
     let units = 0;
     const proceedsByCurrency = {};
+    const salesByCurrency = {};
     for (let i = 1; i < lines.length; i++) {
         const cols = lines[i].split('\t');
-        units += parseInt(cols[unitsIdx]) || 0;
-        const currency = cols[currencyIdx] || 'USD';
-        const amount = parseFloat(cols[proceedsIdx]) || 0;
-        proceedsByCurrency[currency] = Math.round(((proceedsByCurrency[currency] || 0) + amount) * 100) / 100;
+        const u = parseInt(cols[unitsIdx]) || 0;
+        units += u;
+        const proceedsCur = cols[currencyIdx] || 'USD';
+        const proceeds = parseFloat(cols[proceedsIdx]) || 0;
+        proceedsByCurrency[proceedsCur] = Math.round(((proceedsByCurrency[proceedsCur] || 0) + proceeds) * 100) / 100;
+        const salesCur = (customerCurrencyIdx >= 0 && cols[customerCurrencyIdx]) || 'USD';
+        const price = (customerPriceIdx >= 0 ? parseFloat(cols[customerPriceIdx]) : 0) || 0;
+        const sale = price * u;
+        salesByCurrency[salesCur] = Math.round(((salesByCurrency[salesCur] || 0) + sale) * 100) / 100;
     }
-    return { units, proceeds_by_currency: proceedsByCurrency };
+    return { units, proceeds_by_currency: proceedsByCurrency, sales_by_currency: salesByCurrency };
 }
 
 async function fetchExchangeRates() {
@@ -109,21 +117,36 @@ async function fetchApple(rates) {
         for (const cur in b) { r[cur] = Math.round(((r[cur] || 0) + b[cur]) * 100) / 100; }
         return r;
     }
-    function convertProceeds(byCurrency) {
-        const audRate = (rates && rates['AUD']) || 1.55;
+    function toUsd(byCurrency) {
         let usd = 0;
         for (const currency in byCurrency) {
             const amount = byCurrency[currency];
             usd += currency === 'USD' ? amount : (rates && rates[currency] ? amount / rates[currency] : 0);
         }
-        return { proceeds_usd: Math.round(usd * 100) / 100, proceeds_aud: Math.round(usd * audRate * 100) / 100 };
+        return Math.round(usd * 100) / 100;
+    }
+    function convertAmounts(r) {
+        const audRate = (rates && rates['AUD']) || 1.55;
+        const salesUsd = toUsd(r.sales_by_currency);
+        const proceedsUsd = toUsd(r.proceeds_by_currency);
+        return {
+            units: r.units,
+            sales_usd: salesUsd,
+            sales_aud: Math.round(salesUsd * audRate * 100) / 100,
+            proceeds_usd: proceedsUsd,
+            proceeds_aud: Math.round(proceedsUsd * audRate * 100) / 100
+        };
     }
     function sumReports(reports) {
         return reports.reduce(function(a, r) {
-            return { units: a.units + r.units, proceeds_by_currency: mergeCurrencies(a.proceeds_by_currency, r.proceeds_by_currency) };
-        }, { units: 0, proceeds_by_currency: {} });
+            return {
+                units: a.units + r.units,
+                proceeds_by_currency: mergeCurrencies(a.proceeds_by_currency, r.proceeds_by_currency),
+                sales_by_currency: mergeCurrencies(a.sales_by_currency, r.sales_by_currency)
+            };
+        }, { units: 0, proceeds_by_currency: {}, sales_by_currency: {} });
     }
-    const empty = { units: 0, proceeds_by_currency: {} };
+    const empty = { units: 0, proceeds_by_currency: {}, sales_by_currency: {} };
 
     // Fetch last 7 daily reports for 1d and 7d windows
     const daily = [];
@@ -135,12 +158,10 @@ async function fetchApple(rates) {
             daily.push(empty);
         }
     }
-    const d1 = daily[0];
-    result['1d'] = Object.assign({ units: d1.units }, convertProceeds(d1.proceeds_by_currency));
-    const d7 = sumReports(daily);
-    result['7d'] = Object.assign({ units: d7.units }, convertProceeds(d7.proceeds_by_currency));
+    result['1d'] = convertAmounts(daily[0]);
+    result['7d'] = convertAmounts(sumReports(daily));
 
-    // Fetch monthly reports for 30d, 90d, FY
+    // Fetch monthly reports for prior complete months
     async function getMonth(m) {
         if (monthlyCache[m] !== undefined) return monthlyCache[m];
         try {
@@ -152,25 +173,40 @@ async function fetchApple(rates) {
         return monthlyCache[m];
     }
 
-    const m30 = await Promise.all([getMonth(monthStr(0)), getMonth(monthStr(1))]);
-    const s30 = sumReports(m30);
-    result['30d'] = Object.assign({ units: s30.units }, convertProceeds(s30.proceeds_by_currency));
-
-    const m90 = await Promise.all([getMonth(monthStr(0)), getMonth(monthStr(1)), getMonth(monthStr(2)), getMonth(monthStr(3))]);
-    const s90 = sumReports(m90);
-    result['90d'] = Object.assign({ units: s90.units }, convertProceeds(s90.proceeds_by_currency));
-
+    // Current month daily reports (supplements monthly data since current month has no monthly report yet)
     const now = new Date();
+    const dayOfMonth = now.getDate();
+    const currentMonthDaily = daily.slice(0, Math.min(7, dayOfMonth - 1));
+    for (let i = 8; i < dayOfMonth; i++) {
+        try {
+            currentMonthDaily.push(await fetchAppleReport(jwt, dateStr(i), 'DAILY') || empty);
+        } catch (e) {
+            console.error('Apple daily d-' + i + ':', e.message);
+            currentMonthDaily.push(empty);
+        }
+    }
+    const currentMonthSum = sumReports(currentMonthDaily);
+
+    const m30 = await Promise.all([getMonth(monthStr(1)), getMonth(monthStr(2))]);
+    const s30 = sumReports(m30.concat([currentMonthSum]));
+    result['30d'] = convertAmounts(s30);
+
+    const m90 = await Promise.all([getMonth(monthStr(1)), getMonth(monthStr(2)), getMonth(monthStr(3)), getMonth(monthStr(4))]);
+    const s90 = sumReports(m90.concat([currentMonthSum]));
+    result['90d'] = convertAmounts(s90);
+
     const fyStartYear = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
     const fyMonths = [];
     for (let m = 6; m <= 17; m++) {
         const d = new Date(fyStartYear, m, 1);
         if (d > now) break;
-        fyMonths.push(d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0'));
+        // skip current month — covered by currentMonthSum
+        if (d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth()) continue;
+        fyMonths.push(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'));
     }
     const fyData = await Promise.all(fyMonths.map(getMonth));
-    const sfy = sumReports(fyData);
-    result['fy'] = Object.assign({ units: sfy.units }, convertProceeds(sfy.proceeds_by_currency));
+    const sfy = sumReports(fyData.concat([currentMonthSum]));
+    result['fy'] = convertAmounts(sfy);
 
     return result;
 }
@@ -232,7 +268,11 @@ async function fetchLS(days) {
     });
     const orders = recent.length;
     const revenue = recent.reduce(function(a, o) { return a + (o.attributes.total / 100); }, 0);
-    return { orders, revenue: Math.round(revenue * 100) / 100 };
+    const net_revenue_usd = recent.reduce(function(a, o) {
+        const net = o.attributes.revenue_usd != null ? o.attributes.revenue_usd : o.attributes.total;
+        return a + (net / 100);
+    }, 0);
+    return { orders, revenue: Math.round(revenue * 100) / 100, net_revenue_usd: Math.round(net_revenue_usd * 100) / 100 };
 }
 
 async function getGoogleAccessToken() {
@@ -361,6 +401,9 @@ async function main() {
             const ls = stats.lemonsqueezy[key];
             if (ls && ls.revenue != null) {
                 ls.revenue_aud = Math.round(ls.revenue * exchangeRates['AUD'] * 100) / 100;
+            }
+            if (ls && ls.net_revenue_usd != null) {
+                ls.net_revenue_aud = Math.round(ls.net_revenue_usd * exchangeRates['AUD'] * 100) / 100;
             }
         }
     }

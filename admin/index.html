@@ -492,14 +492,16 @@
                 <div class="stat-sub" id="stat-orders-err"></div>
             </div>
             <div class="stat-box highlight revenue">
-                <div class="stat-label" id="label-revenue">Sales Revenue</div>
+                <div class="stat-label" id="label-revenue">LS Gross Revenue</div>
                 <div class="stat-value" id="stat-revenue">--</div>
                 <div class="stat-sub" id="stat-revenue-sub">LemonSqueezy</div>
+                <div class="stat-sub" id="stat-revenue-net" style="margin-top:2px;">Net: --</div>
             </div>
             <div class="stat-box highlight revenue">
-                <div class="stat-label" id="label-apple">Apple IAP</div>
+                <div class="stat-label" id="label-apple">Apple Sales</div>
                 <div class="stat-value" id="stat-apple">--</div>
                 <div class="stat-sub" id="stat-apple-sub">App Store</div>
+                <div class="stat-sub" id="stat-apple-proceeds" style="margin-top:2px;">Proceeds: --</div>
             </div>
             <div class="stat-box highlight">
                 <div class="stat-label">Conversion</div>
@@ -1109,32 +1111,44 @@ function displayStats() {
         } else {
             lsRevenue = ls.revenue;
         }
+        let lsNetRevenue;
+        if (currentCurrency === 'AUD') {
+            lsNetRevenue = ls.net_revenue_aud != null ? ls.net_revenue_aud : (ls.net_revenue_usd != null ? Math.round(ls.net_revenue_usd * audRate * 100) / 100 : null);
+        } else {
+            lsNetRevenue = ls.net_revenue_usd;
+        }
         document.getElementById('stat-orders').textContent = ls.orders;
         document.getElementById('stat-orders-err').textContent = 'LemonSqueezy';
         document.getElementById('stat-revenue').textContent = lsRevenue != null ? '$' + lsRevenue.toFixed(2) : '$0.00';
-        document.getElementById('label-revenue').textContent = 'LS Revenue ' + currentCurrency + ' (' + ordersLabelSuffix + ')';
+        document.getElementById('label-revenue').textContent = 'LS Gross ' + currentCurrency + ' (' + ordersLabelSuffix + ')';
         document.getElementById('stat-revenue-sub').textContent = 'LemonSqueezy · ' + currentCurrency;
+        document.getElementById('stat-revenue-net').textContent = 'Net: ' + (lsNetRevenue != null ? '$' + lsNetRevenue.toFixed(2) : '--');
         if (cf && cf.visits > 0) {
             document.getElementById('stat-conversion').textContent = ((ls.orders / cf.visits) * 100).toFixed(2) + '%';
         }
     } else {
         document.getElementById('stat-orders').textContent = ls ? ls.error : '--';
         document.getElementById('stat-revenue').textContent = '--';
+        document.getElementById('stat-revenue-net').textContent = 'Net: --';
     }
 
     const apple = stats.apple && stats.apple[key];
     if (apple && !apple.error) {
-        let appleRevenue;
+        let appleSales, appleProceeds;
         if (currentCurrency === 'AUD') {
-            appleRevenue = apple.proceeds_aud != null ? apple.proceeds_aud : (apple.proceeds_usd != null ? Math.round(apple.proceeds_usd * audRate * 100) / 100 : null);
+            appleSales = apple.sales_aud != null ? apple.sales_aud : (apple.sales_usd != null ? Math.round(apple.sales_usd * audRate * 100) / 100 : null);
+            appleProceeds = apple.proceeds_aud != null ? apple.proceeds_aud : (apple.proceeds_usd != null ? Math.round(apple.proceeds_usd * audRate * 100) / 100 : null);
         } else {
-            appleRevenue = apple.proceeds_usd;
+            appleSales = apple.sales_usd;
+            appleProceeds = apple.proceeds_usd;
         }
-        document.getElementById('stat-apple').textContent = appleRevenue != null ? '$' + appleRevenue.toFixed(2) : '$0.00';
-        document.getElementById('label-apple').textContent = 'Apple IAP ' + currentCurrency + ' (' + ordersLabelSuffix + ')';
+        document.getElementById('stat-apple').textContent = appleSales != null ? '$' + appleSales.toFixed(2) : '$0.00';
+        document.getElementById('label-apple').textContent = 'Apple Sales ' + currentCurrency + ' (' + ordersLabelSuffix + ')';
         document.getElementById('stat-apple-sub').textContent = 'App Store · ' + currentCurrency;
+        document.getElementById('stat-apple-proceeds').textContent = 'Proceeds: ' + (appleProceeds != null ? '$' + appleProceeds.toFixed(2) : '--');
     } else {
         document.getElementById('stat-apple').textContent = apple ? (apple.error || '--') : '--';
+        document.getElementById('stat-apple-proceeds').textContent = 'Proceeds: --';
     }
 }
 
