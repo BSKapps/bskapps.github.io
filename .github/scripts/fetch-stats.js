@@ -64,13 +64,11 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
     const lines = tsv.split('\n').filter(function(l) { return l.trim(); });
     if (lines.length < 2) return { units: 0, proceeds_by_currency: {}, sales_by_currency: {} };
     const headers = lines[0].split('\t');
-    console.log('Apple TSV headers:', JSON.stringify(headers));
     const unitsIdx = headers.indexOf('Units');
     const proceedsIdx = headers.indexOf('Developer Proceeds');
     const currencyIdx = headers.indexOf('Currency of Proceeds');
     const customerPriceIdx = headers.indexOf('Customer Price');
     const customerCurrencyIdx = headers.indexOf('Customer Currency');
-    console.log('Apple col indices: units=' + unitsIdx + ' proceeds=' + proceedsIdx + ' currency=' + currencyIdx + ' price=' + customerPriceIdx + ' custCur=' + customerCurrencyIdx);
     let units = 0;
     const proceedsByCurrency = {};
     const salesByCurrency = {};
@@ -91,7 +89,7 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
 
 async function fetchExchangeRates() {
     const res = await request({
-        hostname: 'api.frankfurter.app',
+        hostname: 'www.frankfurter.app',
         path: '/latest?from=USD',
         method: 'GET',
         headers: {}
@@ -264,7 +262,6 @@ async function fetchLS(days) {
     });
 
     if (res.status !== 200) throw new Error('LS API error: ' + res.status);
-    if (res.body.data && res.body.data[0]) console.log('LS order keys:', Object.keys(res.body.data[0].attributes).join(', '));
     const cutoff = new Date(Date.now() - days * 86400000);
     const recent = res.body.data.filter(function(o) {
         return new Date(o.attributes.created_at) >= cutoff && o.attributes.status === 'paid';
@@ -272,8 +269,7 @@ async function fetchLS(days) {
     const orders = recent.length;
     const revenue = recent.reduce(function(a, o) { return a + (o.attributes.total / 100); }, 0);
     const net_revenue_usd = recent.reduce(function(a, o) {
-        const net = o.attributes.revenue_usd != null ? o.attributes.revenue_usd : o.attributes.total;
-        return a + (net / 100);
+        return a + ((o.attributes.total_usd - (o.attributes.tax_usd || 0)) / 100);
     }, 0);
     return { orders, revenue: Math.round(revenue * 100) / 100, net_revenue_usd: Math.round(net_revenue_usd * 100) / 100 };
 }
