@@ -1281,23 +1281,17 @@ async function loadStats() {
     const cfLabelSuffix = isFy ? 'FY, capped 90d' : cfDays + 'd';
     const ordersLabelSuffix = isFy ? 'FY' : days + 'd';
 
-    document.getElementById('label-visits').textContent = 'Visits (' + cfLabelSuffix + ')';
-    document.getElementById('label-pageviews').textContent = 'Page Views (' + cfLabelSuffix + ')';
-    document.getElementById('label-orders').textContent = 'Orders (' + ordersLabelSuffix + ')';
-
     try {
         const res = await ghFetch('GET', 'repos/' + STATS_REPO + '/contents/stats.json');
         if (!res.ok) {
             document.getElementById('stat-visits').textContent = 'No data yet';
-            document.getElementById('stat-visits-err').textContent = 'Run the GitHub Action first';
             return;
         }
         const file = await res.json();
         cachedStats = JSON.parse(atob(file.content.replace(/\n/g, '')));
         displayStats();
     } catch (e) {
-        document.getElementById('stat-visits').textContent = 'Error';
-        document.getElementById('stat-visits-err').textContent = e.message;
+        document.getElementById('stat-visits').textContent = 'Error: ' + e.message;
     }
 }
 
