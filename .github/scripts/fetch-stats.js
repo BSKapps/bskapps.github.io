@@ -264,6 +264,7 @@ async function fetchLS(days) {
     });
 
     if (res.status !== 200) throw new Error('LS API error: ' + res.status);
+    if (res.body.data && res.body.data[0]) console.log('LS order keys:', Object.keys(res.body.data[0].attributes).join(', '));
     const cutoff = new Date(Date.now() - days * 86400000);
     const recent = res.body.data.filter(function(o) {
         return new Date(o.attributes.created_at) >= cutoff && o.attributes.status === 'paid';
