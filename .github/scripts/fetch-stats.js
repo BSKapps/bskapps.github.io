@@ -64,11 +64,13 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
     const lines = tsv.split('\n').filter(function(l) { return l.trim(); });
     if (lines.length < 2) return { units: 0, proceeds_by_currency: {}, sales_by_currency: {} };
     const headers = lines[0].split('\t');
+    console.log('Apple TSV headers:', JSON.stringify(headers));
     const unitsIdx = headers.indexOf('Units');
     const proceedsIdx = headers.indexOf('Developer Proceeds');
     const currencyIdx = headers.indexOf('Currency of Proceeds');
     const customerPriceIdx = headers.indexOf('Customer Price');
     const customerCurrencyIdx = headers.indexOf('Customer Currency');
+    console.log('Apple col indices: units=' + unitsIdx + ' proceeds=' + proceedsIdx + ' currency=' + currencyIdx + ' price=' + customerPriceIdx + ' custCur=' + customerCurrencyIdx);
     let units = 0;
     const proceedsByCurrency = {};
     const salesByCurrency = {};
