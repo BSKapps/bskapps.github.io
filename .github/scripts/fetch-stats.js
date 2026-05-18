@@ -78,11 +78,10 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
         units += u;
         const proceedsCur = cols[currencyIdx] || 'USD';
         const proceeds = parseFloat(cols[proceedsIdx]) || 0;
-        proceedsByCurrency[proceedsCur] = Math.round(((proceedsByCurrency[proceedsCur] || 0) + proceeds) * 100) / 100;
+        proceedsByCurrency[proceedsCur] = (proceedsByCurrency[proceedsCur] || 0) + proceeds;
         const salesCur = (customerCurrencyIdx >= 0 && cols[customerCurrencyIdx]) || 'USD';
         const price = (customerPriceIdx >= 0 ? parseFloat(cols[customerPriceIdx]) : 0) || 0;
-        const sale = price * u;
-        salesByCurrency[salesCur] = Math.round(((salesByCurrency[salesCur] || 0) + sale) * 100) / 100;
+        salesByCurrency[salesCur] = (salesByCurrency[salesCur] || 0) + price * u;
     }
     return { units, proceeds_by_currency: proceedsByCurrency, sales_by_currency: salesByCurrency };
 }
@@ -114,7 +113,7 @@ async function fetchApple(rates) {
     }
     function mergeCurrencies(a, b) {
         const r = Object.assign({}, a);
-        for (const cur in b) { r[cur] = Math.round(((r[cur] || 0) + b[cur]) * 100) / 100; }
+        for (const cur in b) { r[cur] = (r[cur] || 0) + b[cur]; }
         return r;
     }
     function toUsd(byCurrency) {
