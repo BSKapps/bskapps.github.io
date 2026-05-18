@@ -273,7 +273,8 @@
         .stat-box .stat-value { font-size: 1.8rem; font-weight: 700; color: #fff; }
         .stat-box .stat-sub { font-size: 0.8rem; color: #444; margin-top: 4px; }
         .stat-box.highlight .stat-value { color: #7aff8a; }
-        .stat-box.revenue .stat-value { color: #ffd700; }
+        .stat-box.revenue .stat-value { color: #ffd700; font-size: 1.4rem; }
+        .stat-box.revenue .stat-value-secondary { font-size: 1.1rem; font-weight: 700; color: #ffd700; margin-top: 4px; }
 
         .analytics-row {
             display: flex;
@@ -495,13 +496,13 @@
                 <div class="stat-label" id="label-revenue">LS Gross Revenue</div>
                 <div class="stat-value" id="stat-revenue">--</div>
                 <div class="stat-sub" id="stat-revenue-sub">LemonSqueezy</div>
-                <div class="stat-sub" id="stat-revenue-net" style="margin-top:2px;">Net: --</div>
+                <div class="stat-value-secondary" id="stat-revenue-net">Net: --</div>
             </div>
             <div class="stat-box highlight revenue">
                 <div class="stat-label" id="label-apple">Apple Sales</div>
                 <div class="stat-value" id="stat-apple">--</div>
                 <div class="stat-sub" id="stat-apple-sub">App Store</div>
-                <div class="stat-sub" id="stat-apple-proceeds" style="margin-top:2px;">Proceeds: --</div>
+                <div class="stat-value-secondary" id="stat-apple-proceeds">Proceeds: --</div>
             </div>
             <div class="stat-box highlight">
                 <div class="stat-label">Conversion</div>
