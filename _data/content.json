@@ -24,8 +24,8 @@
       "tagline": "Let the assistant prep the cues. You run the show.",
       "price": "$14.99 USD",
       "macos": "macOS 14.0+",
-      "version": "v2.1",
-      "released": "7 May 2026",
+      "version": "v2.2",
+      "released": "29 May 2026",
       "features": [
         "LUFS normalisation and automatic level setting",
         "Mono routing, silence trimming, and cue numbering",
