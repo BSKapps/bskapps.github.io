@@ -24,12 +24,12 @@
       "tagline": "Let the assistant prep the cues. You run the show.",
       "price": "$14.99 USD",
       "macos": "macOS 14.0+",
-      "version": "v2.2",
+      "version": "v2.3",
       "released": "30 May 2026",
       "features": [
-        "LUFS normalisation and automatic level setting",
-        "Mono routing, silence trimming, and cue numbering",
-        "BPM and key detection with Camelot reordering"
+        "Mint - convert, clean, and edit cue audio in place",
+        "Auto multi-output routing by cue category",
+        "LUFS levels, mono routing, and cue numbering"
       ]
     },
     "targettrace": {

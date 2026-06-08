@@ -296,7 +296,7 @@
         <p class="outcome">{{ site.data.content.apps.labassistant.tagline }}</p>
 
         <p class="description">
-            Select your QLab cues, enable the modules you need, and hit Run All. Levels are auto-set to your LUFS target, mono routing and crosspoint outputs are configured, silence is trimmed, and cues are numbered and colour-coded - in seconds. Mint adds standalone audio processing and file conversion on top. Built for QLab 5, licensed and free.
+            Select your QLab cues, enable the modules you need, and hit Run All. Levels are auto-set to your LUFS target, mono routing and crosspoint outputs are configured, silence is trimmed, and cues are numbered and colour-coded, in seconds. And when a cue needs more than a fader move, Mint converts, cleans, and edits the audio without leaving Lab Assistant. Built for QLab 5, licensed and free.
         </p>
 
         <video autoplay muted loop playsinline style="width:100%; border-radius:16px; border:1px solid #2a2a2a; display:block; margin-bottom:24px;">
@@ -320,19 +320,31 @@
         <div id="gallery-counter" style="text-align:center; color:#666; font-size:0.8rem; margin-bottom:24px;">1 of 7</div>
 
         <div class="section">
+            <h2>Mint Audio Converter &amp; Editor</h2>
+            <p style="color: #bbb; margin-bottom: 16px;">Built into Lab Assistant. Select cues in your QLab workspace and Mint converts, cleans, and edits the underlying audio. The results drop straight back into QLab.</p>
+            <ul class="features">
+                <li><strong>Convert.</strong> Read WAV, AIFF, MP3, AAC, FLAC, OGG, and M4A; export WAV, AIFF, MP3, AAC, or FLAC at sample rates up to 96 kHz and 16, 24, or 32-bit float</li>
+                <li><strong>Extract from video.</strong> Pull the audio out of MP4, MOV, MKV, AVI, and WebM files</li>
+                <li><strong>Edit &amp; clean.</strong> 7-band EQ, LUFS normalisation, noise removal, fade in/out, trim, and gain, baked into the file (QLab crosspoints remain the non-destructive option)</li>
+                <li><strong>Preview.</strong> Audition changes through any output device, with adjustable preview length and a dedicated fade preview before you commit</li>
+                <li><strong>Batch.</strong> Process your whole cue selection in one pass</li>
+            </ul>
+        </div>
+
+        <div class="section">
             <h2>Processing Modules</h2>
             <ul class="features">
-                <li><strong>Mint</strong> - Standalone audio processing: normalisation, 7-band EQ, noise removal, fade in/out, trim, format conversion, and audio extraction from video</li>
-                <li><strong>Levels</strong> - Measure integrated LUFS and set QLab fader levels to normalise audio. Four broadcast targets (-24, -23, -18, -14 LUFS), optional -10 dB offset, and reset mode</li>
-                <li><strong>Mono Routing</strong> - Set mono cues to dual mono, sum stereo to dual mono, or reset routing to defaults</li>
-                <li><strong>Top &amp; Tail</strong> - Detect silence at the start and end of audio cues and set trim points with configurable padding</li>
-                <li><strong>Musical Intelligence</strong> - Detect BPM and musical key, then sort cues by Camelot wheel for smooth transitions</li>
-                <li><strong>Colour Code</strong> - Customisable colour map for audio, video, and group cues based on type, channels, and status</li>
-                <li><strong>Cue Numbering</strong> - Add missing numbers, renumber sequentially, group sub-numbers, or clear all</li>
-                <li><strong>Fade &amp; Stop</strong> - Insert fade and stop cues for the same group or entire cue list</li>
-                <li><strong>Continue Mode</strong> - Set Do Not Continue, Auto-Continue, or Auto-Follow on selected cues</li>
-                <li><strong>Notes</strong> - Write processing results to QLab cue notes, or clear notes from selected cues</li>
-                <li>Auto-switches QLab to Edit mode to make changes, then restores Show mode</li>
+                <li><strong>Levels.</strong> Measure integrated LUFS and set QLab fader levels to normalise audio. Four broadcast targets (-24, -23, -18, -14 LUFS), optional -10 dB offset, and reset mode</li>
+                <li><strong>Mono Routing.</strong> Set mono cues to dual mono, sum stereo to dual mono, or reset routing to defaults</li>
+                <li><strong>Multi-Output Routing.</strong> Send cues to any output pair with dual-mono and stereo fold-down handled automatically, or let auto-classify sort Music, VOG, and FX to their own outputs in one pass</li>
+                <li><strong>Top &amp; Tail.</strong> Detect silence at the start and end of audio cues and set trim points with configurable padding, while respecting in and out points you've already set</li>
+                <li><strong>Musical Intelligence.</strong> Detect BPM and musical key, then sort cues by Camelot wheel for smooth transitions</li>
+                <li><strong>Colour Code.</strong> Customisable colour map for audio, video, and group cues based on type, channels, and status</li>
+                <li><strong>Cue Numbering.</strong> Add missing numbers, renumber sequentially, group sub-numbers, or clear all</li>
+                <li><strong>Fade &amp; Stop.</strong> Insert fade and stop cues for the same group or entire cue list</li>
+                <li><strong>Continue Mode.</strong> Set Do Not Continue, Auto-Continue, or Auto-Follow on selected cues</li>
+                <li><strong>Notes.</strong> Write processing results to QLab cue notes, or clear notes from selected cues</li>
+                <li><strong>Edit mode handled.</strong> No need to switch QLab to Edit mode first. Lab Assistant flips to Edit to make changes, then restores Show mode.</li>
             </ul>
         </div>
 
@@ -343,7 +355,7 @@
                 <li>QLab 5 users on the free or licensed version</li>
                 <li>AV techs running throw-and-go audio stings and playback for events</li>
                 <li>Corporate events, awards nights, and conference operators</li>
-                <li>Anyone who's spent too long manually setting QLab cue levels or fixing mono routing</li>
+                <li>Anyone who's spent too long manually setting QLab cue levels, fixing mono routing, or trimming silence</li>
             </ul>
         </div>
 
