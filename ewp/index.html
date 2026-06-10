@@ -45,9 +45,7 @@
 
         <p class="outcome">{{ site.data.content.apps.ewp.tagline }}</p>
 
-        <p class="description">
-            Select a screen, pick a layout, assign your apps - EWP arranges everything automatically. Drop clears your desktop when you need a clean screen.
-        </p>
+        <p class="description">{{ site.data.content.apps.ewp.description }}</p>
 
         <div class="buy-section">
             <a href="https://bskapps.lemonsqueezy.com/checkout/buy/c3235a75-6837-4d32-b495-a941806e9b90?dark=1&media=0&desc=0" class="buy-btn large lemonsqueezy-button" aria-label="Buy EWP for {{ site.data.content.apps.ewp.price }}">Buy - {{ site.data.content.apps.ewp.price }}</a>
@@ -70,14 +68,8 @@
         <div class="section">
             <h2>Features</h2>
             <ul class="features">
-                <li>Spotter panel - drag apps in and EWP auto-arranges them instantly</li>
-                <li>Lift and Drop - raise your layout or clear your desktop in one click</li>
-                <li>Emergency stop - closes EWP instantly when you need out</li>
-                <li>6 layout modes - fullscreen, halves, big left, big right, and 4-up quad</li>
-                <li>Save presets and recall your exact setup instantly</li>
-                <li>Lock presets to a specific screen or apply them anywhere</li>
-                <li>Multiple monitor support - configure each screen independently</li>
-                <li>Lives in the menu bar - out of your way until you need it</li>
+                {% for feature in site.data.content.apps.ewp.features %}<li>{{ feature }}</li>
+                {% endfor %}
             </ul>
         </div>
 

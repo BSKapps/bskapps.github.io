@@ -13,10 +13,23 @@
       "version": "v2.3",
       "released": "29 May 2026",
       "features": [
-        "IP presets and Network Locations - switch configs in one click",
-        "Live speed, SSID, and system info in the menu bar",
-        "LAN scanner, ping, and Speed Test built in "
-      ]
+        "Live download/upload speed per adapter",
+        "Switch between DHCP, Static IP, and saved presets in seconds",
+        "Set DNS servers per adapter - up to three, in priority order",
+        "Manage macOS Network Locations from the menu bar - create, rename, delete, and reorder services",
+        "Run a full LAN scan to see every device on your network - sized to the adapter's subnet mask, not just /24",
+        "Join Subnet - hop your adapter onto a scanned device's subnet in one click",
+        "Test your connection speed without leaving the menu bar",
+        "Dante and pro audio network readiness - MTU, multicast, link speed, duplex, and subnet overlap",
+        "System Info Panel - CPU, RAM, Wi-Fi signal and more",
+        "SSID and full Wi-Fi details at a glance",
+        "Monitor all network adapters - Wi-Fi, Ethernet, USB, Thunderbolt, iPhone tethering",
+        "Click to copy any IP, subnet, gateway, or MAC address",
+        "IP change notifications - know immediately when your connection changes",
+        "Colour-coded status dots for instant adapter state recognition",
+        "Run at Login for always-on monitoring"
+      ],
+      "description": "Everything you need to know about your network, one click away. Switch IP configs, run a speed test, scan the LAN, and check Dante readiness - without opening a terminal. Built for AV techs and IT professionals."
     },
     "labassistant": {
       "name": "Lab Assistant",
@@ -26,11 +39,7 @@
       "macos": "macOS 14.0+",
       "version": "v2.3",
       "released": "30 May 2026",
-      "features": [
-        "Mint - convert, clean, and edit cue audio in place",
-        "Auto multi-output routing by cue category",
-        "LUFS levels, mono routing, and cue numbering"
-      ]
+      "description": "Select your QLab cues, enable the modules you need, and hit Run All. Levels are auto-set to your LUFS target, mono routing and crosspoint outputs are configured, silence is trimmed, and cues are numbered and colour-coded, in seconds. And when a cue needs more than a fader move, Mint converts, cleans, and edits the audio without leaving Lab Assistant. Built for QLab 5, licensed and free."
     },
     "targettrace": {
       "name": "Target Trace",
@@ -41,10 +50,24 @@
       "version": "v1.0.1",
       "released": "30 May 2026",
       "features": [
-        "Drag-and-drop control point editing",
-        "Freehand draw mode",
-        "Export .crv files directly to Smaart"
-      ]
+        "Drag-and-drop control point editing with multi-select",
+        "Freehand draw mode with pencil cursor",
+        "Preset starting shapes - tilt, haystack, X-curve, and more",
+        "Simplify imported traces to clean editable curves",
+        "Transfer Function and Spectrum curve types",
+        "Convert any curve between TF and RTA and back, with no data loss",
+        "Split View - see your curve in both modes side by side",
+        "Z / A / C weighting filter for RTA view (IEC 61672)",
+        "Tolerance band overlay",
+        "Non-destructive smoothing (1, 1/3, 1/6, 1/12 octave)",
+        "Curve library with TF / Spectrum filter and drag-to-reorder (syncs Smaart's index)",
+        "Match Mode - sidebar follows your active TF / RTA tab",
+        "X and Y axis zoom with scroll, pinch, and keyboard",
+        "Save directly to Smaart TargetCurves folder",
+        "Drag a .crv file into Target Trace to open it",
+        "Export as REW house curve"
+      ],
+      "description": "Build target curves from presets, draw them freehand, or import and reshape your own measurements. Target Trace gives you a visual editor for Smaart .crv files with drag-and-drop control points, tolerance bands, and one-click export back to Smaart or REW."
     },
     "fetchpuppy": {
       "name": "Fetch Puppy",
@@ -56,9 +79,15 @@
       "released": "7 May 2026",
       "features": [
         "Search and save from YouTube without ads",
-        "Drag in a Spotify or Apple Music playlist - Download tracks or music videos ",
-        "Save videos from TikTok, Instagram, X, Facebook, Reddit and more"
-      ]
+        "Multi-source search with smart quality scoring",
+        "Preview search results before saving",
+        "Drag in a Spotify or Apple Music playlist - find every track automatically",
+        "Find and save music videos for an entire Spotify or Apple Music playlist",
+        "Save videos from TikTok, Instagram, X, Facebook, Reddit and more",
+        "Audio conversion to multiple formats with full metadata and artwork",
+        "Background processing with menu bar progress"
+      ],
+      "description": "Search YouTube and save without the ads. Drop in a Spotify or Apple Music playlist and Fetch Puppy finds every track - or every music video - automatically. Grabs video from TikTok, Instagram, X, Facebook, Reddit, and more, and converts audio to any format with full metadata and artwork."
     },
     "ewp": {
       "name": "EWP",
@@ -69,10 +98,16 @@
       "version": "v1.0.3",
       "released": "31 May 2026",
       "features": [
-        "Spotter panel - drag apps in, EWP arranges them instantly",
-        "6 layout modes across multiple monitors",
-        "Lift and Drop - raise your layout or clear the desktop in one click"
-      ]
+        "Spotter panel - drag apps in and EWP auto-arranges them instantly",
+        "Lift and Drop - raise your layout or clear your desktop in one click",
+        "Emergency stop - closes EWP instantly when you need out",
+        "6 layout modes - fullscreen, halves, big left, big right, and 4-up quad",
+        "Save presets and recall your exact setup instantly",
+        "Lock presets to a specific screen or apply them anywhere",
+        "Multiple monitor support - configure each screen independently",
+        "Lives in the menu bar - out of your way until you need it"
+      ],
+      "description": "Select a screen, pick a layout, assign your apps - EWP arranges everything automatically. Drop clears your desktop when you need a clean screen."
     },
     "gogames": {
       "name": "Go Games",
@@ -81,14 +116,7 @@
       "price": "Free - $1.99 to unlock all levels and themes",
       "macos": "iOS 17+ / macOS 14+",
       "version": "v1.1",
-      "released": "15 May 2026",
-      "features": [
-        "Sudoku - 4 grid sizes, 3 difficulty levels, hints and pencil marks",
-        "Solitaire - Draw 1 and Draw 3 Klondike, \"Favourable deal\" easy mode",
-        "Minesweeper - 3 grid sizes, Easy to Hard, Hints",
-        "Battle Boats - Battleship vs AI, Easy to Hard difficulty",
-        "No ads. Real dark mode."
-      ]
+      "released": "15 May 2026"
     }
   }
 }

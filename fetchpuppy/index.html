@@ -49,9 +49,7 @@
 
         <p class="outcome">{{ site.data.content.apps.fetchpuppy.tagline }}</p>
 
-        <p class="description">
-            Search YouTube and save without the ads. Drop in a Spotify or Apple Music playlist and Fetch Puppy finds every track - or every music video - automatically. Grabs video from TikTok, Instagram, X, Facebook, Reddit, and more, and converts audio to any format with full metadata and artwork.
-        </p>
+        <p class="description">{{ site.data.content.apps.fetchpuppy.description }}</p>
 
         <div class="buy-section">
             <a href="https://bskapps.lemonsqueezy.com/checkout/buy/99a45e24-5f0c-4ef7-86a9-be1cf7c555af?dark=1&media=0&desc=0" class="buy-btn large lemonsqueezy-button" aria-label="Buy Fetch Puppy for {{ site.data.content.apps.fetchpuppy.price }}" style="margin-top: 0;">Buy - {{ site.data.content.apps.fetchpuppy.price }}</a>
@@ -79,14 +77,8 @@
         <div class="section">
             <h2>Features</h2>
             <ul class="features">
-                <li>Search and save from YouTube without ads</li>
-                <li>Multi-source search with smart quality scoring</li>
-                <li>Preview search results before saving</li>
-                <li>Drag in a Spotify or Apple Music playlist - find every track automatically</li>
-                <li>Find and save music videos for an entire Spotify or Apple Music playlist</li>
-                <li>Save videos from TikTok, Instagram, X, Facebook, Reddit and more</li>
-                <li>Audio conversion to multiple formats with full metadata and artwork</li>
-                <li>Background processing with menu bar progress</li>
+                {% for feature in site.data.content.apps.fetchpuppy.features %}<li>{{ feature }}</li>
+                {% endfor %}
             </ul>
         </div>
 

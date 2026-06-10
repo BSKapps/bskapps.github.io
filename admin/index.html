@@ -13,7 +13,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0d0d0d;
+            background: #222226;
             color: #e0e0e0;
             min-height: 100vh;
         }
@@ -29,25 +29,25 @@
             padding: 24px;
         }
         #login h1 { color: #fff; font-size: 1.6rem; margin-bottom: 4px; }
-        #login p { color: #666; font-size: 0.9rem; text-align: center; max-width: 360px; line-height: 1.5; }
+        #login p { color: #A9A9AF; font-size: 0.9rem; text-align: center; max-width: 360px; line-height: 1.5; }
         #login input {
             width: 100%;
             max-width: 360px;
             padding: 12px 16px;
-            background: #1a1a1a;
-            border: 1px solid #333;
+            background: #45454A;
+            border: 1px solid rgba(255,255,255,0.16);
             border-radius: 10px;
             color: #fff;
             font-size: 0.95rem;
             outline: none;
             margin-top: 8px;
         }
-        #login input:focus { border-color: #7ac4ff; }
+        #login input:focus { border-color: #6FA3D9; }
         #login .btn-primary {
             width: 100%;
             max-width: 360px;
             padding: 11px;
-            background: #7ac4ff;
+            background: #6FA3D9;
             color: #000;
             border: none;
             border-radius: 10px;
@@ -55,8 +55,8 @@
             font-size: 0.95rem;
             cursor: pointer;
         }
-        #login .btn-primary:hover { background: #9dd4ff; }
-        #login a { color: #7ac4ff; font-size: 0.8rem; text-decoration: none; }
+        #login .btn-primary:hover { background: #8FBCE8; }
+        #login a { color: #6FA3D9; font-size: 0.8rem; text-decoration: none; }
         #login a:hover { color: #fff; }
         #login-error { color: #ff6b6b; font-size: 0.85rem; display: none; }
 
@@ -67,19 +67,19 @@
             align-items: center;
             justify-content: space-between;
             padding: 16px 28px;
-            border-bottom: 1px solid #1e1e1e;
-            background: #111;
+            border-bottom: 1px solid rgba(255,255,255,0.10);
+            background: #2C2C30;
             position: sticky;
             top: 0;
             z-index: 50;
         }
         .topbar h1 { color: #fff; font-size: 1.1rem; font-weight: 700; }
         .topbar-right { display: flex; align-items: center; gap: 16px; }
-        .topbar a { color: #555; font-size: 0.85rem; text-decoration: none; cursor: pointer; }
+        .topbar a { color: #A2A2A8; font-size: 0.85rem; text-decoration: none; cursor: pointer; }
         .topbar a:hover { color: #fff; }
         #topbar-save-btn {
             padding: 7px 20px;
-            background: linear-gradient(180deg, #229155, #1a7a48);
+            background: #3E8E5F;
             color: #fff;
             border: none;
             border-radius: 8px;
@@ -93,16 +93,16 @@
             opacity: 1;
             pointer-events: auto;
         }
-        #topbar-save-btn.active:hover { background: linear-gradient(180deg, #27a862, #229155); }
+        #topbar-save-btn.active:hover { background: #469C6A; }
 
         .tabs {
             display: flex;
             gap: 4px;
             padding: 20px 28px 0;
-            border-bottom: 1px solid #1e1e1e;
+            border-bottom: 1px solid rgba(255,255,255,0.10);
             position: sticky;
             top: 53px;
-            background: #0d0d0d;
+            background: #222226;
             z-index: 40;
         }
         .tab {
@@ -110,22 +110,22 @@
             background: none;
             border: none;
             border-bottom: 2px solid transparent;
-            color: #666;
+            color: #A9A9AF;
             font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             margin-bottom: -1px;
         }
-        .tab.active { color: #fff; border-bottom-color: #7ac4ff; }
-        .tab:hover { color: #ccc; }
+        .tab.active { color: #fff; border-bottom-color: #6FA3D9; }
+        .tab:hover { color: #D8D8DC; }
 
         .pane { display: none; padding: 28px; max-width: 860px; }
         .pane.active { display: block; }
 
         /* CARDS */
         .card {
-            background: #1a1a1a;
-            border: 1px solid #252525;
+            background: #45454A;
+            border: 1px solid rgba(255,255,255,0.12);
             border-radius: 12px;
             padding: 24px;
             margin-bottom: 16px;
@@ -142,9 +142,9 @@
         .card-title .app-badge {
             font-size: 0.7rem;
             font-weight: 600;
-            color: #7ac4ff;
-            background: #1a2a3a;
-            border: 1px solid #2a4a6a;
+            color: #6FA3D9;
+            background: rgba(111,163,217,0.15);
+            border: 1px solid rgba(111,163,217,0.45);
             border-radius: 6px;
             padding: 2px 8px;
             letter-spacing: 0.3px;
@@ -157,7 +157,7 @@
             display: block;
             font-size: 0.72rem;
             font-weight: 600;
-            color: #555;
+            color: #A2A2A8;
             text-transform: uppercase;
             letter-spacing: 0.6px;
             margin-bottom: 5px;
@@ -165,8 +165,8 @@
         .field input, .field textarea {
             width: 100%;
             padding: 9px 12px;
-            background: #111;
-            border: 1px solid #2a2a2a;
+            background: #2C2C30;
+            border: 1px solid rgba(255,255,255,0.14);
             border-radius: 8px;
             color: #e0e0e0;
             font-size: 0.9rem;
@@ -174,14 +174,14 @@
             outline: none;
             transition: border-color 0.15s;
         }
-        .field input:focus, .field textarea:focus { border-color: #7ac4ff; }
+        .field input:focus, .field textarea:focus { border-color: #6FA3D9; }
         .field textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
 
         /* FEATURES */
         .features-label {
             font-size: 0.72rem;
             font-weight: 600;
-            color: #555;
+            color: #A2A2A8;
             text-transform: uppercase;
             letter-spacing: 0.6px;
             margin-bottom: 8px;
@@ -195,45 +195,45 @@
         .feature-item input {
             flex: 1;
             padding: 9px 12px;
-            background: #111;
-            border: 1px solid #2a2a2a;
+            background: #2C2C30;
+            border: 1px solid rgba(255,255,255,0.14);
             border-radius: 8px;
             color: #e0e0e0;
             font-size: 0.9rem;
             font-family: inherit;
             outline: none;
         }
-        .feature-item input:focus { border-color: #7ac4ff; }
+        .feature-item input:focus { border-color: #6FA3D9; }
         .feature-item .remove-btn {
             background: none;
             border: none;
-            color: #444;
+            color: #8A8A90;
             cursor: pointer;
             font-size: 1rem;
             padding: 4px 6px;
             border-radius: 6px;
             line-height: 1;
         }
-        .feature-item .remove-btn:hover { color: #ff6b6b; background: #2a1a1a; }
+        .feature-item .remove-btn:hover { color: #ff6b6b; background: rgba(255,107,107,0.12); }
         .add-feature-btn {
             background: none;
-            border: 1px dashed #2a2a2a;
+            border: 1px dashed rgba(255,255,255,0.18);
             border-radius: 8px;
-            color: #555;
+            color: #A2A2A8;
             padding: 7px 14px;
             font-size: 0.85rem;
             cursor: pointer;
             width: 100%;
             margin-top: 4px;
         }
-        .add-feature-btn:hover { border-color: #7ac4ff; color: #7ac4ff; }
+        .add-feature-btn:hover { border-color: #6FA3D9; color: #6FA3D9; }
 
         /* SAVE BAR */
         #save-bar {
             position: fixed;
             bottom: 0; left: 0; right: 0;
-            background: #161616;
-            border-top: 1px solid #252525;
+            background: #2A2A2E;
+            border-top: 1px solid rgba(255,255,255,0.12);
             padding: 14px 28px;
             display: none;
             align-items: center;
@@ -242,10 +242,10 @@
             z-index: 100;
         }
         #save-bar.show { display: flex; }
-        #save-status { color: #666; font-size: 0.85rem; }
+        #save-status { color: #A9A9AF; font-size: 0.85rem; }
         #save-btn {
             padding: 9px 28px;
-            background: linear-gradient(180deg, #229155, #1a7a48);
+            background: #3E8E5F;
             color: #fff;
             border: none;
             border-radius: 8px;
@@ -253,7 +253,7 @@
             font-size: 0.9rem;
             cursor: pointer;
         }
-        #save-btn:hover { background: linear-gradient(180deg, #27a862, #229155); }
+        #save-btn:hover { background: #469C6A; }
         #save-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
         /* ANALYTICS */
@@ -264,18 +264,18 @@
             margin-bottom: 16px;
         }
         .stat-box {
-            background: #1a1a1a;
-            border: 1px solid #252525;
+            background: #45454A;
+            border: 1px solid rgba(255,255,255,0.12);
             border-radius: 10px;
             padding: 18px 20px;
         }
-        .stat-box .stat-label { font-size: 0.75rem; color: #555; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .stat-box .stat-label { font-size: 0.75rem; color: #A2A2A8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .stat-box .stat-value { font-size: 1.8rem; font-weight: 700; color: #fff; }
-        .stat-box .stat-sub { font-size: 0.8rem; color: #444; margin-top: 4px; }
-        .stat-box.highlight .stat-value { color: #7aff8a; }
-        .stat-box.revenue .stat-value { color: #ffd700; font-size: 1.4rem; }
-        .stat-box.revenue .stat-value-secondary { font-size: 1.1rem; font-weight: 700; color: #7aff8a; margin-top: 2px; }
-        .stat-sublabel { font-size: 0.65rem; color: #555; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 10px; margin-bottom: 2px; }
+        .stat-box .stat-sub { font-size: 0.8rem; color: #8A8A90; margin-top: 4px; }
+        .stat-box.highlight .stat-value { color: #5FBE8A; }
+        .stat-box.revenue .stat-value { color: #E8C667; font-size: 1.4rem; }
+        .stat-box.revenue .stat-value-secondary { font-size: 1.1rem; font-weight: 700; color: #5FBE8A; margin-top: 2px; }
+        .stat-sublabel { font-size: 0.65rem; color: #A2A2A8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 10px; margin-bottom: 2px; }
 
         .analytics-row {
             display: flex;
@@ -290,23 +290,23 @@
             align-items: center;
             gap: 14px;
             padding: 16px 20px;
-            background: #1a1a1a;
-            border: 1px solid #252525;
+            background: #45454A;
+            border: 1px solid rgba(255,255,255,0.12);
             border-radius: 10px;
             text-decoration: none;
             color: #e0e0e0;
             transition: border-color 0.15s;
         }
-        .analytics-link-card:hover { border-color: #7ac4ff; }
+        .analytics-link-card:hover { border-color: #6FA3D9; }
         .analytics-link-card .alc-icon { font-size: 1.6rem; }
         .analytics-link-card .alc-text strong { display: block; font-size: 0.9rem; color: #fff; }
-        .analytics-link-card .alc-text span { font-size: 0.8rem; color: #555; }
-        .analytics-link-card .alc-arrow { margin-left: auto; color: #333; font-size: 1rem; }
-        .analytics-link-card:hover .alc-arrow { color: #7ac4ff; }
+        .analytics-link-card .alc-text span { font-size: 0.8rem; color: #A2A2A8; }
+        .analytics-link-card .alc-arrow { margin-left: auto; color: #8A8A90; font-size: 1rem; }
+        .analytics-link-card:hover .alc-arrow { color: #6FA3D9; }
 
         .api-setup {
-            background: #111;
-            border: 1px solid #1e1e1e;
+            background: #2C2C30;
+            border: 1px solid rgba(255,255,255,0.10);
             border-radius: 10px;
             margin-bottom: 16px;
             overflow: hidden;
@@ -319,57 +319,57 @@
             cursor: pointer;
             user-select: none;
         }
-        .api-setup-toggle:hover { background: #161616; }
-        .api-setup-toggle h3 { color: #555; font-size: 0.85rem; font-weight: 600; }
-        .api-chevron { color: #333; font-size: 0.7rem; transition: transform 0.2s; }
+        .api-setup-toggle:hover { background: #2A2A2E; }
+        .api-setup-toggle h3 { color: #A2A2A8; font-size: 0.85rem; font-weight: 600; }
+        .api-chevron { color: #8A8A90; font-size: 0.7rem; transition: transform 0.2s; }
         .api-setup.open .api-chevron { transform: rotate(180deg); }
         .api-setup-body { display: none; padding: 0 20px 20px; }
         .api-setup.open .api-setup-body { display: block; }
-        .api-setup p { color: #555; font-size: 0.85rem; margin-bottom: 14px; line-height: 1.5; }
+        .api-setup p { color: #A2A2A8; font-size: 0.85rem; margin-bottom: 14px; line-height: 1.5; }
         .api-fields { display: flex; flex-direction: column; gap: 10px; }
         .api-field { display: flex; flex-direction: column; gap: 4px; }
-        .api-field label { font-size: 0.75rem; color: #555; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .api-field label { font-size: 0.75rem; color: #A2A2A8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
         .api-field input {
             padding: 8px 12px;
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
+            background: #45454A;
+            border: 1px solid rgba(255,255,255,0.14);
             border-radius: 8px;
             color: #e0e0e0;
             font-size: 0.85rem;
             font-family: monospace;
             outline: none;
         }
-        .api-field input:focus { border-color: #7ac4ff; }
+        .api-field input:focus { border-color: #6FA3D9; }
         .api-save-btn {
             margin-top: 12px;
             padding: 8px 20px;
-            background: #1e2e1e;
-            border: 1px solid #2a4a2a;
+            background: rgba(95,190,138,0.12);
+            border: 1px solid rgba(95,190,138,0.45);
             border-radius: 8px;
-            color: #7aff8a;
+            color: #5FBE8A;
             font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
         }
-        .api-save-btn:hover { background: #253525; }
+        .api-save-btn:hover { background: rgba(95,190,138,0.2); }
 
         .range-btn {
             padding: 5px 14px;
             background: none;
-            border: 1px solid #2a2a2a;
+            border: 1px solid rgba(255,255,255,0.14);
             border-radius: 6px;
-            color: #555;
+            color: #A2A2A8;
             font-size: 0.8rem;
             font-weight: 600;
             cursor: pointer;
         }
-        .range-btn:hover { color: #fff; border-color: #444; }
-        .range-btn.active { background: #1a2a3a; border-color: #2a4a6a; color: #7ac4ff; }
+        .range-btn:hover { color: #fff; border-color: rgba(255,255,255,0.30); }
+        .range-btn.active { background: rgba(111,163,217,0.15); border-color: rgba(111,163,217,0.5); color: #6FA3D9; }
 
         .section-title {
             font-size: 0.8rem;
             font-weight: 700;
-            color: #444;
+            color: #8A8A90;
             text-transform: uppercase;
             letter-spacing: 0.8px;
             margin-bottom: 10px;
@@ -383,20 +383,20 @@
             align-items: center;
             justify-content: space-between;
             padding: 14px 18px;
-            background: #1a1a1a;
-            border: 1px solid #252525;
+            background: #45454A;
+            border: 1px solid rgba(255,255,255,0.12);
             border-radius: 10px;
             margin-bottom: 8px;
             cursor: pointer;
             transition: border-color 0.15s, background 0.15s;
         }
-        .article-row:hover { border-color: #2a4a6a; background: #1d1f24; }
+        .article-row:hover { border-color: rgba(255,255,255,0.22); background: #4A4A50; }
         .article-row .article-slug { color: #fff; font-size: 0.95rem; font-weight: 600; }
-        .article-row .article-arrow { color: #444; font-size: 1rem; }
-        .article-row:hover .article-arrow { color: #7ac4ff; }
+        .article-row .article-arrow { color: #8A8A90; font-size: 1rem; }
+        .article-row:hover .article-arrow { color: #6FA3D9; }
         .articles-back {
             display: inline-block;
-            color: #7ac4ff;
+            color: #6FA3D9;
             text-decoration: none;
             cursor: pointer;
             font-size: 0.9rem;
@@ -464,7 +464,7 @@
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
             <div style="display:flex; align-items:baseline; gap:10px;">
                 <div class="section-title" style="margin:0;">Live Stats</div>
-                <span id="stats-updated" style="font-size:0.75rem; color:#444;"></span>
+                <span id="stats-updated" style="font-size:0.75rem; color:#8A8A90;"></span>
             </div>
             <div style="display:flex; gap:6px;">
                 <button class="range-btn active" data-range="1" onclick="setRange(1, this)">24h</button>
@@ -472,7 +472,7 @@
                 <button class="range-btn" data-range="30" onclick="setRange(30, this)">30d</button>
                 <button class="range-btn" data-range="90" onclick="setRange(90, this)">90d</button>
                 <button class="range-btn" data-range="fy" onclick="setRange('fy', this)">FY</button>
-                <span style="color:#333; margin:0 4px;">|</span>
+                <span style="color:#8A8A90; margin:0 4px;">|</span>
                 <button class="range-btn currency-btn active" id="cur-usd" onclick="setCurrency('USD', this)">USD</button>
                 <button class="range-btn currency-btn" id="cur-aud" onclick="setCurrency('AUD', this)">AUD</button>
             </div>
@@ -535,7 +535,7 @@
                         <label>LemonSqueezy API Key</label>
                         <input type="password" id="ls-key" placeholder="Your LemonSqueezy API key">
                     </div>
-                    <div class="api-field" style="margin-top:12px; padding-top:12px; border-top:1px solid #1e1e1e;">
+                    <div class="api-field" style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.10);">
                         <label>Apple Key ID</label>
                         <input type="text" id="apple-key-id" placeholder="XXXXXXXXXX (10 characters, from App Store Connect)">
                     </div>
@@ -549,11 +549,11 @@
                     </div>
                     <div class="api-field">
                         <label>Apple Private Key (.p8 contents)</label>
-                        <textarea id="apple-private-key" placeholder="-----BEGIN PRIVATE KEY-----&#10;...&#10;-----END PRIVATE KEY-----" style="padding:8px 12px; background:#1a1a1a; border:1px solid #2a2a2a; border-radius:8px; color:#e0e0e0; font-size:0.82rem; font-family:monospace; outline:none; width:100%; min-height:80px; resize:vertical;"></textarea>
+                        <textarea id="apple-private-key" placeholder="-----BEGIN PRIVATE KEY-----&#10;...&#10;-----END PRIVATE KEY-----" style="padding:8px 12px; background:#45454A; border:1px solid rgba(255,255,255,0.14); border-radius:8px; color:#e0e0e0; font-size:0.82rem; font-family:monospace; outline:none; width:100%; min-height:80px; resize:vertical;"></textarea>
                     </div>
                 </div>
                 <button class="api-save-btn" onclick="saveApiKeys()">Save to GitHub Secrets</button>
-                <span id="api-save-status" style="margin-left:12px; font-size:0.85rem; color:#666;"></span>
+                <span id="api-save-status" style="margin-left:12px; font-size:0.85rem; color:#A9A9AF;"></span>
             </div>
         </div>
 
@@ -692,23 +692,30 @@ function renderForm() {
     const appLabels = { quickerip: 'Quicker IP', labassistant: 'Lab Assistant', targettrace: 'Target Trace', fetchpuppy: 'Fetch Puppy', ewp: 'EWP', gogames: 'Go Games' };
     Object.keys(data.apps).forEach(function(key) {
         const app = data.apps[key];
-        const card = makeCard(appLabels[key], 'APP', [
+        const children = [
             makeFieldRow([
                 makeField('Name', 'apps.' + key + '.name', app.name),
                 makeField('Subtitle', 'apps.' + key + '.subtitle', app.subtitle)
             ]),
             makeFieldRow([
-                makeField('Tagline', 'apps.' + key + '.tagline', app.tagline)
+                makeField('Tagline (homepage card)', 'apps.' + key + '.tagline', app.tagline)
             ]),
             makeFieldRow([
                 makeField('Price', 'apps.' + key + '.price', app.price),
                 makeField('macOS', 'apps.' + key + '.macos', app.macos),
                 makeField('Version', 'apps.' + key + '.version', app.version),
                 makeField('Released', 'apps.' + key + '.released', app.released)
-            ]),
-            makeFeaturesField('Features', 'apps.' + key + '.features', app.features)
-        ]);
-        container.appendChild(card);
+            ])
+        ];
+        if (app.description !== undefined) {
+            children.push(makeFieldRow([
+                makeTextareaField('Description (product page)', 'apps.' + key + '.description', app.description)
+            ]));
+        }
+        if (app.features) {
+            children.push(makeFeaturesField('Features (product page)', 'apps.' + key + '.features', app.features));
+        }
+        container.appendChild(makeCard(appLabels[key], 'APP', children));
     });
 }
 
@@ -751,6 +758,23 @@ function makeField(label, path, value) {
     });
     wrap.appendChild(lbl);
     wrap.appendChild(inp);
+    return wrap;
+}
+
+function makeTextareaField(label, path, value) {
+    const wrap = document.createElement('div');
+    wrap.className = 'field';
+    const lbl = document.createElement('label');
+    lbl.textContent = label;
+    const ta = document.createElement('textarea');
+    ta.value = value;
+    ta.dataset.path = path;
+    ta.addEventListener('input', function() {
+        setPath(data, path, ta.value);
+        markDirty();
+    });
+    wrap.appendChild(lbl);
+    wrap.appendChild(ta);
     return wrap;
 }
 
@@ -914,7 +938,7 @@ async function showArticlesPane() {
         renderArticleEditor();
         return;
     }
-    view.innerHTML = '<div style="color:#666; font-size:0.85rem;">Loading articles...</div>';
+    view.innerHTML = '<div style="color:#A9A9AF; font-size:0.85rem;">Loading articles...</div>';
     try {
         await loadArticlesIndex();
         renderArticlesList();
@@ -927,7 +951,7 @@ function renderArticlesList() {
     const view = document.getElementById('articles-view');
     view.innerHTML = '';
     const intro = document.createElement('div');
-    intro.style.cssText = 'color:#666; font-size:0.85rem; margin-bottom:14px;';
+    intro.style.cssText = 'color:#A9A9AF; font-size:0.85rem; margin-bottom:14px;';
     intro.textContent = 'Click an article to edit its title, description, heading, date, or body HTML.';
     view.appendChild(intro);
     articlesIndex.forEach(function(slug) {
@@ -948,7 +972,7 @@ function renderArticlesList() {
 
 async function loadArticle(slug) {
     const view = document.getElementById('articles-view');
-    view.innerHTML = '<div style="color:#666; font-size:0.85rem;">Loading...</div>';
+    view.innerHTML = '<div style="color:#A9A9AF; font-size:0.85rem;">Loading...</div>';
     try {
         const path = 'articles/' + slug + '/index.html';
         const res = await ghFetch('GET', 'repos/' + REPO + '/contents/' + path);
@@ -1265,7 +1289,7 @@ async function saveApiKeys() {
         document.getElementById('apple-vendor-number').value = '';
         document.getElementById('apple-private-key').value = '';
         status.textContent = 'Saved to GitHub Action secrets';
-        status.style.color = '#7aff8a';
+        status.style.color = '#5FBE8A';
         setTimeout(function() { status.textContent = ''; }, 4000);
     } catch (e) {
         status.textContent = 'Error: ' + e.message;
@@ -1324,10 +1348,6 @@ function ghFetch(method, path, body, tok) {
     };
     if (body) opts.body = JSON.stringify(body);
     return fetch('https://api.github.com/' + path, opts);
-}
-
-function toggleApiSetup() {
-    document.getElementById('api-setup').classList.toggle('open');
 }
 
 function getPath(obj, path) {
