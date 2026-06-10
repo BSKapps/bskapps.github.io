@@ -6,7 +6,7 @@
 2. **DO NOT add features** unless explicitly requested.
 3. **Read before editing.** Always read a file before modifying it.
 4. **If unsure, ask.** Don't guess. Don't assume.
-5. **Match the existing style exactly.** Dark theme, section cards, same CSS patterns.
+5. **Match the existing style exactly.** Mid-tone graphite theme, shared stylesheet, same patterns. See `.claude/rules/design.md`.
 
 ## Project Context
 
@@ -15,138 +15,104 @@
 - Repository: github.com/BSKapps/bskapps.github.io
 - Deployment: push to `main` → auto-deploys via GitHub Pages (usually under 1 minute)
 - The user is the sole developer. No team, no PRs, no CI/CD.
+- June 2026 redesign lives on the `redesign-midtone` branch until merged: mid-tone graphite theme, shared stylesheet, homepage grid.
 
 ## Site Structure
 
 ```
 bskapps.github.io/
-├── index.html              # Homepage - lists QIP, LA, Target Trace, Fetch Puppy, EWP, Resources, Articles, Go Games
-├── CNAME                   # Custom domain mapping (bskapps.com)
-├── favicon.png
-├── robots.txt
-├── sitemap.xml             # SEO sitemap (7 public pages)
-├── ads.txt                 # AdSense verification
-├── images/                 # All icons and logos
-│   ├── bsk-logo.png
-│   ├── quickip-icon.png
-│   ├── labassistant-icon.png
-│   ├── mvp-icon.png
-│   ├── fetchpuppy-icon.png
-│   ├── targettrace-icon.png
-│   └── favicon-180.png
-├── quickerip/
-│   ├── index.html          # Quicker IP product page (video + 10-image gallery + features)
-│   └── images/             # 10 framed product screenshots (ss-*.png, purple gradient 1280x800)
-├── labassistant/
-│   ├── index.html          # Lab Assistant product page (video + screenshot gallery + modules)
-│   └── images/             # 8 product screenshots (horizontal scroll gallery)
-├── ewp/
-│   ├── index.html          # EWP product page (Elevated Work Platform, 3-image gallery)
-│   └── images/             # 3 product screenshots
+├── index.html              # Homepage - nav, hero, 2-col product grid (QIP, LA, FP, TT, EWP, Go Games), Resources + Articles links
+├── css/site.css            # THE shared stylesheet - all pages link it, all theme tokens live here
+├── _data/content.json      # App names, subtitles, taglines, prices, versions, DESCRIPTIONS, FEATURES - edited via /admin
+├── CNAME / favicon.png / robots.txt / sitemap.xml / ads.txt
+├── images/                 # App icons and logos
+├── quickerip/              # Product page (video + gallery + Lite vs Pro table + features + detail sections)
+├── labassistant/           # Product page (video + gallery + Mint + Processing Modules sections)
+├── fetchpuppy/             # Product page (video + gallery + features + disclaimer)
+├── ewp/                    # Product page (gallery + features)
+├── targettrace/            # Product page (video + gallery + features)
+├── gogames/                # 4 game cards (Solitaire, Sudoku, Minesweeper, Battle Boats) + screenshots
 ├── resources/
-│   ├── index.html          # Free Reaper LUA scripts page
-│   └── scripts/            # 5 LUA script files for download
-├── articles/
-│   ├── index.html          # Articles index (6 posts, category tags + coloured left borders)
-│   ├── static-ips-av-networks/       # Multi-adapter networking
-│   ├── find-devices-on-network/      # arp, ping sweep, Bonjour, scanner
-│   ├── dante-mac-network-readiness/  # USB Ethernet chipsets, subnet clash
-│   ├── qlab-workspace-habits/        # Levels, mono files, panic fade, continue modes
-│   ├── reaper-lua-cue-workflows/     # LUA intro + CSV rename example
-│   └── native-mac-over-electron/     # Native vs Electron
-├── targettrace/
-│   ├── index.html          # Target Trace product page (video + 4-image gallery + features)
-│   └── images/             # 4 screenshots + demo video
-├── gogames/
-│   ├── index.html          # Go Games page (Sudoku, Solitaire, Minesweeper - all 3 on one page)
-│   └── images/             # 3 game icons + 3 gameplay screenshots
-├── contact/index.html      # Contact page (support email, ABN)
-├── about/index.html        # About page (who/what/how)
-├── multiviewport/index.html# MultiViewPort product page (HIDDEN)
-├── fetchpuppy/index.html   # Fetch Puppy product page (LIVE on homepage)
-├── privacy/index.html      # Privacy policy
-├── terms/index.html        # Terms of service
-└── refund/index.html       # Refund policy
+│   ├── index.html          # Hub - 2 tiles (REAPER scripts, Companion modules)
+│   ├── reaper/             # 6 Lua scripts + install instructions
+│   ├── companion/          # BSK Spotify module + setup guide
+│   └── scripts/            # .lua download files
+├── articles/               # Index grouped by category + 9 article pages
+├── admin/index.html        # Self-contained admin: content editor + articles editor + analytics (GitHub token auth)
+├── contact/ about/ privacy/ terms/ refund/
+└── multiviewport/          # DEAD product, unlinked, old theme - do not touch
 ```
 
-## Products Listed (homepage order)
+## Products (homepage grid order)
 
 1. **Quicker IP** - Network toolkit. Lite (App Store, free) + Pro (LemonSqueezy, $19.99 USD)
-2. **Lab Assistant** - QLab workspace automation. Sold via LemonSqueezy
-3. **Target Trace** - Smaart target curve editor. Coming soon, $9.99 USD
-4. **Fetch Puppy** - Media downloader. LemonSqueezy, $14.99 USD
+2. **Lab Assistant** - QLab workspace automation. LemonSqueezy, $14.99 USD
+3. **Fetch Puppy** - Media downloader. LemonSqueezy, $14.99 USD
+4. **Target Trace** - Smaart/REW target curve editor. LemonSqueezy, $8.99 USD
 5. **EWP** - Elevated Work Platform, window layout snapper. LemonSqueezy, $4.99 USD
-6. **Go Games** - Sudoku, Solitaire, Minesweeper. iOS + Mac, App Store (coming soon)
-7. **MultiViewPort** - Multi-window viewer. Not yet built - HIDDEN from homepage (April 2026)
+6. **Go Games** - Solitaire, Sudoku, Minesweeper, Battle Boats. iOS + Mac, free on App Store, $1.99 IAP unlock
 
-## Hidden Products
+MultiViewPort is DEAD (never worked) - see `.claude/rules/hidden-products.md`.
 
-- **MultiViewPort** - Removed from homepage (April 2026) for LemonSqueezy approval - not yet built, no demo available. The `/multiviewport/` page and icon still exist in the repo. Content saved in memory for re-adding later. Do not link or reference on the site without asking first.
+## Content lives in _data/content.json (IMPORTANT)
 
-(Fetch Puppy was previously hidden but has been re-added to the homepage and is live.)
+Per app: name, subtitle, tagline (homepage tile), price, macos, version, released, plus:
+- `description` - the product page intro paragraph (all 5 product pages)
+- `features` - the product page Features list (QIP, FP, EWP, TT; LA's structured sections stay in HTML)
+
+Homepage tiles and product pages render these via Liquid. The /admin Content tab edits this file through the GitHub API and commits to main. Never hardcode taglines, descriptions, or feature lists in page HTML - edit content.json.
+
+Lab Assistant's Mint / Processing Modules sections, QIP's detail subsections (IP Configuration, Presets, Speed Test, Network Scanner, Dante, Wi-Fi) and the Lite vs Pro table are hardcoded HTML by design.
 
 ## Payments
 
-- Payments via LemonSqueezy (approved April 2026)
-- Quicker IP Pro: $19.99 USD, buy button on homepage and /quickerip page
-- Quicker IP Lite: free on Mac App Store (https://apps.apple.com/us/app/quicker-ip-lite/id6761874418). Mac App Store badge sits right of the Pro buy button on both homepage and /quickerip page, with a "LITE - Free version on App Store" label below the badge. Buy row uses flex with `gap: 180px` to space them apart. Buy button and buy-note ("One-time purchase · 2 activations included") are grouped inside `.buy-col` so the note reads as Pro purchase terms.
-- Mobile (< 700px): `.buy-row` stacks vertically with `gap: 40px`; LITE label flips to `position: static` with `margin-bottom: 40px`; `.appstore-wrap` gets `margin-top: 8px` to nudge the App Store badge down slightly; `.buy-section` uses `padding-bottom: 48px` and `.description` uses `padding-top: 24px` to force a real gap (padding, not margin, to avoid collapse).
-- /quickerip page also includes a "Lite vs Pro" comparison table (Pro column on left, Lite on right). Comparison table row for AV tools is labelled "Dante and pro audio network readiness".
-- /quickerip Features card: bullet list of all features (Pro and shared), no Pro badge on the card itself — comparison table handles Pro vs Lite distinction.
-- /quickerip detail card (after Status Dots): no h2 header — opens directly with h3 subheadings (IP Configuration, Presets, Speed Test, Network Scanner, Dante and Pro Audio Network Readiness, Wi-Fi Details). `.section h3:first-child` has `margin-top: 0`; all other h3s have `margin: 20px 0 10px`.
-- Screenshot galleries on all product pages use `.screenshot-scroll` (horizontal scroll, grab cursor) with `.gallery-arrow` prev/next buttons and a `#gallery-counter` div showing "X of Y". Counter is populated by `updateCounter()` called on load and scroll — never hardcode the count in HTML.
-- All product pages (quickerip, labassistant, fetchpuppy, ewp) have a lightbox (`#lightbox`) with prev/next arrow buttons (`#lb-prev`, `#lb-next`), a counter (`#lb-counter`, shown inside lightbox), and keyboard support (left/right/escape). Click outside image closes it.
-- Buy buttons use LemonSqueezy overlay checkout (lemon.js + `lemonsqueezy-button` class)
-- Checkout URL params: `?dark=1&desc=0&media=0` for dark backdrop, no description, no media
-- Buy button colour: green `#26A95F`, white text
-- Lab Assistant: $14.99 USD introductory price, buy button on homepage and /labassistant page
-- EWP: $4.99 USD, buy button on homepage and /ewp page. LS variant c3235a75-6837-4d32-b495-a941806e9b90. Title is "EWP" with subtitle "Elevated Work Platform".
+- Payments via LemonSqueezy (overlay checkout: lemon.js + `lemonsqueezy-button` class)
+- Checkout URL params: `?dark=1&desc=0&media=0`
+- Buy buttons: flat green `--accent` (#3E8E5F), `.buy-btn.large` on product pages; green `.buy-link` text links on homepage tiles
+- Buy notes: "One-time purchase · 2 activations" + version line; QIP and FP add "May be tax deductible for AV professionals."
+- Quicker IP Lite: free on Mac App Store (id6761874418). Badge + plain small-caps "Lite · Free version on App Store" note next to the Pro buy button (`.appstore-col`, `.lite-note`)
+- /quickerip has a Lite vs Pro comparison table (`.compare-table`)
+- Buy buttons have aria-labels (e.g. `aria-label="Buy Quicker IP Pro for $19.99 USD"`)
 - LemonSqueezy store: bskapps.lemonsqueezy.com
+- EWP homepage tile carries "App launch support coming in the next update" (`.tile-note`) - remove when it ships
 
-## Design Conventions
+## Galleries and lightbox (product pages)
 
-- Dark theme: `#0d0d0d` background, `#1a1a1a` section cards, `#2a2a2a` borders
-- Font: system font stack (`-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto`)
-- Section cards: `border-radius: 16px`, `padding: 28px 32px`
-- Link colour: `#7ac4ff`
-- Homepage main cards and resources script cards use a subtle gloss: `linear-gradient(160deg, #252525, #1a1a1a, #141414)` + `border: 1px solid #3a3a3a` + inset top highlight `inset 0 1px 0 rgba(255,255,255,0.08)`. Hover brightens to `#2d2d2d` gradient and `#4a4a4a` border.
-- Homepage Resources + Articles mini cards: blue gloss variant (`#1f2a3a` gradient, `#2a4a6a` border, `#7ac4ff` heading). Sit side-by-side with flex `gap: 16px; flex-wrap: wrap; flex: 1 1 280px` so they stack on mobile.
-- Articles index cards: category tags + coloured left border (4px). Networking = `#7ac4ff`, QLab = `#7aff8a`, Reaper = `#b48aff`, Development = `#ffb347`.
-- Resources script cards: coloured left border. Transport scripts = `#7aff8a`, Hardware/AutoPatch scripts = `#b48aff`. Install and Companion how-to cards use `.setup` variant with dashed `#333` border and darker `#141414` bg.
+- `.screenshot-scroll` horizontal scroll with grab cursor, `.gallery-arrow` prev/next, `#gallery-counter` "X of Y" populated by `updateCounter()` - never hardcode the count
+- `#lightbox` with `#lb-prev`/`#lb-next`, counter, keyboard left/right/escape, click outside to close
 
-## Homepage card wrappers (IMPORTANT)
+## Homepage tile wrappers (IMPORTANT)
 
-All homepage `.app-card` wrappers use `<div onclick="window.location='...'">` — NOT `<a href>`. Reason: each card contains a nested LemonSqueezy/App Store `<a>` for the buy button, and nesting `<a>` inside `<a>` is invalid HTML. Browsers auto-close the outer anchor, knocking the inner `.app` div out of the wrapper and breaking hover styles + the gloss effect. If you add a new homepage card with any `<a>` inside, use the div+onclick pattern.
-- Badges: `.badge.macos` (blue), `.badge.pro` (purple), `.badge.coming-soon` (orange)
-- Buy button: green `#26A95F`, hover `#2fc06d`, white text
-- All pages share the same CSS inline (no external stylesheet)
-- Back link on subpages: `← BSK Apps` linking to `/`
+Tiles containing a buy `<a>` use `<div class="app-card" onclick="window.location='...'">` - NOT `<a href>` - because nesting `<a>` inside `<a>` is invalid HTML and browsers auto-close the outer anchor, breaking the layout. Inner links call `event.stopPropagation()`. Tiles without inner links (Resources hub) may use `<a class="app-card">`.
 
 ## Footer
 
-All pages include a consistent footer with:
+All pages:
 ```
 © 2026 BSK Apps · ABN 75 146 604 896
 Contact · About · Privacy · Terms · Refund Policy
 ```
-Do NOT add an Articles link to the footer — article discovery happens via the homepage Articles mini card and sitemap.xml. Keeping only the "official" links in the footer reads cleaner.
+Do NOT add an Articles link to the footer - articles are reached via the homepage Articles link and sitemap.xml.
+
+## Admin (/admin)
+
+- Single self-contained page, own inline CSS in the site palette (only page not using site.css)
+- GitHub token auth (repo scope, stored in localStorage). Edits commit directly to main → deploys live
+- Content tab: site title/tagline + per-app fields incl. description and features (see content.json section)
+- Articles tab: edits title/meta description/h1/date/body of article pages (parses markers: `<h1>`, `<p class="date">`, body runs to `<div class="article-cta">` or `</article>` - keep these markers when editing article HTML)
+- Analytics tab: reads stats.json from BSKapps/bsk-stats (hourly Action), ranges 24h/7d/30d/90d/FY, USD/AUD, LS gross/net, Apple sales/proceeds, conversion. API Keys panel writes encrypted GitHub Action secrets (CF_API_TOKEN, LS_API_KEY, APPLE_*)
+
 ## SEO
 
 - sitemap.xml submitted to Google Search Console
-- Canonical URLs on all pages
-- JSON-LD structured data: Organization (homepage), SoftwareApplication (QIP, LA), ItemList (resources)
-- og:type on all pages
+- Canonical URLs on all pages; og:type on all pages
+- JSON-LD: Organization (homepage), SoftwareApplication (product pages), ItemList (resources/reaper)
 - robots.txt blocks AI training bots, allows Google-Extended, PerplexityBot, Applebot-Extended
-- All page titles use hyphens, not em dashes (e.g. "BSK Apps - Native macOS Apps")
-- Buy buttons have aria-label attributes (e.g. `aria-label="Buy Quicker IP Pro for $19.99 USD"`)
+- Page titles use hyphens, never em dashes
 
 ## Ads
 
-- AdSense on homepage (below Resources card) and resources page (above footer)
-- AdSense script removed from all other pages (QIP, LA, privacy, terms, refund)
-- Ad slot: 7195341222
-- Fixed 728x90 leaderboard format (`display:inline-block; width:728px; max-width:100%; height:90px`)
-- No `data-ad-format="auto"` or `data-full-width-responsive` - use fixed dimensions only
+- NO ads anywhere. AdSense was removed May 2026 after rejection - do not re-add. ads.txt remains for verification only.
 
 ## Contact
 
@@ -156,8 +122,8 @@ Do NOT add an Articles link to the footer — article discovery happens via the 
 
 - Create pull requests or suggest PR workflows
 - Run `git push` unless explicitly asked
-- Change the dark theme, colours, fonts, or layout unless asked
+- Change the theme, colours, fonts, or layout unless asked (see .claude/rules/design.md)
 - Add external CSS frameworks or JavaScript (lemon.js is the one exception)
-- Add analytics or tracking
-- Link to or mention Fetch Puppy without asking first
+- Add analytics, tracking, or ads
+- Link to or mention MultiViewPort
 - Add emojis to code or output unless asked
