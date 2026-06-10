@@ -15,10 +15,8 @@
       "features": [
         "Live download/upload speed per adapter",
         "Switch between DHCP, Static IP, and saved presets in seconds",
-        "Set DNS servers per adapter - up to three, in priority order",
         "Manage macOS Network Locations from the menu bar - create, rename, delete, and reorder services",
-        "Run a full LAN scan to see every device on your network - sized to the adapter's subnet mask, not just /24",
-        "Join Subnet - hop your adapter onto a scanned device's subnet in one click",
+        "Run a full LAN scan to see every device on your network",
         "Test your connection speed without leaving the menu bar",
         "Dante and pro audio network readiness - MTU, multicast, link speed, duplex, and subnet overlap",
         "System Info Panel - CPU, RAM, Wi-Fi signal and more",
