@@ -12,94 +12,74 @@
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="apple-touch-icon" href="/images/favicon-180.png">
     <link rel="canonical" href="https://bskapps.com/articles">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: radial-gradient(ellipse 900px 500px at 50% -120px, rgba(122,196,255,0.07), transparent 70%), linear-gradient(180deg, #161616 0%, #0d0d0d 700px) #0d0d0d; background-attachment: fixed; color: #e0e0e0; min-height: 100vh; }
-        .container { max-width: 800px; margin: 0 auto; padding: 60px 24px; }
-        .back { display: inline-block; color: #7ac4ff; text-decoration: none; font-size: 0.9rem; margin-bottom: 32px; }
-        .back:hover { color: #fff; }
-        h1 { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
-        .updated { color: #666; font-size: 0.85rem; margin-bottom: 32px; }
-        .post { display: block; background: #1a1a1a; border: 1px solid #2a2a2a; border-left-width: 4px; border-radius: 10px; padding: 22px 26px; margin-bottom: 16px; text-decoration: none; color: inherit; transition: background 0.15s, border-color 0.15s; }
-        .post:hover { background: #202020; }
-        .post h2 { font-size: 1.15rem; color: #fff; margin-bottom: 8px; }
-        .post .meta { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
-        .post .date { color: #666; font-size: 0.8rem; }
-        .post .tag { display: inline-block; font-size: 0.7rem; font-weight: 600; padding: 2px 10px; border-radius: 10px; letter-spacing: 0.3px; text-transform: uppercase; }
-        .post p { line-height: 1.55; color: #aaa; font-size: 0.95rem; }
-        .post.networking { border-left-color: #7ac4ff; }
-        .post.networking .tag { background: #1a2a3a; color: #7ac4ff; border: 1px solid #2a4a6a; }
-        .post.qlab { border-left-color: #b48aff; }
-        .post.qlab .tag { background: #1a1a3a; color: #b48aff; border: 1px solid #3a2a6a; }
-        .post.reaper { border-left-color: #7aff8a; }
-        .post.reaper .tag { background: #1a2a1a; color: #7aff8a; border: 1px solid #2a5a2a; }
-        .post.companion { border-left-color: #4affda; }
-        .post.companion .tag { background: #0d2a25; color: #4affda; border: 1px solid #1a5a4a; }
-        .post.dev { border-left-color: #ffb347; }
-        .post.dev .tag { background: #2a2210; color: #ffb347; border: 1px solid #5a4a2a; }
-        footer { text-align: center; margin-top: 48px; color: #555; font-size: 0.85rem; line-height: 1.6; }
-        footer a { color: #888; text-decoration: none; }
-        footer a:hover { color: #fff; }
-    </style>
+    <link rel="stylesheet" href="/css/site.css">
 </head>
 <body>
     <div class="container">
         <a class="back" href="/">&larr; BSK Apps</a>
 
         <h1>Articles</h1>
-        <p class="updated">Notes from building apps and running shows.</p>
+        <p class="updated">Practical guides for AV work on a Mac.</p>
 
-        <a class="post qlab" href="/articles/qlab-script-cues-spotify/">
-            <h2>QLab script cues for Spotify control</h2>
-            <div class="meta"><span class="tag">QLab</span><span class="date">9 May 2026</span></div>
-            <p>Drive Spotify from QLab Script cues using AppleScript: play a specific track, pause cleanly, fade volume, and where AppleScript hits limits.</p>
-        </a>
+        <h2 class="section-head">Networking</h2>
 
-        <a class="post companion" href="/articles/companion-module-setup/">
-            <h2>Companion module setup for common AV gear</h2>
-            <div class="meta"><span class="tag">Companion</span><span class="date">25 April 2026</span></div>
-            <p>Practical module setup for QLab, REAPER, Shure wireless, ATEM, Barco Event Controller, vMix, Millumin, Spotify, and Stage Timer.</p>
-        </a>
-
-        <a class="post companion" href="/articles/companion-macos-network/">
-            <h2>Companion on macOS: network setup and stability</h2>
-            <div class="meta"><span class="tag">Companion</span><span class="date">25 April 2026</span></div>
-            <p>How to run Bitfocus Companion reliably on a Mac with multiple adapters: interface binding, service order, and the routing traps that make modules drop out.</p>
-        </a>
-
-        <a class="post networking" href="/articles/mac-routing-table/">
+        <a class="post" href="/articles/mac-routing-table/">
             <h2>How macOS routes traffic across multiple adapters</h2>
-            <div class="meta"><span class="tag">Networking</span><span class="date">25 April 2026</span></div>
+            <span class="date">25 April 2026</span>
             <p>How the routing table works, how the default route is chosen, and why putting two adapters on the same subnet causes unpredictable traffic routing.</p>
         </a>
 
-        <a class="post networking" href="/articles/static-ips-av-networks/">
+        <a class="post" href="/articles/static-ips-av-networks/">
             <h2>Running multiple network adapters on a Mac</h2>
-            <div class="meta"><span class="tag">Networking</span><span class="date">18 April 2026</span></div>
+            <span class="date">18 April 2026</span>
             <p>A working setup for a Mac juggling Wi-Fi, a show control LAN, and an audio network at the same time without routing chaos.</p>
         </a>
 
-        <a class="post networking" href="/articles/find-devices-on-network/">
+        <a class="post" href="/articles/find-devices-on-network/">
             <h2>Finding devices and free IPs on an unfamiliar network</h2>
-            <div class="meta"><span class="tag">Networking</span><span class="date">17 April 2026</span></div>
+            <span class="date">17 April 2026</span>
             <p>Four ways to see what's on a LAN and pick a safe static address: arp, ping sweeps, Bonjour, and a tidier scanner for show day.</p>
         </a>
 
-        <a class="post networking" href="/articles/dante-mac-network-readiness/">
+        <a class="post" href="/articles/dante-mac-network-readiness/">
             <h2>Dante network readiness on a Mac</h2>
-            <div class="meta"><span class="tag">Networking</span><span class="date">15 April 2026</span></div>
+            <span class="date">15 April 2026</span>
             <p>A pre-show checklist: which USB Ethernet chipsets work, why Wi-Fi needs to be off, and how to avoid subnet clashes.</p>
         </a>
 
-        <a class="post qlab" href="/articles/qlab-workspace-habits/">
+        <h2 class="section-head">QLab</h2>
+
+        <a class="post" href="/articles/qlab-script-cues-spotify/">
+            <h2>QLab script cues for Spotify control</h2>
+            <span class="date">9 May 2026</span>
+            <p>Drive Spotify from QLab Script cues using AppleScript: play a specific track, pause cleanly, fade volume, and where AppleScript hits limits.</p>
+        </a>
+
+        <a class="post" href="/articles/qlab-workspace-habits/">
             <h2>QLab workspace habits from real shows</h2>
-            <div class="meta"><span class="tag">QLab</span><span class="date">12 April 2026</span></div>
+            <span class="date">12 April 2026</span>
             <p>Level traps, mono-file gotchas, Go button safety, panic fade times, continue modes, and the cues you should trim before tech starts.</p>
         </a>
 
-        <a class="post reaper" href="/articles/reaper-lua-cue-workflows/">
+        <h2 class="section-head">Companion</h2>
+
+        <a class="post" href="/articles/companion-module-setup/">
+            <h2>Companion module setup for common AV gear</h2>
+            <span class="date">25 April 2026</span>
+            <p>Practical module setup for QLab, REAPER, Shure wireless, ATEM, Barco Event Controller, vMix, Millumin, Spotify, and Stage Timer.</p>
+        </a>
+
+        <a class="post" href="/articles/companion-macos-network/">
+            <h2>Companion on macOS: network setup and stability</h2>
+            <span class="date">25 April 2026</span>
+            <p>How to run Bitfocus Companion reliably on a Mac with multiple adapters: interface binding, service order, and the routing traps that make modules drop out.</p>
+        </a>
+
+        <h2 class="section-head">REAPER</h2>
+
+        <a class="post" href="/articles/reaper-lua-cue-workflows/">
             <h2>REAPER Lua scripting for live recording</h2>
-            <div class="meta"><span class="tag">REAPER</span><span class="date">9 April 2026</span></div>
+            <span class="date">9 April 2026</span>
             <p>A short intro with a working example: renaming an entire multitrack session from a CSV patch list in one action.</p>
         </a>
 

@@ -11,31 +11,7 @@
     <meta property="og:title" content="QLab workspace habits from real shows">
     <meta property="og:description" content="QLab habits from real shows: level consistency, mono file traps, Go button safety, panic fade times, and cues to trim before tech.">
     <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: radial-gradient(ellipse 900px 500px at 50% -120px, rgba(122,196,255,0.07), transparent 70%), linear-gradient(180deg, #161616 0%, #0d0d0d 700px) #0d0d0d; background-attachment: fixed; color: #e0e0e0; min-height: 100vh; }
-        .container { max-width: 760px; margin: 0 auto; padding: 60px 24px; }
-        .back { display: inline-block; color: #7ac4ff; text-decoration: none; font-size: 0.9rem; margin-bottom: 32px; }
-        .back:hover { color: #fff; }
-        h1 { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
-        .date { color: #666; font-size: 0.85rem; margin-bottom: 32px; }
-        article p { line-height: 1.75; color: #cfcfcf; margin-bottom: 18px; font-size: 1.02rem; }
-        article h2 { font-size: 1.25rem; color: #fff; margin: 32px 0 14px; }
-        article ul { margin: 0 0 18px 20px; color: #cfcfcf; line-height: 1.7; }
-        article ul li { margin-bottom: 8px; }
-        article a { color: #7ac4ff; text-decoration: none; }
-        article a:hover { color: #fff; }
-        article code { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 4px; padding: 1px 6px; font-size: 0.9em; color: #e0e0e0; }
-        footer { text-align: center; margin-top: 56px; color: #555; font-size: 0.85rem; line-height: 1.6; border-top: 1px solid #1a1a1a; padding-top: 24px; }
-        footer a { color: #888; text-decoration: none; }
-        footer a:hover { color: #fff; }
-    
-        .article-cta { margin: 36px 0 8px; padding: 22px 24px; background: linear-gradient(160deg, #1f2a3a 0%, #141820 100%); border: 1px solid #2a4a6a; border-radius: 12px; }
-        .article-cta h3 { color: #7ac4ff; font-size: 1.05rem; margin: 0 0 8px; }
-        .article-cta p { color: #cfcfcf; line-height: 1.6; margin: 0 0 12px; font-size: 0.95rem; }
-        .article-cta a.cta-link { display: inline-block; color: #7ac4ff; font-weight: 600; text-decoration: none; font-size: 0.95rem; }
-        .article-cta a.cta-link:hover { color: #fff; }
-</style>
+    <link rel="stylesheet" href="/css/site.css">
 </head>
 <body>
     <div class="container">
@@ -63,7 +39,7 @@
                 <li>Check every new audio cue's patch routing. If it's mono, either explicitly route it to the outputs you want or convert it to interleaved stereo. Don't trust defaults.</li>
                 <li>Do a dry run of every audio cue from the house, on the actual system, before tech starts. Not from the op's seat with headphones.</li>
             </ul>
-            <p>This is exactly what the mono-routing module in <a href="/labassistant">Lab Assistant</a> exists for - it walks the workspace and forces every mono cue to play out both outputs, so you don't have to remember to check.</p>
+            <p>This is exactly what the mono-routing module in <a href="/labassistant">Lab Assistant</a> exists for - it walks the workspace and forces every mono cue to play out both outputs, so you don't have to remember to check. Its multi-output routing goes further on bigger systems: it assigns output patches by cue category, so music cues land on the music outputs and effects on the effects outputs across the whole workspace in one pass.</p>
 
             <h2>Set the Go button minimum time</h2>
             <p>Workspace Settings, General. There's a minimum time between Go presses, and it's worth setting deliberately rather than leaving it. Something like 500 ms protects you against the moment a stage manager's finger slips on the clicker, or your own Spacebar bounces. It won't save you from everything, but it will save you from the class of mistake where you fire cue 50 twice in a second and the show goes red.</p>
@@ -95,7 +71,7 @@
         
             <div class="article-cta">
                 <h3>Make these habits a one-click job</h3>
-                <p>Lab Assistant takes a QLab workspace and applies consistent levels, mono routing, fade and stop, numbering, and continue modes - in seconds.</p>
+                <p>Lab Assistant takes a QLab workspace and applies consistent levels, mono and multi-output routing, fade and stop, numbering, and continue modes - in seconds. Mint, built in, converts, cleans, and edits cue audio in place.</p>
                 <a class="cta-link" href="/labassistant">Lab Assistant &rarr;</a>
             </div>
         </article>

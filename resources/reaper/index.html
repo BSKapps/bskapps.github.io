@@ -13,109 +13,7 @@
     <meta property="og:url" content="https://bskapps.com/resources/reaper">
     <meta property="og:type" content="website">
     <link rel="canonical" href="https://bskapps.com/resources/reaper">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: radial-gradient(ellipse 900px 500px at 50% -120px, rgba(122,196,255,0.07), transparent 70%), linear-gradient(180deg, #161616 0%, #0d0d0d 700px) #0d0d0d; background-attachment: fixed;
-            color: #e0e0e0;
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 60px 24px;
-        }
-        .back {
-            display: inline-block;
-            color: #7ac4ff;
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-bottom: 32px;
-        }
-        .back:hover { color: #fff; }
-        h1 {
-            font-size: 2.4rem;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 8px;
-        }
-        .tagline {
-            font-size: 1.1rem;
-            color: #888;
-            margin-bottom: 48px;
-        }
-        .section-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 8px;
-        }
-        .section-desc {
-            color: #888;
-            font-size: 0.95rem;
-            margin-bottom: 24px;
-            line-height: 1.5;
-        }
-        .script-card {
-            background: linear-gradient(160deg, #252525 0%, #1a1a1a 60%, #141414 100%);
-            border: 1px solid #3a3a3a;
-            border-radius: 16px;
-            padding: 28px 32px;
-            margin-bottom: 16px;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), inset 0 0 0 1px rgba(255,255,255,0.03), 0 4px 14px rgba(0,0,0,0.4);
-            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
-        }
-        .script-card:hover {
-            border-color: #4a4a4a;
-            background: linear-gradient(160deg, #2d2d2d 0%, #222 60%, #1a1a1a 100%);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), inset 0 0 0 1px rgba(255,255,255,0.04), 0 6px 20px rgba(0,0,0,0.5);
-        }
-        .script-card.transport { border-left: 4px solid #7aff8a; }
-        .script-card.hardware { border-left: 4px solid #b48aff; }
-        .script-card.setup { background: #141414; border-style: dashed; border-color: #333; }
-        .script-card h3 {
-            font-size: 1.05rem;
-            color: #fff;
-            margin-bottom: 6px;
-        }
-        .script-card p {
-            color: #aaa;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin-bottom: 14px;
-        }
-        .download-link {
-            display: inline-block;
-            color: #7ac4ff;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-        .download-link:hover { color: #fff; }
-        .badge {
-            display: inline-block;
-            font-size: 0.75rem;
-            padding: 3px 10px;
-            border-radius: 12px;
-            margin-left: 8px;
-            position: relative;
-            top: -2px;
-        }
-        .badge.lua { color: #7aff8a; border: 1px solid #2a5a2a; background: #1a2a1a; }
-        .steps { color: #aaa; font-size: 0.9rem; line-height: 1.6; padding-left: 20px; margin: 0; }
-        .steps li { margin-bottom: 8px; }
-        .steps code { background: #2a2a2a; color: #e0e0e0; padding: 1px 6px; border-radius: 4px; font-size: 0.85rem; }
-        footer {
-            text-align: center;
-            margin-top: 48px;
-            color: #555;
-            font-size: 0.85rem;
-            line-height: 1.6;
-        }
-        footer a { color: #888; text-decoration: none; }
-        footer a:hover { color: #fff; }
-    </style>
+    <link rel="stylesheet" href="/css/site.css">
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -191,37 +89,37 @@
         <h2 class="section-title">Free REAPER Lua Scripts</h2>
         <p class="section-desc">Drop these into your REAPER Scripts folder and assign them to actions or toolbar buttons.</p>
 
-        <div class="script-card transport">
+        <div class="script-card">
             <h3>BSK Transport: Play <span class="badge lua">Lua</span></h3>
             <p>Starts playback only if stopped or paused. Does nothing if already playing or recording. Designed to make your Stream Deck transport buttons safe.</p>
             <a class="download-link" href="/resources/scripts/BSK_Transport_Play.lua" download>Download BSK_Transport_Play.lua</a>
         </div>
 
-        <div class="script-card transport">
+        <div class="script-card">
             <h3>BSK Transport: Pause <span class="badge lua">Lua</span></h3>
             <p>Pauses if playing, unpauses if paused. Does nothing if stopped or recording. Designed to make your Stream Deck transport buttons safe.</p>
             <a class="download-link" href="/resources/scripts/BSK_Transport_Pause.lua" download>Download BSK_Transport_Pause.lua</a>
         </div>
 
-        <div class="script-card transport">
+        <div class="script-card">
             <h3>BSK Transport: Record <span class="badge lua">Lua</span></h3>
             <p>Starts recording only if not already recording. Designed to make your Stream Deck transport buttons safe.</p>
             <a class="download-link" href="/resources/scripts/BSK_Transport_Record.lua" download>Download BSK_Transport_Record.lua</a>
         </div>
 
-        <div class="script-card hardware">
+        <div class="script-card">
             <h3>BSK Import: Track Names from CSV or Text <span class="badge lua">Lua</span></h3>
             <p>Imports channel names from a console offline editor export and creates or renames tracks. Detects format automatically -- works with Allen &amp; Heath (dLive, Avantis, SQ), Yamaha (CL, QL, Rivage), or any plain text file with one name per line.</p>
             <a class="download-link" href="/resources/scripts/BSK_Import_Track_Names.lua" download>Download BSK_Import_Track_Names.lua</a>
         </div>
 
-        <div class="script-card hardware">
+        <div class="script-card">
             <h3>BSK AutoPatch: HW 1-to-1 Mono <span class="badge lua">Lua</span></h3>
             <p>Patches all tracks 1:1 to mono hardware inputs and outputs. Sets pre-FX sends at unity gain, disables master send and monitoring. Shows a summary when done.</p>
             <a class="download-link" href="/resources/scripts/BSK_AutoPatch_HW_1to1_Mono.lua" download>Download BSK_AutoPatch_HW_1to1_Mono.lua</a>
         </div>
 
-        <div class="script-card hardware">
+        <div class="script-card">
             <h3>BSK AutoPatch: HW Teardown <span class="badge lua">Lua</span></h3>
             <p>Removes all hardware sends and restores master send and monitoring on every track. An extreme undo button for AutoPatch.</p>
             <a class="download-link" href="/resources/scripts/BSK_AutoPatch_HW_Teardown.lua" download>Download BSK_AutoPatch_HW_Teardown.lua</a>

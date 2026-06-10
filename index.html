@@ -15,188 +15,8 @@
     <meta property="og:url" content="https://bskapps.com">
     <meta property="og:type" content="website">
     <link rel="canonical" href="https://bskapps.com/">
+    <link rel="stylesheet" href="/css/site.css">
     <script src="https://app.lemonsqueezy.com/js/lemon.js" defer></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: radial-gradient(ellipse 900px 500px at 50% -120px, rgba(122,196,255,0.07), transparent 70%), linear-gradient(180deg, #161616 0%, #0d0d0d 700px) #0d0d0d; background-attachment: fixed;
-            color: #e0e0e0;
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 60px 24px;
-        }
-        h1 {
-            font-size: 2.4rem;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 8px;
-        }
-        .tagline {
-            font-size: 1.1rem;
-            color: #888;
-            margin-bottom: 48px;
-        }
-        a.app-card {
-            display: block;
-            text-decoration: none;
-            color: inherit;
-        }
-        .app {
-            background: linear-gradient(160deg, #252525 0%, #1a1a1a 60%, #141414 100%);
-            border: 1px solid #3a3a3a;
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 24px;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), inset 0 0 0 1px rgba(255,255,255,0.03), 0 4px 14px rgba(0,0,0,0.4);
-            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
-            cursor: pointer;
-        }
-        .app h2 {
-            font-size: 1.5rem;
-            color: #fff;
-            margin-bottom: 6px;
-        }
-        .app .subtitle {
-            color: #888;
-            font-size: 0.95rem;
-            margin-bottom: 12px;
-        }
-        .app .outcome {
-            color: #e8e8e8;
-            font-size: 1.02rem;
-            font-weight: 600;
-            line-height: 1.4;
-            margin: 4px 0 18px;
-        }
-        .app p {
-            line-height: 1.6;
-            color: #bbb;
-            margin-bottom: 12px;
-        }
-        .features {
-            list-style: none;
-            padding: 0;
-            margin-top: 12px;
-        }
-        .features li {
-            padding: 4px 0;
-            color: #aaa;
-            font-size: 0.9rem;
-        }
-        .features li::before {
-            content: "\2022";
-            color: #555;
-            margin-right: 8px;
-        }
-        .badge {
-            display: inline-block;
-            background: #2a2a2a;
-            color: #aaa;
-            font-size: 0.75rem;
-            padding: 3px 10px;
-            border-radius: 12px;
-            margin-right: 6px;
-            margin-bottom: 6px;
-        }
-        .badge.macos { color: #7ac4ff; border: 1px solid #2a4a6a; background: #1a2a3a; }
-        .badge.native { color: #7aff8a; border: 1px solid #2a5a2a; background: #1a2a1a; }
-        .badge.coming-soon { color: #ffb347; border: 1px solid #5a4a2a; background: #2a2210; }
-        .badge.pro { color: #b48aff; border: 1px solid #3a2a6a; background: #1a1a3a; }
-        .buy-btn {
-            display: inline-block;
-            margin-top: 16px;
-            padding: 10px 24px;
-            background: linear-gradient(180deg, #229155, #1d7e47);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
-            color: #fff;
-            font-size: 0.95rem;
-            font-weight: 700;
-            letter-spacing: 0.02em;
-            border-radius: 10px;
-            text-decoration: none;
-            transition: background 0.25s;
-        }
-        .buy-btn:hover {
-            background: linear-gradient(180deg, #2aa863, #229155);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.22);
-
-        }
-        .lemonsqueezy-checkout-overlay { background: rgba(0,0,0,0.85) !important; }
-        .buy-note {
-            display: block;
-            color: #666;
-            font-size: 0.8rem;
-            margin-top: 6px;
-            margin-bottom: 8px;
-        }
-        .version-line {
-            display: block;
-            color: #555;
-            font-size: 0.75rem;
-            margin-top: 2px;
-            letter-spacing: 0.01em;
-        }
-        .app h2 a {
-            color: inherit;
-            text-decoration: none;
-        }
-        .app { position: relative; }
-        .app-header { padding-right: 80px; }
-        .corner-link {
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            color: #7ac4ff;
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 6px 10px;
-            border-radius: 8px;
-            transition: color 0.2s, background 0.2s;
-        }
-        .corner-link:hover { color: #fff; background: rgba(122,196,255,0.08); }
-        .corner-link svg { transition: transform 0.2s; }
-        .corner-link:hover svg { transform: translate(2px, -2px); }
-        .header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
-        .header img { width: 56px; height: 56px; border-radius: 50%; }
-        .app-header { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
-        .app-icon { width: 64px; height: 64px; border-radius: 14px; }
-        footer {
-            text-align: center;
-            margin-top: 48px;
-            color: #555;
-            font-size: 0.85rem;
-            line-height: 1.6;
-        }
-        footer a { color: #888; text-decoration: none; }
-        footer a:hover { color: #fff; }
-        .qip-buy-row .buy-btn { flex-shrink: 0; }
-        .mini-card .app { padding: 24px; }
-        .mini-card h2 { font-size: 1.2rem; }
-        .mini-card:hover .app { border-color: #4a7aaa !important; transition: border-color 0.2s; }
-        @media (max-width: 700px) {
-            h1 { font-size: 1.8rem; }
-            .container { padding: 36px 16px; }
-            .app { padding: 24px 20px; }
-            .app-header { padding-right: 0; }
-            .corner-link { display: none; }
-            .buy-btn { display: block; width: 100%; text-align: center; box-sizing: border-box; }
-            .qip-buy-row { flex-direction: column !important; align-items: flex-start !important; gap: 40px !important; }
-            .qip-buy-row span[style*="position:absolute"] {
-                position: static !important;
-                display: block !important;
-                margin-top: 10px !important;
-                white-space: normal !important;
-            }
-        }
-    </style>
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -211,166 +31,140 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <img src="images/bsk-logo.png" alt="BSK Apps">
-            <h1>BSK Apps</h1>
-        </div>
-        <p class="tagline">Utilities for AV Professionals</p>
+        <nav class="nav">
+            <a class="nav-brand" href="/"><img src="images/bsk-logo.png" alt="BSK Apps">BSK Apps</a>
+            <div class="nav-links">
+                <a href="resources/">Resources</a>
+                <a href="contact/">Contact</a>
+            </div>
+        </nav>
 
-        <div class="app-card" onclick="window.location='quickerip/'" style="cursor:pointer">
-        <div class="app">
-            <a href="quickerip/" class="corner-link" onclick="event.stopPropagation()">View <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="11" x2="11" y2="3"/><polyline points="5 3 11 3 11 9"/></svg></a>
-            <div class="app-header">
-                <img class="app-icon" src="images/quickip-icon.png" alt="Quicker IP">
-                <div>
-                    <h2><a href="quickerip/" onclick="event.stopPropagation()">Quicker IP</a></h2>
-                    <p class="subtitle">{{ site.data.content.apps.quickerip.subtitle }}</p>
+        <div class="hero">
+            <h1>Utilities for AV Professionals</h1>
+            <p>Native macOS apps for live production - Networking, QLab Automation, Media, and Measurement.</p>
+        </div>
+
+        <div class="grid">
+            <div class="app-card" onclick="window.location='quickerip/'" style="cursor:pointer">
+            <div class="tile">
+                <div class="tile-head">
+                    <img class="tile-icon" src="images/quickip-icon.png" alt="Quicker IP">
+                    <div>
+                        <h2>Quicker IP</h2>
+                        <p class="subtitle">{{ site.data.content.apps.quickerip.subtitle }}</p>
+                    </div>
+                </div>
+                <p class="tile-line">{{ site.data.content.apps.quickerip.tagline }}</p>
+                <div class="tile-foot">
+                    <a href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0" class="buy-link lemonsqueezy-button" aria-label="Buy Quicker IP Pro for {{ site.data.content.apps.quickerip.price }}" onclick="event.stopPropagation()">Buy - {{ site.data.content.apps.quickerip.price }}</a>
+                    <span class="tile-meta">{{ site.data.content.apps.quickerip.macos }}</span>
+                </div>
+                <a class="tile-note" href="https://apps.apple.com/us/app/quicker-ip-lite/id6761874418" onclick="event.stopPropagation()">Free Lite version on the App Store</a>
+            </div>
+            </div>
+
+            <div class="app-card" onclick="window.location='labassistant/'" style="cursor:pointer">
+            <div class="tile">
+                <div class="tile-head">
+                    <img class="tile-icon" src="images/labassistant-icon.png" alt="Lab Assistant">
+                    <div>
+                        <h2>Lab Assistant</h2>
+                        <p class="subtitle">{{ site.data.content.apps.labassistant.subtitle }}</p>
+                    </div>
+                </div>
+                <p class="tile-line">{{ site.data.content.apps.labassistant.tagline }}</p>
+                <div class="tile-foot">
+                    <a href="https://bskapps.lemonsqueezy.com/checkout/buy/efb96677-ac6d-43c1-8697-e465e62d1d00?dark=1&desc=0&media=0" class="buy-link lemonsqueezy-button" aria-label="Buy Lab Assistant for {{ site.data.content.apps.labassistant.price }}" onclick="event.stopPropagation()">Buy - {{ site.data.content.apps.labassistant.price }}</a>
+                    <span class="tile-meta">{{ site.data.content.apps.labassistant.macos }}</span>
                 </div>
             </div>
-            <p class="outcome">{{ site.data.content.apps.quickerip.tagline }}</p>
-            <span class="badge macos">{{ site.data.content.apps.quickerip.macos }}</span>
+            </div>
 
-            <span class="badge pro">Pro</span>
-            <ul class="features">
-                {% for feature in site.data.content.apps.quickerip.features %}<li>{{ feature }}</li>
-                {% endfor %}
-            </ul>
-            <div class="qip-buy-row" style="display:flex; align-items:flex-start; gap:180px; margin-top:28px; flex-wrap:wrap; row-gap:32px;">
-                <div class="qip-buy-col" style="display:flex; flex-direction:column; align-items:flex-start;">
-                    <a href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Quicker IP Pro for {{ site.data.content.apps.quickerip.price }}" onclick="event.stopPropagation()" style="margin-top:0;">Buy - {{ site.data.content.apps.quickerip.price }}</a>
-                    <span class="buy-note" style="margin-top:8px;">One-time purchase · 2 activations</span>
-                    <span class="version-line">{{ site.data.content.apps.quickerip.version }} · Released {{ site.data.content.apps.quickerip.released }}</span>
+            <div class="app-card" onclick="window.location='fetchpuppy/'" style="cursor:pointer">
+            <div class="tile">
+                <div class="tile-head">
+                    <img class="tile-icon" src="images/fetchpuppy-icon.png" alt="Fetch Puppy">
+                    <div>
+                        <h2>Fetch Puppy</h2>
+                        <p class="subtitle">{{ site.data.content.apps.fetchpuppy.subtitle }}</p>
+                    </div>
                 </div>
-                <div style="position:relative; line-height:0;">
-                    <a href="https://apps.apple.com/us/app/quicker-ip-lite/id6761874418" aria-label="Download Quicker IP Lite on the Mac App Store" onclick="event.stopPropagation()" style="text-decoration:none;">
-                        <img src="https://tools.applemediaservices.com/api/badges/download-on-the-mac-app-store/black/en-us?size=250x83" alt="Download on the Mac App Store" style="height:40px; display:block;">
-                    </a>
-                    <span style="position:absolute; top:100%; left:0; margin-top:10px; font-size:0.9rem; font-weight:700; color:#fff; line-height:1.2; white-space:nowrap;"><span style="display:inline-block; background:#7ac4ff; color:#000; font-size:0.65rem; font-weight:700; padding:2px 8px; border-radius:10px; margin-right:8px; vertical-align:middle; letter-spacing:0.5px;">LITE</span>Free version on App Store</span>
+                <p class="tile-line">{{ site.data.content.apps.fetchpuppy.tagline }}</p>
+                <div class="tile-foot">
+                    <a href="https://bskapps.lemonsqueezy.com/checkout/buy/99a45e24-5f0c-4ef7-86a9-be1cf7c555af?dark=1&media=0&desc=0" class="buy-link lemonsqueezy-button" aria-label="Buy Fetch Puppy for {{ site.data.content.apps.fetchpuppy.price }}" onclick="event.stopPropagation()">Buy - {{ site.data.content.apps.fetchpuppy.price }}</a>
+                    <span class="tile-meta">{{ site.data.content.apps.fetchpuppy.macos }}</span>
                 </div>
             </div>
-        </div>
-        </div>
+            </div>
 
-        <div class="app-card" onclick="window.location='labassistant/'" style="cursor:pointer">
-        <div class="app">
-            <a href="labassistant/" class="corner-link" onclick="event.stopPropagation()">View <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="11" x2="11" y2="3"/><polyline points="5 3 11 3 11 9"/></svg></a>
-            <div class="app-header">
-                <img class="app-icon" src="images/labassistant-icon.png" alt="Lab Assistant">
-                <div>
-                    <h2><a href="labassistant/" onclick="event.stopPropagation()">Lab Assistant</a></h2>
-                    <p class="subtitle">{{ site.data.content.apps.labassistant.subtitle }}</p>
+            <div class="app-card" onclick="window.location='targettrace/'" style="cursor:pointer">
+            <div class="tile">
+                <div class="tile-head">
+                    <img class="tile-icon" src="images/targettrace-icon.png" alt="Target Trace">
+                    <div>
+                        <h2>Target Trace</h2>
+                        <p class="subtitle">{{ site.data.content.apps.targettrace.subtitle }}</p>
+                    </div>
+                </div>
+                <p class="tile-line">{{ site.data.content.apps.targettrace.tagline }}</p>
+                <div class="tile-foot">
+                    <a href="https://bskapps.lemonsqueezy.com/checkout/buy/2d6a5745-536e-4e65-9953-ad34ad59fdb7?dark=1&media=0&desc=0" class="buy-link lemonsqueezy-button" aria-label="Buy Target Trace for {{ site.data.content.apps.targettrace.price }}" onclick="event.stopPropagation()">Buy - {{ site.data.content.apps.targettrace.price }}</a>
+                    <span class="tile-meta">{{ site.data.content.apps.targettrace.macos }}</span>
                 </div>
             </div>
-            <p class="outcome">{{ site.data.content.apps.labassistant.tagline }}</p>
-            <span class="badge macos">{{ site.data.content.apps.labassistant.macos }}</span>
-            <ul class="features">
-                {% for feature in site.data.content.apps.labassistant.features %}<li>{{ feature }}</li>
-                {% endfor %}
-            </ul>
-            <div style="margin-top: 16px;">
-                <a href="https://bskapps.lemonsqueezy.com/checkout/buy/efb96677-ac6d-43c1-8697-e465e62d1d00?dark=1&desc=0&media=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Lab Assistant for {{ site.data.content.apps.labassistant.price }}" onclick="event.stopPropagation()">Buy - {{ site.data.content.apps.labassistant.price }}</a>
-                <span class="buy-note">One-time purchase · 2 activations</span>
-                <span class="version-line">{{ site.data.content.apps.labassistant.version }} · Released {{ site.data.content.apps.labassistant.released }}</span>
             </div>
-        </div>
-        </div>
 
-
-        <div class="app-card" onclick="window.location='targettrace/'" style="cursor:pointer">
-        <div class="app">
-            <a href="targettrace/" class="corner-link" onclick="event.stopPropagation()">View <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="11" x2="11" y2="3"/><polyline points="5 3 11 3 11 9"/></svg></a>
-            <div class="app-header">
-                <img class="app-icon" src="images/targettrace-icon.png" alt="Target Trace">
-                <div>
-                    <h2><a href="targettrace/" onclick="event.stopPropagation()">Target Trace</a></h2>
-                    <p class="subtitle">{{ site.data.content.apps.targettrace.subtitle }}</p>
+            <div class="app-card" onclick="window.location='ewp/'" style="cursor:pointer">
+            <div class="tile">
+                <div class="tile-head">
+                    <img class="tile-icon" src="images/ewp-icon.png" alt="EWP">
+                    <div>
+                        <h2>EWP</h2>
+                        <p class="subtitle">{{ site.data.content.apps.ewp.subtitle }}</p>
+                    </div>
                 </div>
-            </div>
-            <p class="outcome">{{ site.data.content.apps.targettrace.tagline }}</p>
-            <span class="badge macos">{{ site.data.content.apps.targettrace.macos }}</span>
-            <ul class="features">
-                {% for feature in site.data.content.apps.targettrace.features %}<li>{{ feature }}</li>
-                {% endfor %}
-            </ul>
-            <div style="margin-top: 16px;">
-                <a href="https://bskapps.lemonsqueezy.com/checkout/buy/2d6a5745-536e-4e65-9953-ad34ad59fdb7?dark=1&media=0&desc=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Target Trace for {{ site.data.content.apps.targettrace.price }}" onclick="event.stopPropagation()" style="margin-top: 0;">Buy - {{ site.data.content.apps.targettrace.price }}</a>
-                <span class="buy-note">One-time purchase · 2 activations</span>
-                <span class="version-line">{{ site.data.content.apps.targettrace.version }} · Released {{ site.data.content.apps.targettrace.released }}</span>
-            </div>
-        </div>
-        </div>
-
-        <div class="app-card" onclick="window.location='fetchpuppy/'" style="cursor:pointer">
-        <div class="app">
-            <a href="fetchpuppy/" class="corner-link" onclick="event.stopPropagation()">View <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="11" x2="11" y2="3"/><polyline points="5 3 11 3 11 9"/></svg></a>
-            <div class="app-header">
-                <img class="app-icon" src="images/fetchpuppy-icon.png" alt="Fetch Puppy">
-                <div>
-                    <h2><a href="fetchpuppy/" onclick="event.stopPropagation()">Fetch Puppy</a></h2>
-                    <p class="subtitle">{{ site.data.content.apps.fetchpuppy.subtitle }}</p>
+                <p class="tile-line">{{ site.data.content.apps.ewp.tagline }}</p>
+                <div class="tile-foot">
+                    <a href="https://bskapps.lemonsqueezy.com/checkout/buy/c3235a75-6837-4d32-b495-a941806e9b90?dark=1&media=0&desc=0" class="buy-link lemonsqueezy-button" aria-label="Buy EWP for {{ site.data.content.apps.ewp.price }}" onclick="event.stopPropagation()">Buy - {{ site.data.content.apps.ewp.price }}</a>
+                    <span class="tile-meta">{{ site.data.content.apps.ewp.macos }}</span>
                 </div>
+                <span class="tile-note">App launch support coming in the next update</span>
             </div>
-            <p class="outcome">{{ site.data.content.apps.fetchpuppy.tagline }}</p>
-            <span class="badge macos">{{ site.data.content.apps.fetchpuppy.macos }}</span>
-            <ul class="features">
-                {% for feature in site.data.content.apps.fetchpuppy.features %}<li>{{ feature }}</li>
-                {% endfor %}
-            </ul>
-            <div style="margin-top: 16px;">
-                <a href="https://bskapps.lemonsqueezy.com/checkout/buy/99a45e24-5f0c-4ef7-86a9-be1cf7c555af?dark=1&media=0&desc=0" class="buy-btn lemonsqueezy-button" aria-label="Buy Fetch Puppy for {{ site.data.content.apps.fetchpuppy.price }}" onclick="event.stopPropagation()" style="margin-top: 0;">Buy - {{ site.data.content.apps.fetchpuppy.price }}</a>
-                <span class="buy-note">One-time purchase · 2 activations</span>
-                <span class="version-line">{{ site.data.content.apps.fetchpuppy.version }} · Released {{ site.data.content.apps.fetchpuppy.released }}</span>
             </div>
-        </div>
-        </div>
 
-        <div class="app-card" onclick="window.location='ewp/'" style="cursor:pointer">
-        <div class="app">
-            <a href="ewp/" class="corner-link" onclick="event.stopPropagation()">View <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="11" x2="11" y2="3"/><polyline points="5 3 11 3 11 9"/></svg></a>
-            <div class="app-header">
-                <img class="app-icon" src="images/ewp-icon.png" alt="EWP">
-                <div>
-                    <h2><a href="ewp/" onclick="event.stopPropagation()">EWP</a></h2>
-                    <p class="subtitle">{{ site.data.content.apps.ewp.subtitle }}</p>
+            <div class="app-card" onclick="window.location='gogames/'" style="cursor:pointer">
+            <div class="tile">
+                <div class="tile-head">
+                    <div class="fan">
+                        <img src="gogames/images/gosolitaire-icon.png" alt="Go Solitaire">
+                        <img src="gogames/images/gosudoku-icon.png" alt="Go Sudoku">
+                        <img src="gogames/images/gominesweeper-icon.png" alt="Go Minesweeper">
+                        <img src="gogames/images/gobattleboats-icon.png" alt="Go Battle Boats">
+                    </div>
+                    <div>
+                        <h2>Go Games</h2>
+                        <p class="subtitle">{{ site.data.content.apps.gogames.subtitle }}</p>
+                    </div>
                 </div>
+                <p class="tile-line">{{ site.data.content.apps.gogames.tagline }}</p>
+                <div class="tile-foot">
+                    <span class="buy-link">Free on the App Store</span>
+                    <span class="tile-meta">{{ site.data.content.apps.gogames.macos }}</span>
+                </div>
+                <span class="tile-note">Ad-free. Free to play - one $1.99 unlock opens every level and theme.</span>
             </div>
-            <p class="outcome">{{ site.data.content.apps.ewp.tagline }}</p>
-            <span class="badge macos">{{ site.data.content.apps.ewp.macos }}</span>
-            <ul class="features">
-                {% for feature in site.data.content.apps.ewp.features %}<li>{{ feature }}</li>
-                {% endfor %}
-            </ul>
-            <div style="margin-top: 16px;">
-                <a href="https://bskapps.lemonsqueezy.com/checkout/buy/c3235a75-6837-4d32-b495-a941806e9b90?dark=1&media=0&desc=0" class="buy-btn lemonsqueezy-button" aria-label="Buy EWP for {{ site.data.content.apps.ewp.price }}" onclick="event.stopPropagation()" style="margin-top: 0;">Buy - {{ site.data.content.apps.ewp.price }}</a>
-                <span class="buy-note">One-time purchase &middot; 2 activations</span>
-                <span class="version-line">{{ site.data.content.apps.ewp.version }} &middot; Released {{ site.data.content.apps.ewp.released }}</span>
             </div>
         </div>
-        </div>
 
-        <div class="mini-row" style="display:flex; gap:16px; margin-bottom:24px; flex-wrap:wrap;">
-            <a class="app-card mini-card" href="resources/" style="flex:1 1 280px; margin:0;">
-            <div class="app" style="text-align:center; margin-bottom:0; height:100%; background:linear-gradient(160deg, #1f2a3a 0%, #141820 60%, #101218 100%); border:1px solid #2a4a6a; box-shadow:inset 0 1px 0 rgba(122,196,255,0.2), 0 4px 14px rgba(0,0,0,0.4);">
-                <h2 style="color:#7ac4ff;">Resources →</h2>
-                <p class="subtitle">Tools and scripts for AV pros</p>
-                <p>Free REAPER Lua scripts and the BSK Spotify Companion module.</p>
-            </div>
-            </a>
+        <a class="resource-feature" href="resources/">
+            <strong>Free Resources</strong>
+            <span>REAPER Lua scripts for Stream Deck and live recording, plus the BSK Spotify Companion module. Free to download and use.</span>
+        </a>
 
-            <a class="app-card mini-card" href="articles/" style="flex:1 1 280px; margin:0;">
-            <div class="app" style="text-align:center; margin-bottom:0; height:100%; background:linear-gradient(160deg, #1f2a3a 0%, #141820 60%, #101218 100%); border:1px solid #2a4a6a; box-shadow:inset 0 1px 0 rgba(122,196,255,0.2), 0 4px 14px rgba(0,0,0,0.4);">
-                <h2 style="color:#7ac4ff;">Articles →</h2>
-                <p class="subtitle">Notes from shows and building apps</p>
-                <p>Multi-adapter networks, Dante readiness, QLab habits, REAPER Lua, and more.</p>
-            </div>
-            </a>
-
-            <a class="app-card mini-card" href="gogames/" style="flex:1 1 280px; margin:0;">
-            <div class="app" style="text-align:center; margin-bottom:0; height:100%; background:linear-gradient(160deg, #1f2a3a 0%, #141820 60%, #101218 100%); border:1px solid #2a4a6a; box-shadow:inset 0 1px 0 rgba(122,196,255,0.2), 0 4px 14px rgba(0,0,0,0.4);">
-                <h2 style="color:#7ac4ff;">Go Games →</h2>
-                <p class="subtitle">Downtime on gigs sorted</p>
-                <p>Solitaire, Sudoku, Minesweeper, and Battle Boats for iOS and Mac. Free download on the App Store.</p>
-            </div>
+        <div class="more">
+            <a class="more-link" href="articles/">
+                <strong>Articles</strong>
+                <span>Practical guides for AV work on a Mac - Networking, QLab, REAPER Lua, and more.</span>
             </a>
         </div>
 
