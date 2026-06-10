@@ -187,18 +187,14 @@ a.buy-link:hover { color: #76D2A0; }
 
 .post {
     display: block;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px 24px;
-    margin-bottom: 14px;
+    padding: 18px 4px;
+    border-top: 1px solid var(--border);
     text-decoration: none;
     color: inherit;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
-    transition: background 0.15s, border-color 0.15s;
 }
-.post:hover { background: var(--card-hover); border-color: var(--border-strong); }
-.post h2 { font-size: 1.1rem; color: var(--heading); margin-bottom: 6px; }
+.section-head + .post { border-top: none; }
+.post h2 { font-size: 1.1rem; color: var(--brand); margin-bottom: 6px; }
+.post:hover h2 { color: var(--brand-bright); }
 .post .date { color: var(--text-faint); font-size: 0.78rem; display: block; margin-bottom: 8px; }
 .post p { line-height: 1.55; color: var(--text-muted); font-size: 0.95rem; }
 
@@ -235,17 +231,12 @@ article .note { background: var(--card); border: 1px solid var(--border); border
 .section-title { font-size: 1.3rem; font-weight: 600; color: var(--heading); margin-bottom: 8px; }
 .section-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px; line-height: 1.5; }
 .script-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 24px 26px;
-    margin-bottom: 14px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
-    transition: background 0.15s, border-color 0.15s;
+    padding: 20px 4px;
+    margin-bottom: 0;
+    border-top: 1px solid var(--border);
 }
-.script-card:hover { background: var(--card-hover); border-color: var(--border-strong); }
-.script-card.setup { background: transparent; border-style: dashed; box-shadow: none; }
-.script-card.setup:hover { background: transparent; border-color: var(--border); }
+.section-desc + .script-card { border-top: none; }
+.script-card.setup { border-top: 1px solid var(--border); }
 .script-card h3 { font-size: 1.05rem; color: var(--heading); margin-bottom: 6px; }
 .script-card p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 14px; }
 .download-link { display: inline-block; color: var(--brand); text-decoration: none; font-size: 0.85rem; font-weight: 600; }
@@ -255,6 +246,23 @@ article .note { background: var(--card); border: 1px solid var(--border); border
 .steps li { margin-bottom: 8px; }
 .steps code, .script-card code { background: rgba(0,0,0,0.25); border: 1px solid var(--border); color: var(--text); padding: 1px 6px; border-radius: 4px; font-size: 0.85rem; }
 .step-shot { display: block; max-width: 100%; margin: 14px 0; border: 1px solid var(--border); border-radius: 8px; }
+
+.section {
+    padding: 22px 4px;
+    margin-bottom: 0;
+    border-top: 1px solid var(--border);
+}
+.section h2 { font-size: 1.2rem; color: var(--heading); margin-bottom: 12px; }
+.section h2:not(:first-child) { margin-top: 24px; }
+.section h3 { font-size: 1.05rem; color: var(--heading); margin: 20px 0 10px; }
+.section h3:first-child { margin-top: 0; }
+.section p { line-height: 1.7; color: var(--text-muted); margin-bottom: 12px; }
+.section p:last-child { margin-bottom: 0; }
+.section ul { list-style: none; padding: 0; margin: 8px 0 12px; }
+.section ul li { padding: 4px 0; color: var(--text-muted); font-size: 0.95rem; }
+.section ul li::before { content: "\2022"; color: var(--text-faint); margin-right: 8px; }
+.section a { color: var(--brand); text-decoration: none; }
+.section a:hover { color: var(--brand-bright); }
 .script-card .note-line { color: var(--text-muted); font-size: 0.88rem; margin-top: -6px; }
 .script-card .note-line strong, .steps + .note-line strong { color: var(--heading); }
 
