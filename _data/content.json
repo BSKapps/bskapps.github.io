@@ -38,8 +38,8 @@
       "tagline": "Build precise target curves for Smaart - from presets, from scratch, or from your own measurements.",
       "price": "$8.99 USD",
       "macos": "macOS 14.0+",
-      "version": "v1.0",
-      "released": "10 May 2026",
+      "version": "v1.0.1",
+      "released": "30 May 2026",
       "features": [
         "Drag-and-drop control point editing",
         "Freehand draw mode",
@@ -66,8 +66,8 @@
       "tagline": "Set up your screens once. Snap into any layout instantly.",
       "price": "$4.99 USD",
       "macos": "macOS 14.0+",
-      "version": "v1.0.1",
-      "released": "28 April 2026",
+      "version": "v1.0.3",
+      "released": "31 May 2026",
       "features": [
         "Spotter panel - drag apps in, EWP arranges them instantly",
         "6 layout modes across multiple monitors",
