@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=5';
-import { renderDesign } from './renderer.js?v=5';
-import { renderSeriesItems } from './ui.js?v=5';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=6';
+import { renderDesign } from './renderer.js?v=6';
+import { renderSeriesItems } from './ui.js?v=6';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -18,17 +18,6 @@ const ICONS = {
 
 const numberedSet = (from, to) => ({ mode: 'numbers', from, to, items: [], colorTarget: 'bg' });
 
-function transport(name, iconKey, color) {
-  const d = defaultDesign();
-  d.bg.color = '#1d1d22';
-  d.icon.svg = ICONS[iconKey];
-  d.icon.name = 'builtin:' + iconKey;
-  d.icon.color = color;
-  d.icon.size = 58;
-  d.icon.y = 0;
-  return { name, builtin: true, design: d };
-}
-
 function builtinPresets() {
   const mk = (over) => {
     const d = defaultDesign();
@@ -36,6 +25,100 @@ function builtinPresets() {
     return d;
   };
   return [
+    {
+      name: 'Dark Label',
+      builtin: true,
+      design: mk((d) => {
+        d.bg.color = '#111418';
+        Object.assign(d.texts[0], { value: 'LABEL', size: 12 });
+        d.shape.border = 2;
+        d.shape.borderColor = '#2e3947';
+        d.shape.radius = 12;
+      })
+    },
+    {
+      name: 'Light Label',
+      builtin: true,
+      design: mk((d) => {
+        d.bg.color = '#d9d9de';
+        Object.assign(d.texts[0], { value: 'LABEL', size: 12, color: '#16181c' });
+        d.shape.radius = 12;
+      })
+    },
+    {
+      name: 'CUT',
+      builtin: true,
+      design: mk((d) => {
+        d.bg.color = '#b51f1f';
+        Object.assign(d.texts[0], { value: 'CUT', font: 'Oswald', weight: '700', size: 20, align: 'center:center' });
+      })
+    },
+    {
+      name: 'AUTO',
+      builtin: true,
+      design: mk((d) => {
+        d.bg.color = '#c9a227';
+        Object.assign(d.texts[0], { value: 'AUTO', font: 'Oswald', weight: '700', size: 17, color: '#16181c', align: 'center:center' });
+      })
+    },
+    {
+      name: 'PVW',
+      builtin: true,
+      design: mk((d) => {
+        d.bg.color = '#1f9d3a';
+        Object.assign(d.texts[0], { value: 'PVW', font: 'Oswald', weight: '700', size: 19, align: 'center:center' });
+      })
+    },
+    {
+      name: 'Go Green',
+      builtin: true,
+      design: mk((d) => {
+        d.bg.color = '#0f6e2b';
+        Object.assign(d.texts[0], { value: 'GO', font: 'Bebas Neue', weight: '400', size: 30, align: 'center:center' });
+      })
+    },
+    {
+      name: 'Transport',
+      builtin: true,
+      series: {
+        mode: 'list',
+        from: 1,
+        to: 4,
+        items: [
+          { label: 'Play', color: '#4caf50', iconSvg: ICONS.play, iconName: 'builtin:play' },
+          { label: 'Pause', color: '#ffb300', iconSvg: ICONS.pause, iconName: 'builtin:pause' },
+          { label: 'Stop', color: '#e53935', iconSvg: ICONS.stop, iconName: 'builtin:stop' },
+          { label: 'Prev', color: '#ffffff', iconSvg: ICONS.prev, iconName: 'builtin:prev' },
+          { label: 'Next', color: '#ffffff', iconSvg: ICONS.next, iconName: 'builtin:next' },
+          { label: 'Rec', color: '#e53935', iconSvg: ICONS.record, iconName: 'builtin:record' }
+        ],
+        colorTarget: 'icon'
+      },
+      design: mk((d) => {
+        d.bg.color = '#1d1d22';
+        d.icon.size = 58;
+        d.icon.y = 0;
+      })
+    },
+    {
+      name: 'Traffic Lights',
+      builtin: true,
+      series: {
+        mode: 'list',
+        from: 1,
+        to: 4,
+        items: [
+          { label: 'GO', color: '#1f9d3a' },
+          { label: 'WARN', color: '#c9a227' },
+          { label: 'HOLD', color: '#c96a17' },
+          { label: 'STOP', color: '#b51f1f' }
+        ],
+        colorTarget: 'bg'
+      },
+      design: mk((d) => {
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 13, align: 'center:center' });
+      })
+    },
     {
       name: 'CAM 1-4',
       builtin: true,
@@ -97,62 +180,6 @@ function builtinPresets() {
         d.icon.size = 56;
         d.icon.y = 10;
         Object.assign(d.texts[0], { value: 'L3 {n}', font: 'Roboto Condensed', weight: '700', size: 10, align: 'center:top' });
-      })
-    },
-    transport('Play', 'play', '#4caf50'),
-    transport('Pause', 'pause', '#ffb300'),
-    transport('Stop', 'stop', '#e53935'),
-    transport('Previous', 'prev', '#ffffff'),
-    transport('Next', 'next', '#ffffff'),
-    {
-      name: 'Record',
-      builtin: true,
-      design: mk((d) => {
-        d.bg.color = '#1d1d22';
-        d.icon.svg = ICONS.record;
-        d.icon.name = 'builtin:record';
-        d.icon.color = '#e53935';
-        d.icon.size = 46;
-        d.icon.y = -8;
-        Object.assign(d.texts[0], { value: 'REC', font: 'Oswald', weight: '700', size: 10 });
-      })
-    },
-    {
-      name: 'Go Green',
-      builtin: true,
-      design: mk((d) => {
-        d.bg.color = '#0f6e2b';
-        Object.assign(d.texts[0], { value: 'GO', font: 'Bebas Neue', weight: '400', size: 24, align: 'center:center' });
-      })
-    },
-    {
-      name: 'Traffic Lights',
-      builtin: true,
-      series: {
-        mode: 'list',
-        from: 1,
-        to: 4,
-        items: [
-          { label: 'GO', color: '#1f9d3a' },
-          { label: 'WARN', color: '#c9a227' },
-          { label: 'HOLD', color: '#c96a17' },
-          { label: 'STOP', color: '#b51f1f' }
-        ],
-        colorTarget: 'bg'
-      },
-      design: mk((d) => {
-        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 13, align: 'center:center' });
-      })
-    },
-    {
-      name: 'Dark Label',
-      builtin: true,
-      design: mk((d) => {
-        d.bg.color = '#111418';
-        Object.assign(d.texts[0], { value: 'LABEL', size: 12 });
-        d.shape.border = 2;
-        d.shape.borderColor = '#2e3947';
-        d.shape.radius = 12;
       })
     }
   ];
@@ -253,7 +280,7 @@ export function renderPresetList() {
     }
 
     tile.addEventListener('click', () => {
-      state.design = normalizeDesign(deepClone(preset.design));
+      Object.assign(state.design, normalizeDesign(deepClone(preset.design)));
       state.ui.activeText = 0;
       if (preset.series) {
         Object.assign(state.series, deepClone(preset.series));
@@ -291,6 +318,10 @@ function thumbDesign(preset) {
   const label = first ? first.label : '';
   for (const t of d.texts) {
     t.value = t.value.replaceAll('{n}', n).replaceAll('{label}', label);
+  }
+  if (first && first.iconSvg) {
+    d.icon.svg = first.iconSvg;
+    d.icon.name = first.iconName || null;
   }
   if (first && first.color) {
     if (s.colorTarget === 'bg' && d.bg.mode !== 'image') {

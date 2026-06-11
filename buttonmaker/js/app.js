@@ -1,11 +1,11 @@
-import { state, onChange, emit } from './state.js?v=5';
-import { renderDesign } from './renderer.js?v=5';
-import { seriesVariants } from './series.js?v=5';
-import { initUI, syncInputsFromState, renderTextLayerChips } from './ui.js?v=5';
-import { initIconPicker } from './icons.js?v=5';
-import { initPresets } from './presets.js?v=5';
-import { initExport } from './export.js?v=5';
-import { initColorPopover } from './colorpicker.js?v=5';
+import { state, onChange, emit, APP_VERSION } from './state.js?v=6';
+import { renderDesign } from './renderer.js?v=6';
+import { seriesVariants } from './series.js?v=6';
+import { initUI, syncInputsFromState, renderTextLayerChips } from './ui.js?v=6';
+import { initIconPicker } from './icons.js?v=6';
+import { initPresets } from './presets.js?v=6';
+import { initExport } from './export.js?v=6';
+import { initColorPopover } from './colorpicker.js?v=6';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -19,11 +19,16 @@ async function renderAll() {
     return;
   }
   rendering = true;
-  do {
-    renderPending = false;
-    await renderOnce();
-  } while (renderPending);
-  rendering = false;
+  try {
+    do {
+      renderPending = false;
+      try {
+        await renderOnce();
+      } catch (e) {}
+    } while (renderPending);
+  } finally {
+    rendering = false;
+  }
 }
 
 async function renderOnce() {
@@ -34,10 +39,10 @@ async function renderOnce() {
   });
 
   const summary = document.getElementById('exportSummary');
-  if (variants.length === 1) {
-    summary.textContent = 'Your downloads will contain this one button.';
-  } else {
-    summary.textContent = 'Your downloads will contain all ' + variants.length + ' buttons, laid out as one row on the Companion page.';
+  if (summary) {
+    summary.textContent = variants.length === 1
+      ? 'Your downloads will contain this one button.'
+      : 'Your downloads will contain all ' + variants.length + ' buttons, laid out as one row on the Companion page.';
   }
 
   seriesWrap.innerHTML = '';
@@ -56,6 +61,15 @@ async function renderOnce() {
       seriesWrap.appendChild(item);
     }
   }
+}
+
+if (window.BM_V && window.BM_V !== APP_VERSION) {
+  if (!sessionStorage.getItem('bm-skew-reload')) {
+    sessionStorage.setItem('bm-skew-reload', '1');
+    location.replace(location.pathname + '?fresh=' + APP_VERSION);
+  }
+} else {
+  sessionStorage.removeItem('bm-skew-reload');
 }
 
 initUI();
