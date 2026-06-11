@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer } from './state.js?v=27';
-import { openIconModal, triggerIconUpload } from './icons.js?v=27';
-import { seriesVariants, hasToken } from './series.js?v=27';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer } from './state.js?v=28';
+import { openIconModal, triggerIconUpload } from './icons.js?v=28';
+import { seriesVariants, hasToken } from './series.js?v=28';
 
 let dragIndex = null;
 
@@ -40,7 +40,7 @@ function rebuildWeightOptions(font, current) {
 }
 
 function iconAnchorOffset() {
-  return Math.max(0, Math.min(40, Math.round(50 - activeIcon().size / 2 - 6)));
+  return Math.max(0, Math.min(40, Math.round(50 - activeIcon().size / 2)));
 }
 
 function activeIcon() {
@@ -246,7 +246,7 @@ export function renderTextLayerChips() {
   if (texts.length > 1) {
     const del = document.createElement('button');
     del.className = 'chip-action';
-    del.textContent = 'Remove';
+    del.textContent = 'Delete layer';
     del.addEventListener('click', () => {
       texts.splice(state.ui.activeText, 1);
       state.ui.activeText = Math.max(0, state.ui.activeText - 1);
@@ -286,7 +286,7 @@ export function renderIconLayerChips() {
   if (icons.length > 1) {
     const del = document.createElement('button');
     del.className = 'chip-action';
-    del.textContent = 'Remove';
+    del.textContent = 'Delete layer';
     del.addEventListener('click', () => {
       icons.splice(state.ui.activeIcon, 1);
       state.ui.activeIcon = Math.max(0, state.ui.activeIcon - 1);
