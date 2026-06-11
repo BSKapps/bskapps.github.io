@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=38';
-import { triggerIconUpload } from './icons.js?v=38';
-import { seriesVariants, hasToken } from './series.js?v=38';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=39';
+import { triggerIconUpload } from './icons.js?v=39';
+import { seriesVariants, hasToken } from './series.js?v=39';
 
 const selectionSnapshots = new Map();
 
@@ -278,6 +278,7 @@ export function initUI() {
 
   document.getElementById('textValue').addEventListener('input', (e) => {
     if (state.ui.allText) return;
+    if (state.series.mode === 'list' && !state.ui.selectedItems.length) return;
     activeText().value = e.target.value;
     syncSelectedLabel();
     emit();
@@ -499,9 +500,14 @@ export function syncInputsFromState() {
   setRange('iconOpacity', ic.opacity === undefined ? 100 : ic.opacity, 'iconOpacityVal');
   const t = refText();
   const textField = document.getElementById('textValue');
-  textField.disabled = state.ui.allText;
-  setVal('textValue', state.ui.allText ? '' : t.value);
-  textField.placeholder = state.ui.allText ? 'Pick a single layer to edit its text' : 'PC';
+  const listEditAll = state.series.mode === 'list' && !state.ui.selectedItems.length;
+  textField.disabled = state.ui.allText || listEditAll;
+  setVal('textValue', textField.disabled ? '' : t.value);
+  textField.placeholder = state.ui.allText
+    ? 'Pick a single layer to edit its text'
+    : listEditAll
+      ? 'Each button shows its name. Click one in the set to change its text.'
+      : 'PC';
   setVal('textFont', t.font);
   rebuildWeightOptions(t.font, t.weight);
   setRange('textSize', t.size, 'textSizeVal');
