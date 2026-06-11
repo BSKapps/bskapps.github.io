@@ -66,6 +66,17 @@ body {
   scrollbar-color: var(--card-hover) transparent;
 }
 
+.step-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 2px 0 8px;
+}
+
+.panel .step-label { margin: 4px 2px 10px; }
+
 .section {
   background: var(--card);
   border: 1px solid var(--border);

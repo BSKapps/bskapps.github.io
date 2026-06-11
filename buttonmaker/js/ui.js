@@ -1,5 +1,5 @@
-import { state, emit, defaultTextLayer } from './state.js?v=3';
-import { openIconModal } from './icons.js?v=3';
+import { state, emit, defaultTextLayer } from './state.js?v=4';
+import { openIconModal } from './icons.js?v=4';
 
 function activeText() {
   const texts = state.design.texts;
@@ -167,15 +167,17 @@ export function renderTextLayerChips() {
     wrap.appendChild(chip);
   });
 
-  const add = document.createElement('button');
-  add.className = 'chip-action';
-  add.textContent = '+ Layer';
-  add.addEventListener('click', () => {
-    texts.push(defaultTextLayer());
-    state.ui.activeText = texts.length - 1;
-    emit();
-  });
-  wrap.appendChild(add);
+  if (texts.length < 12) {
+    const add = document.createElement('button');
+    add.className = 'chip-action';
+    add.textContent = '+ Layer';
+    add.addEventListener('click', () => {
+      texts.push(defaultTextLayer());
+      state.ui.activeText = texts.length - 1;
+      emit();
+    });
+    wrap.appendChild(add);
+  }
 
   if (texts.length > 1) {
     const del = document.createElement('button');
