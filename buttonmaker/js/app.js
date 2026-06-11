@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, editTarget } from './state.js?v=30';
-import { renderDesign } from './renderer.js?v=30';
-import { seriesVariants } from './series.js?v=30';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, renderSeriesItems, convertNumberedToList, selectListItem, deselectListItem } from './ui.js?v=30';
-import { initIconPicker } from './icons.js?v=30';
-import { initPresets } from './presets.js?v=30';
-import { initExport } from './export.js?v=30';
-import { initColorPopover } from './colorpicker.js?v=30';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, editTarget } from './state.js?v=31';
+import { renderDesign } from './renderer.js?v=31';
+import { seriesVariants } from './series.js?v=31';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, deselectListItem, addListItem, removeListItem } from './ui.js?v=31';
+import { initIconPicker } from './icons.js?v=31';
+import { initPresets } from './presets.js?v=31';
+import { initExport } from './export.js?v=31';
+import { initColorPopover } from './colorpicker.js?v=31';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -34,7 +34,8 @@ async function renderAll() {
 async function renderOnce() {
   const variants = seriesVariants();
   const sel = state.ui.activeListItem;
-  const mainVariant = state.series.mode === 'list' && sel !== null && variants[sel] ? variants[sel] : variants[0];
+  const mainVariant = (state.series.mode === 'list' && sel !== null && variants[sel] ? variants[sel] : variants[0])
+    || { design: state.design };
   await renderDesign(preview, mainVariant.design, { bakeText: true });
 
   const summary = document.getElementById('exportSummary');
@@ -45,11 +46,12 @@ async function renderOnce() {
   }
 
   seriesWrap.innerHTML = '';
-  if (variants.length > 1) {
+  const isList = state.series.mode === 'list';
+  if (variants.length > 1 || isList) {
     variants.forEach((v, idx) => {
       const item = document.createElement('div');
       item.className = 'series-item';
-      item.classList.toggle('selected', state.series.mode === 'list' && idx === state.ui.activeListItem);
+      item.classList.toggle('selected', isList && idx === state.ui.activeListItem);
       item.draggable = true;
       item.title = 'Click to edit this button on its own. Drag onto another button to reorder.';
       item.addEventListener('click', () => {
@@ -70,6 +72,18 @@ async function renderOnce() {
       span.textContent = v.label;
       item.appendChild(c);
       item.appendChild(span);
+
+      if (isList) {
+        const del = document.createElement('button');
+        del.className = 'series-del';
+        del.textContent = 'x';
+        del.title = 'Remove this button from the set';
+        del.addEventListener('click', (e) => {
+          e.stopPropagation();
+          removeListItem(idx);
+        });
+        item.appendChild(del);
+      }
 
       item.addEventListener('dragstart', (e) => {
         gridDragIndex = idx;
@@ -93,6 +107,15 @@ async function renderOnce() {
 
       seriesWrap.appendChild(item);
     });
+
+    if (isList && state.series.items.length < 64) {
+      const add = document.createElement('button');
+      add.className = 'series-add';
+      add.textContent = '+';
+      add.title = 'Add another button to the set';
+      add.addEventListener('click', addListItem);
+      seriesWrap.appendChild(add);
+    }
   }
 }
 
@@ -108,7 +131,6 @@ function reorderSet(from, to) {
   items.splice(to, 0, moved);
   if (selItem) state.ui.activeListItem = items.indexOf(selItem);
   gridDragIndex = null;
-  renderSeriesItems();
   emit();
 }
 
@@ -213,7 +235,6 @@ document.addEventListener('keydown', (e) => {
   Object.assign(state.design, prev.design);
   Object.assign(state.series, prev.series);
   state.ui.activeListItem = null;
-  renderSeriesItems();
   emit();
   applyingUndo = false;
 });
@@ -259,7 +280,6 @@ document.getElementById('resetDesign').addEventListener('click', () => {
   state.ui.activeText = 0;
   state.ui.activeIcon = 0;
   state.ui.activeListItem = null;
-  renderSeriesItems();
   emit();
 });
 
@@ -275,9 +295,6 @@ onChange(() => {
   renderTextLayerChips();
   renderIconLayerChips();
   syncInputsFromState();
-  const active = document.activeElement;
-  const seriesWrap = document.getElementById('seriesItems');
-  if (!seriesWrap || !seriesWrap.contains(active)) renderSeriesItems();
   renderAll();
   if (!applyingUndo) {
     clearTimeout(historyTimer);

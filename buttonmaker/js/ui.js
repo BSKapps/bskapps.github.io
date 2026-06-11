@@ -1,8 +1,7 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget } from './state.js?v=30';
-import { openIconModal, triggerIconUpload } from './icons.js?v=30';
-import { seriesVariants, hasToken } from './series.js?v=30';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget } from './state.js?v=31';
+import { triggerIconUpload } from './icons.js?v=31';
+import { seriesVariants, hasToken } from './series.js?v=31';
 
-let dragIndex = null;
 let selectionSnapshot = null;
 
 function releaseSelection() {
@@ -40,6 +39,32 @@ export function deselectListItem() {
   state.ui.activeText = 0;
   state.ui.activeIcon = 0;
   emit();
+}
+
+export function addListItem() {
+  if (state.series.mode !== 'list' || state.series.items.length >= 64) return;
+  state.series.items.push({ label: '', color: '' });
+  selectListItem(state.series.items.length - 1);
+}
+
+export function removeListItem(i) {
+  if (state.ui.activeListItem === i) {
+    state.ui.activeListItem = null;
+    selectionSnapshot = null;
+  } else if (state.ui.activeListItem !== null && state.ui.activeListItem > i) {
+    state.ui.activeListItem--;
+  }
+  state.series.items.splice(i, 1);
+  emit();
+}
+
+function syncSelectedLabel() {
+  const i = state.ui.activeListItem;
+  if (i === null || state.series.mode !== 'list') return;
+  const item = state.series.items[i];
+  if (!item || !item.design) return;
+  const t = item.design.texts.find((l) => l.value);
+  item.label = t ? t.value.split('\n')[0] : '';
 }
 
 const FONT_WEIGHTS = {
@@ -178,6 +203,7 @@ export function initUI() {
 
   document.getElementById('textValue').addEventListener('input', (e) => {
     activeText().value = e.target.value;
+    syncSelectedLabel();
     emit();
   });
   bindSelect('textFont', (v) => {
@@ -218,17 +244,8 @@ export function initUI() {
     state.series.to = Number(e.target.value) || 0;
     emit();
   });
-  bindSelect('seriesColorTarget', (v) => (state.series.colorTarget = v));
-
-  document.getElementById('seriesAddItem').addEventListener('click', () => {
-    state.series.items.push({ label: '', color: '' });
-    renderSeriesItems();
-    emit();
-  });
-
   bindSelect('exportSize', (v) => (state.export.size = Number(v)));
 
-  renderSeriesItems();
   renderTextLayerChips();
   renderIconLayerChips();
   syncInputsFromState();
@@ -252,7 +269,6 @@ export function convertNumberedToList() {
     }));
   }
   state.series.mode = 'list';
-  renderSeriesItems();
 }
 
 export function renderTextLayerChips() {
@@ -335,162 +351,8 @@ export function renderIconLayerChips() {
   }
 }
 
-function resolvedSwatchColor(d) {
-  const ct = state.series.colorTarget;
-  if (ct === 'icon') return (d.icons[0] && d.icons[0].color) || '#ffffff';
-  if (ct === 'text') return (d.texts[0] && d.texts[0].color) || '#ffffff';
-  return d.bg.color;
-}
-
-function applyColorToDesign(d, col) {
-  const ct = state.series.colorTarget;
-  if (ct === 'icon') {
-    for (const ic of d.icons) ic.color = col;
-  } else if (ct === 'text') {
-    for (const t of d.texts) t.color = col;
-  } else if (d.bg.mode !== 'image') {
-    d.bg.mode = 'solid';
-    d.bg.color = col;
-  }
-}
-
 function truncate(s, len) {
   return s.length > len ? s.slice(0, len) + '...' : s;
-}
-
-export function renderSeriesItems() {
-  const wrap = document.getElementById('seriesItems');
-  wrap.innerHTML = '';
-  state.series.items.forEach((item, i) => {
-    const row = document.createElement('div');
-    row.className = 'series-item-row';
-    row.classList.toggle('active', i === state.ui.activeListItem);
-
-    const grip = document.createElement('span');
-    grip.className = 'drag-grip';
-    grip.textContent = '::';
-    grip.title = 'Drag to reorder';
-    grip.addEventListener('mousedown', () => (row.draggable = true));
-    row.addEventListener('dragend', () => {
-      row.draggable = false;
-      dragIndex = null;
-    });
-    row.addEventListener('dragstart', (e) => {
-      dragIndex = i;
-      e.dataTransfer.effectAllowed = 'move';
-    });
-    row.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-    });
-    row.addEventListener('drop', (e) => {
-      e.preventDefault();
-      if (dragIndex === null || dragIndex === i) return;
-      const selItem = state.ui.activeListItem !== null ? state.series.items[state.ui.activeListItem] : null;
-      const [moved] = state.series.items.splice(dragIndex, 1);
-      state.series.items.splice(i, 0, moved);
-      if (selItem) state.ui.activeListItem = state.series.items.indexOf(selItem);
-      dragIndex = null;
-      renderSeriesItems();
-      emit();
-    });
-    row.appendChild(grip);
-
-    const label = document.createElement('input');
-    label.type = 'text';
-    label.placeholder = 'Label';
-    label.value = item.label;
-    label.addEventListener('focus', () => selectListItem(i));
-    let labelLayerIdx = null;
-    label.addEventListener('input', () => {
-      item.label = label.value;
-      if (item.design) {
-        if (labelLayerIdx === null) {
-          labelLayerIdx = item.design.texts.findIndex((l) => l.value);
-          if (labelLayerIdx === -1) labelLayerIdx = 0;
-        }
-        const t = item.design.texts[labelLayerIdx];
-        if (t) t.value = label.value;
-      }
-      emit();
-    });
-
-    const color = document.createElement('input');
-    color.type = 'color';
-    color.value = item.design ? resolvedSwatchColor(item.design) : (item.color || resolvedSwatchColor(state.design));
-    color.addEventListener('input', () => {
-      item.color = color.value;
-      if (item.design) applyColorToDesign(item.design, color.value);
-      emit();
-    });
-
-    const iconBtn = document.createElement('button');
-    iconBtn.className = 'item-icon-btn';
-    iconBtn.title = item.iconSvg ? 'Change image for this button' : 'Add an image to this button';
-    if (item.iconSvg) {
-      const img = document.createElement('img');
-      img.draggable = false;
-      img.src = item.iconSvg.startsWith('<')
-        ? 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(item.iconSvg.replaceAll('currentColor', '#ffffff'))
-        : item.iconSvg;
-      iconBtn.appendChild(img);
-    } else {
-      iconBtn.textContent = '+img';
-    }
-    iconBtn.addEventListener('click', () => {
-      selectListItem(i);
-      openIconModal((id, svg) => {
-        item.iconSvg = svg;
-        item.iconName = id;
-        if (item.design) {
-          item.design.icons[0].svg = svg;
-          item.design.icons[0].name = id;
-          item.design.icons[0].tint = false;
-        }
-        renderSeriesItems();
-        emit();
-      });
-    });
-
-    row.appendChild(label);
-    row.appendChild(iconBtn);
-    row.appendChild(color);
-
-    if (item.iconSvg) {
-      const clearIcon = document.createElement('button');
-      clearIcon.textContent = '-';
-      clearIcon.title = 'Remove image from this button';
-      clearIcon.addEventListener('click', () => {
-        delete item.iconSvg;
-        delete item.iconName;
-        if (item.design) {
-          item.design.icons[0].svg = null;
-          item.design.icons[0].name = null;
-        }
-        renderSeriesItems();
-        emit();
-      });
-      row.appendChild(clearIcon);
-    }
-
-    const del = document.createElement('button');
-    del.textContent = 'x';
-    del.title = 'Remove this button';
-    del.addEventListener('click', () => {
-      if (state.ui.activeListItem === i) {
-        state.ui.activeListItem = null;
-        selectionSnapshot = null;
-      } else if (state.ui.activeListItem !== null && state.ui.activeListItem > i) {
-        state.ui.activeListItem--;
-      }
-      state.series.items.splice(i, 1);
-      renderSeriesItems();
-      emit();
-    });
-
-    row.appendChild(del);
-    wrap.appendChild(row);
-  });
 }
 
 export function syncInputsFromState() {
@@ -536,7 +398,6 @@ export function syncInputsFromState() {
   document.getElementById('seriesListRows').classList.toggle('hidden', state.series.mode !== 'list');
   setVal('seriesFrom', state.series.from);
   setVal('seriesTo', state.series.to);
-  setVal('seriesColorTarget', state.series.colorTarget);
 
   document.getElementById('clearIcon').disabled = !ic.svg;
   document.getElementById('exportZip').disabled = state.series.mode === 'off';

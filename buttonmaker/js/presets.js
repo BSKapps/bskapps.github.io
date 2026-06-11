@@ -1,6 +1,5 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=30';
-import { renderDesign } from './renderer.js?v=30';
-import { renderSeriesItems } from './ui.js?v=30';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=31';
+import { renderDesign } from './renderer.js?v=31';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -12,6 +11,10 @@ const ICONS = {
   stop: mdi('M18,18H6V6H18V18Z'),
   next: mdi('M16,18H18V6H16M6,18L14.5,12L6,6V18Z'),
   prev: mdi('M6,18V6H8V18H6M9.5,12L18,6V18L9.5,12Z'),
+  rewind: mdi('m11.5 12l8.5 6V6m-9 12V6l-8.5 6z'),
+  ffwd: mdi('M13 6v12l8.5-6M4 18l8.5-6L4 6z'),
+  shuffle: mdi('m17 3l5.25 4.5L17 12l5.25 4.5L17 21v-3h-2.74l-2.82-2.82l2.12-2.12L15.5 15H17V9h-1.5l-9 9H2v-3h3.26l9-9H17zM2 6h4.5l2.82 2.82l-2.12 2.12L5.26 9H2z'),
+  repeat: mdi('M17 17H7v-3l-4 4l4 4v-3h12v-6h-2M7 7h10v3l4-4l-4-4v3H5v6h2z'),
   record: mdi('M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z'),
   lowerthird: mdi('M3,13.5H13V15.5H3V13.5M3,17H21V19.5H3V17Z')
 };
@@ -46,38 +49,6 @@ function builtinPresets() {
       })
     },
     {
-      name: 'CUT',
-      builtin: true,
-      design: mk((d) => {
-        d.bg.color = '#b51f1f';
-        Object.assign(d.texts[0], { value: 'CUT', font: 'Oswald', weight: '700', size: 20, align: 'center:center' });
-      })
-    },
-    {
-      name: 'AUTO',
-      builtin: true,
-      design: mk((d) => {
-        d.bg.color = '#c9a227';
-        Object.assign(d.texts[0], { value: 'AUTO', font: 'Oswald', weight: '700', size: 17, color: '#16181c', align: 'center:center' });
-      })
-    },
-    {
-      name: 'PVW',
-      builtin: true,
-      design: mk((d) => {
-        d.bg.color = '#1f9d3a';
-        Object.assign(d.texts[0], { value: 'PVW', font: 'Oswald', weight: '700', size: 19, align: 'center:center' });
-      })
-    },
-    {
-      name: 'Go Green',
-      builtin: true,
-      design: mk((d) => {
-        d.bg.color = '#0f6e2b';
-        Object.assign(d.texts[0], { value: 'GO', font: 'Bebas Neue', weight: '400', size: 30, align: 'center:center' });
-      })
-    },
-    {
       name: 'Record',
       builtin: true,
       design: mk((d) => {
@@ -103,6 +74,10 @@ function builtinPresets() {
           { label: 'Stop', color: '#e53935', iconSvg: ICONS.stop, iconName: 'builtin:stop' },
           { label: 'Prev', color: '#ffffff', iconSvg: ICONS.prev, iconName: 'builtin:prev' },
           { label: 'Next', color: '#ffffff', iconSvg: ICONS.next, iconName: 'builtin:next' },
+          { label: 'Rew', color: '#ffffff', iconSvg: ICONS.rewind, iconName: 'builtin:rewind' },
+          { label: 'FFwd', color: '#ffffff', iconSvg: ICONS.ffwd, iconName: 'builtin:ffwd' },
+          { label: 'Shuffle', color: '#ffffff', iconSvg: ICONS.shuffle, iconName: 'builtin:shuffle' },
+          { label: 'Repeat', color: '#ffffff', iconSvg: ICONS.repeat, iconName: 'builtin:repeat' },
           { label: 'Rec', color: '#e53935', iconSvg: ICONS.record, iconName: 'builtin:record' }
         ],
         colorTarget: 'icon'
@@ -124,12 +99,40 @@ function builtinPresets() {
           { label: 'GO', color: '#1f9d3a' },
           { label: 'PAUSE', color: '#c9a227' },
           { label: 'RESUME', color: '#3a6ea5' },
-          { label: 'PANIC', color: '#b51f1f' }
+          { label: 'PANIC', color: '#b51f1f' },
+          { label: 'PREV', color: '#55555c' },
+          { label: 'NEXT', color: '#55555c' },
+          { label: 'PREVIEW', color: '#6b4fa0' },
+          { label: 'LOOP', color: '#1f7a8c' }
         ],
         colorTarget: 'bg'
       },
       design: mk((d) => {
         Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 12, align: 'center:center' });
+      })
+    },
+    {
+      name: 'Video Switch',
+      builtin: true,
+      series: {
+        mode: 'list',
+        from: 1,
+        to: 4,
+        items: [
+          { label: 'AUTO', color: '#c9a227' },
+          { label: 'CUT', color: '#e53935' },
+          { label: 'PVW', color: '#1f9d3a' },
+          { label: 'PGM', color: '#b51f1f' },
+          { label: 'AUX', color: '#3a6ea5' },
+          { label: 'IN 1', color: '#16324f' },
+          { label: 'IN 2', color: '#16324f' },
+          { label: 'IN 3', color: '#16324f' },
+          { label: 'IN 4', color: '#16324f' }
+        ],
+        colorTarget: 'bg'
+      },
+      design: mk((d) => {
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 13, align: 'center:center' });
       })
     },
     {
@@ -291,7 +294,6 @@ export function renderPresetList() {
       } else {
         state.series.mode = 'off';
       }
-      renderSeriesItems();
       emit();
     });
 
