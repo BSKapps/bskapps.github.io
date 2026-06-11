@@ -176,11 +176,37 @@ body {
 .row input[type="file"] { flex: 1; color: var(--muted); font-size: 0.85rem; min-width: 0; }
 
 .val {
-  flex: 0 0 34px;
+  flex: 0 0 44px;
   text-align: right;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
   font-size: 0.85rem;
+}
+
+.row input.val {
+  flex: 0 0 44px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 2px 4px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.row input.val::-webkit-outer-spin-button,
+.row input.val::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.row input.val:hover, .row input.val:focus {
+  border-color: var(--border-strong);
+  color: var(--text);
+  outline: none;
 }
 
 .hint { color: var(--muted); font-size: 0.82rem; margin: 6px 0; line-height: 1.5; }

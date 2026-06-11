@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=39';
-import { triggerIconUpload } from './icons.js?v=39';
-import { seriesVariants, hasToken } from './series.js?v=39';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=40';
+import { triggerIconUpload } from './icons.js?v=40';
+import { seriesVariants, hasToken } from './series.js?v=40';
 
 const selectionSnapshots = new Map();
 
@@ -188,11 +188,28 @@ function activeText() {
 
 function bindRange(id, getSet, valId) {
   const el = document.getElementById(id);
+  const val = valId ? document.getElementById(valId) : null;
   el.addEventListener('input', () => {
     getSet(Number(el.value));
-    if (valId) document.getElementById(valId).textContent = el.value;
+    if (val) val.value = el.value;
     emit();
   });
+  if (val) {
+    val.min = el.min;
+    val.max = el.max;
+    val.addEventListener('change', () => {
+      let n = Number(val.value);
+      if (val.value === '' || Number.isNaN(n)) {
+        val.value = el.value;
+        return;
+      }
+      n = Math.max(Number(el.min), Math.min(Number(el.max), Math.round(n)));
+      val.value = n;
+      el.value = n;
+      getSet(n);
+      emit();
+    });
+  }
 }
 
 function bindColor(id, getSet) {
@@ -576,7 +593,8 @@ function setVal(id, v) {
 
 function setRange(id, v, valId) {
   document.getElementById(id).value = v;
-  document.getElementById(valId).textContent = v;
+  const val = document.getElementById(valId);
+  if (document.activeElement !== val) val.value = v;
 }
 
 function setSeg(id, v) {
