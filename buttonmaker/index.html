@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=6">
+<link rel="stylesheet" href="css/style.css?v=7">
 </head>
 <body>
 <header class="app-header">
@@ -199,24 +199,27 @@
       <details class="section" open>
         <summary>4. Download</summary>
         <div class="section-body">
-          <div class="row">
-            <label>PNG size</label>
-            <select id="exportSize">
-              <option value="72">72 px</option>
-              <option value="144">144 px</option>
-              <option value="288" selected>288 px</option>
-            </select>
-          </div>
-          <div class="row check">
-            <input type="checkbox" id="exportBakeText" checked>
-            <label for="exportBakeText">Bake text into image</label>
-          </div>
-          <p class="hint">Unticked: the Companion export sets button text in Companion instead, so you can edit it there. Only the first text layer carries over, extra layers need baking.</p>
           <p class="hint" id="exportSummary"></p>
           <button class="btn primary" id="exportPng">Download PNG</button>
           <button class="btn primary" id="exportZip">Download set as ZIP</button>
-          <button class="btn primary" id="exportCompanion">Download Companion page</button>
-          <p class="hint">Import the page file in Companion under Import / Export. Companion keeps its own copy of the images, so nothing else to manage.</p>
+          <button class="btn primary" id="exportCompanion">Download for Companion</button>
+          <p class="hint">The Companion file imports under Import / Export. Your buttons land as a row on a new page, exactly like the preview above. Companion keeps its own copy of the images.</p>
+          <details class="sub-options">
+            <summary>Options</summary>
+            <div class="row">
+              <label>PNG size</label>
+              <select id="exportSize">
+                <option value="72">72 px</option>
+                <option value="144">144 px</option>
+                <option value="288" selected>288 px</option>
+              </select>
+            </div>
+            <div class="row check">
+              <input type="checkbox" id="exportBakeText" checked>
+              <label for="exportBakeText">Bake text into image</label>
+            </div>
+            <p class="hint">Unticked: the Companion export sets button text in Companion instead, so you can edit it there. Only the first text layer carries over, extra layers need baking.</p>
+          </details>
         </div>
       </details>
     </div>
@@ -240,8 +243,8 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato or Corsair. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script>window.BM_V = '6';</script>
-<script src="vendor/jszip.min.js?v=6"></script>
-<script type="module" src="js/app.js?v=6"></script>
+<script>window.BM_V = '7';</script>
+<script src="vendor/jszip.min.js?v=7"></script>
+<script type="module" src="js/app.js?v=7"></script>
 </body>
 </html>

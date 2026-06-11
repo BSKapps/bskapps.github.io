@@ -1,5 +1,5 @@
-import { state, emit, defaultTextLayer } from './state.js?v=6';
-import { openIconModal } from './icons.js?v=6';
+import { state, emit, defaultTextLayer } from './state.js?v=7';
+import { openIconModal } from './icons.js?v=7';
 
 function activeText() {
   const texts = state.design.texts;

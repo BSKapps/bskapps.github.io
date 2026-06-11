@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=6';
-import { renderDesign } from './renderer.js?v=6';
-import { renderSeriesItems } from './ui.js?v=6';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=7';
+import { renderDesign } from './renderer.js?v=7';
+import { renderSeriesItems } from './ui.js?v=7';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -98,6 +98,25 @@ function builtinPresets() {
         d.bg.color = '#1d1d22';
         d.icon.size = 58;
         d.icon.y = 0;
+      })
+    },
+    {
+      name: 'QLab',
+      builtin: true,
+      series: {
+        mode: 'list',
+        from: 1,
+        to: 4,
+        items: [
+          { label: 'GO', color: '#1f9d3a' },
+          { label: 'PAUSE', color: '#c9a227' },
+          { label: 'RESUME', color: '#3a6ea5' },
+          { label: 'PANIC', color: '#b51f1f' }
+        ],
+        colorTarget: 'bg'
+      },
+      design: mk((d) => {
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 12, align: 'center:center' });
       })
     },
     {
