@@ -1,5 +1,5 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=31';
-import { renderDesign } from './renderer.js?v=31';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=32';
+import { renderDesign } from './renderer.js?v=32';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -133,6 +133,37 @@ function builtinPresets() {
       },
       design: mk((d) => {
         Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 13, align: 'center:center' });
+      })
+    },
+    {
+      name: 'Timers',
+      builtin: true,
+      series: {
+        mode: 'list',
+        from: 1,
+        to: 4,
+        items: [
+          { label: '60', color: '#1f9d3a' },
+          { label: '45', color: '#6d9c2a' },
+          { label: '30', color: '#c9a227' },
+          { label: '15', color: '#c96a17' },
+          { label: '5', color: '#b51f1f' },
+          { label: '+1', color: '#3f7d46' },
+          { label: '-1', color: '#9c4321' },
+          {
+            label: 'Message',
+            color: '#3a6ea5',
+            design: mk((d) => {
+              d.bg.color = '#3a6ea5';
+              Object.assign(d.texts[0], { value: 'MESSAGE', font: 'Oswald', weight: '700', size: 11, align: 'center:center' });
+            })
+          }
+        ],
+        colorTarget: 'bg'
+      },
+      design: mk((d) => {
+        Object.assign(d.texts[0], { value: '{label}', font: 'Bebas Neue', weight: '400', size: 26, align: 'center:center', y: -3 });
+        d.texts.push({ value: 'MIN', font: 'Oswald', weight: '700', size: 8, color: '#ffffff', align: 'center:bottom', x: 0, y: 0 });
       })
     },
     {
