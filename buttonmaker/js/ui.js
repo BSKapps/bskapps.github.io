@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=42';
-import { triggerIconUpload } from './icons.js?v=42';
-import { seriesVariants, hasToken } from './series.js?v=42';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=43';
+import { triggerIconUpload } from './icons.js?v=43';
+import { seriesVariants, hasToken } from './series.js?v=43';
 
 const selectionSnapshots = new Map();
 
@@ -54,8 +54,8 @@ export function selectListItem(i, additive = false) {
     releaseSelection();
     if (!materialize(i)) return;
     state.ui.selectedItems = [i];
+    focusActiveLayers();
   }
-  focusActiveLayers();
   emit();
 }
 
@@ -77,7 +77,6 @@ export function selectRangeTo(i) {
     sel.splice(pos, 1);
     sel.push(i);
   }
-  focusActiveLayers();
   emit();
 }
 
@@ -103,6 +102,16 @@ export function removeListItem(i) {
     .map((s) => (s > i ? s - 1 : s));
   state.series.items.splice(i, 1);
   emit();
+}
+
+export function seriesForSnapshot() {
+  const s = deepClone(state.series);
+  s.items.forEach((clone, i) => {
+    const orig = state.series.items[i];
+    const snap = orig && selectionSnapshots.get(orig);
+    if (clone.design && snap && JSON.stringify(orig.design) === snap) delete clone.design;
+  });
+  return s;
 }
 
 function syncSelectedLabels() {
@@ -150,10 +159,16 @@ function applyRelative(all, layersOf, ref, prop, v, min, max) {
     });
     return;
   }
-  const delta = v - (ref[prop] || 0);
+  let delta = v - (ref[prop] || 0);
+  for (const d of editTargets()) {
+    for (const l of layersOf(d)) {
+      const cur = l[prop] || 0;
+      delta = delta > 0 ? Math.min(delta, max - cur) : Math.max(delta, min - cur);
+    }
+  }
   applyEdit((d) => {
     for (const l of layersOf(d)) {
-      l[prop] = Math.max(min, Math.min(max, (l[prop] || 0) + delta));
+      l[prop] = (l[prop] || 0) + delta;
     }
   });
 }
@@ -298,7 +313,7 @@ export function initUI() {
       ic.tint = true;
     }
   }));
-  bindRange('iconSize', (v) => applyRelative(state.ui.allIcons, iconLayersOf, refIcon(), 'size', v, 10, 100), 'iconSizeVal');
+  bindRange('iconSize', (v) => applyRelative(state.ui.allIcons, iconLayersOf, refIcon(), 'size', v, 10, 150), 'iconSizeVal');
   bindRange('iconX', (v) => applyRelative(state.ui.allIcons, iconLayersOf, refIcon(), 'x', v, -40, 40), 'iconXVal');
   bindRange('iconY', (v) => applyRelative(state.ui.allIcons, iconLayersOf, refIcon(), 'y', v, -40, 40), 'iconYVal');
   bindRange('iconOpacity', (v) => applyEdit((d) => {
@@ -364,10 +379,12 @@ export function initUI() {
   });
 
   document.getElementById('seriesFrom').addEventListener('input', (e) => {
+    if (e.target.value === '') return;
     state.series.from = Number(e.target.value) || 0;
     emit();
   });
   document.getElementById('seriesTo').addEventListener('input', (e) => {
+    if (e.target.value === '') return;
     state.series.to = Number(e.target.value) || 0;
     emit();
   });
@@ -433,9 +450,11 @@ export function renderTextLayerChips() {
     add.className = 'chip-action';
     add.textContent = '+ Layer';
     add.addEventListener('click', () => {
-      texts.push(defaultTextLayer());
+      applyEdit((d) => {
+        if (d.texts.length < 12) d.texts.push(defaultTextLayer());
+      });
       state.ui.allText = false;
-      state.ui.activeText = texts.length - 1;
+      state.ui.activeText = editTarget().texts.length - 1;
       emit();
     });
     wrap.appendChild(add);
@@ -446,7 +465,9 @@ export function renderTextLayerChips() {
     del.className = 'chip-action';
     del.textContent = 'Delete layer';
     del.addEventListener('click', () => {
-      texts.splice(state.ui.activeText, 1);
+      applyEdit((d) => {
+        if (d.texts.length > 1 && state.ui.activeText < d.texts.length) d.texts.splice(state.ui.activeText, 1);
+      });
       state.ui.activeText = Math.max(0, state.ui.activeText - 1);
       emit();
     });
@@ -489,9 +510,11 @@ export function renderIconLayerChips() {
     add.className = 'chip-action';
     add.textContent = '+ Layer';
     add.addEventListener('click', () => {
-      icons.push(defaultIconLayer());
+      applyEdit((d) => {
+        if (d.icons.length < 6) d.icons.push(defaultIconLayer());
+      });
       state.ui.allIcons = false;
-      state.ui.activeIcon = icons.length - 1;
+      state.ui.activeIcon = editTarget().icons.length - 1;
       emit();
     });
     wrap.appendChild(add);
@@ -502,7 +525,9 @@ export function renderIconLayerChips() {
     del.className = 'chip-action';
     del.textContent = 'Delete layer';
     del.addEventListener('click', () => {
-      icons.splice(state.ui.activeIcon, 1);
+      applyEdit((d) => {
+        if (d.icons.length > 1 && state.ui.activeIcon < d.icons.length) d.icons.splice(state.ui.activeIcon, 1);
+      });
       state.ui.activeIcon = Math.max(0, state.ui.activeIcon - 1);
       emit();
     });
@@ -516,9 +541,8 @@ function truncate(s, len) {
 
 export function syncInputsFromState() {
   if (state.series.mode !== 'list') {
-    if (state.ui.selectedItems.length) {
-      state.ui.selectedItems = [];
-      selectionSnapshots.clear();
+    if (state.ui.selectedItems.length || selectionSnapshots.size) {
+      releaseSelection();
     }
   } else {
     state.ui.selectedItems = state.ui.selectedItems.filter((i) => state.series.items[i]);
@@ -612,6 +636,7 @@ function updateEditBanner() {
 
 function setVal(id, v) {
   const el = document.getElementById(id);
+  if (document.activeElement === el) return;
   if (el.value !== String(v)) el.value = v;
 }
 
