@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION } from './state.js?v=17';
-import { renderDesign } from './renderer.js?v=17';
-import { seriesVariants } from './series.js?v=17';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderSeriesItems, convertNumberedToList } from './ui.js?v=17';
-import { initIconPicker } from './icons.js?v=17';
-import { initPresets } from './presets.js?v=17';
-import { initExport } from './export.js?v=17';
-import { initColorPopover } from './colorpicker.js?v=17';
+import { state, onChange, emit, deepClone, APP_VERSION } from './state.js?v=18';
+import { renderDesign } from './renderer.js?v=18';
+import { seriesVariants } from './series.js?v=18';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderSeriesItems, convertNumberedToList } from './ui.js?v=18';
+import { initIconPicker } from './icons.js?v=18';
+import { initPresets } from './presets.js?v=18';
+import { initExport } from './export.js?v=18';
+import { initColorPopover } from './colorpicker.js?v=18';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -33,10 +33,7 @@ async function renderAll() {
 
 async function renderOnce() {
   const variants = seriesVariants();
-  await renderDesign(preview, variants[0].design, {
-    topbarGuide: state.guides.topbar,
-    bakeText: true
-  });
+  await renderDesign(preview, variants[0].design, { bakeText: true });
 
   const summary = document.getElementById('exportSummary');
   if (summary) {
@@ -55,7 +52,7 @@ async function renderOnce() {
       const c = document.createElement('canvas');
       c.width = 144;
       c.height = 144;
-      renderDesign(c, v.design, { bakeText: true, topbarGuide: state.guides.topbar });
+      renderDesign(c, v.design, { bakeText: true });
       const span = document.createElement('span');
       span.textContent = v.label;
       item.appendChild(c);

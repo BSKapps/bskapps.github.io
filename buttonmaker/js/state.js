@@ -1,4 +1,4 @@
-export const APP_VERSION = '17';
+export const APP_VERSION = '18';
 
 export function defaultTextLayer() {
   return {
@@ -57,8 +57,7 @@ export const state = {
     ],
     colorTarget: 'bg'
   },
-  guides: { topbar: false },
-  export: { size: 288, bakeText: true, hideTopbar: false },
+  export: { size: 288 },
   ui: { activeText: 0 }
 };
 

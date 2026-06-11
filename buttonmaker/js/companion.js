@@ -14,7 +14,7 @@ function buttonControl(btn) {
       pngalignment: 'center:center',
       color: hexToInt(btn.color),
       bgcolor: hexToInt(btn.bgcolor),
-      show_topbar: btn.hideTopbar ? false : 'default'
+      show_topbar: 'default'
     },
     options: {
       rotaryActions: false,

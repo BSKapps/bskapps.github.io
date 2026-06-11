@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer } from './state.js?v=17';
-import { openIconModal, triggerIconUpload } from './icons.js?v=17';
-import { seriesVariants } from './series.js?v=17';
+import { state, emit, deepClone, defaultTextLayer } from './state.js?v=18';
+import { openIconModal, triggerIconUpload } from './icons.js?v=18';
+import { seriesVariants } from './series.js?v=18';
 
 let dragIndex = null;
 
@@ -149,19 +149,7 @@ export function initUI() {
     emit();
   });
 
-  document.getElementById('guideTopbar').addEventListener('change', (e) => {
-    state.guides.topbar = e.target.checked;
-    emit();
-  });
-
   bindSelect('exportSize', (v) => (state.export.size = Number(v)));
-  document.getElementById('exportBakeText').addEventListener('change', (e) => {
-    state.export.bakeText = e.target.checked;
-    emit();
-  });
-  document.getElementById('exportHideTopbar').addEventListener('change', (e) => {
-    state.export.hideTopbar = e.target.checked;
-  });
 
   renderSeriesItems();
   renderTextLayerChips();
