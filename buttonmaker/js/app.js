@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, editTarget } from './state.js?v=32';
-import { renderDesign } from './renderer.js?v=32';
-import { seriesVariants } from './series.js?v=32';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, deselectListItem, addListItem, removeListItem } from './ui.js?v=32';
-import { initIconPicker } from './icons.js?v=32';
-import { initPresets } from './presets.js?v=32';
-import { initExport } from './export.js?v=32';
-import { initColorPopover } from './colorpicker.js?v=32';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, editTarget } from './state.js?v=33';
+import { renderDesign } from './renderer.js?v=33';
+import { seriesVariants } from './series.js?v=33';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, deselectListItem, addListItem, removeListItem } from './ui.js?v=33';
+import { initIconPicker } from './icons.js?v=33';
+import { initPresets } from './presets.js?v=33';
+import { initExport } from './export.js?v=33';
+import { initColorPopover } from './colorpicker.js?v=33';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -112,8 +112,30 @@ async function renderOnce() {
       const add = document.createElement('button');
       add.className = 'series-add';
       add.textContent = '+';
-      add.title = 'Add another button to the set';
+      add.title = 'Add another button to the set. Drop a button here to duplicate it.';
       add.addEventListener('click', addListItem);
+      add.addEventListener('dragenter', (e) => {
+        if (gridDragIndex === null) return;
+        e.preventDefault();
+        add.classList.add('drop-target');
+      });
+      add.addEventListener('dragover', (e) => {
+        if (gridDragIndex === null) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+        add.classList.add('drop-target');
+      });
+      add.addEventListener('dragleave', () => add.classList.remove('drop-target'));
+      add.addEventListener('drop', (e) => {
+        e.preventDefault();
+        add.classList.remove('drop-target');
+        if (gridDragIndex === null) return;
+        const src = state.series.items[gridDragIndex];
+        gridDragIndex = null;
+        if (!src || state.series.items.length >= 64) return;
+        state.series.items.push(deepClone(src));
+        emit();
+      });
       seriesWrap.appendChild(add);
     }
   }

@@ -504,7 +504,7 @@ body {
   align-self: flex-start;
 }
 
-.series-add:hover { border-color: var(--brand); color: var(--brand); }
+.series-add:hover, .series-add.drop-target { border-color: var(--brand); color: var(--brand); }
 
 #preview.drop-ready { outline: 2px dashed var(--border-strong); outline-offset: 5px; }
 
