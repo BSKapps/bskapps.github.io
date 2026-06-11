@@ -6,9 +6,15 @@
 
 local trackCount = reaper.CountTracks(0)
 local hwOutputs = reaper.GetNumAudioOutputs()
+local hwInputs = reaper.GetNumAudioInputs()
 
-local patched = 0
-local skipped = 0
+if hwOutputs == 0 and hwInputs == 0 then
+    reaper.ShowMessageBox("No audio hardware detected. Check your audio device settings.", "Auto Patch", 0)
+    return
+end
+
+local inputsPatched = 0
+local outputsPatched = 0
 
 reaper.Undo_BeginBlock()
 
@@ -16,12 +22,10 @@ for i = 0, trackCount - 1 do
 
     local track = reaper.GetTrack(0, i)
 
-    -- only patch if a hardware output exists for this channel
-    if i < hwOutputs then
-
-        -------------------------------------------------
-        -- INPUT PATCHING (Mono 1:1)
-        -------------------------------------------------
+    -------------------------------------------------
+    -- INPUT PATCHING (Mono 1:1)
+    -------------------------------------------------
+    if i < hwInputs then
         reaper.SetMediaTrackInfo_Value(track, "I_RECINPUT", i)
 
         -------------------------------------------------
@@ -29,23 +33,32 @@ for i = 0, trackCount - 1 do
         -------------------------------------------------
         reaper.SetMediaTrackInfo_Value(track, "I_RECMON", 0)
 
+        inputsPatched = inputsPatched + 1
+    else
+        reaper.SetMediaTrackInfo_Value(track, "I_RECINPUT", -1)
+    end
+
+    -------------------------------------------------
+    -- REMOVE EXISTING HARDWARE OUTPUTS
+    -------------------------------------------------
+    local hwOutCount = reaper.GetTrackNumSends(track, 1)
+    for j = hwOutCount - 1, 0, -1 do
+        reaper.RemoveTrackSend(track, 1, j)
+    end
+
+    if i < hwOutputs then
+
         -------------------------------------------------
         -- DISABLE MASTER SEND
         -------------------------------------------------
         reaper.SetMediaTrackInfo_Value(track, "B_MAINSEND", 0)
 
         -------------------------------------------------
-        -- REMOVE EXISTING HARDWARE OUTPUTS
-        -------------------------------------------------
-        local hwOutCount = reaper.GetTrackNumSends(track, 1)
-        for j = hwOutCount - 1, 0, -1 do
-            reaper.RemoveTrackSend(track, 1, j)
-        end
-
-        -------------------------------------------------
         -- CREATE HARDWARE OUTPUT
         -------------------------------------------------
         local sendIndex = reaper.CreateTrackSend(track, nil)
+
+        reaper.SetTrackSendInfo_Value(track, 1, sendIndex, "I_SRCCHAN", 1024)
 
         -- mono output channel
         reaper.SetTrackSendInfo_Value(track, 1, sendIndex, "I_DSTCHAN", i)
@@ -56,16 +69,7 @@ for i = 0, trackCount - 1 do
         -- unity gain
         reaper.SetTrackSendInfo_Value(track, 1, sendIndex, "D_VOL", 1.0)
 
-        patched = patched + 1
-
-    else
-        -- track exceeds available hardware -- clear input and remove any existing HW sends
-        reaper.SetMediaTrackInfo_Value(track, "I_RECINPUT", -1)
-        local hwOutCount = reaper.GetTrackNumSends(track, 1)
-        for j = hwOutCount - 1, 0, -1 do
-            reaper.RemoveTrackSend(track, 1, j)
-        end
-        skipped = skipped + 1
+        outputsPatched = outputsPatched + 1
     end
 end
 
@@ -78,14 +82,16 @@ reaper.TrackList_AdjustWindows(false)
 
 local message =
 "Auto Patch Complete\n\n" ..
+"Hardware inputs available: " .. hwInputs .. "\n" ..
 "Hardware outputs available: " .. hwOutputs .. "\n" ..
-"Tracks patched: " .. patched .. "\n" ..
-"Tracks skipped (exceeds hardware): " .. skipped .. "\n\n" ..
-"Changes applied to each patched track:\n" ..
-"  • Hardware input/output assigned 1:1 mono\n" ..
-"  • Send mode: Pre-Fader/Pre-FX\n" ..
-"  • Send volume: unity (0dB)\n" ..
-"  • Master/Parent send: disabled\n" ..
-"  • Record monitoring: disabled"
+"Track inputs patched: " .. inputsPatched .. "\n" ..
+"Track outputs patched: " .. outputsPatched .. "\n\n" ..
+"Tracks with a patched input:\n" ..
+"  - Mono hardware input assigned 1:1\n" ..
+"  - Record monitoring: disabled\n\n" ..
+"Tracks with a patched output:\n" ..
+"  - Mono hardware output assigned 1:1\n" ..
+"  - Send mode: Pre-Fader/Pre-FX, volume: unity (0dB)\n" ..
+"  - Master/Parent send: disabled"
 
 reaper.ShowMessageBox(message, "Auto Patch", 0)

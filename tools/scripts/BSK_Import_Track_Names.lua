@@ -13,6 +13,10 @@ for line in file:lines() do
 end
 file:close()
 
+if lines[1] then
+    lines[1] = lines[1]:gsub("^\239\187\191", "")
+end
+
 local function trim(s)
     return s:match("^%s*(.-)%s*$")
 end
@@ -79,7 +83,7 @@ for _, line in ipairs(lines) do
         nameCol = nil
     elseif trimmed:match("^%[") then
         inChannels = false
-    elseif inChannels and not sectionHeaderParsed then
+    elseif inChannels and not sectionHeaderParsed and #trimmed > 0 then
         nameCol = findNameCol(parseCSVLine(trimmed))
         sectionHeaderParsed = true
     elseif inChannels and nameCol and #trimmed > 0 then
@@ -93,13 +97,19 @@ end
 
 if #names == 0 then
     local headerFound = false
+    local seenAny = false
     nameCol = nil
     for _, line in ipairs(lines) do
         local trimmed = trim(line)
         if #trimmed == 0 then goto continue end
         if not headerFound then
-            nameCol = findNameCol(parseCSVLine(trimmed))
-            headerFound = true
+            local fields = parseCSVLine(trimmed)
+            local col = findNameCol(fields)
+            if col and (#fields >= 2 or not seenAny) then
+                nameCol = col
+                headerFound = true
+            end
+            seenAny = true
         elseif nameCol then
             local fields = parseCSVLine(trimmed)
             local n = fields[nameCol]
@@ -128,8 +138,10 @@ end
 local mode = reaper.ShowMessageBox(
     "How do you want to apply these " .. #names .. " names?\n\nYes = Rename existing tracks\nNo = Create new tracks",
     "Import Track Names",
-    4
+    3
 )
+
+if mode ~= 6 and mode ~= 7 then return end
 
 reaper.Undo_BeginBlock()
 
