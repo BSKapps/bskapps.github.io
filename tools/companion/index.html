@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Companion Modules - BSK Apps</title>
+    <meta name="description" content="Open source Bitfocus Companion modules from BSK Apps. Free, MIT licensed, with manual install instructions for Companion 3+.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/images/favicon-180.png">
+    <meta property="og:title" content="Companion Modules - BSK Apps">
+    <meta property="og:description" content="Open source Bitfocus Companion modules from BSK Apps. Free, MIT licensed.">
+    <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
+    <meta property="og:url" content="https://bskapps.com/tools/companion">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://bskapps.com/tools/companion">
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/tools">&larr; Free Tools</a>
+        <h1>Companion Modules</h1>
+        <p class="tagline">Open source Bitfocus Companion modules. Free, MIT licensed.</p>
+
+        <div class="script-card">
+            <h3>BSK Spotify <span class="badge">Companion</span></h3>
+            <p>Full-featured Spotify Web API controller for Companion. Cue-point playback from a timestamp, named bookmarks, volume fades, album art grids (1x1, 2x2, 3x3), playlist control, 99 ready-made presets, and 30 dynamic variables for track info, timing, and state. Requires a Spotify Premium account and a free Spotify Developer app.</p>
+            <p class="note-line"><strong>macOS offline fallback:</strong> if the Web API drops out mid-show, transport actions keep working via AppleScript and the local Spotify app. Auto-recovers when the API returns.</p>
+            <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-spotify/releases/latest" target="_blank" rel="noopener">Download latest release &rarr;</a>
+            &nbsp; <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-spotify" target="_blank" rel="noopener">View on GitHub &rarr;</a>
+        </div>
+
+        <h2 class="section-title" style="margin-top: 32px; margin-bottom: 16px;">How to Install a Companion Module Manually</h2>
+
+        <div class="script-card setup">
+            <h3>Add the module to Companion</h3>
+            <p>Companion 4.x lets you import a module directly from a <code>.tgz</code> file. Use this until the module is published to the official Companion module list.</p>
+            <ol class="steps">
+                <li>Download <code>bsk-spotify-X.Y.Z.tgz</code> from the <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-spotify/releases/latest" target="_blank" rel="noopener">latest release</a>. Do not extract it.</li>
+                <li>In Companion, click <strong>Modules</strong> in the left sidebar.</li>
+                <li>Click <strong>Import module package</strong> (the orange button) and select the downloaded <code>.tgz</code> file. The Finder window may open in an unexpected location -- navigate to your <strong>Downloads</strong> folder if needed.</li>
+                <li>Click <strong>Connections</strong> in the left sidebar, then add a new connection. Search for <code>BSK Spotify</code> and select it.</li>
+                <li>Configure the connection with your Client ID and Client Secret (see the Spotify Developer app section below).</li>
+            </ol>
+            <p class="note-line" style="margin-top:14px;"><strong>After Companion updates:</strong> in our testing the module survived a version update intact, but we can't guarantee every update will preserve it. If the BSK Spotify connection disappears after an update, re-import the <code>.tgz</code> from the latest release and re-add the connection. Your Client ID, Client Secret, and tokens are kept in Companion's database and are usually preserved.</p>
+        </div>
+
+        <div class="script-card setup">
+            <h3>Spotify Developer app for the BSK Spotify module</h3>
+            <p>The Spotify module needs a free Spotify Developer app for OAuth. One per Companion install is enough. Your normal Spotify account is fine; you do not need a paid developer subscription.</p>
+            <ol class="steps">
+                <li>Go to <a class="download-link" href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">developer.spotify.com/dashboard</a> and sign in with your normal Spotify account.</li>
+                <li>Click <strong>Create app</strong> (top right).
+                    <img class="step-shot" src="/tools/companion/images/spotify-dashboard.png" alt="Spotify Developer Dashboard with the Create app button at top right">
+                </li>
+                <li>Fill in the form:
+                    <ul style="margin-top:6px; margin-left:18px; list-style:disc;">
+                        <li><strong>App name:</strong> anything works, only you see it. Suggestion: <code>Spotify Control</code> or <code>Companion Spotify</code>.</li>
+                        <li><strong>App description:</strong> leave blank, or add something short, e.g. <code>BSK Spotify</code>. Only you see it.</li>
+                        <li><strong>Website:</strong> leave blank.</li>
+                        <li><strong>Redirect URIs:</strong> type <code>http://127.0.0.1:4115/callback</code> exactly, then click <strong>Add</strong>. Check that it appears in the list below the input -- if it doesn't, it wasn't saved. The URL must be entered exactly as shown, including the port number.</li>
+                        <li><strong>Bundle IDs / Android packages:</strong> leave blank.</li>
+                        <li><strong>Which API/SDKs are you planning to use?</strong> tick <strong>Web API</strong>. Leave the others unticked.</li>
+                    </ul>
+                    <img class="step-shot" src="/tools/companion/images/spotify-app-form.png" alt="Spotify app edit form showing Redirect URIs list, API/SDKs checkboxes with Web API ticked, and Save button">
+                </li>
+                <li>Tick the Terms of Service box and click <strong>Save</strong>.</li>
+                <li>You will land on the app's page. Click <strong>Settings</strong> (top right).</li>
+                <li>Copy the <strong>Client ID</strong>. Click <strong>View client secret</strong> and copy that too. Both go into the Companion connection's <em>Client ID</em> and <em>Client Secret</em> fields.</li>
+                <li>Back in Companion, click <strong>Authenticate</strong> on the BSK Spotify connection. A browser tab opens, you sign in to Spotify with your normal account, and authorize. Companion stores the refresh token from then on.</li>
+                <li><em>Only if Authenticate fails with an "access denied" or "user not registered" error:</em> go back to the Spotify dev page, switch to the <strong>User Management</strong> tab, click <strong>Add user</strong>, and enter your full name and the email tied to your Spotify account. Apps in Development mode sometimes require the authenticating user to be listed here (up to 5 allowed). Then retry Authenticate.
+                    <img class="step-shot" src="/tools/companion/images/spotify-user-mgmt.png" alt="Spotify app User Management tab with Full Name and Email fields and Add user button">
+                </li>
+            </ol>
+            <p class="note-line" style="margin-top:14px;"><strong>If Authenticate fails with "INVALID_CLIENT" or similar:</strong> the most common cause is the Redirect URI in your Spotify app does not match <code>http://127.0.0.1:4115/callback</code> exactly. Whitespace, https vs http, or a trailing slash will all break it. Double-check it appears in the Redirect URIs list and re-save the Spotify app if needed.</p>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 BSK Apps &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
+        </footer>
+    </div>
+</body>
+</html>

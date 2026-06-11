@@ -413,6 +413,7 @@ body {
   gap: 14px;
   justify-content: center;
   max-width: 760px;
+  min-height: 117px;
 }
 
 .series-preview canvas {
