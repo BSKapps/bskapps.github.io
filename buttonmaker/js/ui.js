@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer } from './state.js?v=15';
-import { openIconModal, triggerIconUpload } from './icons.js?v=15';
-import { seriesVariants } from './series.js?v=15';
+import { state, emit, deepClone, defaultTextLayer } from './state.js?v=16';
+import { openIconModal, triggerIconUpload } from './icons.js?v=16';
+import { seriesVariants } from './series.js?v=16';
 
 let dragIndex = null;
 
@@ -158,6 +158,9 @@ export function initUI() {
   document.getElementById('exportBakeText').addEventListener('change', (e) => {
     state.export.bakeText = e.target.checked;
     emit();
+  });
+  document.getElementById('exportHideTopbar').addEventListener('change', (e) => {
+    state.export.hideTopbar = e.target.checked;
   });
 
   renderSeriesItems();

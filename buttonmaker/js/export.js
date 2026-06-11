@@ -1,8 +1,8 @@
-import { state } from './state.js?v=15';
-import { renderToDataUrl } from './renderer.js?v=15';
-import { seriesVariants, safeFileName } from './series.js?v=15';
-import { downloadBlob } from './presets.js?v=15';
-import { buildCompanionPage } from './companion.js?v=15';
+import { state } from './state.js?v=16';
+import { renderToDataUrl } from './renderer.js?v=16';
+import { seriesVariants, safeFileName } from './series.js?v=16';
+import { downloadBlob } from './presets.js?v=16';
+import { buildCompanionPage } from './companion.js?v=16';
 
 function dataUrlToBlob(dataUrl) {
   const [head, body] = dataUrl.split(',');
@@ -61,7 +61,8 @@ async function exportCompanion() {
       color: firstLayer.color,
       bgcolor: v.design.bg.mode === 'solid' ? v.design.bg.color : '#000000',
       size: firstLayer.size,
-      alignment: firstLayer.align
+      alignment: firstLayer.align,
+      hideTopbar: state.export.hideTopbar
     });
   }
   const config = buildCompanionPage(buttons);

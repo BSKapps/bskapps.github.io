@@ -1,4 +1,4 @@
-import { state, emit } from './state.js?v=15';
+import { state, emit } from './state.js?v=16';
 
 const API = 'https://api.iconify.design';
 
@@ -44,6 +44,9 @@ export function initIconPicker() {
   closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
   modal.addEventListener('click', (e) => {
     if (e.target === modal) modal.classList.add('hidden');
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') modal.classList.add('hidden');
   });
 
   clearBtn.addEventListener('click', () => {

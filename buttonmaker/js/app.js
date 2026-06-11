@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION } from './state.js?v=15';
-import { renderDesign } from './renderer.js?v=15';
-import { seriesVariants } from './series.js?v=15';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderSeriesItems, convertNumberedToList } from './ui.js?v=15';
-import { initIconPicker } from './icons.js?v=15';
-import { initPresets } from './presets.js?v=15';
-import { initExport } from './export.js?v=15';
-import { initColorPopover } from './colorpicker.js?v=15';
+import { state, onChange, emit, deepClone, APP_VERSION } from './state.js?v=16';
+import { renderDesign } from './renderer.js?v=16';
+import { seriesVariants } from './series.js?v=16';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderSeriesItems, convertNumberedToList } from './ui.js?v=16';
+import { initIconPicker } from './icons.js?v=16';
+import { initPresets } from './presets.js?v=16';
+import { initExport } from './export.js?v=16';
+import { initColorPopover } from './colorpicker.js?v=16';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -99,25 +99,107 @@ function reorderSet(from, to) {
   emit();
 }
 
+function isFileDrag(e) {
+  return e.dataTransfer && [...e.dataTransfer.types].includes('Files');
+}
+
 preview.addEventListener('dragover', (e) => {
-  if (gridDragIndex === null) return;
+  if (gridDragIndex === null && !isFileDrag(e)) return;
   e.preventDefault();
   e.dataTransfer.dropEffect = 'copy';
   preview.classList.add('drop-target');
 });
 preview.addEventListener('dragleave', () => preview.classList.remove('drop-target'));
 preview.addEventListener('drop', (e) => {
-  if (gridDragIndex === null) return;
-  e.preventDefault();
-  const v = seriesVariants()[gridDragIndex];
-  gridDragIndex = null;
-  preview.classList.remove('drop-ready', 'drop-target');
-  if (!v) return;
-  Object.assign(state.design, deepClone(v.design));
-  state.ui.activeText = 0;
-  state.series.mode = 'off';
-  emit();
+  if (gridDragIndex !== null) {
+    e.preventDefault();
+    const v = seriesVariants()[gridDragIndex];
+    gridDragIndex = null;
+    preview.classList.remove('drop-ready', 'drop-target');
+    if (!v) return;
+    Object.assign(state.design, deepClone(v.design));
+    state.ui.activeText = 0;
+    state.series.mode = 'off';
+    emit();
+    return;
+  }
+  if (isFileDrag(e)) {
+    e.preventDefault();
+    preview.classList.remove('drop-target');
+    const file = [...e.dataTransfer.files].find((f) => f.type.startsWith('image/'));
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      state.design.bg.imageData = reader.result;
+      state.design.bg.mode = 'image';
+      emit();
+    };
+    reader.readAsDataURL(file);
+  }
 });
+
+document.addEventListener('paste', (e) => {
+  const t = e.target;
+  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+  const item = [...(e.clipboardData ? e.clipboardData.items : [])].find((i) => i.type.startsWith('image/'));
+  if (!item) return;
+  const file = item.getAsFile();
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    state.design.icon.svg = reader.result;
+    state.design.icon.name = 'pasted image';
+    state.design.icon.tint = false;
+    emit();
+  };
+  reader.readAsDataURL(file);
+});
+
+const SESSION_KEY = 'bm-session-v1';
+const undoStack = [];
+let historyTimer = null;
+let applyingUndo = false;
+
+function snapshot() {
+  return JSON.stringify({ design: state.design, series: state.series });
+}
+
+function pushHistory() {
+  const s = snapshot();
+  if (undoStack[undoStack.length - 1] !== s) {
+    undoStack.push(s);
+    if (undoStack.length > 50) undoStack.shift();
+  }
+  try {
+    localStorage.setItem(SESSION_KEY, s);
+  } catch (err) {}
+}
+
+document.addEventListener('keydown', (e) => {
+  if (!(e.metaKey || e.ctrlKey) || e.key !== 'z' || e.shiftKey) return;
+  const t = e.target;
+  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA') && t.type !== 'range' && t.type !== 'checkbox') return;
+  if (undoStack.length < 2) return;
+  e.preventDefault();
+  undoStack.pop();
+  const prev = JSON.parse(undoStack[undoStack.length - 1]);
+  applyingUndo = true;
+  Object.assign(state.design, prev.design);
+  Object.assign(state.series, prev.series);
+  renderSeriesItems();
+  emit();
+  applyingUndo = false;
+});
+
+function restoreSession() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(SESSION_KEY));
+    if (saved && saved.design && Array.isArray(saved.design.texts)) {
+      Object.assign(state.design, saved.design);
+      Object.assign(state.series, saved.series || {});
+    }
+  } catch (err) {}
+}
 
 if (window.BM_V && window.BM_V !== APP_VERSION) {
   if (!sessionStorage.getItem('bm-skew-reload')) {
@@ -127,6 +209,8 @@ if (window.BM_V && window.BM_V !== APP_VERSION) {
 } else {
   sessionStorage.removeItem('bm-skew-reload');
 }
+
+restoreSession();
 
 initUI();
 initIconPicker();
@@ -138,7 +222,12 @@ onChange(() => {
   renderTextLayerChips();
   syncInputsFromState();
   renderAll();
+  if (!applyingUndo) {
+    clearTimeout(historyTimer);
+    historyTimer = setTimeout(pushHistory, 400);
+  }
 });
 
 document.fonts.ready.then(() => emit());
 emit();
+pushHistory();
