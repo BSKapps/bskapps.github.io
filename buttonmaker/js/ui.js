@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer } from './state.js?v=26';
-import { openIconModal, triggerIconUpload } from './icons.js?v=26';
-import { seriesVariants, hasToken } from './series.js?v=26';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer } from './state.js?v=27';
+import { openIconModal, triggerIconUpload } from './icons.js?v=27';
+import { seriesVariants, hasToken } from './series.js?v=27';
 
 let dragIndex = null;
 
@@ -161,10 +161,6 @@ export function initUI() {
   bindColor('shapeBorderColor', (v) => (d.shape.borderColor = v));
 
   bindSeg('seriesMode', (v) => {
-    if (v === 'off' && state.series.mode !== 'off') {
-      const first = seriesVariants()[0];
-      if (first) Object.assign(state.design, deepClone(first.design));
-    }
     state.series.mode = v;
     document.getElementById('seriesNumbersRows').classList.toggle('hidden', v !== 'numbers');
     document.getElementById('seriesListRows').classList.toggle('hidden', v !== 'list');
