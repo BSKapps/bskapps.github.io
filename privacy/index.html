@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - BSK Apps</title>
-    <meta name="description" content="Privacy policy for BSK Apps. Our apps do not collect, store, or transmit any personal data.">
+    <meta name="description" content="Privacy policy for BSK Apps. We do not collect, store, or receive any personal data.">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Privacy Policy - BSK Apps">
-    <meta property="og:description" content="Privacy policy for BSK Apps. Our apps do not collect, store, or transmit any personal data.">
+    <meta property="og:description" content="Privacy policy for BSK Apps. We do not collect, store, or receive any personal data.">
     <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="apple-touch-icon" href="/images/favicon-180.png">
@@ -19,7 +19,7 @@
         <a class="back" href="/">&larr; BSK Apps</a>
 
         <h1>Privacy Policy</h1>
-        <p class="updated">Last updated: 4 April 2026</p>
+        <p class="updated">Last updated: 11 June 2026</p>
 
         <div class="section">
             <h2>Overview</h2>
@@ -31,30 +31,58 @@
 
         <div class="section">
             <h2>Data Collection</h2>
-            <p>Our apps do not collect, store, or transmit any personal data. Specifically:</p>
+            <p>We do not collect, store, or receive any personal data. Our apps have:</p>
             <ul>
                 <li>No analytics or tracking</li>
                 <li>No user accounts or sign-in</li>
-                <li>No data sent to our servers</li>
-                <li>No cookies or identifiers</li>
-                <li>No access to contacts, calendars, or files outside the app</li>
+                <li>No BSK Apps servers - we do not operate any</li>
             </ul>
         </div>
 
         <div class="section">
-            <h2>Network Access</h2>
+            <h2>License Activation (paid apps)</h2>
             <p>
-                Some of our apps access the network for core functionality:
+                Apps purchased through LemonSqueezy send your license key to LemonSqueezy's API
+                to activate and periodically re-validate it. No other personal information is sent.
+                LemonSqueezy's own privacy policy applies to your purchase details.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Software Updates</h2>
+            <p>
+                Apps sold outside the App Store check GitHub for updates using the Sparkle
+                framework. These checks send no personal data.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Fetch Puppy</h2>
+            <p>
+                Fetch Puppy downloads media on your behalf, so it talks directly to the services
+                you use it with:
             </p>
             <ul>
-                <li><strong>Quicker IP</strong> makes a single HTTPS request to a third-party service
-                    (such as ifconfig.me) to display your public IP address. No personal data is
-                    sent with this request. This feature can be disabled in Settings.</li>
+                <li>Requests go to Spotify, Apple Music, YouTube, and the social media sites you
+                    download from. These services see the requests the same way a web browser would.</li>
+                <li>To access sites that require a login, Fetch Puppy can read cookies from your
+                    web browser (Firefox, Chrome, Brave, or Edge) and pass them only to the site
+                    they belong to. Cookies are never sent to BSK Apps or anyone else.</li>
+                <li>Search suggestions are fetched from Google as you type in the Search tab.</li>
+                <li>It downloads its yt-dlp engine and updates from GitHub.</li>
+                <li>Optional Spotify API credentials and your license key are stored in the macOS
+                    Keychain. Download history stays on your Mac.</li>
             </ul>
+        </div>
+
+        <div class="section">
+            <h2>Quicker IP</h2>
             <p>
-                No other network requests are made. All network information displayed by the app
-                (IP addresses, adapter details, scan results) is read from your local system and
-                is never transmitted anywhere.
+                Quicker IP makes a single HTTPS request to a third-party service (such as
+                ifconfig.me) to display your public IP address. No personal data is sent with this
+                request. This feature can be disabled in Settings. All other network information
+                shown (IP addresses, adapter details, scan results) is read from your local system
+                and never transmitted.
             </p>
         </div>
 
@@ -71,7 +99,7 @@
             <h2>Local Storage</h2>
             <p>
                 Our apps store preferences and settings locally on your Mac using standard macOS
-                mechanisms (UserDefaults). This data never leaves your device.
+                mechanisms (UserDefaults and the Keychain). This data never leaves your device.
             </p>
         </div>
 
