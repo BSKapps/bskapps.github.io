@@ -1,5 +1,5 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=36';
-import { renderDesign } from './renderer.js?v=36';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=37';
+import { renderDesign } from './renderer.js?v=37';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -84,7 +84,7 @@ function builtinPresets() {
       },
       design: mk((d) => {
         d.bg.color = '#1d1d22';
-        d.icons[0].size = 64;
+        d.icons[0].size = 75;
         d.icons[0].y = 0;
       })
     },
