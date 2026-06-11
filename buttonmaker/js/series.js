@@ -1,4 +1,4 @@
-import { state, deepClone } from './state.js?v=2';
+import { state, deepClone } from './state.js?v=3';
 
 export function seriesVariants() {
   const s = state.series;
@@ -59,10 +59,11 @@ function substitute(text, n, label) {
 }
 
 export function safeFileName(text, index) {
-  const base = (text || 'button')
+  if (!text) return 'button-' + (index + 1);
+  const base = text
     .replace(/[^a-zA-Z0-9 _-]/g, '')
     .trim()
     .replace(/\s+/g, '-')
     .toLowerCase();
-  return (base || 'button-' + (index + 1));
+  return base || 'button-' + (index + 1);
 }

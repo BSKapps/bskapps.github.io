@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=2';
-import { renderDesign } from './renderer.js?v=2';
-import { renderSeriesItems } from './ui.js?v=2';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=3';
+import { renderDesign } from './renderer.js?v=3';
+import { renderSeriesItems } from './ui.js?v=3';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -229,8 +229,9 @@ export function renderPresetList() {
   const all = user.map((p, i) => ({ ...p, userIndex: i })).concat(builtinPresets());
 
   for (const preset of all) {
-    const row = document.createElement('div');
-    row.className = 'preset-row';
+    const tile = document.createElement('div');
+    tile.className = 'strip-item';
+    tile.title = preset.name + (preset.series ? ' - loads a whole set' : '');
 
     const thumb = document.createElement('canvas');
     thumb.width = 72;
@@ -238,13 +239,20 @@ export function renderPresetList() {
     renderDesign(thumb, thumbDesign(preset));
 
     const label = document.createElement('span');
-    label.className = 'preset-label';
-    label.textContent = preset.name + (preset.series ? ' [set]' : '');
-    label.title = preset.builtin ? 'Built-in preset' : preset.name;
+    label.className = 'strip-name';
+    label.textContent = preset.name;
 
-    const loadBtn = document.createElement('button');
-    loadBtn.textContent = 'Load';
-    loadBtn.addEventListener('click', () => {
+    tile.appendChild(thumb);
+    tile.appendChild(label);
+
+    if (preset.series) {
+      const setTag = document.createElement('span');
+      setTag.className = 'strip-set';
+      setTag.textContent = 'SET';
+      tile.appendChild(setTag);
+    }
+
+    tile.addEventListener('click', () => {
       state.design = normalizeDesign(deepClone(preset.design));
       state.ui.activeText = 0;
       if (preset.series) {
@@ -256,23 +264,22 @@ export function renderPresetList() {
       emit();
     });
 
-    row.appendChild(thumb);
-    row.appendChild(label);
-    row.appendChild(loadBtn);
-
     if (!preset.builtin) {
-      const delBtn = document.createElement('button');
-      delBtn.textContent = 'Delete';
-      delBtn.addEventListener('click', () => {
+      const delBtn = document.createElement('span');
+      delBtn.className = 'strip-del';
+      delBtn.textContent = 'x';
+      delBtn.title = 'Delete preset';
+      delBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
         const list = loadUserPresets();
         list.splice(preset.userIndex, 1);
         saveUserPresets(list);
         renderPresetList();
       });
-      row.appendChild(delBtn);
+      tile.appendChild(delBtn);
     }
 
-    wrap.appendChild(row);
+    wrap.appendChild(tile);
   }
 }
 

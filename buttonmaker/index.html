@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&family=Bebas+Neue&family=Montserrat:wght@600;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=2">
+<link rel="stylesheet" href="css/style.css?v=3">
 </head>
 <body>
 <header class="app-header">
@@ -30,23 +30,6 @@
 
 <main class="layout">
   <aside class="panel" id="controls">
-
-    <details class="section" open>
-      <summary>Presets</summary>
-      <div class="section-body">
-        <p class="hint">Start from a ready-made button, then tweak it. Presets marked with a set load a whole row of buttons.</p>
-        <div id="presetList" class="preset-list"></div>
-        <div class="row">
-          <input type="text" id="presetName" placeholder="Name your design" autocomplete="off">
-          <button class="btn" id="presetSave">Save</button>
-        </div>
-        <div class="row">
-          <button class="btn ghost" id="presetExport">Export pack</button>
-          <button class="btn ghost" id="presetImportBtn">Import pack</button>
-          <input type="file" id="presetImportFile" accept=".json" class="hidden">
-        </div>
-      </div>
-    </details>
 
     <details class="section" open>
       <summary>Background</summary>
@@ -159,62 +142,19 @@
       </div>
     </details>
 
-    <details class="section">
-      <summary>Button set</summary>
-      <div class="section-body">
-        <p class="hint">Turn one design into a whole row of matching buttons.</p>
-        <div class="seg" id="seriesMode">
-          <button data-val="off" class="active">One button</button>
-          <button data-val="numbers">Numbered</button>
-          <button data-val="list">Custom list</button>
-        </div>
-        <div id="seriesNumbersRows" class="hidden">
-          <div class="row"><label>From</label><input type="number" id="seriesFrom" value="1" min="0" max="999"></div>
-          <div class="row"><label>To</label><input type="number" id="seriesTo" value="4" min="0" max="999"></div>
-        </div>
-        <div id="seriesListRows" class="hidden">
-          <p class="hint">One button per item. Type {label} in your text to show the item name.</p>
-          <div id="seriesItems"></div>
-          <button class="btn ghost" id="seriesAddItem">Add item</button>
-          <div class="row">
-            <label>Colour applies to</label>
-            <select id="seriesColorTarget">
-              <option value="bg">Background</option>
-              <option value="icon">Icon</option>
-              <option value="text">Text</option>
-            </select>
-          </div>
-          <button class="btn ghost" id="seriesTrafficLights">Load traffic light example</button>
-        </div>
-      </div>
-    </details>
-
-    <details class="section" open>
-      <summary>Download</summary>
-      <div class="section-body">
-        <div class="row">
-          <label>PNG size</label>
-          <select id="exportSize">
-            <option value="72">72 px</option>
-            <option value="144">144 px</option>
-            <option value="288" selected>288 px</option>
-          </select>
-        </div>
-        <div class="row check">
-          <input type="checkbox" id="exportBakeText" checked>
-          <label for="exportBakeText">Bake text into image</label>
-        </div>
-        <p class="hint">Unticked: the Companion export sets button text in Companion instead, so you can edit it there. Only the first text layer carries over, extra layers need baking.</p>
-        <button class="btn primary" id="exportPng">Download PNG</button>
-        <button class="btn primary" id="exportZip">Download set as ZIP</button>
-        <button class="btn primary" id="exportCompanion">Download Companion page</button>
-        <p class="hint">Import the page file in Companion under Import / Export. Companion keeps its own copy of the images, so nothing else to manage.</p>
-      </div>
-    </details>
-
   </aside>
 
   <section class="stage">
+    <div class="preset-strip-wrap">
+      <div id="presetList" class="preset-strip"></div>
+      <div class="preset-actions">
+        <input type="text" id="presetName" placeholder="Name your design" autocomplete="off">
+        <button class="btn" id="presetSave">Save preset</button>
+        <button class="btn ghost" id="presetExport">Export pack</button>
+        <button class="btn ghost" id="presetImportBtn">Import pack</button>
+        <input type="file" id="presetImportFile" accept=".json" class="hidden">
+      </div>
+    </div>
     <div class="preview-wrap">
       <canvas id="preview" width="288" height="288"></canvas>
       <div class="preview-tools">
@@ -222,6 +162,59 @@
       </div>
     </div>
     <div id="seriesPreview" class="series-preview"></div>
+    <div class="stage-cards">
+      <details class="section" open>
+        <summary>Button set</summary>
+        <div class="section-body">
+          <p class="hint">Turn one design into a whole row of matching buttons.</p>
+          <div class="seg" id="seriesMode">
+            <button data-val="off" class="active">One button</button>
+            <button data-val="numbers">Numbered</button>
+            <button data-val="list">Custom list</button>
+          </div>
+          <div id="seriesNumbersRows" class="hidden">
+            <div class="row"><label>From</label><input type="number" id="seriesFrom" value="1" min="0" max="999"></div>
+            <div class="row"><label>To</label><input type="number" id="seriesTo" value="4" min="0" max="999"></div>
+          </div>
+          <div id="seriesListRows" class="hidden">
+            <p class="hint">One button per item. Type {label} in your text to show the item name.</p>
+            <div id="seriesItems"></div>
+            <button class="btn ghost" id="seriesAddItem">Add item</button>
+            <div class="row">
+              <label>Colour applies to</label>
+              <select id="seriesColorTarget">
+                <option value="bg">Background</option>
+                <option value="icon">Icon</option>
+                <option value="text">Text</option>
+              </select>
+            </div>
+            <button class="btn ghost" id="seriesTrafficLights">Load traffic light example</button>
+          </div>
+        </div>
+      </details>
+      <details class="section" open>
+        <summary>Download</summary>
+        <div class="section-body">
+          <div class="row">
+            <label>PNG size</label>
+            <select id="exportSize">
+              <option value="72">72 px</option>
+              <option value="144">144 px</option>
+              <option value="288" selected>288 px</option>
+            </select>
+          </div>
+          <div class="row check">
+            <input type="checkbox" id="exportBakeText" checked>
+            <label for="exportBakeText">Bake text into image</label>
+          </div>
+          <p class="hint">Unticked: the Companion export sets button text in Companion instead, so you can edit it there. Only the first text layer carries over, extra layers need baking.</p>
+          <button class="btn primary" id="exportPng">Download PNG</button>
+          <button class="btn primary" id="exportZip">Download set as ZIP</button>
+          <button class="btn primary" id="exportCompanion">Download Companion page</button>
+          <p class="hint">Import the page file in Companion under Import / Export. Companion keeps its own copy of the images, so nothing else to manage.</p>
+        </div>
+      </details>
+    </div>
   </section>
 </main>
 
@@ -242,7 +235,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato or Corsair. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=2"></script>
-<script type="module" src="js/app.js?v=2"></script>
+<script src="vendor/jszip.min.js?v=3"></script>
+<script type="module" src="js/app.js?v=3"></script>
 </body>
 </html>
