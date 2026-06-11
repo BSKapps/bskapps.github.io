@@ -1,4 +1,4 @@
-export const APP_VERSION = '22';
+export const APP_VERSION = '26';
 
 export function defaultTextLayer() {
   return {
@@ -13,6 +13,19 @@ export function defaultTextLayer() {
   };
 }
 
+export function defaultIconLayer() {
+  return {
+    name: null,
+    svg: null,
+    color: '#ffffff',
+    tint: false,
+    size: 52,
+    x: 0,
+    y: -6,
+    opacity: 100
+  };
+}
+
 export function defaultDesign() {
   return {
     bg: {
@@ -21,20 +34,12 @@ export function defaultDesign() {
       gradFrom: '#16324f',
       gradTo: '#0a0e14',
       angle: 135,
+      blend: 100,
       imageData: null,
       imageFit: 'cover',
       imageDim: 0
     },
-    icon: {
-      name: null,
-      svg: null,
-      color: '#ffffff',
-      tint: false,
-      size: 52,
-      x: 0,
-      y: -6,
-      opacity: 100
-    },
+    icons: [defaultIconLayer()],
     texts: [defaultTextLayer()],
     shape: {
       radius: 0,
@@ -58,7 +63,7 @@ export const state = {
     colorTarget: 'bg'
   },
   export: { size: 288 },
-  ui: { activeText: 0 }
+  ui: { activeText: 0, activeIcon: 0 }
 };
 
 const listeners = [];

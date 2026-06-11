@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION } from './state.js?v=22';
-import { renderDesign } from './renderer.js?v=22';
-import { seriesVariants } from './series.js?v=22';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderSeriesItems, convertNumberedToList } from './ui.js?v=22';
-import { initIconPicker } from './icons.js?v=22';
-import { initPresets } from './presets.js?v=22';
-import { initExport } from './export.js?v=22';
-import { initColorPopover } from './colorpicker.js?v=22';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign } from './state.js?v=26';
+import { renderDesign } from './renderer.js?v=26';
+import { seriesVariants } from './series.js?v=26';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, renderSeriesItems, convertNumberedToList } from './ui.js?v=26';
+import { initIconPicker } from './icons.js?v=26';
+import { initPresets } from './presets.js?v=26';
+import { initExport } from './export.js?v=26';
+import { initColorPopover } from './colorpicker.js?v=26';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -154,9 +154,12 @@ document.addEventListener('paste', (e) => {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = () => {
-    state.design.icon.svg = reader.result;
-    state.design.icon.name = 'pasted image';
-    state.design.icon.tint = false;
+    const icons = state.design.icons;
+    if (state.ui.activeIcon >= icons.length) state.ui.activeIcon = icons.length - 1;
+    const ic = icons[state.ui.activeIcon];
+    ic.svg = reader.result;
+    ic.name = 'pasted image';
+    ic.tint = false;
     emit();
   };
   reader.readAsDataURL(file);
@@ -202,6 +205,16 @@ function restoreSession() {
   try {
     const saved = JSON.parse(localStorage.getItem(SESSION_KEY));
     if (saved && saved.design && Array.isArray(saved.design.texts)) {
+      if (!Array.isArray(saved.design.icons) || !saved.design.icons.length) {
+        saved.design.icons = saved.design.icon ? [saved.design.icon] : state.design.icons;
+      }
+      delete saved.design.icon;
+      if (saved.design.bg && saved.design.bg.blend === undefined) saved.design.bg.blend = 100;
+      if (Array.isArray(saved.design.texts)) {
+        for (const t of saved.design.texts) {
+          if (t.value) t.value = t.value.replace(/\\n/g, '\n');
+        }
+      }
       Object.assign(state.design, saved.design);
       Object.assign(state.series, saved.series || {});
     }
@@ -217,6 +230,21 @@ if (window.BM_V && window.BM_V !== APP_VERSION) {
   sessionStorage.removeItem('bm-skew-reload');
 }
 
+document.getElementById('resetDesign').addEventListener('click', () => {
+  Object.assign(state.design, defaultDesign());
+  state.series.mode = 'off';
+  state.series.items = [
+    { label: 'ON AIR', color: '#b51f1f' },
+    { label: 'PREVIEW', color: '#1f9d3a' },
+    { label: 'OFF', color: '#55555c' }
+  ];
+  state.series.colorTarget = 'bg';
+  state.ui.activeText = 0;
+  state.ui.activeIcon = 0;
+  renderSeriesItems();
+  emit();
+});
+
 restoreSession();
 
 initUI();
@@ -227,7 +255,11 @@ initColorPopover();
 
 onChange(() => {
   renderTextLayerChips();
+  renderIconLayerChips();
   syncInputsFromState();
+  const active = document.activeElement;
+  const seriesWrap = document.getElementById('seriesItems');
+  if (!seriesWrap || !seriesWrap.contains(active)) renderSeriesItems();
   renderAll();
   if (!applyingUndo) {
     clearTimeout(historyTimer);

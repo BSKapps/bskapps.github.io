@@ -1,7 +1,7 @@
-import { state, defaultDesign, defaultTextLayer, deepClone } from '../js/state.js?v=22';
-import { seriesVariants, safeFileName } from '../js/series.js?v=22';
-import { buildCompanionPage } from '../js/companion.js?v=22';
-import { renderToDataUrl } from '../js/renderer.js?v=22';
+import { state, defaultDesign, defaultTextLayer, deepClone } from '../js/state.js?v=26';
+import { seriesVariants, safeFileName } from '../js/series.js?v=26';
+import { buildCompanionPage } from '../js/companion.js?v=26';
+import { renderToDataUrl } from '../js/renderer.js?v=26';
 
 const results = [];
 
@@ -17,6 +17,7 @@ function resetState() {
   state.series.items = [];
   state.series.colorTarget = 'bg';
   state.ui.activeText = 0;
+  state.ui.activeIcon = 0;
 }
 
 function run() {
@@ -77,12 +78,12 @@ function run() {
   check('list set produces one variant per item', v.length === 2);
   check('{label} substituted in every layer', v[1].design.texts[0].value === 'STOP' && v[1].design.texts[1].value === 'No 2 here: STOP');
   check('item colour applied to background', v[0].design.bg.color === '#1f9d3a' && v[0].design.bg.mode === 'solid');
-  check('per-item icon overrides design icon', v[1].design.icon.svg === '<svg>x</svg>' && v[1].design.icon.name === 'test:stop');
-  check('items without icon keep base icon', v[0].design.icon.svg === null);
+  check('per-item icon overrides design icon', v[1].design.icons[0].svg === '<svg>x</svg>' && v[1].design.icons[0].name === 'test:stop');
+  check('items without icon keep base icon', v[0].design.icons[0].svg === null);
 
   state.series.colorTarget = 'icon';
   v = seriesVariants();
-  check('colour target icon recolours icon', v[0].design.icon.color === '#1f9d3a');
+  check('colour target icon recolours icon', v[0].design.icons[0].color === '#1f9d3a');
 
   state.series.colorTarget = 'text';
   v = seriesVariants();
@@ -117,6 +118,17 @@ function run() {
   const big = buildCompanionPage(Array.from({ length: 40 }, () => ({ png64: 'x' })));
   check('gridSize grows for 5 rows', big.page.gridSize.maxRow === 4);
 
+  resetState();
+  state.design.icons.push(Object.assign(deepClone(state.design.icons[0]), { svg: '<svg>2</svg>', name: 'test:two' }));
+  state.series.mode = 'list';
+  state.series.items = [{ label: 'GO', color: '#1f9d3a', iconSvg: '<svg>1</svg>', iconName: 'test:one' }];
+  state.series.colorTarget = 'icon';
+  v = seriesVariants();
+  check('item icon replaces first layer only', v[0].design.icons[0].svg === '<svg>1</svg>' && v[0].design.icons[1].svg === '<svg>2</svg>');
+  check('colour target icon recolours every icon layer', v[0].design.icons.every((ic) => ic.color === '#1f9d3a'));
+
+  check('gradient blend defaults to 100', defaultDesign().bg.blend === 100);
+
   const legacy = { bg: { color: '#101010' }, text: { value: 'OLD', size: 14 }, icon: {}, shape: {} };
   const clone = deepClone(legacy);
   check('deepClone detaches', (clone.bg.color = '#fff') && legacy.bg.color === '#101010');
@@ -126,12 +138,32 @@ function run() {
 
 async function runAsync() {
   resetState();
-  state.design.icon.svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M8,5V19L19,12Z"/></svg>';
+  const playSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M8,5V19L19,12Z"/></svg>';
+  state.design.icons[0].svg = playSvg;
   state.design.texts[0].value = 'T';
   const url = await renderToDataUrl(state.design, 72, { bakeText: true });
   check('renderer outputs png data url', url.startsWith('data:image/png;base64,') && url.length > 500);
   const noText = await renderToDataUrl(state.design, 72, { bakeText: false });
   check('bakeText false changes output', noText !== url);
+
+  state.design.icons.push(Object.assign(deepClone(state.design.icons[0]), { x: 20, color: '#ff0000' }));
+  const twoIcons = await renderToDataUrl(state.design, 72, { bakeText: false });
+  check('second icon layer changes output', twoIcons !== noText);
+
+  resetState();
+  const legacySingle = deepClone(state.design);
+  legacySingle.icon = Object.assign(deepClone(legacySingle.icons[0]), { svg: playSvg });
+  delete legacySingle.icons;
+  const legacyUrl = await renderToDataUrl(legacySingle, 72, {});
+  check('legacy single-icon design still renders', legacyUrl.startsWith('data:image/png;base64,'));
+
+  resetState();
+  state.design.bg.mode = 'gradient';
+  state.design.bg.blend = 0;
+  const hard = await renderToDataUrl(state.design, 72, {});
+  state.design.bg.blend = 100;
+  const soft = await renderToDataUrl(state.design, 72, {});
+  check('gradient blend changes output', hard !== soft);
   resetState();
 }
 

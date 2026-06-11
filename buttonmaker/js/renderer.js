@@ -54,8 +54,9 @@ export async function renderDesign(canvas, design, opts = {}) {
       cx + Math.cos(a) * len,
       cy + Math.sin(a) * len
     );
-    g.addColorStop(0, bg.gradFrom);
-    g.addColorStop(1, bg.gradTo);
+    const blend = bg.blend === undefined ? 100 : bg.blend;
+    g.addColorStop(Math.max(0, 0.5 - blend / 200), bg.gradFrom);
+    g.addColorStop(Math.min(1, 0.5 + blend / 200), bg.gradTo);
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, size, size);
   } else if (bg.mode === 'image' && bg.imageData) {
@@ -74,8 +75,9 @@ export async function renderDesign(canvas, design, opts = {}) {
     ctx.fillRect(0, 0, size, size);
   }
 
-  const icon = design.icon;
-  if (icon.svg) {
+  const icons = design.icons || (design.icon ? [design.icon] : []);
+  for (const icon of icons) {
+    if (!icon.svg) continue;
     try {
       const isSvg = icon.svg.trim().startsWith('<');
       const hasCC = isSvg && icon.svg.includes('currentColor');
@@ -100,7 +102,7 @@ export async function renderDesign(canvas, design, opts = {}) {
       else w = s * ratio;
       const x = size / 2 - w / 2 + (icon.x / 100) * size;
       const y = size / 2 - h / 2 + (icon.y / 100) * size;
-      ctx.globalAlpha = icon.opacity / 100;
+      ctx.globalAlpha = (icon.opacity === undefined ? 100 : icon.opacity) / 100;
       ctx.drawImage(img, x, y, w, h);
       ctx.globalAlpha = 1;
     } catch (e) {}
@@ -115,7 +117,7 @@ export async function renderDesign(canvas, design, opts = {}) {
       ctx.textAlign = h === 'left' ? 'left' : h === 'right' ? 'right' : 'center';
       const pad = 5 * u;
       const x = h === 'left' ? pad : h === 'right' ? size - pad : size / 2;
-      const lines = text.value.split('\\n');
+      const lines = text.value.split('\n');
       const lineHeight = text.size * u * 1.15;
       let startY;
       if (v === 'top') {

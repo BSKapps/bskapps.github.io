@@ -1,4 +1,4 @@
-import { state, deepClone } from './state.js?v=22';
+import { state, deepClone } from './state.js?v=26';
 
 export function hasToken(design) {
   return design.texts.some((t) => t.value && (t.value.includes('{n}') || t.value.includes('{label}')));
@@ -42,18 +42,18 @@ export function seriesVariants() {
       } else if (item.label) {
         const t = d.texts.find((l) => l.value);
         if (t) t.value = item.label;
-        else if (!item.iconSvg && !base.icon.svg) d.texts.push(numberLayer(item.label));
+        else if (!item.iconSvg && !base.icons.some((ic) => ic.svg)) d.texts.push(numberLayer(item.label));
       }
       if (item.iconSvg) {
-        d.icon.svg = item.iconSvg;
-        d.icon.name = item.iconName || null;
+        d.icons[0].svg = item.iconSvg;
+        d.icons[0].name = item.iconName || null;
       }
       if (item.color) {
         if (s.colorTarget === 'bg' && base.bg.mode !== 'image') {
           d.bg.mode = 'solid';
           d.bg.color = item.color;
         } else if (s.colorTarget === 'icon') {
-          d.icon.color = item.color;
+          for (const ic of d.icons) ic.color = item.color;
         } else {
           for (const t of d.texts) t.color = item.color;
         }

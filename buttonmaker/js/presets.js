@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=22';
-import { renderDesign } from './renderer.js?v=22';
-import { renderSeriesItems } from './ui.js?v=22';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=26';
+import { renderDesign } from './renderer.js?v=26';
+import { renderSeriesItems } from './ui.js?v=26';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -82,11 +82,11 @@ function builtinPresets() {
       builtin: true,
       design: mk((d) => {
         d.bg.color = '#1d1d22';
-        d.icon.svg = ICONS.record;
-        d.icon.name = 'builtin:record';
-        d.icon.color = '#e53935';
-        d.icon.size = 46;
-        d.icon.y = -8;
+        d.icons[0].svg = ICONS.record;
+        d.icons[0].name = 'builtin:record';
+        d.icons[0].color = '#e53935';
+        d.icons[0].size = 46;
+        d.icons[0].y = -8;
         Object.assign(d.texts[0], { value: 'REC', font: 'Oswald', weight: '700', size: 10 });
       })
     },
@@ -109,8 +109,8 @@ function builtinPresets() {
       },
       design: mk((d) => {
         d.bg.color = '#1d1d22';
-        d.icon.size = 58;
-        d.icon.y = 0;
+        d.icons[0].size = 58;
+        d.icons[0].y = 0;
       })
     },
     {
@@ -171,11 +171,11 @@ function builtinPresets() {
         d.bg.mode = 'gradient';
         d.bg.gradFrom = '#4d3a10';
         d.bg.gradTo = '#171204';
-        d.icon.svg = ICONS.lowerthird;
-        d.icon.name = 'builtin:lowerthird';
-        d.icon.color = '#ffd54f';
-        d.icon.size = 56;
-        d.icon.y = 10;
+        d.icons[0].svg = ICONS.lowerthird;
+        d.icons[0].name = 'builtin:lowerthird';
+        d.icons[0].color = '#ffd54f';
+        d.icons[0].size = 56;
+        d.icons[0].y = 10;
         Object.assign(d.texts[0], { value: 'L3 {n}', font: 'Roboto Condensed', weight: '700', size: 10, align: 'center:top' });
       })
     }
@@ -322,15 +322,15 @@ function thumbDesign(preset) {
     t.value = t.value.replaceAll('{n}', n).replaceAll('{label}', label);
   }
   if (first && first.iconSvg) {
-    d.icon.svg = first.iconSvg;
-    d.icon.name = first.iconName || null;
+    d.icons[0].svg = first.iconSvg;
+    d.icons[0].name = first.iconName || null;
   }
   if (first && first.color) {
     if (s.colorTarget === 'bg' && d.bg.mode !== 'image') {
       d.bg.mode = 'solid';
       d.bg.color = first.color;
     } else if (s.colorTarget === 'icon') {
-      d.icon.color = first.color;
+      for (const ic of d.icons) ic.color = first.color;
     } else if (s.colorTarget === 'text') {
       for (const t of d.texts) t.color = first.color;
     }
@@ -342,13 +342,18 @@ function normalizeDesign(design) {
   const base = defaultDesign();
   const merged = deepClone(base);
   for (const key of Object.keys(base)) {
-    if (key === 'texts') continue;
+    if (key === 'texts' || key === 'icons') continue;
     if (design[key]) Object.assign(merged[key], design[key]);
   }
   if (Array.isArray(design.texts) && design.texts.length) {
     merged.texts = design.texts.map((t) => Object.assign(deepClone(base.texts[0]), t));
   } else if (design.text) {
     merged.texts = [Object.assign(deepClone(base.texts[0]), design.text)];
+  }
+  if (Array.isArray(design.icons) && design.icons.length) {
+    merged.icons = design.icons.map((i) => Object.assign(deepClone(base.icons[0]), i));
+  } else if (design.icon) {
+    merged.icons = [Object.assign(deepClone(base.icons[0]), design.icon)];
   }
   return merged;
 }

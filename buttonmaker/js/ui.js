@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer } from './state.js?v=22';
-import { openIconModal, triggerIconUpload } from './icons.js?v=22';
-import { seriesVariants, hasToken } from './series.js?v=22';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer } from './state.js?v=26';
+import { openIconModal, triggerIconUpload } from './icons.js?v=26';
+import { seriesVariants, hasToken } from './series.js?v=26';
 
 let dragIndex = null;
 
@@ -40,7 +40,13 @@ function rebuildWeightOptions(font, current) {
 }
 
 function iconAnchorOffset() {
-  return Math.max(0, Math.min(40, Math.round(50 - state.design.icon.size / 2 - 6)));
+  return Math.max(0, Math.min(40, Math.round(50 - activeIcon().size / 2 - 6)));
+}
+
+function activeIcon() {
+  const icons = state.design.icons;
+  if (state.ui.activeIcon >= icons.length) state.ui.activeIcon = icons.length - 1;
+  return icons[state.ui.activeIcon];
 }
 
 function activeText() {
@@ -99,6 +105,7 @@ export function initUI() {
   bindColor('bgColor2a', (v) => (d.bg.gradFrom = v));
   bindColor('bgColor2b', (v) => (d.bg.gradTo = v));
   bindRange('bgAngle', (v) => (d.bg.angle = v), 'bgAngleVal');
+  bindRange('bgBlend', (v) => (d.bg.blend = v), 'bgBlendVal');
   bindSelect('bgImageFit', (v) => (d.bg.imageFit = v));
   bindRange('bgImageDim', (v) => (d.bg.imageDim = v), 'bgImageDimVal');
 
@@ -114,27 +121,23 @@ export function initUI() {
   });
 
   bindColor('iconColor', (v) => {
-    d.icon.color = v;
-    d.icon.tint = true;
+    const ic = activeIcon();
+    ic.color = v;
+    ic.tint = true;
   });
-  bindRange('iconSize', (v) => (d.icon.size = v), 'iconSizeVal');
-  bindRange('iconX', (v) => (d.icon.x = v), 'iconXVal');
-  bindRange('iconY', (v) => (d.icon.y = v), 'iconYVal');
-  bindRange('iconOpacity', (v) => (d.icon.opacity = v), 'iconOpacityVal');
-
-  document.getElementById('iconCentre').addEventListener('click', () => {
-    d.icon.x = 0;
-    d.icon.y = 0;
-    emit();
-  });
+  bindRange('iconSize', (v) => (activeIcon().size = v), 'iconSizeVal');
+  bindRange('iconX', (v) => (activeIcon().x = v), 'iconXVal');
+  bindRange('iconY', (v) => (activeIcon().y = v), 'iconYVal');
+  bindRange('iconOpacity', (v) => (activeIcon().opacity = v), 'iconOpacityVal');
 
   document.getElementById('iconUploadSidebar').addEventListener('click', triggerIconUpload);
 
   bindSeg('iconAlign', (v) => {
+    const ic = activeIcon();
     const [hh, vv] = v.split(':');
     const off = iconAnchorOffset();
-    d.icon.x = hh === 'left' ? -off : hh === 'right' ? off : 0;
-    d.icon.y = vv === 'top' ? -off : vv === 'bottom' ? off : 0;
+    ic.x = hh === 'left' ? -off : hh === 'right' ? off : 0;
+    ic.y = vv === 'top' ? -off : vv === 'bottom' ? off : 0;
   });
 
   document.getElementById('textValue').addEventListener('input', (e) => {
@@ -183,7 +186,7 @@ export function initUI() {
   bindSelect('seriesColorTarget', (v) => (state.series.colorTarget = v));
 
   document.getElementById('seriesAddItem').addEventListener('click', () => {
-    state.series.items.push({ label: '', color: '#3d8bfd' });
+    state.series.items.push({ label: '', color: '' });
     renderSeriesItems();
     emit();
   });
@@ -192,6 +195,7 @@ export function initUI() {
 
   renderSeriesItems();
   renderTextLayerChips();
+  renderIconLayerChips();
   syncInputsFromState();
 }
 
@@ -256,6 +260,53 @@ export function renderTextLayerChips() {
   }
 }
 
+export function renderIconLayerChips() {
+  const wrap = document.getElementById('iconLayerChips');
+  wrap.innerHTML = '';
+  const icons = state.design.icons;
+  icons.forEach((ic, i) => {
+    const chip = document.createElement('button');
+    chip.textContent = ic.name ? truncate(ic.name.split(':').pop(), 10) : 'Layer ' + (i + 1);
+    chip.classList.toggle('active', i === state.ui.activeIcon);
+    chip.addEventListener('click', () => {
+      state.ui.activeIcon = i;
+      emit();
+    });
+    wrap.appendChild(chip);
+  });
+
+  if (icons.length < 6) {
+    const add = document.createElement('button');
+    add.className = 'chip-action';
+    add.textContent = '+ Layer';
+    add.addEventListener('click', () => {
+      icons.push(defaultIconLayer());
+      state.ui.activeIcon = icons.length - 1;
+      emit();
+    });
+    wrap.appendChild(add);
+  }
+
+  if (icons.length > 1) {
+    const del = document.createElement('button');
+    del.className = 'chip-action';
+    del.textContent = 'Remove';
+    del.addEventListener('click', () => {
+      icons.splice(state.ui.activeIcon, 1);
+      state.ui.activeIcon = Math.max(0, state.ui.activeIcon - 1);
+      emit();
+    });
+    wrap.appendChild(del);
+  }
+}
+
+function resolvedSwatchColor() {
+  const ct = state.series.colorTarget;
+  if (ct === 'icon') return (state.design.icons[0] && state.design.icons[0].color) || '#ffffff';
+  if (ct === 'text') return (state.design.texts[0] && state.design.texts[0].color) || '#ffffff';
+  return state.design.bg.color;
+}
+
 function truncate(s, len) {
   return s.length > len ? s.slice(0, len) + '...' : s;
 }
@@ -306,7 +357,7 @@ export function renderSeriesItems() {
 
     const color = document.createElement('input');
     color.type = 'color';
-    color.value = item.color || '#3d8bfd';
+    color.value = item.color || resolvedSwatchColor();
     color.addEventListener('input', () => {
       item.color = color.value;
       emit();
@@ -371,13 +422,15 @@ export function syncInputsFromState() {
   setVal('bgColor2a', d.bg.gradFrom);
   setVal('bgColor2b', d.bg.gradTo);
   setRange('bgAngle', d.bg.angle, 'bgAngleVal');
+  setRange('bgBlend', d.bg.blend === undefined ? 100 : d.bg.blend, 'bgBlendVal');
   setVal('bgImageFit', d.bg.imageFit);
   setRange('bgImageDim', d.bg.imageDim, 'bgImageDimVal');
-  setVal('iconColor', d.icon.color);
-  setRange('iconSize', d.icon.size, 'iconSizeVal');
-  setRange('iconX', d.icon.x, 'iconXVal');
-  setRange('iconY', d.icon.y, 'iconYVal');
-  setRange('iconOpacity', d.icon.opacity, 'iconOpacityVal');
+  const ic = activeIcon();
+  setVal('iconColor', ic.color);
+  setRange('iconSize', ic.size, 'iconSizeVal');
+  setRange('iconX', ic.x, 'iconXVal');
+  setRange('iconY', ic.y, 'iconYVal');
+  setRange('iconOpacity', ic.opacity === undefined ? 100 : ic.opacity, 'iconOpacityVal');
   const t = activeText();
   setVal('textValue', t.value);
   setVal('textFont', t.font);
@@ -403,7 +456,7 @@ export function syncInputsFromState() {
   setVal('seriesTo', state.series.to);
   setVal('seriesColorTarget', state.series.colorTarget);
 
-  document.getElementById('clearIcon').disabled = !d.icon.svg;
+  document.getElementById('clearIcon').disabled = !ic.svg;
   document.getElementById('exportZip').disabled = state.series.mode === 'off';
 
   const off = iconAnchorOffset();
@@ -411,7 +464,7 @@ export function syncInputsFromState() {
     const [hh, vv] = b.dataset.val.split(':');
     const bx = hh === 'left' ? -off : hh === 'right' ? off : 0;
     const by = vv === 'top' ? -off : vv === 'bottom' ? off : 0;
-    b.classList.toggle('active', d.icon.x === bx && d.icon.y === by);
+    b.classList.toggle('active', ic.x === bx && ic.y === by);
   });
 }
 

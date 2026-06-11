@@ -92,7 +92,10 @@ function buildPopover() {
   pop.querySelector('#cpDone').addEventListener('click', close);
 
   document.addEventListener('mousedown', (e) => {
-    if (!pop.classList.contains('hidden') && !pop.contains(e.target) && e.target !== targetInput) close();
+    if (!pop.classList.contains('hidden') && !pop.contains(e.target) && e.target !== targetInput) {
+      if (e.target instanceof HTMLInputElement && e.target.type === 'color') return;
+      close();
+    }
   });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') close();
