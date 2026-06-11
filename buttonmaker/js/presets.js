@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=19';
-import { renderDesign } from './renderer.js?v=19';
-import { renderSeriesItems } from './ui.js?v=19';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=20';
+import { renderDesign } from './renderer.js?v=20';
+import { renderSeriesItems } from './ui.js?v=20';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -215,11 +215,16 @@ export function initPresets() {
   });
 
   document.getElementById('presetExport').addEventListener('click', () => {
+    const presets = loadUserPresets();
+    if (!presets.length) {
+      alert('You have no saved presets yet. Click "Save to my presets" first, then back them up.');
+      return;
+    }
     const blob = new Blob(
-      [JSON.stringify({ app: 'companion-button-maker', version: 1, presets: loadUserPresets() }, null, 2)],
+      [JSON.stringify({ app: 'companion-button-maker', version: 1, presets }, null, 2)],
       { type: 'application/json' }
     );
-    downloadBlob(blob, 'button-presets.json');
+    downloadBlob(blob, 'bsk-button-presets.json');
   });
 
   const importFile = document.getElementById('presetImportFile');

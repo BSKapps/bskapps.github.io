@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=19">
+<link rel="stylesheet" href="css/style.css?v=20">
 </head>
 <body>
 <header class="app-header">
@@ -171,10 +171,10 @@
       <p class="step-label">1. Pick a starting point</p>
       <div id="presetList" class="preset-strip"></div>
       <div class="preset-actions">
-        <input type="text" id="presetName" placeholder="Name your design" autocomplete="off">
-        <button class="btn" id="presetSave">Save preset</button>
-        <button class="btn ghost" id="presetExport">Export pack</button>
-        <button class="btn ghost" id="presetImportBtn">Import pack</button>
+        <input type="text" id="presetName" placeholder="Name this design" autocomplete="off">
+        <button class="btn" id="presetSave">Save to my presets</button>
+        <button class="btn ghost" id="presetExport" title="Save all your presets to a file to back up or share">Back up</button>
+        <button class="btn ghost" id="presetImportBtn" title="Load presets from a backup file">Restore</button>
         <input type="file" id="presetImportFile" accept=".json" class="hidden">
       </div>
     </div>
@@ -227,6 +227,7 @@
               <option value="288" selected>288 px</option>
             </select>
           </div>
+          <p class="hint">72 px is the native key size. 144 px is crisper on newer high-res decks. 288 px is the sharpest and scales down cleanly, so it is the safe all-round default.</p>
           <button class="btn primary" id="exportCompanion">Download as Companion page file</button>
           <p class="hint">Optional: a whole page of finished buttons in one import. Aim it at an EMPTY page - it replaces the page you point it at.</p>
         </div>
@@ -239,12 +240,11 @@
   <div class="modal-box">
     <div class="modal-head">
       <input type="search" id="iconSearch" placeholder="Search 200,000+ icons" autocomplete="off">
-      <button class="btn ghost" id="iconUploadBtn">Upload image</button>
       <button class="btn ghost" id="iconModalClose">Close</button>
       <input type="file" id="iconUploadFile" accept="image/*" class="hidden">
     </div>
     <div class="icon-results" id="iconResults"></div>
-    <p class="hint" id="iconStatus">Type to search the Iconify library</p>
+    <p class="hint" id="iconStatus">A few to get you started - type above to search anything.</p>
   </div>
 </div>
 
@@ -252,8 +252,8 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato or Corsair. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script>window.BM_V = '19';</script>
-<script src="vendor/jszip.min.js?v=19"></script>
-<script type="module" src="js/app.js?v=19"></script>
+<script>window.BM_V = '20';</script>
+<script src="vendor/jszip.min.js?v=20"></script>
+<script type="module" src="js/app.js?v=20"></script>
 </body>
 </html>
