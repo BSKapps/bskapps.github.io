@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=12">
+<link rel="stylesheet" href="css/style.css?v=13">
 </head>
 <body>
 <header class="app-header">
@@ -153,7 +153,7 @@
       </div>
     </details>
 
-    <details class="section">
+    <details class="section" open>
       <summary>Shape</summary>
       <div class="section-body">
         <div class="row"><label>Corners</label><input type="range" id="shapeRadius" min="0" max="35" value="0"><span class="val" id="shapeRadiusVal">0</span></div>
@@ -229,6 +229,7 @@
                 <option value="288" selected>288 px</option>
               </select>
             </div>
+            <p class="hint">72 px is the native key size. 288 px looks sharper on newer decks and scales down cleanly, so it is a safe default everywhere.</p>
             <div class="row check">
               <input type="checkbox" id="exportBakeText" checked>
               <label for="exportBakeText">Bake text into image</label>
@@ -258,8 +259,8 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato or Corsair. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script>window.BM_V = '12';</script>
-<script src="vendor/jszip.min.js?v=12"></script>
-<script type="module" src="js/app.js?v=12"></script>
+<script>window.BM_V = '13';</script>
+<script src="vendor/jszip.min.js?v=13"></script>
+<script type="module" src="js/app.js?v=13"></script>
 </body>
 </html>

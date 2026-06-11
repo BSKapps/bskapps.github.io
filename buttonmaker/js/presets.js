@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=12';
-import { renderDesign } from './renderer.js?v=12';
-import { renderSeriesItems } from './ui.js?v=12';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=13';
+import { renderDesign } from './renderer.js?v=13';
+import { renderSeriesItems } from './ui.js?v=13';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -152,50 +152,15 @@ function builtinPresets() {
       })
     },
     {
-      name: 'CAM 1-4',
+      name: 'INPUT 1-8',
       builtin: true,
-      series: numberedSet(1, 4),
+      series: numberedSet(1, 8),
       design: mk((d) => {
         d.bg.mode = 'gradient';
         d.bg.gradFrom = '#16324f';
         d.bg.gradTo = '#0a0e14';
-        Object.assign(d.texts[0], { value: 'CAM', font: 'Roboto Condensed', weight: '700', size: 10, align: 'center:top' });
-        d.texts.push({ value: '{n}', font: 'Bebas Neue', weight: '400', size: 28, color: '#ffffff', align: 'center:center' });
-      })
-    },
-    {
-      name: 'INPUT 1-4',
-      builtin: true,
-      series: numberedSet(1, 4),
-      design: mk((d) => {
-        d.bg.mode = 'gradient';
-        d.bg.gradFrom = '#0f3d3e';
-        d.bg.gradTo = '#091416';
         Object.assign(d.texts[0], { value: 'INPUT', font: 'Roboto Condensed', weight: '700', size: 10, align: 'center:top' });
         d.texts.push({ value: '{n}', font: 'Bebas Neue', weight: '400', size: 28, color: '#ffffff', align: 'center:center' });
-      })
-    },
-    {
-      name: 'PC 1-4',
-      builtin: true,
-      series: numberedSet(1, 4),
-      design: mk((d) => {
-        d.bg.mode = 'gradient';
-        d.bg.gradFrom = '#3e4e57';
-        d.bg.gradTo = '#0e1418';
-        Object.assign(d.texts[0], { value: 'PC', font: 'Roboto Condensed', weight: '700', size: 10, align: 'center:top' });
-        d.texts.push({ value: '{n}', font: 'Bebas Neue', weight: '400', size: 28, color: '#ffffff', align: 'center:center' });
-      })
-    },
-    {
-      name: 'SCREEN 1-4',
-      builtin: true,
-      series: numberedSet(1, 4),
-      design: mk((d) => {
-        d.bg.mode = 'gradient';
-        d.bg.gradFrom = '#3a1d5e';
-        d.bg.gradTo = '#12081f';
-        Object.assign(d.texts[0], { value: 'SCREEN {n}', font: 'Roboto Condensed', weight: '700', size: 11 });
       })
     },
     {

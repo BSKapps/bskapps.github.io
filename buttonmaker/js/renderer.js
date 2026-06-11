@@ -33,6 +33,28 @@ export async function renderDesign(canvas, design, opts = {}) {
   const size = canvas.width;
   const u = size / 72;
   const ctx = canvas.getContext('2d');
+
+  if (opts.topbarGuide) {
+    const off = document.createElement('canvas');
+    off.width = size;
+    off.height = size;
+    await renderDesign(off, design, { ...opts, topbarGuide: false });
+    ctx.clearRect(0, 0, size, size);
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, size, size);
+    const barH = 14 * u;
+    ctx.fillStyle = '#16181c';
+    ctx.fillRect(0, 0, size, barH);
+    ctx.fillStyle = '#8a8a90';
+    ctx.font = '600 ' + 7 * u + 'px -apple-system, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('1.1', 3 * u, barH / 2);
+    const avail = size - barH;
+    ctx.drawImage(off, (size - avail) / 2, barH, avail, avail);
+    return;
+  }
+
   ctx.clearRect(0, 0, size, size);
   ctx.save();
 
@@ -163,20 +185,6 @@ export async function renderDesign(canvas, design, opts = {}) {
   }
 
   ctx.restore();
-
-  if (opts.topbarGuide) {
-    const guideH = (14 / 72) * size;
-    ctx.save();
-    ctx.fillStyle = 'rgba(255, 70, 70, 0.28)';
-    ctx.fillRect(0, 0, size, guideH);
-    ctx.strokeStyle = 'rgba(255, 70, 70, 0.9)';
-    ctx.setLineDash([6, 4]);
-    ctx.beginPath();
-    ctx.moveTo(0, guideH);
-    ctx.lineTo(size, guideH);
-    ctx.stroke();
-    ctx.restore();
-  }
 }
 
 function drawFitted(ctx, img, size, fit) {

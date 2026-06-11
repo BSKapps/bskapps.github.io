@@ -1,5 +1,5 @@
-import { state, emit, defaultTextLayer } from './state.js?v=12';
-import { openIconModal, triggerIconUpload } from './icons.js?v=12';
+import { state, emit, defaultTextLayer } from './state.js?v=13';
+import { openIconModal, triggerIconUpload } from './icons.js?v=13';
 
 function iconAnchorOffset() {
   return Math.max(0, Math.min(40, Math.round(50 - state.design.icon.size / 2 - 6)));

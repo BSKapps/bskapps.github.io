@@ -1,4 +1,4 @@
-export const APP_VERSION = '12';
+export const APP_VERSION = '13';
 
 export function defaultTextLayer() {
   return {
@@ -49,8 +49,9 @@ export const state = {
     from: 1,
     to: 4,
     items: [
-      { label: 'GO', color: '#1f9d3a' },
-      { label: 'STANDBY', color: '#c9a227' }
+      { label: 'ON AIR', color: '#b51f1f' },
+      { label: 'PREVIEW', color: '#1f9d3a' },
+      { label: 'OFF', color: '#55555c' }
     ],
     colorTarget: 'bg'
   },
