@@ -1,8 +1,43 @@
-import { state, emit, deepClone, defaultTextLayer } from './state.js?v=21';
-import { openIconModal, triggerIconUpload } from './icons.js?v=21';
-import { seriesVariants, hasToken } from './series.js?v=21';
+import { state, emit, deepClone, defaultTextLayer } from './state.js?v=22';
+import { openIconModal, triggerIconUpload } from './icons.js?v=22';
+import { seriesVariants, hasToken } from './series.js?v=22';
 
 let dragIndex = null;
+
+const FONT_WEIGHTS = {
+  'Inter': ['400', '600', '700', '800'],
+  'Oswald': ['400', '600', '700'],
+  'Bebas Neue': ['400'],
+  'Montserrat': ['400', '600', '700', '800'],
+  'Roboto Condensed': ['400', '700'],
+  'JetBrains Mono': ['400', '700', '800'],
+  'Arial': ['400', '700'],
+  'Helvetica Neue': ['400', '700'],
+  'Georgia': ['400', '700']
+};
+
+const WEIGHT_LABELS = { '400': 'Regular', '600': 'Semibold', '700': 'Bold', '800': 'Heavy' };
+
+function weightsFor(font) {
+  return FONT_WEIGHTS[font] || ['400', '700'];
+}
+
+function nearestWeight(options, weight) {
+  const w = Number(weight);
+  return options.reduce((best, o) => (Math.abs(Number(o) - w) < Math.abs(Number(best) - w) ? o : best), options[0]);
+}
+
+function rebuildWeightOptions(font, current) {
+  const select = document.getElementById('textWeight');
+  const options = weightsFor(font);
+  const value = options.includes(current) ? current : nearestWeight(options, current);
+  select.innerHTML = options
+    .map((o) => '<option value="' + o + '">' + WEIGHT_LABELS[o] + '</option>')
+    .join('');
+  select.value = value;
+  select.disabled = options.length === 1;
+  return value;
+}
 
 function iconAnchorOffset() {
   return Math.max(0, Math.min(40, Math.round(50 - state.design.icon.size / 2 - 6)));
@@ -106,7 +141,11 @@ export function initUI() {
     activeText().value = e.target.value;
     emit();
   });
-  bindSelect('textFont', (v) => (activeText().font = v));
+  bindSelect('textFont', (v) => {
+    const t = activeText();
+    t.font = v;
+    t.weight = rebuildWeightOptions(v, t.weight);
+  });
   bindSelect('textWeight', (v) => (activeText().weight = v));
   bindRange('textSize', (v) => (activeText().size = v), 'textSizeVal');
   bindColor('textColor', (v) => (activeText().color = v));
@@ -167,9 +206,9 @@ export function convertNumberedToList() {
     }
   } else {
     const t = state.design.texts.find((l) => l.value);
-    const baseText = t ? t.value : '';
+    const stem = t ? t.value.replace(/\s*\d+$/, '') : '';
     state.series.items = Array.from({ length: count }, (_, i) => ({
-      label: baseText ? baseText + ' ' + (from + i) : String(from + i),
+      label: stem ? stem + ' ' + (from + i) : String(from + i),
       color: ''
     }));
   }
@@ -342,7 +381,7 @@ export function syncInputsFromState() {
   const t = activeText();
   setVal('textValue', t.value);
   setVal('textFont', t.font);
-  setVal('textWeight', t.weight);
+  rebuildWeightOptions(t.font, t.weight);
   setRange('textSize', t.size, 'textSizeVal');
   setVal('textColor', t.color);
   setRange('textX', t.x || 0, 'textXVal');

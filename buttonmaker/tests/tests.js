@@ -1,7 +1,7 @@
-import { state, defaultDesign, defaultTextLayer, deepClone } from '../js/state.js?v=21';
-import { seriesVariants, safeFileName } from '../js/series.js?v=21';
-import { buildCompanionPage } from '../js/companion.js?v=21';
-import { renderToDataUrl } from '../js/renderer.js?v=21';
+import { state, defaultDesign, defaultTextLayer, deepClone } from '../js/state.js?v=22';
+import { seriesVariants, safeFileName } from '../js/series.js?v=22';
+import { buildCompanionPage } from '../js/companion.js?v=22';
+import { renderToDataUrl } from '../js/renderer.js?v=22';
 
 const results = [];
 
@@ -49,6 +49,14 @@ function run() {
   state.series.to = 2;
   v = seriesVariants();
   check('empty design numbered: number drawn as big centred text', v[0].design.texts.some((t) => t.value === '1' && t.align === 'center:center'));
+
+  resetState();
+  state.design.texts[0].value = 'PC 1';
+  state.series.mode = 'numbers';
+  state.series.from = 2;
+  state.series.to = 4;
+  v = seriesVariants();
+  check('existing trailing number replaced: PC 1 from 2 gives PC 2..PC 4', v[0].design.texts[0].value === 'PC 2' && v[2].design.texts[0].value === 'PC 4');
 
   resetState();
   state.design.texts[0].value = 'STATE';
