@@ -1,4 +1,4 @@
-import { state, deepClone } from './state.js?v=4';
+import { state, deepClone } from './state.js?v=5';
 
 export function seriesVariants() {
   const s = state.series;

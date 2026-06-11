@@ -1,11 +1,11 @@
-import { state, onChange, emit } from './state.js?v=4';
-import { renderDesign } from './renderer.js?v=4';
-import { seriesVariants } from './series.js?v=4';
-import { initUI, syncInputsFromState, renderTextLayerChips } from './ui.js?v=4';
-import { initIconPicker } from './icons.js?v=4';
-import { initPresets } from './presets.js?v=4';
-import { initExport } from './export.js?v=4';
-import { initColorPopover } from './colorpicker.js?v=4';
+import { state, onChange, emit } from './state.js?v=5';
+import { renderDesign } from './renderer.js?v=5';
+import { seriesVariants } from './series.js?v=5';
+import { initUI, syncInputsFromState, renderTextLayerChips } from './ui.js?v=5';
+import { initIconPicker } from './icons.js?v=5';
+import { initPresets } from './presets.js?v=5';
+import { initExport } from './export.js?v=5';
+import { initColorPopover } from './colorpicker.js?v=5';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -32,6 +32,13 @@ async function renderOnce() {
     topbarGuide: state.guides.topbar,
     bakeText: true
   });
+
+  const summary = document.getElementById('exportSummary');
+  if (variants.length === 1) {
+    summary.textContent = 'Your downloads will contain this one button.';
+  } else {
+    summary.textContent = 'Your downloads will contain all ' + variants.length + ' buttons, laid out as one row on the Companion page.';
+  }
 
   seriesWrap.innerHTML = '';
   if (variants.length > 1) {

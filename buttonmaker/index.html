@@ -16,8 +16,8 @@
 <link rel="icon" type="image/png" href="images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&family=Bebas+Neue&family=Montserrat:wght@600;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=4">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=5">
 </head>
 <body>
 <header class="app-header">
@@ -116,7 +116,8 @@
             <option value="800">Heavy</option>
           </select>
         </div>
-        <div class="row"><label>Size</label><input type="range" id="textSize" min="6" max="30" value="11"><span class="val" id="textSizeVal">11</span></div>
+        <div class="row"><label>Size</label><input type="range" id="textSize" min="6" max="48" value="11"><span class="val" id="textSizeVal">11</span></div>
+        <p class="hint">Bebas Neue and Roboto Condensed come in fewer weights, so some weight options look the same there.</p>
         <div class="row"><label>Colour</label><input type="color" id="textColor" value="#ffffff"></div>
         <div class="row">
           <label>Position</label>
@@ -211,6 +212,7 @@
             <label for="exportBakeText">Bake text into image</label>
           </div>
           <p class="hint">Unticked: the Companion export sets button text in Companion instead, so you can edit it there. Only the first text layer carries over, extra layers need baking.</p>
+          <p class="hint" id="exportSummary"></p>
           <button class="btn primary" id="exportPng">Download PNG</button>
           <button class="btn primary" id="exportZip">Download set as ZIP</button>
           <button class="btn primary" id="exportCompanion">Download Companion page</button>
@@ -238,7 +240,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato or Corsair. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=4"></script>
-<script type="module" src="js/app.js?v=4"></script>
+<script src="vendor/jszip.min.js?v=5"></script>
+<script type="module" src="js/app.js?v=5"></script>
 </body>
 </html>
