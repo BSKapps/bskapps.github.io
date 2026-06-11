@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION } from './state.js?v=16';
-import { renderDesign } from './renderer.js?v=16';
-import { seriesVariants } from './series.js?v=16';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderSeriesItems, convertNumberedToList } from './ui.js?v=16';
-import { initIconPicker } from './icons.js?v=16';
-import { initPresets } from './presets.js?v=16';
-import { initExport } from './export.js?v=16';
-import { initColorPopover } from './colorpicker.js?v=16';
+import { state, onChange, emit, deepClone, APP_VERSION } from './state.js?v=17';
+import { renderDesign } from './renderer.js?v=17';
+import { seriesVariants } from './series.js?v=17';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderSeriesItems, convertNumberedToList } from './ui.js?v=17';
+import { initIconPicker } from './icons.js?v=17';
+import { initPresets } from './presets.js?v=17';
+import { initExport } from './export.js?v=17';
+import { initColorPopover } from './colorpicker.js?v=17';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -63,7 +63,8 @@ async function renderOnce() {
 
       item.addEventListener('dragstart', (e) => {
         gridDragIndex = idx;
-        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', String(idx));
+        e.dataTransfer.effectAllowed = 'copyMove';
         preview.classList.add('drop-ready');
       });
       item.addEventListener('dragend', () => {
@@ -103,6 +104,11 @@ function isFileDrag(e) {
   return e.dataTransfer && [...e.dataTransfer.types].includes('Files');
 }
 
+preview.addEventListener('dragenter', (e) => {
+  if (gridDragIndex === null && !isFileDrag(e)) return;
+  e.preventDefault();
+  preview.classList.add('drop-target');
+});
 preview.addEventListener('dragover', (e) => {
   if (gridDragIndex === null && !isFileDrag(e)) return;
   e.preventDefault();
@@ -111,6 +117,10 @@ preview.addEventListener('dragover', (e) => {
 });
 preview.addEventListener('dragleave', () => preview.classList.remove('drop-target'));
 preview.addEventListener('drop', (e) => {
+  if (gridDragIndex === null && !isFileDrag(e)) {
+    const fromData = parseInt(e.dataTransfer.getData('text/plain'), 10);
+    if (!Number.isNaN(fromData)) gridDragIndex = fromData;
+  }
   if (gridDragIndex !== null) {
     e.preventDefault();
     const v = seriesVariants()[gridDragIndex];

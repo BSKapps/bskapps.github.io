@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer } from './state.js?v=16';
-import { openIconModal, triggerIconUpload } from './icons.js?v=16';
-import { seriesVariants } from './series.js?v=16';
+import { state, emit, deepClone, defaultTextLayer } from './state.js?v=17';
+import { openIconModal, triggerIconUpload } from './icons.js?v=17';
+import { seriesVariants } from './series.js?v=17';
 
 let dragIndex = null;
 
