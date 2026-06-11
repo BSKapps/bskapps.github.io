@@ -1,7 +1,7 @@
-import { state, defaultDesign, defaultTextLayer, deepClone } from '../js/state.js?v=9';
-import { seriesVariants, safeFileName } from '../js/series.js?v=9';
-import { buildCompanionPage } from '../js/companion.js?v=9';
-import { renderToDataUrl } from '../js/renderer.js?v=9';
+import { state, defaultDesign, defaultTextLayer, deepClone } from '../js/state.js?v=10';
+import { seriesVariants, safeFileName } from '../js/series.js?v=10';
+import { buildCompanionPage } from '../js/companion.js?v=10';
+import { renderToDataUrl } from '../js/renderer.js?v=10';
 
 const results = [];
 
