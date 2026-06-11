@@ -4,6 +4,24 @@ const API = 'https://api.iconify.design';
 
 let searchTimer = null;
 let lastQuery = '';
+let pickTarget = null;
+
+function defaultTarget(id, svg) {
+  state.design.icon.name = id;
+  state.design.icon.svg = svg;
+  state.design.icon.tint = false;
+  emit();
+}
+
+export function openIconModal(target) {
+  pickTarget = target || defaultTarget;
+  const modal = document.getElementById('iconModal');
+  const results = document.getElementById('iconResults');
+  const status = document.getElementById('iconStatus');
+  modal.classList.remove('hidden');
+  document.getElementById('iconSearch').focus();
+  if (!results.children.length) runSearch('play', results, status);
+}
 
 export function initIconPicker() {
   const modal = document.getElementById('iconModal');
@@ -13,12 +31,10 @@ export function initIconPicker() {
   const search = document.getElementById('iconSearch');
   const results = document.getElementById('iconResults');
   const status = document.getElementById('iconStatus');
+  const uploadBtn = document.getElementById('iconUploadBtn');
+  const uploadFile = document.getElementById('iconUploadFile');
 
-  openBtn.addEventListener('click', () => {
-    modal.classList.remove('hidden');
-    search.focus();
-    if (!results.children.length) runSearch('play', results, status);
-  });
+  openBtn.addEventListener('click', () => openIconModal());
 
   closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
   modal.addEventListener('click', (e) => {
@@ -29,6 +45,19 @@ export function initIconPicker() {
     state.design.icon.name = null;
     state.design.icon.svg = null;
     emit();
+  });
+
+  uploadBtn.addEventListener('click', () => uploadFile.click());
+  uploadFile.addEventListener('change', () => {
+    const file = uploadFile.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      pickTarget('upload:' + file.name, reader.result);
+      modal.classList.add('hidden');
+    };
+    reader.readAsDataURL(file);
+    uploadFile.value = '';
   });
 
   search.addEventListener('input', () => {
@@ -74,10 +103,8 @@ async function pickIcon(id) {
   try {
     const res = await fetch(API + '/' + id.replace(':', '/') + '.svg');
     const svg = await res.text();
-    state.design.icon.name = id;
-    state.design.icon.svg = svg;
+    pickTarget(id, svg);
     document.getElementById('iconModal').classList.add('hidden');
-    emit();
   } catch (e) {
     status.textContent = 'Could not load icon';
   }

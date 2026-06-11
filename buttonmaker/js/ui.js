@@ -1,4 +1,5 @@
 import { state, emit, defaultTextLayer } from './state.js';
+import { openIconModal } from './icons.js';
 
 function activeText() {
   const texts = state.design.texts;
@@ -70,11 +71,20 @@ export function initUI() {
     reader.readAsDataURL(file);
   });
 
-  bindColor('iconColor', (v) => (d.icon.color = v));
+  bindColor('iconColor', (v) => {
+    d.icon.color = v;
+    d.icon.tint = true;
+  });
   bindRange('iconSize', (v) => (d.icon.size = v), 'iconSizeVal');
   bindRange('iconX', (v) => (d.icon.x = v), 'iconXVal');
   bindRange('iconY', (v) => (d.icon.y = v), 'iconYVal');
   bindRange('iconOpacity', (v) => (d.icon.opacity = v), 'iconOpacityVal');
+
+  document.getElementById('iconCentre').addEventListener('click', () => {
+    d.icon.x = 0;
+    d.icon.y = 0;
+    emit();
+  });
 
   document.getElementById('textValue').addEventListener('input', (e) => {
     activeText().value = e.target.value;
@@ -208,17 +218,53 @@ export function renderSeriesItems() {
       emit();
     });
 
+    const iconBtn = document.createElement('button');
+    iconBtn.className = 'item-icon-btn';
+    iconBtn.title = item.iconSvg ? 'Change image for this button' : 'Add an image to this button';
+    if (item.iconSvg) {
+      const img = document.createElement('img');
+      img.src = item.iconSvg.startsWith('<')
+        ? 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(item.iconSvg.replaceAll('currentColor', '#ffffff'))
+        : item.iconSvg;
+      iconBtn.appendChild(img);
+    } else {
+      iconBtn.textContent = '+img';
+    }
+    iconBtn.addEventListener('click', () => {
+      openIconModal((id, svg) => {
+        item.iconSvg = svg;
+        item.iconName = id;
+        renderSeriesItems();
+        emit();
+      });
+    });
+
+    row.appendChild(label);
+    row.appendChild(iconBtn);
+    row.appendChild(color);
+
+    if (item.iconSvg) {
+      const clearIcon = document.createElement('button');
+      clearIcon.textContent = '-';
+      clearIcon.title = 'Remove image from this button';
+      clearIcon.addEventListener('click', () => {
+        delete item.iconSvg;
+        delete item.iconName;
+        renderSeriesItems();
+        emit();
+      });
+      row.appendChild(clearIcon);
+    }
+
     const del = document.createElement('button');
     del.textContent = 'x';
-    del.title = 'Remove';
+    del.title = 'Remove this button';
     del.addEventListener('click', () => {
       state.series.items.splice(i, 1);
       renderSeriesItems();
       emit();
     });
 
-    row.appendChild(label);
-    row.appendChild(color);
     row.appendChild(del);
     wrap.appendChild(row);
   });

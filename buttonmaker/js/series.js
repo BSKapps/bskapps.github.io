@@ -19,6 +19,10 @@ export function seriesVariants() {
     s.items.slice(0, 64).forEach((item, i) => {
       const d = deepClone(base);
       substituteLayers(d, i + 1, item.label);
+      if (item.iconSvg) {
+        d.icon.svg = item.iconSvg;
+        d.icon.name = item.iconName || null;
+      }
       if (item.color) {
         if (s.colorTarget === 'bg' && base.bg.mode !== 'image') {
           d.bg.mode = 'solid';

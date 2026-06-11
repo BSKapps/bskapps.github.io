@@ -77,7 +77,21 @@ export async function renderDesign(canvas, design, opts = {}) {
   const icon = design.icon;
   if (icon.svg) {
     try {
-      const img = await loadImage(svgToDataUrl(icon.svg, icon.color));
+      const isSvg = icon.svg.trim().startsWith('<');
+      const hasCC = isSvg && icon.svg.includes('currentColor');
+      const src = !isSvg ? icon.svg : hasCC ? svgToDataUrl(icon.svg, icon.color) : svgToDataUrl(icon.svg, '#000000');
+      let img = await loadImage(src);
+      if (!hasCC && icon.tint) {
+        const off = document.createElement('canvas');
+        off.width = img.width || size;
+        off.height = img.height || size;
+        const octx = off.getContext('2d');
+        octx.drawImage(img, 0, 0, off.width, off.height);
+        octx.globalCompositeOperation = 'source-in';
+        octx.fillStyle = icon.color;
+        octx.fillRect(0, 0, off.width, off.height);
+        img = off;
+      }
       const s = (icon.size / 100) * size;
       const ratio = img.width && img.height ? img.width / img.height : 1;
       let w = s;

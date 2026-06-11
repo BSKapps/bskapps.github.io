@@ -5,6 +5,7 @@ import { initUI, syncInputsFromState, renderTextLayerChips } from './ui.js';
 import { initIconPicker } from './icons.js';
 import { initPresets } from './presets.js';
 import { initExport } from './export.js';
+import { initColorPopover } from './colorpicker.js';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -45,6 +46,7 @@ initUI();
 initIconPicker();
 initPresets();
 initExport();
+initColorPopover();
 
 onChange(() => {
   renderTextLayerChips();

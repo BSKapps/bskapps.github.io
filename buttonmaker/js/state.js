@@ -25,6 +25,7 @@ export function defaultDesign() {
       name: null,
       svg: null,
       color: '#ffffff',
+      tint: false,
       size: 52,
       x: 0,
       y: -6,
