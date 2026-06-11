@@ -1,4 +1,4 @@
-export const APP_VERSION = '29';
+export const APP_VERSION = '30';
 
 export function defaultTextLayer() {
   return {
@@ -63,8 +63,17 @@ export const state = {
     colorTarget: 'bg'
   },
   export: { size: 288 },
-  ui: { activeText: 0, activeIcon: 0 }
+  ui: { activeText: 0, activeIcon: 0, activeListItem: null }
 };
+
+export function editTarget() {
+  const i = state.ui.activeListItem;
+  if (state.series.mode === 'list' && i !== null) {
+    const item = state.series.items[i];
+    if (item && item.design) return item.design;
+  }
+  return state.design;
+}
 
 const listeners = [];
 

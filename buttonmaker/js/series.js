@@ -1,4 +1,4 @@
-import { state, deepClone } from './state.js?v=29';
+import { state, deepClone } from './state.js?v=30';
 
 export function hasToken(design) {
   return design.texts.some((t) => t.value && (t.value.includes('{n}') || t.value.includes('{label}')));
@@ -36,6 +36,11 @@ export function seriesVariants() {
     }
   } else if (s.mode === 'list') {
     s.items.slice(0, 64).forEach((item, i) => {
+      if (item.design) {
+        const d = deepClone(item.design);
+        variants.push({ design: d, label: item.label || String(i + 1), companionText: item.label || firstText(d) });
+        return;
+      }
       const d = deepClone(base);
       if (tokens) {
         substituteLayers(d, i + 1, item.label);

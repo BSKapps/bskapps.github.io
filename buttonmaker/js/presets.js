@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=29';
-import { renderDesign } from './renderer.js?v=29';
-import { renderSeriesItems } from './ui.js?v=29';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=30';
+import { renderDesign } from './renderer.js?v=30';
+import { renderSeriesItems } from './ui.js?v=30';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -284,6 +284,8 @@ export function renderPresetList() {
     tile.addEventListener('click', () => {
       Object.assign(state.design, normalizeDesign(deepClone(preset.design)));
       state.ui.activeText = 0;
+      state.ui.activeIcon = 0;
+      state.ui.activeListItem = null;
       if (preset.series) {
         Object.assign(state.series, deepClone(preset.series));
       } else {
@@ -313,8 +315,11 @@ export function renderPresetList() {
 }
 
 function thumbDesign(preset) {
-  const d = normalizeDesign(deepClone(preset.design));
   const s = preset.series;
+  if (s && s.mode === 'list' && s.items[0] && s.items[0].design) {
+    return normalizeDesign(deepClone(s.items[0].design));
+  }
+  const d = normalizeDesign(deepClone(preset.design));
   const n = s && s.mode === 'numbers' ? String(Math.min(s.from, s.to)) : '1';
   const first = s && s.mode === 'list' && s.items[0] ? s.items[0] : null;
   const label = first ? first.label : '';

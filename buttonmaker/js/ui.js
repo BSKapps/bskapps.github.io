@@ -1,8 +1,46 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer } from './state.js?v=29';
-import { openIconModal, triggerIconUpload } from './icons.js?v=29';
-import { seriesVariants, hasToken } from './series.js?v=29';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget } from './state.js?v=30';
+import { openIconModal, triggerIconUpload } from './icons.js?v=30';
+import { seriesVariants, hasToken } from './series.js?v=30';
 
 let dragIndex = null;
+let selectionSnapshot = null;
+
+function releaseSelection() {
+  const i = state.ui.activeListItem;
+  if (i === null) return;
+  const item = state.series.items[i];
+  if (item && item.design && selectionSnapshot !== null && JSON.stringify(item.design) === selectionSnapshot) {
+    delete item.design;
+  }
+  selectionSnapshot = null;
+  state.ui.activeListItem = null;
+}
+
+export function selectListItem(i) {
+  if (state.series.mode !== 'list') return;
+  if (state.ui.activeListItem === i) return;
+  releaseSelection();
+  const item = state.series.items[i];
+  if (!item) return;
+  if (!item.design) {
+    const v = seriesVariants()[i];
+    if (!v) return;
+    item.design = v.design;
+  }
+  selectionSnapshot = JSON.stringify(item.design);
+  state.ui.activeListItem = i;
+  state.ui.activeText = Math.max(0, item.design.texts.findIndex((t) => t.value));
+  state.ui.activeIcon = Math.max(0, item.design.icons.findIndex((ic) => ic.svg));
+  emit();
+}
+
+export function deselectListItem() {
+  if (state.ui.activeListItem === null) return;
+  releaseSelection();
+  state.ui.activeText = 0;
+  state.ui.activeIcon = 0;
+  emit();
+}
 
 const FONT_WEIGHTS = {
   'Inter': ['400', '600', '700', '800'],
@@ -44,13 +82,13 @@ function iconAnchorOffset() {
 }
 
 function activeIcon() {
-  const icons = state.design.icons;
+  const icons = editTarget().icons;
   if (state.ui.activeIcon >= icons.length) state.ui.activeIcon = icons.length - 1;
   return icons[state.ui.activeIcon];
 }
 
 function activeText() {
-  const texts = state.design.texts;
+  const texts = editTarget().texts;
   if (state.ui.activeText >= texts.length) state.ui.activeText = texts.length - 1;
   return texts[state.ui.activeText];
 }
@@ -93,28 +131,26 @@ function bindSeg(id, getSet) {
 }
 
 export function initUI() {
-  const d = state.design;
-
   bindSeg('bgMode', (v) => {
-    d.bg.mode = v;
+    editTarget().bg.mode = v;
     document.getElementById('bgSolidRow').classList.toggle('hidden', v !== 'solid');
     document.getElementById('bgGradientRows').classList.toggle('hidden', v !== 'gradient');
     document.getElementById('bgImageRows').classList.toggle('hidden', v !== 'image');
   });
-  bindColor('bgColor', (v) => (d.bg.color = v));
-  bindColor('bgColor2a', (v) => (d.bg.gradFrom = v));
-  bindColor('bgColor2b', (v) => (d.bg.gradTo = v));
-  bindRange('bgAngle', (v) => (d.bg.angle = v), 'bgAngleVal');
-  bindRange('bgBlend', (v) => (d.bg.blend = v), 'bgBlendVal');
-  bindSelect('bgImageFit', (v) => (d.bg.imageFit = v));
-  bindRange('bgImageDim', (v) => (d.bg.imageDim = v), 'bgImageDimVal');
+  bindColor('bgColor', (v) => (editTarget().bg.color = v));
+  bindColor('bgColor2a', (v) => (editTarget().bg.gradFrom = v));
+  bindColor('bgColor2b', (v) => (editTarget().bg.gradTo = v));
+  bindRange('bgAngle', (v) => (editTarget().bg.angle = v), 'bgAngleVal');
+  bindRange('bgBlend', (v) => (editTarget().bg.blend = v), 'bgBlendVal');
+  bindSelect('bgImageFit', (v) => (editTarget().bg.imageFit = v));
+  bindRange('bgImageDim', (v) => (editTarget().bg.imageDim = v), 'bgImageDimVal');
 
   document.getElementById('bgImageFile').addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
-      d.bg.imageData = reader.result;
+      editTarget().bg.imageData = reader.result;
       emit();
     };
     reader.readAsDataURL(file);
@@ -156,15 +192,18 @@ export function initUI() {
   bindRange('textX', (v) => (activeText().x = v), 'textXVal');
   bindRange('textY', (v) => (activeText().y = v), 'textYVal');
 
-  bindRange('shapeRadius', (v) => (d.shape.radius = v), 'shapeRadiusVal');
-  bindRange('shapeBorder', (v) => (d.shape.border = v), 'shapeBorderVal');
-  bindColor('shapeBorderColor', (v) => (d.shape.borderColor = v));
+  bindRange('shapeRadius', (v) => (editTarget().shape.radius = v), 'shapeRadiusVal');
+  bindRange('shapeBorder', (v) => (editTarget().shape.border = v), 'shapeBorderVal');
+  bindColor('shapeBorderColor', (v) => (editTarget().shape.borderColor = v));
 
   bindSeg('seriesMode', (v) => {
+    if (v !== 'list') releaseSelection();
     state.series.mode = v;
     document.getElementById('seriesNumbersRows').classList.toggle('hidden', v !== 'numbers');
     document.getElementById('seriesListRows').classList.toggle('hidden', v !== 'list');
   });
+
+  document.getElementById('editAllBtn').addEventListener('click', deselectListItem);
 
   document.getElementById('seriesConvertList').addEventListener('click', () => {
     convertNumberedToList();
@@ -219,7 +258,7 @@ export function convertNumberedToList() {
 export function renderTextLayerChips() {
   const wrap = document.getElementById('textLayerChips');
   wrap.innerHTML = '';
-  const texts = state.design.texts;
+  const texts = editTarget().texts;
   texts.forEach((t, i) => {
     const chip = document.createElement('button');
     chip.textContent = t.value ? truncate(t.value, 10) : 'Layer ' + (i + 1);
@@ -259,7 +298,7 @@ export function renderTextLayerChips() {
 export function renderIconLayerChips() {
   const wrap = document.getElementById('iconLayerChips');
   wrap.innerHTML = '';
-  const icons = state.design.icons;
+  const icons = editTarget().icons;
   icons.forEach((ic, i) => {
     const chip = document.createElement('button');
     chip.textContent = ic.name ? truncate(ic.name.split(':').pop(), 10) : 'Layer ' + (i + 1);
@@ -296,11 +335,23 @@ export function renderIconLayerChips() {
   }
 }
 
-function resolvedSwatchColor() {
+function resolvedSwatchColor(d) {
   const ct = state.series.colorTarget;
-  if (ct === 'icon') return (state.design.icons[0] && state.design.icons[0].color) || '#ffffff';
-  if (ct === 'text') return (state.design.texts[0] && state.design.texts[0].color) || '#ffffff';
-  return state.design.bg.color;
+  if (ct === 'icon') return (d.icons[0] && d.icons[0].color) || '#ffffff';
+  if (ct === 'text') return (d.texts[0] && d.texts[0].color) || '#ffffff';
+  return d.bg.color;
+}
+
+function applyColorToDesign(d, col) {
+  const ct = state.series.colorTarget;
+  if (ct === 'icon') {
+    for (const ic of d.icons) ic.color = col;
+  } else if (ct === 'text') {
+    for (const t of d.texts) t.color = col;
+  } else if (d.bg.mode !== 'image') {
+    d.bg.mode = 'solid';
+    d.bg.color = col;
+  }
 }
 
 function truncate(s, len) {
@@ -313,6 +364,7 @@ export function renderSeriesItems() {
   state.series.items.forEach((item, i) => {
     const row = document.createElement('div');
     row.className = 'series-item-row';
+    row.classList.toggle('active', i === state.ui.activeListItem);
 
     const grip = document.createElement('span');
     grip.className = 'drag-grip';
@@ -334,8 +386,10 @@ export function renderSeriesItems() {
     row.addEventListener('drop', (e) => {
       e.preventDefault();
       if (dragIndex === null || dragIndex === i) return;
+      const selItem = state.ui.activeListItem !== null ? state.series.items[state.ui.activeListItem] : null;
       const [moved] = state.series.items.splice(dragIndex, 1);
       state.series.items.splice(i, 0, moved);
+      if (selItem) state.ui.activeListItem = state.series.items.indexOf(selItem);
       dragIndex = null;
       renderSeriesItems();
       emit();
@@ -346,16 +400,27 @@ export function renderSeriesItems() {
     label.type = 'text';
     label.placeholder = 'Label';
     label.value = item.label;
+    label.addEventListener('focus', () => selectListItem(i));
+    let labelLayerIdx = null;
     label.addEventListener('input', () => {
       item.label = label.value;
+      if (item.design) {
+        if (labelLayerIdx === null) {
+          labelLayerIdx = item.design.texts.findIndex((l) => l.value);
+          if (labelLayerIdx === -1) labelLayerIdx = 0;
+        }
+        const t = item.design.texts[labelLayerIdx];
+        if (t) t.value = label.value;
+      }
       emit();
     });
 
     const color = document.createElement('input');
     color.type = 'color';
-    color.value = item.color || resolvedSwatchColor();
+    color.value = item.design ? resolvedSwatchColor(item.design) : (item.color || resolvedSwatchColor(state.design));
     color.addEventListener('input', () => {
       item.color = color.value;
+      if (item.design) applyColorToDesign(item.design, color.value);
       emit();
     });
 
@@ -373,9 +438,15 @@ export function renderSeriesItems() {
       iconBtn.textContent = '+img';
     }
     iconBtn.addEventListener('click', () => {
+      selectListItem(i);
       openIconModal((id, svg) => {
         item.iconSvg = svg;
         item.iconName = id;
+        if (item.design) {
+          item.design.icons[0].svg = svg;
+          item.design.icons[0].name = id;
+          item.design.icons[0].tint = false;
+        }
         renderSeriesItems();
         emit();
       });
@@ -392,6 +463,10 @@ export function renderSeriesItems() {
       clearIcon.addEventListener('click', () => {
         delete item.iconSvg;
         delete item.iconName;
+        if (item.design) {
+          item.design.icons[0].svg = null;
+          item.design.icons[0].name = null;
+        }
         renderSeriesItems();
         emit();
       });
@@ -402,6 +477,12 @@ export function renderSeriesItems() {
     del.textContent = 'x';
     del.title = 'Remove this button';
     del.addEventListener('click', () => {
+      if (state.ui.activeListItem === i) {
+        state.ui.activeListItem = null;
+        selectionSnapshot = null;
+      } else if (state.ui.activeListItem !== null && state.ui.activeListItem > i) {
+        state.ui.activeListItem--;
+      }
       state.series.items.splice(i, 1);
       renderSeriesItems();
       emit();
@@ -413,7 +494,12 @@ export function renderSeriesItems() {
 }
 
 export function syncInputsFromState() {
-  const d = state.design;
+  if (state.ui.activeListItem !== null && (state.series.mode !== 'list' || !state.series.items[state.ui.activeListItem])) {
+    state.ui.activeListItem = null;
+    selectionSnapshot = null;
+  }
+  updateEditBanner();
+  const d = editTarget();
   setVal('bgColor', d.bg.color);
   setVal('bgColor2a', d.bg.gradFrom);
   setVal('bgColor2b', d.bg.gradTo);
@@ -462,6 +548,26 @@ export function syncInputsFromState() {
     const by = vv === 'top' ? -off : vv === 'bottom' ? off : 0;
     b.classList.toggle('active', ic.x === bx && ic.y === by);
   });
+}
+
+function updateEditBanner() {
+  const banner = document.getElementById('editBanner');
+  const bLabel = document.getElementById('editBannerLabel');
+  const bAll = document.getElementById('editAllBtn');
+  const sel = state.ui.activeListItem;
+  if (state.series.mode === 'list' && sel !== null && state.series.items[sel]) {
+    banner.classList.remove('hidden');
+    banner.classList.add('one');
+    bLabel.textContent = 'Editing "' + (state.series.items[sel].label || 'button ' + (sel + 1)) + '" only';
+    bAll.classList.remove('hidden');
+  } else if (state.series.mode === 'list' && state.series.items.length) {
+    banner.classList.remove('hidden');
+    banner.classList.remove('one');
+    bLabel.textContent = 'Editing every button in the set. Click one under the preview to style it alone.';
+    bAll.classList.add('hidden');
+  } else {
+    banner.classList.add('hidden');
+  }
 }
 
 function setVal(id, v) {

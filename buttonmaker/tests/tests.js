@@ -1,7 +1,7 @@
-import { state, defaultDesign, defaultTextLayer, deepClone } from '../js/state.js?v=29';
-import { seriesVariants, safeFileName } from '../js/series.js?v=29';
-import { buildCompanionPage } from '../js/companion.js?v=29';
-import { renderToDataUrl } from '../js/renderer.js?v=29';
+import { state, defaultDesign, defaultTextLayer, deepClone } from '../js/state.js?v=30';
+import { seriesVariants, safeFileName } from '../js/series.js?v=30';
+import { buildCompanionPage } from '../js/companion.js?v=30';
+import { renderToDataUrl } from '../js/renderer.js?v=30';
 
 const results = [];
 
@@ -18,6 +18,7 @@ function resetState() {
   state.series.colorTarget = 'bg';
   state.ui.activeText = 0;
   state.ui.activeIcon = 0;
+  state.ui.activeListItem = null;
 }
 
 function run() {
@@ -126,6 +127,24 @@ function run() {
   v = seriesVariants();
   check('item icon replaces first layer only', v[0].design.icons[0].svg === '<svg>1</svg>' && v[0].design.icons[1].svg === '<svg>2</svg>');
   check('colour target icon recolours every icon layer', v[0].design.icons.every((ic) => ic.color === '#1f9d3a'));
+
+  resetState();
+  state.design.texts[0].value = 'BASE';
+  state.series.mode = 'list';
+  const ownDesign = defaultDesign();
+  ownDesign.texts[0].value = 'CUSTOM';
+  ownDesign.bg.color = '#123456';
+  state.series.items = [
+    { label: 'GO', color: '#1f9d3a', design: ownDesign },
+    { label: 'STOP', color: '#b51f1f' }
+  ];
+  v = seriesVariants();
+  check('item with own design renders it verbatim', v[0].design.texts[0].value === 'CUSTOM' && v[0].design.bg.color === '#123456');
+  check('own design skips label and swatch substitution', v[0].design.texts[0].value !== 'GO' && v[0].design.bg.color !== '#1f9d3a');
+  check('designed item companionText is its label', v[0].companionText === 'GO');
+  check('undesigned item in same list still substitutes', v[1].design.texts[0].value === 'STOP' && v[1].design.bg.color === '#b51f1f');
+  v[0].design.texts[0].value = 'MUTATED';
+  check('variant design detached from stored item design', state.series.items[0].design.texts[0].value === 'CUSTOM');
 
   check('gradient blend defaults to 100', defaultDesign().bg.blend === 100);
 
