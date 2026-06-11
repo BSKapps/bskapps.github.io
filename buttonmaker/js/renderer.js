@@ -124,12 +124,28 @@ export async function renderDesign(canvas, design, opts = {}) {
       } else if (v === 'center') {
         ctx.textBaseline = 'middle';
         startY = size / 2 - ((lines.length - 1) * lineHeight) / 2;
+        if (lines.length === 1) {
+          ctx.textBaseline = 'alphabetic';
+          const m = ctx.measureText(lines[0]);
+          if (m.actualBoundingBoxAscent !== undefined) {
+            startY = size / 2 + (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2;
+          } else {
+            ctx.textBaseline = 'middle';
+          }
+        }
       } else {
         ctx.textBaseline = 'bottom';
         startY = size - pad - (lines.length - 1) * lineHeight;
       }
       lines.forEach((line, i) => {
-        ctx.fillText(line, x, startY + i * lineHeight);
+        let dx = 0;
+        if (h === 'center') {
+          const m = ctx.measureText(line);
+          if (m.actualBoundingBoxLeft !== undefined) {
+            dx = (m.actualBoundingBoxLeft - m.actualBoundingBoxRight) / 2;
+          }
+        }
+        ctx.fillText(line, x + dx, startY + i * lineHeight);
       });
     }
   }

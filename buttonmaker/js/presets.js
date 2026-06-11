@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=7';
-import { renderDesign } from './renderer.js?v=7';
-import { renderSeriesItems } from './ui.js?v=7';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=8';
+import { renderDesign } from './renderer.js?v=8';
+import { renderSeriesItems } from './ui.js?v=8';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -75,6 +75,19 @@ function builtinPresets() {
       design: mk((d) => {
         d.bg.color = '#0f6e2b';
         Object.assign(d.texts[0], { value: 'GO', font: 'Bebas Neue', weight: '400', size: 30, align: 'center:center' });
+      })
+    },
+    {
+      name: 'Record',
+      builtin: true,
+      design: mk((d) => {
+        d.bg.color = '#1d1d22';
+        d.icon.svg = ICONS.record;
+        d.icon.name = 'builtin:record';
+        d.icon.color = '#e53935';
+        d.icon.size = 46;
+        d.icon.y = -8;
+        Object.assign(d.texts[0], { value: 'REC', font: 'Oswald', weight: '700', size: 10 });
       })
     },
     {

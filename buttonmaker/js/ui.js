@@ -1,5 +1,5 @@
-import { state, emit, defaultTextLayer } from './state.js?v=7';
-import { openIconModal } from './icons.js?v=7';
+import { state, emit, defaultTextLayer } from './state.js?v=8';
+import { openIconModal } from './icons.js?v=8';
 
 function activeText() {
   const texts = state.design.texts;
@@ -118,20 +118,6 @@ export function initUI() {
 
   document.getElementById('seriesAddItem').addEventListener('click', () => {
     state.series.items.push({ label: '', color: '#3d8bfd' });
-    renderSeriesItems();
-    emit();
-  });
-
-  document.getElementById('seriesTrafficLights').addEventListener('click', () => {
-    state.series.items = [
-      { label: 'GO', color: '#1f9d3a' },
-      { label: 'WARN', color: '#c9a227' },
-      { label: 'HOLD', color: '#c96a17' },
-      { label: 'STOP', color: '#b51f1f' }
-    ];
-    if (!state.design.texts[0].value) {
-      state.design.texts[0].value = '{label}';
-    }
     renderSeriesItems();
     emit();
   });

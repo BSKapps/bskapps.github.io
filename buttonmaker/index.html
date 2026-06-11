@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=7">
+<link rel="stylesheet" href="css/style.css?v=8">
 </head>
 <body>
 <header class="app-header">
@@ -183,16 +183,14 @@
           <div id="seriesListRows" class="hidden">
             <p class="hint">One button per item. Type {label} in your text to show the item name.</p>
             <div id="seriesItems"></div>
-            <button class="btn ghost" id="seriesAddItem">Add item</button>
             <div class="row">
-              <label>Colour applies to</label>
-              <select id="seriesColorTarget">
-                <option value="bg">Background</option>
-                <option value="icon">Icon</option>
-                <option value="text">Text</option>
+              <button class="btn ghost" id="seriesAddItem">Add item</button>
+              <select id="seriesColorTarget" title="What each item's colour applies to">
+                <option value="bg">Colour: background</option>
+                <option value="icon">Colour: icon</option>
+                <option value="text">Colour: text</option>
               </select>
             </div>
-            <button class="btn ghost" id="seriesTrafficLights">Load traffic light example</button>
           </div>
         </div>
       </details>
@@ -243,8 +241,8 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato or Corsair. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script>window.BM_V = '7';</script>
-<script src="vendor/jszip.min.js?v=7"></script>
-<script type="module" src="js/app.js?v=7"></script>
+<script>window.BM_V = '8';</script>
+<script src="vendor/jszip.min.js?v=8"></script>
+<script type="module" src="js/app.js?v=8"></script>
 </body>
 </html>
