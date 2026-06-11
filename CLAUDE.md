@@ -33,10 +33,11 @@ bskapps.github.io/
 ├── targettrace/            # Product page (video + gallery + features)
 ├── gogames/                # 4 game cards (Solitaire, Sudoku, Minesweeper, Battle Boats) + screenshots
 ├── resources/
-│   ├── index.html          # Hub - 2 tiles (REAPER scripts, Companion modules)
+│   ├── index.html          # Hub - 3 entries (REAPER scripts, Companion modules, BSK Button Maker)
 │   ├── reaper/             # 6 Lua scripts + install instructions
 │   ├── companion/          # BSK Spotify module + setup guide
 │   └── scripts/            # .lua download files
+├── buttonmaker/            # BSK Button Maker web app - self-contained (own css/js, NOT site.css, like /admin). Canonical copy; dev repo at ../companion-button-maker is archive
 ├── articles/               # Index grouped by category + 9 article pages
 ├── admin/index.html        # Self-contained admin: content editor + articles editor + analytics (GitHub token auth)
 ├── contact/ about/ privacy/ terms/ refund/

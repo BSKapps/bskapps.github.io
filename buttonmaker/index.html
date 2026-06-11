@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BSK Button Maker - Free Companion and Stream Deck Button Designer</title>
+<meta name="description" content="Free button designer for Bitfocus Companion and Stream Deck. Icon library, presets, button sets, PNG and Companion page export.">
+<meta property="og:title" content="BSK Button Maker">
+<meta property="og:description" content="Free button designer for Bitfocus Companion and Stream Deck. Icon library, presets, button sets, PNG and Companion page export.">
+<meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
+<meta property="og:url" content="https://bskapps.com/buttonmaker/">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://bskapps.com/buttonmaker/">
+<link rel="icon" type="image/png" href="images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&family=Bebas+Neue&family=Montserrat:wght@600;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="app-header">
+  <div class="brand">
+    <img src="images/bsk-logo.png" alt="BSK Apps">
+    <h1>BSK Button Maker</h1>
+  </div>
+  <p class="tagline">Free button designer for Bitfocus Companion and Stream Deck</p>
+</header>
+
+<main class="layout">
+  <aside class="panel" id="controls">
+
+    <details class="section" open>
+      <summary>Presets</summary>
+      <div class="section-body">
+        <p class="hint">Start from a ready-made button, then tweak it. Presets marked with a set load a whole row of buttons.</p>
+        <div id="presetList" class="preset-list"></div>
+        <div class="row">
+          <input type="text" id="presetName" placeholder="Name your design" autocomplete="off">
+          <button class="btn" id="presetSave">Save</button>
+        </div>
+        <div class="row">
+          <button class="btn ghost" id="presetExport">Export pack</button>
+          <button class="btn ghost" id="presetImportBtn">Import pack</button>
+          <input type="file" id="presetImportFile" accept=".json" class="hidden">
+        </div>
+      </div>
+    </details>
+
+    <details class="section" open>
+      <summary>Background</summary>
+      <div class="section-body">
+        <div class="seg" id="bgMode">
+          <button data-val="solid" class="active">Solid</button>
+          <button data-val="gradient">Gradient</button>
+          <button data-val="image">Image</button>
+        </div>
+        <div class="row" id="bgSolidRow">
+          <label>Colour</label>
+          <input type="color" id="bgColor" value="#1a2230">
+        </div>
+        <div id="bgGradientRows" class="hidden">
+          <div class="row"><label>From</label><input type="color" id="bgColor2a" value="#16324f"></div>
+          <div class="row"><label>To</label><input type="color" id="bgColor2b" value="#0a0e14"></div>
+          <div class="row"><label>Angle</label><input type="range" id="bgAngle" min="0" max="360" value="135"><span class="val" id="bgAngleVal">135</span></div>
+        </div>
+        <div id="bgImageRows" class="hidden">
+          <div class="row">
+            <label>File</label>
+            <input type="file" id="bgImageFile" accept="image/*">
+          </div>
+          <div class="row">
+            <label>Fit</label>
+            <select id="bgImageFit">
+              <option value="cover">Fill</option>
+              <option value="contain">Fit</option>
+              <option value="stretch">Stretch</option>
+            </select>
+          </div>
+          <div class="row"><label>Dim</label><input type="range" id="bgImageDim" min="0" max="80" value="0"><span class="val" id="bgImageDimVal">0</span></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="section" open>
+      <summary>Icon</summary>
+      <div class="section-body">
+        <div class="row">
+          <button class="btn" id="openIconPicker">Choose icon</button>
+          <button class="btn ghost" id="clearIcon">Clear</button>
+        </div>
+        <div class="row"><label>Colour</label><input type="color" id="iconColor" value="#ffffff"></div>
+        <div class="row"><label>Size</label><input type="range" id="iconSize" min="10" max="100" value="52"><span class="val" id="iconSizeVal">52</span></div>
+        <div class="row"><label>X</label><input type="range" id="iconX" min="-40" max="40" value="0"><span class="val" id="iconXVal">0</span></div>
+        <div class="row"><label>Y</label><input type="range" id="iconY" min="-40" max="40" value="-6"><span class="val" id="iconYVal">-6</span></div>
+        <div class="row"><label>Opacity</label><input type="range" id="iconOpacity" min="10" max="100" value="100"><span class="val" id="iconOpacityVal">100</span></div>
+      </div>
+    </details>
+
+    <details class="section" open>
+      <summary>Text</summary>
+      <div class="section-body">
+        <div class="layer-chips" id="textLayerChips"></div>
+        <div class="row">
+          <label>Text</label>
+          <input type="text" id="textValue" placeholder="CAM {n}" autocomplete="off">
+        </div>
+        <p class="hint">Making a set? Type {n} where the number should go. CAM {n} becomes CAM 1, CAM 2, CAM 3...</p>
+        <div class="row">
+          <label>Font</label>
+          <select id="textFont">
+            <option value="Inter">Inter</option>
+            <option value="Oswald">Oswald</option>
+            <option value="Bebas Neue">Bebas Neue</option>
+            <option value="Montserrat">Montserrat</option>
+            <option value="Roboto Condensed">Roboto Condensed</option>
+            <option value="JetBrains Mono">JetBrains Mono</option>
+            <option value="Arial">Arial</option>
+            <option value="Helvetica Neue">Helvetica Neue</option>
+            <option value="Georgia">Georgia</option>
+          </select>
+        </div>
+        <div class="row">
+          <label>Weight</label>
+          <select id="textWeight">
+            <option value="400">Regular</option>
+            <option value="600" selected>Semibold</option>
+            <option value="700">Bold</option>
+            <option value="800">Heavy</option>
+          </select>
+        </div>
+        <div class="row"><label>Size</label><input type="range" id="textSize" min="6" max="30" value="11"><span class="val" id="textSizeVal">11</span></div>
+        <div class="row"><label>Colour</label><input type="color" id="textColor" value="#ffffff"></div>
+        <div class="row">
+          <label>Position</label>
+          <div class="align-grid" id="textAlign">
+            <button data-val="left:top"></button>
+            <button data-val="center:top"></button>
+            <button data-val="right:top"></button>
+            <button data-val="left:center"></button>
+            <button data-val="center:center"></button>
+            <button data-val="right:center"></button>
+            <button data-val="left:bottom"></button>
+            <button data-val="center:bottom" class="active"></button>
+            <button data-val="right:bottom"></button>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details class="section">
+      <summary>Shape</summary>
+      <div class="section-body">
+        <div class="row"><label>Corners</label><input type="range" id="shapeRadius" min="0" max="35" value="0"><span class="val" id="shapeRadiusVal">0</span></div>
+        <div class="row"><label>Border</label><input type="range" id="shapeBorder" min="0" max="8" value="0"><span class="val" id="shapeBorderVal">0</span></div>
+        <div class="row"><label>Border colour</label><input type="color" id="shapeBorderColor" value="#ffffff"></div>
+      </div>
+    </details>
+
+    <details class="section">
+      <summary>Button set</summary>
+      <div class="section-body">
+        <p class="hint">Turn one design into a whole row of matching buttons.</p>
+        <div class="seg" id="seriesMode">
+          <button data-val="off" class="active">One button</button>
+          <button data-val="numbers">Numbered</button>
+          <button data-val="list">Custom list</button>
+        </div>
+        <div id="seriesNumbersRows" class="hidden">
+          <div class="row"><label>From</label><input type="number" id="seriesFrom" value="1" min="0" max="999"></div>
+          <div class="row"><label>To</label><input type="number" id="seriesTo" value="4" min="0" max="999"></div>
+        </div>
+        <div id="seriesListRows" class="hidden">
+          <p class="hint">One button per item. Type {label} in your text to show the item name.</p>
+          <div id="seriesItems"></div>
+          <button class="btn ghost" id="seriesAddItem">Add item</button>
+          <div class="row">
+            <label>Colour applies to</label>
+            <select id="seriesColorTarget">
+              <option value="bg">Background</option>
+              <option value="icon">Icon</option>
+              <option value="text">Text</option>
+            </select>
+          </div>
+          <button class="btn ghost" id="seriesTrafficLights">Load traffic light example</button>
+        </div>
+      </div>
+    </details>
+
+    <details class="section" open>
+      <summary>Download</summary>
+      <div class="section-body">
+        <div class="row">
+          <label>PNG size</label>
+          <select id="exportSize">
+            <option value="72">72 px</option>
+            <option value="144">144 px</option>
+            <option value="288" selected>288 px</option>
+          </select>
+        </div>
+        <div class="row check">
+          <input type="checkbox" id="exportBakeText" checked>
+          <label for="exportBakeText">Bake text into image</label>
+        </div>
+        <p class="hint">Unticked: the Companion export sets button text in Companion instead, so you can edit it there. Only the first text layer carries over, extra layers need baking.</p>
+        <button class="btn primary" id="exportPng">Download PNG</button>
+        <button class="btn primary" id="exportZip">Download set as ZIP</button>
+        <button class="btn primary" id="exportCompanion">Download Companion page</button>
+        <p class="hint">Import the page file in Companion under Import / Export. Companion keeps its own copy of the images, so nothing else to manage.</p>
+      </div>
+    </details>
+
+  </aside>
+
+  <section class="stage">
+    <div class="preview-wrap">
+      <canvas id="preview" width="288" height="288"></canvas>
+      <div class="preview-tools">
+        <label class="check"><input type="checkbox" id="guideTopbar"> Show Companion topbar</label>
+      </div>
+    </div>
+    <div id="seriesPreview" class="series-preview"></div>
+  </section>
+</main>
+
+<div class="modal hidden" id="iconModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <input type="search" id="iconSearch" placeholder="Search 200,000+ icons" autocomplete="off">
+      <button class="btn ghost" id="iconModalClose">Close</button>
+    </div>
+    <div class="icon-results" id="iconResults"></div>
+    <p class="hint" id="iconStatus">Type to search the Iconify library</p>
+  </div>
+</div>
+
+<footer class="app-footer">
+  <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato or Corsair. Icons from the Iconify project, individual icon licences apply.</p>
+</footer>
+
+<script src="vendor/jszip.min.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
