@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=40';
-import { triggerIconUpload } from './icons.js?v=40';
-import { seriesVariants, hasToken } from './series.js?v=40';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=41';
+import { triggerIconUpload } from './icons.js?v=41';
+import { seriesVariants, hasToken } from './series.js?v=41';
 
 const selectionSnapshots = new Map();
 
@@ -59,6 +59,28 @@ export function selectListItem(i, additive = false) {
   emit();
 }
 
+export function selectRangeTo(i) {
+  if (state.series.mode !== 'list') return;
+  const sel = state.ui.selectedItems;
+  if (!sel.length) {
+    selectListItem(i);
+    return;
+  }
+  const anchor = sel[sel.length - 1];
+  const lo = Math.min(anchor, i);
+  const hi = Math.max(anchor, i);
+  for (let k = lo; k <= hi; k++) {
+    if (!sel.includes(k) && materialize(k)) sel.push(k);
+  }
+  const pos = sel.indexOf(i);
+  if (pos !== -1) {
+    sel.splice(pos, 1);
+    sel.push(i);
+  }
+  focusActiveLayers();
+  emit();
+}
+
 export function deselectListItem() {
   if (!state.ui.selectedItems.length) return;
   releaseSelection();
@@ -83,13 +105,14 @@ export function removeListItem(i) {
   emit();
 }
 
-function syncSelectedLabel() {
-  const i = primarySelection();
-  if (i === null || state.series.mode !== 'list') return;
-  const item = state.series.items[i];
-  if (!item || !item.design) return;
-  const t = item.design.texts.find((l) => l.value);
-  item.label = t ? t.value.split('\n')[0] : '';
+function syncSelectedLabels() {
+  if (state.series.mode !== 'list') return;
+  for (const i of state.ui.selectedItems) {
+    const item = state.series.items[i];
+    if (!item || !item.design) continue;
+    const t = item.design.texts.find((l) => l.value);
+    item.label = t ? t.value.split('\n')[0] : '';
+  }
 }
 
 function applyEdit(fn) {
@@ -296,8 +319,8 @@ export function initUI() {
   document.getElementById('textValue').addEventListener('input', (e) => {
     if (state.ui.allText) return;
     if (state.series.mode === 'list' && !state.ui.selectedItems.length) return;
-    activeText().value = e.target.value;
-    syncSelectedLabel();
+    applyEdit((d) => (textOf(d).value = e.target.value));
+    syncSelectedLabels();
     emit();
   });
   bindSelect('textFont', (v) => {

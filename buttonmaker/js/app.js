@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, editTarget, primarySelection } from './state.js?v=40';
-import { renderDesign } from './renderer.js?v=40';
-import { seriesVariants } from './series.js?v=40';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, deselectListItem, addListItem, removeListItem } from './ui.js?v=40';
-import { initIconPicker } from './icons.js?v=40';
-import { initPresets } from './presets.js?v=40';
-import { initExport } from './export.js?v=40';
-import { initColorPopover } from './colorpicker.js?v=40';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, editTarget, primarySelection } from './state.js?v=41';
+import { renderDesign } from './renderer.js?v=41';
+import { seriesVariants } from './series.js?v=41';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, selectRangeTo, deselectListItem, addListItem, removeListItem } from './ui.js?v=41';
+import { initIconPicker } from './icons.js?v=41';
+import { initPresets } from './presets.js?v=41';
+import { initExport } from './export.js?v=41';
+import { initColorPopover } from './colorpicker.js?v=41';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -68,7 +68,8 @@ async function renderOnce() {
           return;
         }
         if (state.series.mode !== 'list') return;
-        selectListItem(idx, e.metaKey || e.ctrlKey);
+        if (e.shiftKey) selectRangeTo(idx);
+        else selectListItem(idx, e.metaKey || e.ctrlKey);
       });
       const c = document.createElement('canvas');
       c.width = 144;
