@@ -12,7 +12,8 @@ const ICONS = {
   stop: mdi('M18,18H6V6H18V18Z'),
   next: mdi('M16,18H18V6H16M6,18L14.5,12L6,6V18Z'),
   prev: mdi('M6,18V6H8V18H6M9.5,12L18,6V18L9.5,12Z'),
-  record: mdi('M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z')
+  record: mdi('M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z'),
+  lowerthird: mdi('M3,13.5H13V15.5H3V13.5M3,17H21V19.5H3V17Z')
 };
 
 const numberedSet = (from, to) => ({ mode: 'numbers', from, to, items: [], colorTarget: 'bg' });
@@ -60,6 +61,18 @@ function builtinPresets() {
       })
     },
     {
+      name: 'PC 1-4',
+      builtin: true,
+      series: numberedSet(1, 4),
+      design: mk((d) => {
+        d.bg.mode = 'gradient';
+        d.bg.gradFrom = '#3e4e57';
+        d.bg.gradTo = '#0e1418';
+        Object.assign(d.texts[0], { value: 'PC', font: 'Roboto Condensed', weight: '700', size: 10, align: 'center:top' });
+        d.texts.push({ value: '{n}', font: 'Bebas Neue', weight: '400', size: 28, color: '#ffffff', align: 'center:center' });
+      })
+    },
+    {
       name: 'SCREEN 1-4',
       builtin: true,
       series: numberedSet(1, 4),
@@ -68,6 +81,22 @@ function builtinPresets() {
         d.bg.gradFrom = '#3a1d5e';
         d.bg.gradTo = '#12081f';
         Object.assign(d.texts[0], { value: 'SCREEN {n}', font: 'Roboto Condensed', weight: '700', size: 11 });
+      })
+    },
+    {
+      name: 'Lower Third 1-4',
+      builtin: true,
+      series: numberedSet(1, 4),
+      design: mk((d) => {
+        d.bg.mode = 'gradient';
+        d.bg.gradFrom = '#4d3a10';
+        d.bg.gradTo = '#171204';
+        d.icon.svg = ICONS.lowerthird;
+        d.icon.name = 'builtin:lowerthird';
+        d.icon.color = '#ffd54f';
+        d.icon.size = 56;
+        d.icon.y = 10;
+        Object.assign(d.texts[0], { value: 'L3 {n}', font: 'Roboto Condensed', weight: '700', size: 10, align: 'center:top' });
       })
     },
     transport('Play', 'play', '#4caf50'),

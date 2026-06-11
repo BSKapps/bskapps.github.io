@@ -259,6 +259,9 @@ export function syncInputsFromState() {
   setVal('seriesFrom', state.series.from);
   setVal('seriesTo', state.series.to);
   setVal('seriesColorTarget', state.series.colorTarget);
+
+  document.getElementById('clearIcon').disabled = !d.icon.svg;
+  document.getElementById('exportZip').disabled = state.series.mode === 'off';
 }
 
 function setVal(id, v) {
