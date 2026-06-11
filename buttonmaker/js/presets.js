@@ -1,5 +1,5 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=33';
-import { renderDesign } from './renderer.js?v=33';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=34';
+import { renderDesign } from './renderer.js?v=34';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -108,7 +108,7 @@ function builtinPresets() {
         colorTarget: 'bg'
       },
       design: mk((d) => {
-        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 12, align: 'center:center' });
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 16, align: 'center:center' });
       })
     },
     {
@@ -132,7 +132,7 @@ function builtinPresets() {
         colorTarget: 'bg'
       },
       design: mk((d) => {
-        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 13, align: 'center:center' });
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 18, align: 'center:center' });
       })
     },
     {
@@ -145,25 +145,25 @@ function builtinPresets() {
         items: [
           { label: '60', color: '#1f9d3a' },
           { label: '45', color: '#6d9c2a' },
-          { label: '30', color: '#c9a227' },
-          { label: '15', color: '#c96a17' },
+          { label: '30', color: '#9aa427' },
+          { label: '15', color: '#c9a227' },
           { label: '5', color: '#b51f1f' },
-          { label: '+1', color: '#3f7d46' },
-          { label: '-1', color: '#9c4321' },
+          { label: '+1', color: '#1f9d3a' },
+          { label: '-1', color: '#b51f1f' },
           {
             label: 'Message',
             color: '#3a6ea5',
             design: mk((d) => {
               d.bg.color = '#3a6ea5';
-              Object.assign(d.texts[0], { value: 'MESSAGE', font: 'Oswald', weight: '700', size: 11, align: 'center:center' });
+              Object.assign(d.texts[0], { value: 'MESSAGE', font: 'Oswald', weight: '700', size: 15, align: 'center:center' });
             })
           }
         ],
         colorTarget: 'bg'
       },
       design: mk((d) => {
-        Object.assign(d.texts[0], { value: '{label}', font: 'Bebas Neue', weight: '400', size: 26, align: 'center:center', y: -3 });
-        d.texts.push({ value: 'MIN', font: 'Oswald', weight: '700', size: 8, color: '#ffffff', align: 'center:bottom', x: 0, y: 0 });
+        Object.assign(d.texts[0], { value: '{label}', font: 'Bebas Neue', weight: '400', size: 53, align: 'center:center', y: -3 });
+        d.texts.push({ value: 'MIN', font: 'Oswald', weight: '700', size: 11, color: '#ffffff', align: 'center:bottom', x: 0, y: 2 });
       })
     },
     {
@@ -182,7 +182,7 @@ function builtinPresets() {
         colorTarget: 'bg'
       },
       design: mk((d) => {
-        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 13, align: 'center:center' });
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 20, align: 'center:center' });
       })
     },
     {
@@ -193,8 +193,8 @@ function builtinPresets() {
         d.bg.mode = 'gradient';
         d.bg.gradFrom = '#16324f';
         d.bg.gradTo = '#0a0e14';
-        Object.assign(d.texts[0], { value: 'INPUT', font: 'Roboto Condensed', weight: '700', size: 10, align: 'center:top' });
-        d.texts.push({ value: '{n}', font: 'Bebas Neue', weight: '400', size: 28, color: '#ffffff', align: 'center:center' });
+        Object.assign(d.texts[0], { value: 'INPUT', font: 'Roboto Condensed', weight: '700', size: 11, align: 'center:top' });
+        d.texts.push({ value: '{n}', font: 'Bebas Neue', weight: '400', size: 34, color: '#ffffff', align: 'center:center' });
       })
     },
     {
@@ -203,8 +203,8 @@ function builtinPresets() {
       series: numberedSet(1, 4),
       design: mk((d) => {
         d.bg.mode = 'gradient';
-        d.bg.gradFrom = '#4d3a10';
-        d.bg.gradTo = '#171204';
+        d.bg.gradFrom = '#2c3440';
+        d.bg.gradTo = '#0d1014';
         d.icons[0].svg = ICONS.lowerthird;
         d.icons[0].name = 'builtin:lowerthird';
         d.icons[0].color = '#ffd54f';
@@ -319,7 +319,7 @@ export function renderPresetList() {
       Object.assign(state.design, normalizeDesign(deepClone(preset.design)));
       state.ui.activeText = 0;
       state.ui.activeIcon = 0;
-      state.ui.activeListItem = null;
+      state.ui.selectedItems = [];
       if (preset.series) {
         Object.assign(state.series, deepClone(preset.series));
       } else {

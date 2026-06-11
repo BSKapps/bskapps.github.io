@@ -1,4 +1,4 @@
-import { state, emit, editTarget } from './state.js?v=33';
+import { state, emit, editTargets } from './state.js?v=34';
 
 const API = 'https://api.iconify.design';
 
@@ -21,12 +21,12 @@ let lastQuery = '';
 let pickTarget = null;
 
 function defaultTarget(id, svg) {
-  const icons = editTarget().icons;
-  if (state.ui.activeIcon >= icons.length) state.ui.activeIcon = icons.length - 1;
-  const ic = icons[state.ui.activeIcon];
-  ic.name = id;
-  ic.svg = svg;
-  ic.tint = false;
+  for (const d of editTargets()) {
+    const ic = d.icons[Math.max(0, Math.min(state.ui.activeIcon, d.icons.length - 1))];
+    ic.name = id;
+    ic.svg = svg;
+    ic.tint = false;
+  }
   emit();
 }
 
@@ -68,11 +68,11 @@ export function initIconPicker() {
   });
 
   clearBtn.addEventListener('click', () => {
-    const icons = editTarget().icons;
-    if (state.ui.activeIcon >= icons.length) state.ui.activeIcon = icons.length - 1;
-    const ic = icons[state.ui.activeIcon];
-    ic.name = null;
-    ic.svg = null;
+    for (const d of editTargets()) {
+      const ic = d.icons[Math.max(0, Math.min(state.ui.activeIcon, d.icons.length - 1))];
+      ic.name = null;
+      ic.svg = null;
+    }
     emit();
   });
 

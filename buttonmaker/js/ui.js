@@ -1,40 +1,66 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget } from './state.js?v=33';
-import { triggerIconUpload } from './icons.js?v=33';
-import { seriesVariants, hasToken } from './series.js?v=33';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=34';
+import { triggerIconUpload } from './icons.js?v=34';
+import { seriesVariants, hasToken } from './series.js?v=34';
 
-let selectionSnapshot = null;
+const selectionSnapshots = new Map();
 
-function releaseSelection() {
-  const i = state.ui.activeListItem;
-  if (i === null) return;
-  const item = state.series.items[i];
-  if (item && item.design && selectionSnapshot !== null && JSON.stringify(item.design) === selectionSnapshot) {
+function discardIfUnchanged(item) {
+  if (!item) return;
+  const snap = selectionSnapshots.get(item);
+  if (item.design && snap && JSON.stringify(item.design) === snap) {
     delete item.design;
   }
-  selectionSnapshot = null;
-  state.ui.activeListItem = null;
+  selectionSnapshots.delete(item);
 }
 
-export function selectListItem(i) {
-  if (state.series.mode !== 'list') return;
-  if (state.ui.activeListItem === i) return;
-  releaseSelection();
+function releaseSelection() {
+  for (const item of [...selectionSnapshots.keys()]) discardIfUnchanged(item);
+  selectionSnapshots.clear();
+  state.ui.selectedItems = [];
+}
+
+function materialize(i) {
   const item = state.series.items[i];
-  if (!item) return;
+  if (!item) return false;
   if (!item.design) {
     const v = seriesVariants()[i];
-    if (!v) return;
+    if (!v) return false;
     item.design = v.design;
   }
-  selectionSnapshot = JSON.stringify(item.design);
-  state.ui.activeListItem = i;
-  state.ui.activeText = Math.max(0, item.design.texts.findIndex((t) => t.value));
-  state.ui.activeIcon = Math.max(0, item.design.icons.findIndex((ic) => ic.svg));
+  if (!selectionSnapshots.has(item)) selectionSnapshots.set(item, JSON.stringify(item.design));
+  return true;
+}
+
+function focusActiveLayers() {
+  const d = editTarget();
+  state.ui.activeText = Math.max(0, d.texts.findIndex((t) => t.value));
+  state.ui.activeIcon = Math.max(0, d.icons.findIndex((ic) => ic.svg));
+}
+
+export function selectListItem(i, additive = false) {
+  if (state.series.mode !== 'list') return;
+  const sel = state.ui.selectedItems;
+  if (additive) {
+    const pos = sel.indexOf(i);
+    if (pos !== -1) {
+      discardIfUnchanged(state.series.items[i]);
+      sel.splice(pos, 1);
+    } else {
+      if (!materialize(i)) return;
+      sel.push(i);
+    }
+  } else {
+    if (sel.length === 1 && sel[0] === i) return;
+    releaseSelection();
+    if (!materialize(i)) return;
+    state.ui.selectedItems = [i];
+  }
+  focusActiveLayers();
   emit();
 }
 
 export function deselectListItem() {
-  if (state.ui.activeListItem === null) return;
+  if (!state.ui.selectedItems.length) return;
   releaseSelection();
   state.ui.activeText = 0;
   state.ui.activeIcon = 0;
@@ -48,23 +74,34 @@ export function addListItem() {
 }
 
 export function removeListItem(i) {
-  if (state.ui.activeListItem === i) {
-    state.ui.activeListItem = null;
-    selectionSnapshot = null;
-  } else if (state.ui.activeListItem !== null && state.ui.activeListItem > i) {
-    state.ui.activeListItem--;
-  }
+  const item = state.series.items[i];
+  if (item) selectionSnapshots.delete(item);
+  state.ui.selectedItems = state.ui.selectedItems
+    .filter((s) => s !== i)
+    .map((s) => (s > i ? s - 1 : s));
   state.series.items.splice(i, 1);
   emit();
 }
 
 function syncSelectedLabel() {
-  const i = state.ui.activeListItem;
+  const i = primarySelection();
   if (i === null || state.series.mode !== 'list') return;
   const item = state.series.items[i];
   if (!item || !item.design) return;
   const t = item.design.texts.find((l) => l.value);
   item.label = t ? t.value.split('\n')[0] : '';
+}
+
+function applyEdit(fn) {
+  for (const d of editTargets()) fn(d);
+}
+
+function textOf(d) {
+  return d.texts[Math.max(0, Math.min(state.ui.activeText, d.texts.length - 1))];
+}
+
+function iconOf(d) {
+  return d.icons[Math.max(0, Math.min(state.ui.activeIcon, d.icons.length - 1))];
 }
 
 const FONT_WEIGHTS = {
@@ -157,49 +194,52 @@ function bindSeg(id, getSet) {
 
 export function initUI() {
   bindSeg('bgMode', (v) => {
-    editTarget().bg.mode = v;
+    applyEdit((d) => (d.bg.mode = v));
     document.getElementById('bgSolidRow').classList.toggle('hidden', v !== 'solid');
     document.getElementById('bgGradientRows').classList.toggle('hidden', v !== 'gradient');
     document.getElementById('bgImageRows').classList.toggle('hidden', v !== 'image');
   });
-  bindColor('bgColor', (v) => (editTarget().bg.color = v));
-  bindColor('bgColor2a', (v) => (editTarget().bg.gradFrom = v));
-  bindColor('bgColor2b', (v) => (editTarget().bg.gradTo = v));
-  bindRange('bgAngle', (v) => (editTarget().bg.angle = v), 'bgAngleVal');
-  bindRange('bgBlend', (v) => (editTarget().bg.blend = v), 'bgBlendVal');
-  bindSelect('bgImageFit', (v) => (editTarget().bg.imageFit = v));
-  bindRange('bgImageDim', (v) => (editTarget().bg.imageDim = v), 'bgImageDimVal');
+  bindColor('bgColor', (v) => applyEdit((d) => (d.bg.color = v)));
+  bindColor('bgColor2a', (v) => applyEdit((d) => (d.bg.gradFrom = v)));
+  bindColor('bgColor2b', (v) => applyEdit((d) => (d.bg.gradTo = v)));
+  bindRange('bgAngle', (v) => applyEdit((d) => (d.bg.angle = v)), 'bgAngleVal');
+  bindRange('bgBlend', (v) => applyEdit((d) => (d.bg.blend = v)), 'bgBlendVal');
+  bindSelect('bgImageFit', (v) => applyEdit((d) => (d.bg.imageFit = v)));
+  bindRange('bgImageDim', (v) => applyEdit((d) => (d.bg.imageDim = v)), 'bgImageDimVal');
 
   document.getElementById('bgImageFile').addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
-      editTarget().bg.imageData = reader.result;
+      applyEdit((d) => {
+        d.bg.imageData = reader.result;
+        d.bg.mode = 'image';
+      });
       emit();
     };
     reader.readAsDataURL(file);
   });
 
-  bindColor('iconColor', (v) => {
-    const ic = activeIcon();
+  bindColor('iconColor', (v) => applyEdit((d) => {
+    const ic = iconOf(d);
     ic.color = v;
     ic.tint = true;
-  });
-  bindRange('iconSize', (v) => (activeIcon().size = v), 'iconSizeVal');
-  bindRange('iconX', (v) => (activeIcon().x = v), 'iconXVal');
-  bindRange('iconY', (v) => (activeIcon().y = v), 'iconYVal');
-  bindRange('iconOpacity', (v) => (activeIcon().opacity = v), 'iconOpacityVal');
+  }));
+  bindRange('iconSize', (v) => applyEdit((d) => (iconOf(d).size = v)), 'iconSizeVal');
+  bindRange('iconX', (v) => applyEdit((d) => (iconOf(d).x = v)), 'iconXVal');
+  bindRange('iconY', (v) => applyEdit((d) => (iconOf(d).y = v)), 'iconYVal');
+  bindRange('iconOpacity', (v) => applyEdit((d) => (iconOf(d).opacity = v)), 'iconOpacityVal');
 
   document.getElementById('iconUploadSidebar').addEventListener('click', triggerIconUpload);
 
-  bindSeg('iconAlign', (v) => {
-    const ic = activeIcon();
+  bindSeg('iconAlign', (v) => applyEdit((d) => {
+    const ic = iconOf(d);
     const [hh, vv] = v.split(':');
-    const off = iconAnchorOffset();
+    const off = Math.max(0, Math.min(40, Math.round(50 - ic.size / 2)));
     ic.x = hh === 'left' ? -off : hh === 'right' ? off : 0;
     ic.y = vv === 'top' ? -off : vv === 'bottom' ? off : 0;
-  });
+  }));
 
   document.getElementById('textValue').addEventListener('input', (e) => {
     activeText().value = e.target.value;
@@ -207,20 +247,23 @@ export function initUI() {
     emit();
   });
   bindSelect('textFont', (v) => {
-    const t = activeText();
-    t.font = v;
-    t.weight = rebuildWeightOptions(v, t.weight);
+    const w = rebuildWeightOptions(v, activeText().weight);
+    applyEdit((d) => {
+      const t = textOf(d);
+      t.font = v;
+      t.weight = w;
+    });
   });
-  bindSelect('textWeight', (v) => (activeText().weight = v));
-  bindRange('textSize', (v) => (activeText().size = v), 'textSizeVal');
-  bindColor('textColor', (v) => (activeText().color = v));
-  bindSeg('textAlign', (v) => (activeText().align = v));
-  bindRange('textX', (v) => (activeText().x = v), 'textXVal');
-  bindRange('textY', (v) => (activeText().y = v), 'textYVal');
+  bindSelect('textWeight', (v) => applyEdit((d) => (textOf(d).weight = v)));
+  bindRange('textSize', (v) => applyEdit((d) => (textOf(d).size = v)), 'textSizeVal');
+  bindColor('textColor', (v) => applyEdit((d) => (textOf(d).color = v)));
+  bindSeg('textAlign', (v) => applyEdit((d) => (textOf(d).align = v)));
+  bindRange('textX', (v) => applyEdit((d) => (textOf(d).x = v)), 'textXVal');
+  bindRange('textY', (v) => applyEdit((d) => (textOf(d).y = v)), 'textYVal');
 
-  bindRange('shapeRadius', (v) => (editTarget().shape.radius = v), 'shapeRadiusVal');
-  bindRange('shapeBorder', (v) => (editTarget().shape.border = v), 'shapeBorderVal');
-  bindColor('shapeBorderColor', (v) => (editTarget().shape.borderColor = v));
+  bindRange('shapeRadius', (v) => applyEdit((d) => (d.shape.radius = v)), 'shapeRadiusVal');
+  bindRange('shapeBorder', (v) => applyEdit((d) => (d.shape.border = v)), 'shapeBorderVal');
+  bindColor('shapeBorderColor', (v) => applyEdit((d) => (d.shape.borderColor = v)));
 
   bindSeg('seriesMode', (v) => {
     if (v !== 'list') releaseSelection();
@@ -356,9 +399,13 @@ function truncate(s, len) {
 }
 
 export function syncInputsFromState() {
-  if (state.ui.activeListItem !== null && (state.series.mode !== 'list' || !state.series.items[state.ui.activeListItem])) {
-    state.ui.activeListItem = null;
-    selectionSnapshot = null;
+  if (state.series.mode !== 'list') {
+    if (state.ui.selectedItems.length) {
+      state.ui.selectedItems = [];
+      selectionSnapshots.clear();
+    }
+  } else {
+    state.ui.selectedItems = state.ui.selectedItems.filter((i) => state.series.items[i]);
   }
   updateEditBanner();
   const d = editTarget();
@@ -415,16 +462,21 @@ function updateEditBanner() {
   const banner = document.getElementById('editBanner');
   const bLabel = document.getElementById('editBannerLabel');
   const bAll = document.getElementById('editAllBtn');
-  const sel = state.ui.activeListItem;
-  if (state.series.mode === 'list' && sel !== null && state.series.items[sel]) {
+  const sel = state.ui.selectedItems;
+  if (state.series.mode === 'list' && sel.length) {
     banner.classList.remove('hidden');
     banner.classList.add('one');
-    bLabel.textContent = 'Editing "' + (state.series.items[sel].label || 'button ' + (sel + 1)) + '" only';
+    if (sel.length === 1) {
+      const item = state.series.items[sel[0]];
+      bLabel.textContent = 'Editing "' + ((item && item.label) || 'button ' + (sel[0] + 1)) + '" only';
+    } else {
+      bLabel.textContent = 'Editing ' + sel.length + ' buttons together';
+    }
     bAll.classList.remove('hidden');
   } else if (state.series.mode === 'list' && state.series.items.length) {
     banner.classList.remove('hidden');
     banner.classList.remove('one');
-    bLabel.textContent = 'Editing every button in the set. Click one under the preview to style it alone.';
+    bLabel.textContent = 'Editing every button in the set. Click one to style it alone, Cmd-click to grab a few.';
     bAll.classList.add('hidden');
   } else {
     banner.classList.add('hidden');

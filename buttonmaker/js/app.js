@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, editTarget } from './state.js?v=33';
-import { renderDesign } from './renderer.js?v=33';
-import { seriesVariants } from './series.js?v=33';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, deselectListItem, addListItem, removeListItem } from './ui.js?v=33';
-import { initIconPicker } from './icons.js?v=33';
-import { initPresets } from './presets.js?v=33';
-import { initExport } from './export.js?v=33';
-import { initColorPopover } from './colorpicker.js?v=33';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, editTarget, primarySelection } from './state.js?v=34';
+import { renderDesign } from './renderer.js?v=34';
+import { seriesVariants } from './series.js?v=34';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, addListItem, removeListItem } from './ui.js?v=34';
+import { initIconPicker } from './icons.js?v=34';
+import { initPresets } from './presets.js?v=34';
+import { initExport } from './export.js?v=34';
+import { initColorPopover } from './colorpicker.js?v=34';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -33,7 +33,7 @@ async function renderAll() {
 
 async function renderOnce() {
   const variants = seriesVariants();
-  const sel = state.ui.activeListItem;
+  const sel = primarySelection();
   const mainVariant = (state.series.mode === 'list' && sel !== null && variants[sel] ? variants[sel] : variants[0])
     || { design: state.design };
   await renderDesign(preview, mainVariant.design, { bakeText: true });
@@ -51,18 +51,17 @@ async function renderOnce() {
     variants.forEach((v, idx) => {
       const item = document.createElement('div');
       item.className = 'series-item';
-      item.classList.toggle('selected', isList && idx === state.ui.activeListItem);
+      item.classList.toggle('selected', isList && state.ui.selectedItems.includes(idx));
       item.draggable = true;
-      item.title = 'Click to edit this button on its own. Drag onto another button to reorder.';
-      item.addEventListener('click', () => {
+      item.title = 'Click to edit this button on its own, Cmd-click to select several. Drag onto another button to reorder.';
+      item.addEventListener('click', (e) => {
         if (state.series.mode === 'numbers') {
           convertNumberedToList();
           selectListItem(idx);
           return;
         }
         if (state.series.mode !== 'list') return;
-        if (state.ui.activeListItem === idx) deselectListItem();
-        else selectListItem(idx);
+        selectListItem(idx, e.metaKey || e.ctrlKey);
       });
       const c = document.createElement('canvas');
       c.width = 144;
@@ -148,10 +147,10 @@ function reorderSet(from, to) {
     convertNumberedToList();
   }
   const items = state.series.items;
-  const selItem = state.ui.activeListItem !== null ? items[state.ui.activeListItem] : null;
+  const selObjects = state.ui.selectedItems.map((i) => items[i]);
   const [moved] = items.splice(from, 1);
   items.splice(to, 0, moved);
-  if (selItem) state.ui.activeListItem = items.indexOf(selItem);
+  state.ui.selectedItems = selObjects.map((it) => items.indexOf(it)).filter((i) => i !== -1);
   gridDragIndex = null;
   emit();
 }
@@ -256,7 +255,7 @@ document.addEventListener('keydown', (e) => {
   applyingUndo = true;
   Object.assign(state.design, prev.design);
   Object.assign(state.series, prev.series);
-  state.ui.activeListItem = null;
+  state.ui.selectedItems = [];
   emit();
   applyingUndo = false;
 });
@@ -301,7 +300,7 @@ document.getElementById('resetDesign').addEventListener('click', () => {
   state.series.colorTarget = 'bg';
   state.ui.activeText = 0;
   state.ui.activeIcon = 0;
-  state.ui.activeListItem = null;
+  state.ui.selectedItems = [];
   emit();
 });
 

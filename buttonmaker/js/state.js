@@ -1,4 +1,4 @@
-export const APP_VERSION = '33';
+export const APP_VERSION = '34';
 
 export function defaultTextLayer() {
   return {
@@ -63,16 +63,33 @@ export const state = {
     colorTarget: 'bg'
   },
   export: { size: 288 },
-  ui: { activeText: 0, activeIcon: 0, activeListItem: null }
+  ui: { activeText: 0, activeIcon: 0, selectedItems: [] }
 };
 
+export function primarySelection() {
+  const sel = state.ui.selectedItems;
+  return sel.length ? sel[sel.length - 1] : null;
+}
+
 export function editTarget() {
-  const i = state.ui.activeListItem;
+  const i = primarySelection();
   if (state.series.mode === 'list' && i !== null) {
     const item = state.series.items[i];
     if (item && item.design) return item.design;
   }
   return state.design;
+}
+
+export function editTargets() {
+  if (state.series.mode === 'list') {
+    const selected = state.ui.selectedItems
+      .map((i) => state.series.items[i] && state.series.items[i].design)
+      .filter(Boolean);
+    if (selected.length) return selected;
+    const detached = state.series.items.map((it) => it.design).filter(Boolean);
+    return [state.design, ...detached];
+  }
+  return [state.design];
 }
 
 const listeners = [];

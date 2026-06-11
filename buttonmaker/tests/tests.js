@@ -1,7 +1,7 @@
-import { state, defaultDesign, defaultTextLayer, deepClone } from '../js/state.js?v=33';
-import { seriesVariants, safeFileName } from '../js/series.js?v=33';
-import { buildCompanionPage } from '../js/companion.js?v=33';
-import { renderToDataUrl } from '../js/renderer.js?v=33';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=34';
+import { seriesVariants, safeFileName } from '../js/series.js?v=34';
+import { buildCompanionPage } from '../js/companion.js?v=34';
+import { renderToDataUrl } from '../js/renderer.js?v=34';
 
 const results = [];
 
@@ -18,7 +18,7 @@ function resetState() {
   state.series.colorTarget = 'bg';
   state.ui.activeText = 0;
   state.ui.activeIcon = 0;
-  state.ui.activeListItem = null;
+  state.ui.selectedItems = [];
 }
 
 function run() {
@@ -145,6 +145,23 @@ function run() {
   check('undesigned item in same list still substitutes', v[1].design.texts[0].value === 'STOP' && v[1].design.bg.color === '#b51f1f');
   v[0].design.texts[0].value = 'MUTATED';
   check('variant design detached from stored item design', state.series.items[0].design.texts[0].value === 'CUSTOM');
+
+  resetState();
+  state.series.mode = 'list';
+  const dA = defaultDesign();
+  dA.bg.color = '#0000aa';
+  state.series.items = [
+    { label: 'A', color: '', design: dA },
+    { label: 'B', color: '' }
+  ];
+  state.ui.selectedItems = [0];
+  check('editTarget returns the selected item design', editTarget() === dA);
+  check('editTargets returns only selected designs', editTargets().length === 1 && editTargets()[0] === dA);
+  state.ui.selectedItems = [];
+  const all = editTargets();
+  check('editTargets with no selection covers base and detached designs', all.length === 2 && all[0] === state.design && all[1] === dA);
+  resetState();
+  check('editTargets outside list mode is just the base design', editTargets().length === 1 && editTargets()[0] === state.design);
 
   check('gradient blend defaults to 100', defaultDesign().bg.blend === 100);
 
