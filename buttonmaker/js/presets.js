@@ -1,5 +1,5 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=34';
-import { renderDesign } from './renderer.js?v=34';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=35';
+import { renderDesign } from './renderer.js?v=35';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -84,7 +84,7 @@ function builtinPresets() {
       },
       design: mk((d) => {
         d.bg.color = '#1d1d22';
-        d.icons[0].size = 58;
+        d.icons[0].size = 64;
         d.icons[0].y = 0;
       })
     },
@@ -96,7 +96,14 @@ function builtinPresets() {
         from: 1,
         to: 4,
         items: [
-          { label: 'GO', color: '#1f9d3a' },
+          {
+            label: 'GO',
+            color: '#1f9d3a',
+            design: mk((d) => {
+              d.bg.color = '#1f9d3a';
+              Object.assign(d.texts[0], { value: 'GO', font: 'Oswald', weight: '700', size: 36, align: 'center:center' });
+            })
+          },
           { label: 'PAUSE', color: '#c9a227' },
           { label: 'RESUME', color: '#3a6ea5' },
           { label: 'PANIC', color: '#b51f1f' },
@@ -108,7 +115,7 @@ function builtinPresets() {
         colorTarget: 'bg'
       },
       design: mk((d) => {
-        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 16, align: 'center:center' });
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 18, align: 'center:center' });
       })
     },
     {
@@ -132,7 +139,7 @@ function builtinPresets() {
         colorTarget: 'bg'
       },
       design: mk((d) => {
-        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 18, align: 'center:center' });
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 25, align: 'center:center' });
       })
     },
     {
@@ -162,7 +169,7 @@ function builtinPresets() {
         colorTarget: 'bg'
       },
       design: mk((d) => {
-        Object.assign(d.texts[0], { value: '{label}', font: 'Bebas Neue', weight: '400', size: 53, align: 'center:center', y: -3 });
+        Object.assign(d.texts[0], { value: '{label}', font: 'Bebas Neue', weight: '400', size: 48, align: 'center:center', y: -3 });
         d.texts.push({ value: 'MIN', font: 'Oswald', weight: '700', size: 11, color: '#ffffff', align: 'center:bottom', x: 0, y: 2 });
       })
     },
@@ -182,7 +189,7 @@ function builtinPresets() {
         colorTarget: 'bg'
       },
       design: mk((d) => {
-        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 20, align: 'center:center' });
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 25, align: 'center:center' });
       })
     },
     {
