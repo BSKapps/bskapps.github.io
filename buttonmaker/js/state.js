@@ -1,4 +1,4 @@
-export const APP_VERSION = '13';
+export const APP_VERSION = '14';
 
 export function defaultTextLayer() {
   return {
@@ -7,7 +7,9 @@ export function defaultTextLayer() {
     weight: '600',
     size: 11,
     color: '#ffffff',
-    align: 'center:bottom'
+    align: 'center:bottom',
+    x: 0,
+    y: 0
   };
 }
 

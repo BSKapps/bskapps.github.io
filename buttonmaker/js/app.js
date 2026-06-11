@@ -1,11 +1,11 @@
-import { state, onChange, emit, APP_VERSION } from './state.js?v=13';
-import { renderDesign } from './renderer.js?v=13';
-import { seriesVariants } from './series.js?v=13';
-import { initUI, syncInputsFromState, renderTextLayerChips } from './ui.js?v=13';
-import { initIconPicker } from './icons.js?v=13';
-import { initPresets } from './presets.js?v=13';
-import { initExport } from './export.js?v=13';
-import { initColorPopover } from './colorpicker.js?v=13';
+import { state, onChange, emit, APP_VERSION } from './state.js?v=14';
+import { renderDesign } from './renderer.js?v=14';
+import { seriesVariants } from './series.js?v=14';
+import { initUI, syncInputsFromState, renderTextLayerChips } from './ui.js?v=14';
+import { initIconPicker } from './icons.js?v=14';
+import { initPresets } from './presets.js?v=14';
+import { initExport } from './export.js?v=14';
+import { initColorPopover } from './colorpicker.js?v=14';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -53,7 +53,7 @@ async function renderOnce() {
       const c = document.createElement('canvas');
       c.width = 144;
       c.height = 144;
-      renderDesign(c, v.design, { bakeText: true });
+      renderDesign(c, v.design, { bakeText: true, topbarGuide: state.guides.topbar });
       const span = document.createElement('span');
       span.textContent = v.label;
       item.appendChild(c);

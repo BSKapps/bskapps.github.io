@@ -159,6 +159,8 @@ export async function renderDesign(canvas, design, opts = {}) {
         ctx.textBaseline = 'bottom';
         startY = size - pad - (lines.length - 1) * lineHeight;
       }
+      const ox = ((text.x || 0) / 100) * size;
+      const oy = ((text.y || 0) / 100) * size;
       lines.forEach((line, i) => {
         let dx = 0;
         if (h === 'center') {
@@ -167,7 +169,7 @@ export async function renderDesign(canvas, design, opts = {}) {
             dx = (m.actualBoundingBoxLeft - m.actualBoundingBoxRight) / 2;
           }
         }
-        ctx.fillText(line, x + dx, startY + i * lineHeight);
+        ctx.fillText(line, x + dx + ox, startY + i * lineHeight + oy);
       });
     }
   }

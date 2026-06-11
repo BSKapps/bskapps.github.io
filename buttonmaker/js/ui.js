@@ -1,5 +1,8 @@
-import { state, emit, defaultTextLayer } from './state.js?v=13';
-import { openIconModal, triggerIconUpload } from './icons.js?v=13';
+import { state, emit, deepClone, defaultTextLayer } from './state.js?v=14';
+import { openIconModal, triggerIconUpload } from './icons.js?v=14';
+import { seriesVariants } from './series.js?v=14';
+
+let dragIndex = null;
 
 function iconAnchorOffset() {
   return Math.max(0, Math.min(40, Math.round(50 - state.design.icon.size / 2 - 6)));
@@ -108,15 +111,34 @@ export function initUI() {
   bindRange('textSize', (v) => (activeText().size = v), 'textSizeVal');
   bindColor('textColor', (v) => (activeText().color = v));
   bindSeg('textAlign', (v) => (activeText().align = v));
+  bindRange('textX', (v) => (activeText().x = v), 'textXVal');
+  bindRange('textY', (v) => (activeText().y = v), 'textYVal');
 
   bindRange('shapeRadius', (v) => (d.shape.radius = v), 'shapeRadiusVal');
   bindRange('shapeBorder', (v) => (d.shape.border = v), 'shapeBorderVal');
   bindColor('shapeBorderColor', (v) => (d.shape.borderColor = v));
 
   bindSeg('seriesMode', (v) => {
+    if (v === 'off' && state.series.mode !== 'off') {
+      const first = seriesVariants()[0];
+      if (first) Object.assign(state.design, deepClone(first.design));
+    }
     state.series.mode = v;
     document.getElementById('seriesNumbersRows').classList.toggle('hidden', v !== 'numbers');
     document.getElementById('seriesListRows').classList.toggle('hidden', v !== 'list');
+  });
+
+  document.getElementById('seriesConvertList').addEventListener('click', () => {
+    const from = Math.min(state.series.from, state.series.to);
+    const to = Math.max(state.series.from, state.series.to);
+    const count = Math.min(to - from + 1, 64);
+    state.series.items = Array.from({ length: count }, (_, i) => ({ label: String(from + i), color: '' }));
+    for (const t of state.design.texts) {
+      t.value = t.value.replaceAll('{n}', '{label}');
+    }
+    state.series.mode = 'list';
+    renderSeriesItems();
+    emit();
   });
 
   document.getElementById('seriesFrom').addEventListener('input', (e) => {
@@ -202,6 +224,34 @@ export function renderSeriesItems() {
     const row = document.createElement('div');
     row.className = 'series-item-row';
 
+    const grip = document.createElement('span');
+    grip.className = 'drag-grip';
+    grip.textContent = '::';
+    grip.title = 'Drag to reorder';
+    grip.addEventListener('mousedown', () => (row.draggable = true));
+    row.addEventListener('dragend', () => {
+      row.draggable = false;
+      dragIndex = null;
+    });
+    row.addEventListener('dragstart', (e) => {
+      dragIndex = i;
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    row.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+    });
+    row.addEventListener('drop', (e) => {
+      e.preventDefault();
+      if (dragIndex === null || dragIndex === i) return;
+      const [moved] = state.series.items.splice(dragIndex, 1);
+      state.series.items.splice(i, 0, moved);
+      dragIndex = null;
+      renderSeriesItems();
+      emit();
+    });
+    row.appendChild(grip);
+
     const label = document.createElement('input');
     label.type = 'text';
     label.placeholder = 'Label';
@@ -224,6 +274,7 @@ export function renderSeriesItems() {
     iconBtn.title = item.iconSvg ? 'Change image for this button' : 'Add an image to this button';
     if (item.iconSvg) {
       const img = document.createElement('img');
+      img.draggable = false;
       img.src = item.iconSvg.startsWith('<')
         ? 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(item.iconSvg.replaceAll('currentColor', '#ffffff'))
         : item.iconSvg;
@@ -290,6 +341,8 @@ export function syncInputsFromState() {
   setVal('textWeight', t.weight);
   setRange('textSize', t.size, 'textSizeVal');
   setVal('textColor', t.color);
+  setRange('textX', t.x || 0, 'textXVal');
+  setRange('textY', t.y || 0, 'textYVal');
   setRange('shapeRadius', d.shape.radius, 'shapeRadiusVal');
   setRange('shapeBorder', d.shape.border, 'shapeBorderVal');
   setVal('shapeBorderColor', d.shape.borderColor);
