@@ -1,9 +1,18 @@
-import { state, deepClone } from './state.js?v=20';
+import { state, deepClone } from './state.js?v=21';
+
+export function hasToken(design) {
+  return design.texts.some((t) => t.value && (t.value.includes('{n}') || t.value.includes('{label}')));
+}
+
+function numberLayer(value) {
+  return { value, font: 'Inter', weight: '600', size: 28, color: '#ffffff', align: 'center:center', x: 0, y: 0 };
+}
 
 export function seriesVariants() {
   const s = state.series;
   const base = state.design;
   const variants = [];
+  const tokens = hasToken(base);
 
   if (s.mode === 'numbers') {
     const from = Math.min(s.from, s.to);
@@ -12,13 +21,25 @@ export function seriesVariants() {
     for (let i = 0; i < count; i++) {
       const n = from + i;
       const d = deepClone(base);
-      substituteLayers(d, n, String(n));
+      if (tokens) {
+        substituteLayers(d, n, String(n));
+      } else {
+        const t = d.texts.find((l) => l.value);
+        if (t) t.value = t.value + ' ' + n;
+        else d.texts.push(numberLayer(String(n)));
+      }
       variants.push({ design: d, label: String(n), companionText: firstText(d) });
     }
   } else if (s.mode === 'list') {
     s.items.slice(0, 64).forEach((item, i) => {
       const d = deepClone(base);
-      substituteLayers(d, i + 1, item.label);
+      if (tokens) {
+        substituteLayers(d, i + 1, item.label);
+      } else if (item.label) {
+        const t = d.texts.find((l) => l.value);
+        if (t) t.value = item.label;
+        else if (!item.iconSvg && !base.icon.svg) d.texts.push(numberLayer(item.label));
+      }
       if (item.iconSvg) {
         d.icon.svg = item.iconSvg;
         d.icon.name = item.iconName || null;

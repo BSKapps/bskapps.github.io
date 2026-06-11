@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20">
+<link rel="stylesheet" href="css/style.css?v=21">
 </head>
 <body>
 <header class="app-header">
@@ -107,9 +107,8 @@
         <div class="layer-chips" id="textLayerChips"></div>
         <div class="row">
           <label>Text</label>
-          <input type="text" id="textValue" placeholder="CAM {n}" autocomplete="off">
+          <input type="text" id="textValue" placeholder="PC" autocomplete="off">
         </div>
-        <p class="hint">Making a set? Type {n} where the number should go. CAM {n} becomes CAM 1, CAM 2, CAM 3...</p>
         <div class="row">
           <label>Font</label>
           <select id="textFont">
@@ -193,12 +192,13 @@
             <button data-val="list">Custom list</button>
           </div>
           <div id="seriesNumbersRows" class="hidden">
+            <p class="hint">Numbers your buttons for you. Text "PC" becomes PC 1, PC 2, PC 3...</p>
             <div class="row"><label>From</label><input type="number" id="seriesFrom" value="1" min="0" max="999"></div>
             <div class="row"><label>To</label><input type="number" id="seriesTo" value="4" min="0" max="999"></div>
             <button class="btn ghost" id="seriesConvertList">Convert to custom list to edit each button</button>
           </div>
           <div id="seriesListRows" class="hidden">
-            <p class="hint">One button per item. Type {label} in your text to show the item name.</p>
+            <p class="hint">One button per item. The item's name becomes the button text, and each item can have its own colour and image.</p>
             <div id="seriesItems"></div>
             <div class="row">
               <button class="btn ghost" id="seriesAddItem">Add item</button>
@@ -252,8 +252,8 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato or Corsair. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script>window.BM_V = '20';</script>
-<script src="vendor/jszip.min.js?v=20"></script>
-<script type="module" src="js/app.js?v=20"></script>
+<script>window.BM_V = '21';</script>
+<script src="vendor/jszip.min.js?v=21"></script>
+<script type="module" src="js/app.js?v=21"></script>
 </body>
 </html>

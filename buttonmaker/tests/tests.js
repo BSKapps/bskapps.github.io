@@ -1,7 +1,7 @@
-import { state, defaultDesign, defaultTextLayer, deepClone } from '../js/state.js?v=20';
-import { seriesVariants, safeFileName } from '../js/series.js?v=20';
-import { buildCompanionPage } from '../js/companion.js?v=20';
-import { renderToDataUrl } from '../js/renderer.js?v=20';
+import { state, defaultDesign, defaultTextLayer, deepClone } from '../js/state.js?v=21';
+import { seriesVariants, safeFileName } from '../js/series.js?v=21';
+import { buildCompanionPage } from '../js/companion.js?v=21';
+import { renderToDataUrl } from '../js/renderer.js?v=21';
 
 const results = [];
 
@@ -36,6 +36,26 @@ function run() {
   state.series.from = 1;
   state.series.to = 500;
   check('numbered set capped at 64', seriesVariants().length === 64);
+
+  resetState();
+  state.design.texts[0].value = 'PC';
+  state.series.mode = 'numbers';
+  state.series.to = 3;
+  v = seriesVariants();
+  check('plain text numbered: PC becomes PC 1, PC 2, PC 3', v[0].design.texts[0].value === 'PC 1' && v[2].design.texts[0].value === 'PC 3');
+
+  resetState();
+  state.series.mode = 'numbers';
+  state.series.to = 2;
+  v = seriesVariants();
+  check('empty design numbered: number drawn as big centred text', v[0].design.texts.some((t) => t.value === '1' && t.align === 'center:center'));
+
+  resetState();
+  state.design.texts[0].value = 'STATE';
+  state.series.mode = 'list';
+  state.series.items = [{ label: 'GO', color: '' }, { label: 'STOP', color: '' }];
+  v = seriesVariants();
+  check('plain text list: item name becomes the button text', v[0].design.texts[0].value === 'GO' && v[1].design.texts[0].value === 'STOP');
 
   resetState();
   state.design.texts[0].value = '{label}';

@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer } from './state.js?v=20';
-import { openIconModal, triggerIconUpload } from './icons.js?v=20';
-import { seriesVariants } from './series.js?v=20';
+import { state, emit, deepClone, defaultTextLayer } from './state.js?v=21';
+import { openIconModal, triggerIconUpload } from './icons.js?v=21';
+import { seriesVariants, hasToken } from './series.js?v=21';
 
 let dragIndex = null;
 
@@ -160,9 +160,18 @@ export function convertNumberedToList() {
   const from = Math.min(state.series.from, state.series.to);
   const to = Math.max(state.series.from, state.series.to);
   const count = Math.min(to - from + 1, 64);
-  state.series.items = Array.from({ length: count }, (_, i) => ({ label: String(from + i), color: '' }));
-  for (const t of state.design.texts) {
-    t.value = t.value.replaceAll('{n}', '{label}');
+  if (hasToken(state.design)) {
+    state.series.items = Array.from({ length: count }, (_, i) => ({ label: String(from + i), color: '' }));
+    for (const t of state.design.texts) {
+      t.value = t.value.replaceAll('{n}', '{label}');
+    }
+  } else {
+    const t = state.design.texts.find((l) => l.value);
+    const baseText = t ? t.value : '';
+    state.series.items = Array.from({ length: count }, (_, i) => ({
+      label: baseText ? baseText + ' ' + (from + i) : String(from + i),
+      color: ''
+    }));
   }
   state.series.mode = 'list';
   renderSeriesItems();
