@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=18">
+<link rel="stylesheet" href="css/style.css?v=19">
 </head>
 <body>
 <header class="app-header">
@@ -217,7 +217,8 @@
           <p class="hint" id="exportSummary"></p>
           <button class="btn primary" id="exportPng">Download PNG</button>
           <button class="btn primary" id="exportZip">Download set as ZIP</button>
-          <p class="hint">In Companion, edit your button and click its image box to load the PNG. Your actions stay untouched.</p>
+          <p class="hint">In Companion, edit your button and click its image box to load the PNG. Your actions stay untouched. Any image format works for uploads too: PNG, JPEG, WebP and more.</p>
+          <p class="hint">Downloads land in your browser's Downloads folder. Double-click the ZIP and it becomes a folder of PNGs.</p>
           <div class="row">
             <label>PNG size</label>
             <select id="exportSize">
@@ -226,7 +227,7 @@
               <option value="288" selected>288 px</option>
             </select>
           </div>
-          <button class="btn ghost" id="exportCompanion">Download as Companion page file</button>
+          <button class="btn primary" id="exportCompanion">Download as Companion page file</button>
           <p class="hint">Optional: a whole page of finished buttons in one import. Aim it at an EMPTY page - it replaces the page you point it at.</p>
         </div>
       </details>
@@ -251,8 +252,8 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato or Corsair. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script>window.BM_V = '18';</script>
-<script src="vendor/jszip.min.js?v=18"></script>
-<script type="module" src="js/app.js?v=18"></script>
+<script>window.BM_V = '19';</script>
+<script src="vendor/jszip.min.js?v=19"></script>
+<script type="module" src="js/app.js?v=19"></script>
 </body>
 </html>

@@ -1,8 +1,8 @@
-import { state } from './state.js?v=18';
-import { renderToDataUrl } from './renderer.js?v=18';
-import { seriesVariants, safeFileName } from './series.js?v=18';
-import { downloadBlob } from './presets.js?v=18';
-import { buildCompanionPage } from './companion.js?v=18';
+import { state } from './state.js?v=19';
+import { renderToDataUrl } from './renderer.js?v=19';
+import { seriesVariants, safeFileName } from './series.js?v=19';
+import { downloadBlob } from './presets.js?v=19';
+import { buildCompanionPage } from './companion.js?v=19';
 
 function dataUrlToBlob(dataUrl) {
   const [head, body] = dataUrl.split(',');
@@ -48,6 +48,12 @@ async function exportZip() {
 }
 
 async function exportCompanion() {
+  const proceed = window.confirm(
+    'This file imports as a FULL PAGE in Companion.\n\n' +
+    'When importing, pick an EMPTY page - the import replaces whatever page you choose. It cannot touch your other pages, connections or actions.\n\n' +
+    'Want to keep buttons on a working page? Import to an empty page first, then copy them across in Companion.\n\nDownload the page file?'
+  );
+  if (!proceed) return;
   const variants = seriesVariants();
   const buttons = [];
   for (let i = 0; i < variants.length; i++) {
