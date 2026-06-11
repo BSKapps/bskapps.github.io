@@ -1,5 +1,5 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=41';
-import { renderDesign } from './renderer.js?v=41';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=42';
+import { renderDesign } from './renderer.js?v=42';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -84,7 +84,7 @@ function builtinPresets() {
       },
       design: mk((d) => {
         d.bg.color = '#1d1d22';
-        d.icons[0].size = 75;
+        d.icons[0].size = 72;
         d.icons[0].y = -4;
         Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 10, align: 'center:bottom' });
       })

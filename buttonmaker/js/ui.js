@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=41';
-import { triggerIconUpload } from './icons.js?v=41';
-import { seriesVariants, hasToken } from './series.js?v=41';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=42';
+import { triggerIconUpload } from './icons.js?v=42';
+import { seriesVariants, hasToken } from './series.js?v=42';
 
 const selectionSnapshots = new Map();
 
@@ -580,7 +580,8 @@ export function syncInputsFromState() {
     const [hh, vv] = b.dataset.val.split(':');
     const bx = hh === 'left' ? -off : hh === 'right' ? off : 0;
     const by = vv === 'top' ? -off : vv === 'bottom' ? off : 0;
-    b.classList.toggle('active', ic.x === bx && ic.y === by);
+    const match = ic.x === bx && ic.y === by && (off !== 0 || b.dataset.val === 'center:center');
+    b.classList.toggle('active', match);
   });
 }
 
