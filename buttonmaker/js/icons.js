@@ -1,4 +1,4 @@
-import { state, emit } from './state.js?v=11';
+import { state, emit } from './state.js?v=12';
 
 const API = 'https://api.iconify.design';
 
@@ -11,6 +11,11 @@ function defaultTarget(id, svg) {
   state.design.icon.svg = svg;
   state.design.icon.tint = false;
   emit();
+}
+
+export function triggerIconUpload() {
+  pickTarget = defaultTarget;
+  document.getElementById('iconUploadFile').click();
 }
 
 export function openIconModal(target) {

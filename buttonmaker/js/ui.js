@@ -1,5 +1,9 @@
-import { state, emit, defaultTextLayer } from './state.js?v=11';
-import { openIconModal } from './icons.js?v=11';
+import { state, emit, defaultTextLayer } from './state.js?v=12';
+import { openIconModal, triggerIconUpload } from './icons.js?v=12';
+
+function iconAnchorOffset() {
+  return Math.max(0, Math.min(40, Math.round(50 - state.design.icon.size / 2 - 6)));
+}
 
 function activeText() {
   const texts = state.design.texts;
@@ -84,6 +88,15 @@ export function initUI() {
     d.icon.x = 0;
     d.icon.y = 0;
     emit();
+  });
+
+  document.getElementById('iconUploadSidebar').addEventListener('click', triggerIconUpload);
+
+  bindSeg('iconAlign', (v) => {
+    const [hh, vv] = v.split(':');
+    const off = iconAnchorOffset();
+    d.icon.x = hh === 'left' ? -off : hh === 'right' ? off : 0;
+    d.icon.y = vv === 'top' ? -off : vv === 'bottom' ? off : 0;
   });
 
   document.getElementById('textValue').addEventListener('input', (e) => {
@@ -296,6 +309,14 @@ export function syncInputsFromState() {
 
   document.getElementById('clearIcon').disabled = !d.icon.svg;
   document.getElementById('exportZip').disabled = state.series.mode === 'off';
+
+  const off = iconAnchorOffset();
+  document.getElementById('iconAlign').querySelectorAll('button').forEach((b) => {
+    const [hh, vv] = b.dataset.val.split(':');
+    const bx = hh === 'left' ? -off : hh === 'right' ? off : 0;
+    const by = vv === 'top' ? -off : vv === 'bottom' ? off : 0;
+    b.classList.toggle('active', d.icon.x === bx && d.icon.y === by);
+  });
 }
 
 function setVal(id, v) {
