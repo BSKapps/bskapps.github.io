@@ -1,4 +1,4 @@
-export const APP_VERSION = '35';
+export const APP_VERSION = '36';
 
 export function defaultTextLayer() {
   return {
@@ -63,7 +63,7 @@ export const state = {
     colorTarget: 'bg'
   },
   export: { size: 288 },
-  ui: { activeText: 0, activeIcon: 0, selectedItems: [] }
+  ui: { activeText: 0, activeIcon: 0, allText: false, allIcons: false, selectedItems: [] }
 };
 
 export function primarySelection() {

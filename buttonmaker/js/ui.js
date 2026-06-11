@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=35';
-import { triggerIconUpload } from './icons.js?v=35';
-import { seriesVariants, hasToken } from './series.js?v=35';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=36';
+import { triggerIconUpload } from './icons.js?v=36';
+import { seriesVariants, hasToken } from './series.js?v=36';
 
 const selectionSnapshots = new Map();
 
@@ -104,6 +104,37 @@ function iconOf(d) {
   return d.icons[Math.max(0, Math.min(state.ui.activeIcon, d.icons.length - 1))];
 }
 
+function textLayersOf(d) {
+  return state.ui.allText ? d.texts : [textOf(d)];
+}
+
+function iconLayersOf(d) {
+  return state.ui.allIcons ? d.icons : [iconOf(d)];
+}
+
+function refText() {
+  return state.ui.allText ? editTarget().texts[0] : activeText();
+}
+
+function refIcon() {
+  return state.ui.allIcons ? editTarget().icons[0] : activeIcon();
+}
+
+function applyRelative(all, layersOf, ref, prop, v, min, max) {
+  if (!all) {
+    applyEdit((d) => {
+      for (const l of layersOf(d)) l[prop] = v;
+    });
+    return;
+  }
+  const delta = v - (ref[prop] || 0);
+  applyEdit((d) => {
+    for (const l of layersOf(d)) {
+      l[prop] = Math.max(min, Math.min(max, (l[prop] || 0) + delta));
+    }
+  });
+}
+
 const FONT_WEIGHTS = {
   'Inter': ['400', '600', '700', '800'],
   'Oswald': ['400', '600', '700'],
@@ -140,7 +171,7 @@ function rebuildWeightOptions(font, current) {
 }
 
 function iconAnchorOffset() {
-  return Math.max(0, Math.min(40, Math.round(50 - activeIcon().size / 2)));
+  return Math.max(0, Math.min(40, Math.round(50 - refIcon().size / 2)));
 }
 
 function activeIcon() {
@@ -222,44 +253,56 @@ export function initUI() {
   });
 
   bindColor('iconColor', (v) => applyEdit((d) => {
-    const ic = iconOf(d);
-    ic.color = v;
-    ic.tint = true;
+    for (const ic of iconLayersOf(d)) {
+      ic.color = v;
+      ic.tint = true;
+    }
   }));
-  bindRange('iconSize', (v) => applyEdit((d) => (iconOf(d).size = v)), 'iconSizeVal');
-  bindRange('iconX', (v) => applyEdit((d) => (iconOf(d).x = v)), 'iconXVal');
-  bindRange('iconY', (v) => applyEdit((d) => (iconOf(d).y = v)), 'iconYVal');
-  bindRange('iconOpacity', (v) => applyEdit((d) => (iconOf(d).opacity = v)), 'iconOpacityVal');
+  bindRange('iconSize', (v) => applyRelative(state.ui.allIcons, iconLayersOf, refIcon(), 'size', v, 10, 100), 'iconSizeVal');
+  bindRange('iconX', (v) => applyRelative(state.ui.allIcons, iconLayersOf, refIcon(), 'x', v, -40, 40), 'iconXVal');
+  bindRange('iconY', (v) => applyRelative(state.ui.allIcons, iconLayersOf, refIcon(), 'y', v, -40, 40), 'iconYVal');
+  bindRange('iconOpacity', (v) => applyEdit((d) => {
+    for (const ic of iconLayersOf(d)) ic.opacity = v;
+  }), 'iconOpacityVal');
 
   document.getElementById('iconUploadSidebar').addEventListener('click', triggerIconUpload);
 
   bindSeg('iconAlign', (v) => applyEdit((d) => {
-    const ic = iconOf(d);
-    const [hh, vv] = v.split(':');
-    const off = Math.max(0, Math.min(40, Math.round(50 - ic.size / 2)));
-    ic.x = hh === 'left' ? -off : hh === 'right' ? off : 0;
-    ic.y = vv === 'top' ? -off : vv === 'bottom' ? off : 0;
+    for (const ic of iconLayersOf(d)) {
+      const [hh, vv] = v.split(':');
+      const off = Math.max(0, Math.min(40, Math.round(50 - ic.size / 2)));
+      ic.x = hh === 'left' ? -off : hh === 'right' ? off : 0;
+      ic.y = vv === 'top' ? -off : vv === 'bottom' ? off : 0;
+    }
   }));
 
   document.getElementById('textValue').addEventListener('input', (e) => {
+    if (state.ui.allText) return;
     activeText().value = e.target.value;
     syncSelectedLabel();
     emit();
   });
   bindSelect('textFont', (v) => {
-    const w = rebuildWeightOptions(v, activeText().weight);
+    const w = rebuildWeightOptions(v, refText().weight);
     applyEdit((d) => {
-      const t = textOf(d);
-      t.font = v;
-      t.weight = w;
+      for (const t of textLayersOf(d)) {
+        t.font = v;
+        t.weight = w;
+      }
     });
   });
-  bindSelect('textWeight', (v) => applyEdit((d) => (textOf(d).weight = v)));
-  bindRange('textSize', (v) => applyEdit((d) => (textOf(d).size = v)), 'textSizeVal');
-  bindColor('textColor', (v) => applyEdit((d) => (textOf(d).color = v)));
-  bindSeg('textAlign', (v) => applyEdit((d) => (textOf(d).align = v)));
-  bindRange('textX', (v) => applyEdit((d) => (textOf(d).x = v)), 'textXVal');
-  bindRange('textY', (v) => applyEdit((d) => (textOf(d).y = v)), 'textYVal');
+  bindSelect('textWeight', (v) => applyEdit((d) => {
+    for (const t of textLayersOf(d)) t.weight = v;
+  }));
+  bindRange('textSize', (v) => applyRelative(state.ui.allText, textLayersOf, refText(), 'size', v, 6, 96), 'textSizeVal');
+  bindColor('textColor', (v) => applyEdit((d) => {
+    for (const t of textLayersOf(d)) t.color = v;
+  }));
+  bindSeg('textAlign', (v) => applyEdit((d) => {
+    for (const t of textLayersOf(d)) t.align = v;
+  }));
+  bindRange('textX', (v) => applyRelative(state.ui.allText, textLayersOf, refText(), 'x', v, -40, 40), 'textXVal');
+  bindRange('textY', (v) => applyRelative(state.ui.allText, textLayersOf, refText(), 'y', v, -40, 40), 'textYVal');
 
   bindRange('shapeRadius', (v) => applyEdit((d) => (d.shape.radius = v)), 'shapeRadiusVal');
   bindRange('shapeBorder', (v) => applyEdit((d) => (d.shape.border = v)), 'shapeBorderVal');
@@ -318,11 +361,26 @@ export function renderTextLayerChips() {
   const wrap = document.getElementById('textLayerChips');
   wrap.innerHTML = '';
   const texts = editTarget().texts;
+  if (texts.length < 2) state.ui.allText = false;
+
+  if (texts.length > 1) {
+    const allChip = document.createElement('button');
+    allChip.textContent = 'All';
+    allChip.title = 'Size and move every text layer together';
+    allChip.classList.toggle('active', state.ui.allText);
+    allChip.addEventListener('click', () => {
+      state.ui.allText = true;
+      emit();
+    });
+    wrap.appendChild(allChip);
+  }
+
   texts.forEach((t, i) => {
     const chip = document.createElement('button');
     chip.textContent = t.value ? truncate(t.value, 10) : 'Layer ' + (i + 1);
-    chip.classList.toggle('active', i === state.ui.activeText);
+    chip.classList.toggle('active', !state.ui.allText && i === state.ui.activeText);
     chip.addEventListener('click', () => {
+      state.ui.allText = false;
       state.ui.activeText = i;
       emit();
     });
@@ -335,13 +393,14 @@ export function renderTextLayerChips() {
     add.textContent = '+ Layer';
     add.addEventListener('click', () => {
       texts.push(defaultTextLayer());
+      state.ui.allText = false;
       state.ui.activeText = texts.length - 1;
       emit();
     });
     wrap.appendChild(add);
   }
 
-  if (texts.length > 1) {
+  if (texts.length > 1 && !state.ui.allText) {
     const del = document.createElement('button');
     del.className = 'chip-action';
     del.textContent = 'Delete layer';
@@ -358,11 +417,26 @@ export function renderIconLayerChips() {
   const wrap = document.getElementById('iconLayerChips');
   wrap.innerHTML = '';
   const icons = editTarget().icons;
+  if (icons.length < 2) state.ui.allIcons = false;
+
+  if (icons.length > 1) {
+    const allChip = document.createElement('button');
+    allChip.textContent = 'All';
+    allChip.title = 'Size and move every image layer together';
+    allChip.classList.toggle('active', state.ui.allIcons);
+    allChip.addEventListener('click', () => {
+      state.ui.allIcons = true;
+      emit();
+    });
+    wrap.appendChild(allChip);
+  }
+
   icons.forEach((ic, i) => {
     const chip = document.createElement('button');
     chip.textContent = ic.name ? truncate(ic.name.split(':').pop(), 10) : 'Layer ' + (i + 1);
-    chip.classList.toggle('active', i === state.ui.activeIcon);
+    chip.classList.toggle('active', !state.ui.allIcons && i === state.ui.activeIcon);
     chip.addEventListener('click', () => {
+      state.ui.allIcons = false;
       state.ui.activeIcon = i;
       emit();
     });
@@ -375,13 +449,14 @@ export function renderIconLayerChips() {
     add.textContent = '+ Layer';
     add.addEventListener('click', () => {
       icons.push(defaultIconLayer());
+      state.ui.allIcons = false;
       state.ui.activeIcon = icons.length - 1;
       emit();
     });
     wrap.appendChild(add);
   }
 
-  if (icons.length > 1) {
+  if (icons.length > 1 && !state.ui.allIcons) {
     const del = document.createElement('button');
     del.className = 'chip-action';
     del.textContent = 'Delete layer';
@@ -416,14 +491,17 @@ export function syncInputsFromState() {
   setRange('bgBlend', d.bg.blend === undefined ? 100 : d.bg.blend, 'bgBlendVal');
   setVal('bgImageFit', d.bg.imageFit);
   setRange('bgImageDim', d.bg.imageDim, 'bgImageDimVal');
-  const ic = activeIcon();
+  const ic = refIcon();
   setVal('iconColor', ic.color);
   setRange('iconSize', ic.size, 'iconSizeVal');
   setRange('iconX', ic.x, 'iconXVal');
   setRange('iconY', ic.y, 'iconYVal');
   setRange('iconOpacity', ic.opacity === undefined ? 100 : ic.opacity, 'iconOpacityVal');
-  const t = activeText();
-  setVal('textValue', t.value);
+  const t = refText();
+  const textField = document.getElementById('textValue');
+  textField.disabled = state.ui.allText;
+  setVal('textValue', state.ui.allText ? '' : t.value);
+  textField.placeholder = state.ui.allText ? 'Pick a single layer to edit its text' : 'PC';
   setVal('textFont', t.font);
   rebuildWeightOptions(t.font, t.weight);
   setRange('textSize', t.size, 'textSizeVal');
@@ -446,7 +524,9 @@ export function syncInputsFromState() {
   setVal('seriesFrom', state.series.from);
   setVal('seriesTo', state.series.to);
 
-  document.getElementById('clearIcon').disabled = !ic.svg;
+  document.getElementById('clearIcon').disabled = state.ui.allIcons || !ic.svg;
+  document.getElementById('openIconPicker').disabled = state.ui.allIcons;
+  document.getElementById('iconUploadSidebar').disabled = state.ui.allIcons;
   document.getElementById('exportZip').disabled = state.series.mode === 'off';
 
   const off = iconAnchorOffset();
