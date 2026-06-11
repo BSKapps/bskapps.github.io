@@ -134,6 +134,14 @@ iframe[src*="lemonsqueezy.com"] {
 
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
+.tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.tile-mini { padding: 16px 16px 14px; }
+.tile-mini .tile-head { gap: 10px; }
+.tile-mini .tile-icon { width: 40px; height: 40px; border-radius: 9px; }
+.tile-mini h2 { font-size: 0.98rem; line-height: 1.25; }
+.tile-mini .tile-line { font-size: 0.83rem; margin: 12px 0 12px; }
+.tile-mini .tile-meta { font-size: 0.64rem; }
+
 .tile {
     background: var(--card);
     border: 1px solid var(--border);
@@ -423,6 +431,7 @@ footer a:hover { color: var(--heading); }
     .nav-links { gap: 16px; }
     .hero h1 { font-size: 1.6rem; }
     .grid { grid-template-columns: 1fr; }
+    .tools-grid { grid-template-columns: 1fr; }
     .game-card { flex-direction: column; align-items: center; text-align: center; }
     .game-icon { width: 64px; height: 64px; }
     .product-header h1 { font-size: 1.8rem; }
