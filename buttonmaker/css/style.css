@@ -758,6 +758,7 @@ body {
   #seriesPreview { order: 2; width: 100%; }
   .panel { order: 3; position: static; max-height: none; border-right: none; border-top: 1px solid var(--border); }
   .stage-cards { order: 4; flex-direction: column; padding: 0 12px 24px; box-sizing: border-box; width: 100%; }
+  .stage-cards .section { flex: 0 0 auto; min-height: 0; }
   .preset-actions { flex-wrap: wrap; }
   .preset-actions input[type="text"] { flex: 1 1 100%; }
   .app-header { flex-direction: column; gap: 4px; }

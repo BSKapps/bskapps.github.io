@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v45 - 2026-06-11
+- Mobile layout fix: the Download card no longer overlaps the footer note. Stacked step cards were locked to a fixed 420px height in a column, so the Download card's taller content spilled past its border into the footer; cards now size to their content on narrow screens.
+
 ## v44 - 2026-06-11
 - Mobile layout fix: step order is now 1 (presets), canvas, 2 (editing), 3 (set), 4 (download).
 
