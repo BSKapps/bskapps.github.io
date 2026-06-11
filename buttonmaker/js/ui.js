@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer } from './state.js?v=14';
-import { openIconModal, triggerIconUpload } from './icons.js?v=14';
-import { seriesVariants } from './series.js?v=14';
+import { state, emit, deepClone, defaultTextLayer } from './state.js?v=15';
+import { openIconModal, triggerIconUpload } from './icons.js?v=15';
+import { seriesVariants } from './series.js?v=15';
 
 let dragIndex = null;
 
@@ -129,15 +129,7 @@ export function initUI() {
   });
 
   document.getElementById('seriesConvertList').addEventListener('click', () => {
-    const from = Math.min(state.series.from, state.series.to);
-    const to = Math.max(state.series.from, state.series.to);
-    const count = Math.min(to - from + 1, 64);
-    state.series.items = Array.from({ length: count }, (_, i) => ({ label: String(from + i), color: '' }));
-    for (const t of state.design.texts) {
-      t.value = t.value.replaceAll('{n}', '{label}');
-    }
-    state.series.mode = 'list';
-    renderSeriesItems();
+    convertNumberedToList();
     emit();
   });
 
@@ -171,6 +163,18 @@ export function initUI() {
   renderSeriesItems();
   renderTextLayerChips();
   syncInputsFromState();
+}
+
+export function convertNumberedToList() {
+  const from = Math.min(state.series.from, state.series.to);
+  const to = Math.max(state.series.from, state.series.to);
+  const count = Math.min(to - from + 1, 64);
+  state.series.items = Array.from({ length: count }, (_, i) => ({ label: String(from + i), color: '' }));
+  for (const t of state.design.texts) {
+    t.value = t.value.replaceAll('{n}', '{label}');
+  }
+  state.series.mode = 'list';
+  renderSeriesItems();
 }
 
 export function renderTextLayerChips() {

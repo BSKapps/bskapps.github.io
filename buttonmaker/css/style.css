@@ -445,7 +445,13 @@ body {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
 
-.series-item { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.series-item { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: grab; }
+
+.series-item:active { cursor: grabbing; }
+
+#preview.drop-ready { outline: 2px dashed var(--border-strong); outline-offset: 5px; }
+
+#preview.drop-target { outline: 3px dashed var(--brand); outline-offset: 5px; }
 
 .series-item span { color: var(--muted); font-size: 0.8rem; }
 
