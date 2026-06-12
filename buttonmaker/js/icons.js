@@ -1,4 +1,4 @@
-import { state, emit, editTargets } from './state.js?v=48';
+import { state, emit, editTargets } from './state.js?v=49';
 
 const API = 'https://api.iconify.design';
 
@@ -128,7 +128,7 @@ function renderIcons(ids, results) {
     btn.title = id;
     const img = document.createElement('img');
     img.loading = 'lazy';
-    img.src = API + '/' + id.replace(':', '/') + '.svg';
+    img.src = API + '/' + id.replace(':', '/') + '.svg?color=%23E4E4E7';
     btn.appendChild(img);
     btn.addEventListener('click', () => pickIcon(id));
     results.appendChild(btn);

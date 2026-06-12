@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v49 - 2026-06-12
+- Icon search results show true colours: coloured icons (logos, emoji) no longer display inverted in the picker grid. Monochrome icons are requested light from the API (?color=) instead of CSS-inverting everything.
+
 ## v48 - 2026-06-12
 - "Blank" preset first in the strip: a plain empty button (no text, icon or border) so starting from scratch does not require finding the Start fresh button.
 
