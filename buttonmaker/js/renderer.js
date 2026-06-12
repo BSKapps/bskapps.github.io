@@ -42,6 +42,15 @@ export async function renderDesign(canvas, design, opts = {}) {
     ctx.clip();
   }
 
+  const faceRot = (((design.shape.rotation || 0) % 360) * Math.PI) / 180;
+  const pad = faceRot ? size * 0.21 : 0;
+  ctx.save();
+  if (faceRot) {
+    ctx.translate(size / 2, size / 2);
+    ctx.rotate(faceRot);
+    ctx.translate(-size / 2, -size / 2);
+  }
+
   const bg = design.bg;
   if (bg.mode === 'gradient') {
     const a = ((bg.angle - 90) * Math.PI) / 180;
@@ -58,21 +67,39 @@ export async function renderDesign(canvas, design, opts = {}) {
     g.addColorStop(Math.max(0, 0.5 - blend / 200), bg.gradFrom);
     g.addColorStop(Math.min(1, 0.5 + blend / 200), bg.gradTo);
     ctx.fillStyle = g;
-    ctx.fillRect(0, 0, size, size);
+    ctx.fillRect(-pad, -pad, size + pad * 2, size + pad * 2);
   } else if (bg.mode === 'image' && bg.imageData) {
     ctx.fillStyle = '#000000';
-    ctx.fillRect(0, 0, size, size);
+    ctx.fillRect(-pad, -pad, size + pad * 2, size + pad * 2);
     try {
       const img = await loadImage(bg.imageData);
-      drawFitted(ctx, img, size, bg.imageFit);
+      const imgRot = ((bg.imageRotation || 0) * Math.PI) / 180;
+      const ipad = imgRot || faceRot ? size * 0.21 : 0;
+      ctx.save();
+      if (imgRot) {
+        ctx.translate(size / 2, size / 2);
+        ctx.rotate(imgRot);
+        ctx.translate(-size / 2, -size / 2);
+      }
+      if (bg.imageFit === 'contain') drawFitted(ctx, img, 0, size, bg.imageFit);
+      else drawFitted(ctx, img, -ipad, size + ipad * 2, bg.imageFit);
+      ctx.restore();
     } catch (e) {}
     if (bg.imageDim > 0) {
       ctx.fillStyle = 'rgba(0,0,0,' + bg.imageDim / 100 + ')';
-      ctx.fillRect(0, 0, size, size);
+      ctx.fillRect(-pad, -pad, size + pad * 2, size + pad * 2);
     }
   } else {
     ctx.fillStyle = bg.color;
-    ctx.fillRect(0, 0, size, size);
+    ctx.fillRect(-pad, -pad, size + pad * 2, size + pad * 2);
+  }
+
+  const zoom = (design.shape.zoom === undefined ? 100 : design.shape.zoom) / 100;
+  ctx.save();
+  if (zoom !== 1) {
+    ctx.translate(size / 2, size / 2);
+    ctx.scale(zoom, zoom);
+    ctx.translate(-size / 2, -size / 2);
   }
 
   const icons = design.icons || (design.icon ? [design.icon] : []);
@@ -103,7 +130,16 @@ export async function renderDesign(canvas, design, opts = {}) {
       const x = size / 2 - w / 2 + (icon.x / 100) * size;
       const y = size / 2 - h / 2 + (icon.y / 100) * size;
       ctx.globalAlpha = (icon.opacity === undefined ? 100 : icon.opacity) / 100;
-      ctx.drawImage(img, x, y, w, h);
+      const rot = ((icon.rotation || 0) * Math.PI) / 180;
+      if (rot) {
+        ctx.save();
+        ctx.translate(x + w / 2, y + h / 2);
+        ctx.rotate(rot);
+        ctx.drawImage(img, -w / 2, -h / 2, w, h);
+        ctx.restore();
+      } else {
+        ctx.drawImage(img, x, y, w, h);
+      }
       ctx.globalAlpha = 1;
     } catch (e) {}
   }
@@ -141,6 +177,24 @@ export async function renderDesign(canvas, design, opts = {}) {
       }
       const ox = ((text.x || 0) / 100) * size;
       const oy = ((text.y || 0) / 100) * size;
+      const rot = ((text.rotation || 0) * Math.PI) / 180;
+      if (rot) {
+        let maxW = 0;
+        for (const line of lines) maxW = Math.max(maxW, ctx.measureText(line).width);
+        const px = (h === 'left' ? pad + maxW / 2 : h === 'right' ? size - pad - maxW / 2 : size / 2) + ox;
+        let py;
+        if (v === 'center') {
+          py = size / 2 + oy;
+        } else {
+          py = startY + ((lines.length - 1) * lineHeight) / 2 + oy;
+          if (v === 'top') py += (text.size * u) / 2;
+          else py -= (text.size * u) / 2;
+        }
+        ctx.save();
+        ctx.translate(px, py);
+        ctx.rotate(rot);
+        ctx.translate(-px, -py);
+      }
       lines.forEach((line, i) => {
         let dx = 0;
         if (h === 'center') {
@@ -151,8 +205,12 @@ export async function renderDesign(canvas, design, opts = {}) {
         }
         ctx.fillText(line, x + dx + ox, startY + i * lineHeight + oy);
       });
+      if (rot) ctx.restore();
     }
   }
+
+  ctx.restore();
+  ctx.restore();
 
   if (design.shape.border > 0) {
     const bw = design.shape.border * u;
@@ -169,9 +227,9 @@ export async function renderDesign(canvas, design, opts = {}) {
   ctx.restore();
 }
 
-function drawFitted(ctx, img, size, fit) {
+function drawFitted(ctx, img, off, size, fit) {
   if (fit === 'stretch') {
-    ctx.drawImage(img, 0, 0, size, size);
+    ctx.drawImage(img, off, off, size, size);
     return;
   }
   const ratio = img.width / img.height;
@@ -184,7 +242,7 @@ function drawFitted(ctx, img, size, fit) {
     if (ratio > 1) h = size / ratio;
     else w = size * ratio;
   }
-  ctx.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
+  ctx.drawImage(img, off + (size - w) / 2, off + (size - h) / 2, w, h);
 }
 
 export async function renderToDataUrl(design, size, opts = {}) {

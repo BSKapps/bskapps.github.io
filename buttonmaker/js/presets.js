@@ -1,5 +1,5 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=45';
-import { renderDesign } from './renderer.js?v=45';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=46';
+import { renderDesign } from './renderer.js?v=46';
 
 const STORE_KEY = 'cbm-presets-v1';
 

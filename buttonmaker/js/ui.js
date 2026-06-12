@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=45';
-import { triggerIconUpload } from './icons.js?v=45';
-import { seriesVariants, hasToken } from './series.js?v=45';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=46';
+import { triggerIconUpload } from './icons.js?v=46';
+import { seriesVariants, hasToken } from './series.js?v=46';
 
 const selectionSnapshots = new Map();
 
@@ -292,6 +292,7 @@ export function initUI() {
   bindRange('bgBlend', (v) => applyEdit((d) => (d.bg.blend = v)), 'bgBlendVal');
   bindSelect('bgImageFit', (v) => applyEdit((d) => (d.bg.imageFit = v)));
   bindRange('bgImageDim', (v) => applyEdit((d) => (d.bg.imageDim = v)), 'bgImageDimVal');
+  bindRange('bgImageRotate', (v) => applyEdit((d) => (d.bg.imageRotation = v)), 'bgImageRotateVal');
 
   document.getElementById('bgImageFile').addEventListener('change', (e) => {
     const file = e.target.files[0];
@@ -319,6 +320,7 @@ export function initUI() {
   bindRange('iconOpacity', (v) => applyEdit((d) => {
     for (const ic of iconLayersOf(d)) ic.opacity = v;
   }), 'iconOpacityVal');
+  bindRange('iconRotate', (v) => applyRelative(state.ui.allIcons, iconLayersOf, refIcon(), 'rotation', v, -180, 180), 'iconRotateVal');
 
   document.getElementById('iconUploadSidebar').addEventListener('click', triggerIconUpload);
 
@@ -359,10 +361,13 @@ export function initUI() {
   }));
   bindRange('textX', (v) => applyRelative(state.ui.allText, textLayersOf, refText(), 'x', v, -40, 40), 'textXVal');
   bindRange('textY', (v) => applyRelative(state.ui.allText, textLayersOf, refText(), 'y', v, -40, 40), 'textYVal');
+  bindRange('textRotate', (v) => applyRelative(state.ui.allText, textLayersOf, refText(), 'rotation', v, -180, 180), 'textRotateVal');
 
   bindRange('shapeRadius', (v) => applyEdit((d) => (d.shape.radius = v)), 'shapeRadiusVal');
   bindRange('shapeBorder', (v) => applyEdit((d) => (d.shape.border = v)), 'shapeBorderVal');
   bindColor('shapeBorderColor', (v) => applyEdit((d) => (d.shape.borderColor = v)));
+  bindRange('shapeRotate', (v) => applyEdit((d) => (d.shape.rotation = v)), 'shapeRotateVal');
+  bindRange('shapeZoom', (v) => applyEdit((d) => (d.shape.zoom = v)), 'shapeZoomVal');
 
   bindSeg('seriesMode', (v) => {
     if (v !== 'list') releaseSelection();
@@ -460,15 +465,18 @@ export function renderTextLayerChips() {
     wrap.appendChild(add);
   }
 
-  if (texts.length > 1 && !state.ui.allText) {
+  const activeT = texts[Math.max(0, Math.min(state.ui.activeText, texts.length - 1))];
+  if (!state.ui.allText && (texts.length > 1 || (activeT && activeT.value))) {
     const del = document.createElement('button');
     del.className = 'chip-action';
     del.textContent = 'Delete layer';
     del.addEventListener('click', () => {
       applyEdit((d) => {
         if (d.texts.length > 1 && state.ui.activeText < d.texts.length) d.texts.splice(state.ui.activeText, 1);
+        else Object.assign(d.texts[0], defaultTextLayer());
       });
       state.ui.activeText = Math.max(0, state.ui.activeText - 1);
+      syncSelectedLabels();
       emit();
     });
     wrap.appendChild(del);
@@ -556,12 +564,14 @@ export function syncInputsFromState() {
   setRange('bgBlend', d.bg.blend === undefined ? 100 : d.bg.blend, 'bgBlendVal');
   setVal('bgImageFit', d.bg.imageFit);
   setRange('bgImageDim', d.bg.imageDim, 'bgImageDimVal');
+  setRange('bgImageRotate', d.bg.imageRotation || 0, 'bgImageRotateVal');
   const ic = refIcon();
   setVal('iconColor', ic.color);
   setRange('iconSize', ic.size, 'iconSizeVal');
   setRange('iconX', ic.x, 'iconXVal');
   setRange('iconY', ic.y, 'iconYVal');
   setRange('iconOpacity', ic.opacity === undefined ? 100 : ic.opacity, 'iconOpacityVal');
+  setRange('iconRotate', ic.rotation || 0, 'iconRotateVal');
   const t = refText();
   const textField = document.getElementById('textValue');
   const listEditAll = state.series.mode === 'list' && !state.ui.selectedItems.length;
@@ -578,9 +588,12 @@ export function syncInputsFromState() {
   setVal('textColor', t.color);
   setRange('textX', t.x || 0, 'textXVal');
   setRange('textY', t.y || 0, 'textYVal');
+  setRange('textRotate', t.rotation || 0, 'textRotateVal');
   setRange('shapeRadius', d.shape.radius, 'shapeRadiusVal');
   setRange('shapeBorder', d.shape.border, 'shapeBorderVal');
   setVal('shapeBorderColor', d.shape.borderColor);
+  setRange('shapeRotate', d.shape.rotation || 0, 'shapeRotateVal');
+  setRange('shapeZoom', d.shape.zoom === undefined ? 100 : d.shape.zoom, 'shapeZoomVal');
 
   setSeg('bgMode', d.bg.mode);
   document.getElementById('bgSolidRow').classList.toggle('hidden', d.bg.mode !== 'solid');

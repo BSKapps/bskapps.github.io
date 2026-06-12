@@ -1,4 +1,4 @@
-export const APP_VERSION = '45';
+export const APP_VERSION = '46';
 
 export function defaultTextLayer() {
   return {
@@ -9,7 +9,8 @@ export function defaultTextLayer() {
     color: '#ffffff',
     align: 'center:bottom',
     x: 0,
-    y: 0
+    y: 0,
+    rotation: 0
   };
 }
 
@@ -22,7 +23,8 @@ export function defaultIconLayer() {
     size: 52,
     x: 0,
     y: -6,
-    opacity: 100
+    opacity: 100,
+    rotation: 0
   };
 }
 
@@ -37,14 +39,17 @@ export function defaultDesign() {
       blend: 100,
       imageData: null,
       imageFit: 'cover',
-      imageDim: 0
+      imageDim: 0,
+      imageRotation: 0
     },
     icons: [defaultIconLayer()],
     texts: [defaultTextLayer()],
     shape: {
       radius: 0,
       border: 0,
-      borderColor: '#ffffff'
+      borderColor: '#ffffff',
+      rotation: 0,
+      zoom: 100
     }
   };
 }

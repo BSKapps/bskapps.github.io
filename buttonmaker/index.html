@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=45">
+<link rel="stylesheet" href="css/style.css?v=46">
 </head>
 <body>
 <header class="app-header">
@@ -73,6 +73,7 @@
             </select>
           </div>
           <div class="row"><label>Dim</label><input type="range" id="bgImageDim" min="0" max="80" value="0"><input type="number" class="val" id="bgImageDimVal" value="0"></div>
+          <div class="row"><label>Rotate</label><input type="range" id="bgImageRotate" min="-180" max="180" value="0"><input type="number" class="val" id="bgImageRotateVal" value="0"></div>
         </div>
       </div>
     </details>
@@ -107,6 +108,7 @@
         <div class="row"><label>Nudge X</label><input type="range" id="iconX" min="-40" max="40" value="0"><input type="number" class="val" id="iconXVal" value="0"></div>
         <div class="row"><label>Nudge Y</label><input type="range" id="iconY" min="-40" max="40" value="-6"><input type="number" class="val" id="iconYVal" value="-6"></div>
         <div class="row"><label>Opacity</label><input type="range" id="iconOpacity" min="10" max="100" value="100"><input type="number" class="val" id="iconOpacityVal" value="100"></div>
+        <div class="row"><label>Rotate</label><input type="range" id="iconRotate" min="-180" max="180" value="0"><input type="number" class="val" id="iconRotateVal" value="0"></div>
       </div>
     </details>
 
@@ -160,6 +162,7 @@
         </div>
         <div class="row"><label>Nudge X</label><input type="range" id="textX" min="-40" max="40" value="0"><input type="number" class="val" id="textXVal" value="0"></div>
         <div class="row"><label>Nudge Y</label><input type="range" id="textY" min="-40" max="40" value="0"><input type="number" class="val" id="textYVal" value="0"></div>
+        <div class="row"><label>Rotate</label><input type="range" id="textRotate" min="-180" max="180" value="0"><input type="number" class="val" id="textRotateVal" value="0"></div>
       </div>
     </details>
 
@@ -169,6 +172,8 @@
         <div class="row"><label>Border</label><input type="range" id="shapeBorder" min="0" max="8" value="0"><input type="number" class="val" id="shapeBorderVal" value="0"></div>
         <div class="row"><label>Border colour</label><input type="color" id="shapeBorderColor" value="#ffffff"></div>
         <div class="row"><label>Corners</label><input type="range" id="shapeRadius" min="0" max="35" value="0"><input type="number" class="val" id="shapeRadiusVal" value="0"></div>
+        <div class="row"><label>Rotate</label><input type="range" id="shapeRotate" min="-180" max="180" value="0"><input type="number" class="val" id="shapeRotateVal" value="0"></div>
+        <div class="row"><label>Zoom</label><input type="range" id="shapeZoom" min="25" max="200" value="100"><input type="number" class="val" id="shapeZoomVal" value="100"></div>
       </div>
     </details>
 
@@ -252,8 +257,8 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato or Corsair. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script>window.BM_V = '45';</script>
-<script src="vendor/jszip.min.js?v=45"></script>
-<script type="module" src="js/app.js?v=45"></script>
+<script>window.BM_V = '46';</script>
+<script src="vendor/jszip.min.js?v=46"></script>
+<script type="module" src="js/app.js?v=46"></script>
 </body>
 </html>

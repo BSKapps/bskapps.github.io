@@ -2,6 +2,11 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v46 - 2026-06-12
+- Rotation sliders (-180 to 180): per image layer (spins around its own centre), per text layer, background image (Image mode only), and Border/Shape gains a whole-face Rotate that spins background + images + text together while the border and corners stay put. Backgrounds draw oversized while rotated so corners never show empty. Works with the All chips and set selection like every other slider; old presets load as 0.
+- Zoom slider in Border/Shape (25 to 200): scales every image and text layer together around the button centre. Background keeps filling the button and the border/corners stay as set. Old presets load as 100.
+- Delete layer now appears with a single text layer too (when it has text): deleting the only layer clears it to a fresh empty one, so removing a set's label no longer requires adding a throwaway layer first.
+
 ## v45 - 2026-06-11
 - Mobile layout fix: the Download card no longer overlaps the footer note. Stacked step cards were locked to a fixed 420px height in a column, so the Download card's taller content spilled past its border into the footer; cards now size to their content on narrow screens.
 
