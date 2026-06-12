@@ -1,4 +1,4 @@
-export const APP_VERSION = '46';
+export const APP_VERSION = '47';
 
 export function defaultTextLayer() {
   return {
@@ -24,7 +24,8 @@ export function defaultIconLayer() {
     x: 0,
     y: -6,
     opacity: 100,
-    rotation: 0
+    rotation: 0,
+    reverse: false
   };
 }
 

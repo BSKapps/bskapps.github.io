@@ -2,6 +2,10 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v47 - 2026-06-12
+- Reverse checkbox in the Image section: flips the icon horizontally around its own centre (e.g. a right-curving arrow becomes left-curving). Per layer, composes with Rotate, works across sets like every other control.
+- Icon search understands AV terms: searches like transport, reaper, fader, mixer, daw, obs, protools, ableton and stream deck surface curated AV icons first, with normal web results below. QLab has no icon in any library - use Upload image for true brand logos.
+
 ## v46 - 2026-06-12
 - Rotation sliders (-180 to 180): per image layer (spins around its own centre), per text layer, background image (Image mode only), and Border/Shape gains a whole-face Rotate that spins background + images + text together while the border and corners stay put. Backgrounds draw oversized while rotated so corners never show empty. Works with the All chips and set selection like every other slider; old presets load as 0.
 - Zoom slider in Border/Shape (25 to 200): scales every image and text layer together around the button centre. Background keeps filling the button and the border/corners stay as set. Old presets load as 100.

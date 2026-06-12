@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=46';
-import { triggerIconUpload } from './icons.js?v=46';
-import { seriesVariants, hasToken } from './series.js?v=46';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=47';
+import { triggerIconUpload } from './icons.js?v=47';
+import { seriesVariants, hasToken } from './series.js?v=47';
 
 const selectionSnapshots = new Map();
 
@@ -321,6 +321,12 @@ export function initUI() {
     for (const ic of iconLayersOf(d)) ic.opacity = v;
   }), 'iconOpacityVal');
   bindRange('iconRotate', (v) => applyRelative(state.ui.allIcons, iconLayersOf, refIcon(), 'rotation', v, -180, 180), 'iconRotateVal');
+  document.getElementById('iconReverse').addEventListener('change', (e) => {
+    applyEdit((d) => {
+      for (const ic of iconLayersOf(d)) ic.reverse = e.target.checked;
+    });
+    emit();
+  });
 
   document.getElementById('iconUploadSidebar').addEventListener('click', triggerIconUpload);
 
@@ -572,6 +578,7 @@ export function syncInputsFromState() {
   setRange('iconY', ic.y, 'iconYVal');
   setRange('iconOpacity', ic.opacity === undefined ? 100 : ic.opacity, 'iconOpacityVal');
   setRange('iconRotate', ic.rotation || 0, 'iconRotateVal');
+  document.getElementById('iconReverse').checked = !!ic.reverse;
   const t = refText();
   const textField = document.getElementById('textValue');
   const listEditAll = state.series.mode === 'list' && !state.ui.selectedItems.length;

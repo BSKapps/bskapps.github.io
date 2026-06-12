@@ -131,10 +131,11 @@ export async function renderDesign(canvas, design, opts = {}) {
       const y = size / 2 - h / 2 + (icon.y / 100) * size;
       ctx.globalAlpha = (icon.opacity === undefined ? 100 : icon.opacity) / 100;
       const rot = ((icon.rotation || 0) * Math.PI) / 180;
-      if (rot) {
+      if (rot || icon.reverse) {
         ctx.save();
         ctx.translate(x + w / 2, y + h / 2);
-        ctx.rotate(rot);
+        if (rot) ctx.rotate(rot);
+        if (icon.reverse) ctx.scale(-1, 1);
         ctx.drawImage(img, -w / 2, -h / 2, w, h);
         ctx.restore();
       } else {

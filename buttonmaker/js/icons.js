@@ -1,4 +1,4 @@
-import { state, emit, editTargets } from './state.js?v=46';
+import { state, emit, editTargets } from './state.js?v=47';
 
 const API = 'https://api.iconify.design';
 
@@ -15,6 +15,26 @@ const STARTER = [
   'mdi:home', 'mdi:check-bold', 'mdi:close-thick', 'mdi:alert', 'mdi:information',
   'mdi:timer-outline', 'mdi:clock-outline', 'mdi:calendar', 'mdi:flag', 'mdi:star', 'mdi:bell', 'mdi:lock'
 ];
+
+const FADERS = ['ph:faders', 'ph:faders-bold', 'ph:faders-horizontal', 'mdi:tune-vertical', 'mdi:tune'];
+const TRANSPORT = ['mdi:play', 'mdi:pause', 'mdi:stop', 'mdi:record', 'mdi:skip-next', 'mdi:skip-previous', 'mdi:fast-forward', 'mdi:rewind', 'mdi:play-pause', 'material-symbols:eject'];
+const DAWS = ['fad:logo-reaper', 'fad:logo-protools', 'cbi:abletonlive', 'fad:logo-abletonlink'];
+
+const AV_PICKS = {
+  'transport': TRANSPORT,
+  'reaper': ['fad:logo-reaper'],
+  'protools': ['simple-icons:protools', 'fad:logo-protools'],
+  'pro tools': ['simple-icons:protools', 'fad:logo-protools'],
+  'ableton': ['cbi:abletonlive', 'fad:logo-abletonlink', 'skill-icons:ableton-dark'],
+  'obs': ['streamline-logos:obs-studio-logo', 'streamline-logos:obs-studio-logo-block', 'streamline-logos:obs-studio-logo-solid'],
+  'daw': DAWS,
+  'fader': FADERS,
+  'faders': FADERS,
+  'mixer': FADERS,
+  'mixing desk': FADERS,
+  'stream deck': ['arcticons:elgato-stream-deck-mobile'],
+  'streamdeck': ['arcticons:elgato-stream-deck-mobile']
+};
 
 let searchTimer = null;
 let lastQuery = '';
@@ -124,18 +144,26 @@ function showStarter(results, status) {
 async function runSearch(query, results, status) {
   lastQuery = query;
   status.textContent = 'Searching...';
+  const picks = AV_PICKS[query.toLowerCase()] || [];
   try {
     const res = await fetch(API + '/search?query=' + encodeURIComponent(query) + '&limit=96');
     const data = await res.json();
     if (lastQuery !== query) return;
-    if (!data.icons || !data.icons.length) {
+    const found = (data.icons || []).filter((id) => !picks.includes(id));
+    const merged = picks.concat(found);
+    if (!merged.length) {
       results.innerHTML = '';
       status.textContent = 'No icons found for "' + query + '"';
       return;
     }
-    renderIcons(data.icons, results);
-    status.textContent = data.icons.length + ' results';
+    renderIcons(merged, results);
+    status.textContent = picks.length ? 'AV picks first - ' + merged.length + ' results' : merged.length + ' results';
   } catch (e) {
+    if (picks.length) {
+      renderIcons(picks, results);
+      status.textContent = picks.length + ' results';
+      return;
+    }
     status.textContent = 'Search failed, check your connection';
   }
 }
