@@ -1,4 +1,4 @@
-export const APP_VERSION = '49';
+export const APP_VERSION = '50';
 
 export function defaultTextLayer() {
   return {
@@ -7,6 +7,7 @@ export function defaultTextLayer() {
     weight: '600',
     size: 11,
     color: '#ffffff',
+    opacity: 100,
     align: 'center:bottom',
     x: 0,
     y: 0,
@@ -34,6 +35,7 @@ export function defaultDesign() {
     bg: {
       mode: 'solid',
       color: '#1a2230',
+      opacity: 100,
       gradFrom: '#16324f',
       gradTo: '#0a0e14',
       angle: 135,

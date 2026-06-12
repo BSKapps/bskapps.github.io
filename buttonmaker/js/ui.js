@@ -284,6 +284,7 @@ export function initUI() {
     document.getElementById('bgSolidRow').classList.toggle('hidden', v !== 'solid');
     document.getElementById('bgGradientRows').classList.toggle('hidden', v !== 'gradient');
     document.getElementById('bgImageRows').classList.toggle('hidden', v !== 'image');
+    document.getElementById('bgOpacityRow').classList.toggle('hidden', v === 'image');
   });
   bindColor('bgColor', (v) => applyEdit((d) => (d.bg.color = v)));
   bindColor('bgColor2a', (v) => applyEdit((d) => (d.bg.gradFrom = v)));
@@ -291,6 +292,7 @@ export function initUI() {
   bindRange('bgAngle', (v) => applyEdit((d) => (d.bg.angle = v)), 'bgAngleVal');
   bindRange('bgBlend', (v) => applyEdit((d) => (d.bg.blend = v)), 'bgBlendVal');
   bindSelect('bgImageFit', (v) => applyEdit((d) => (d.bg.imageFit = v)));
+  bindRange('bgOpacity', (v) => applyEdit((d) => (d.bg.opacity = v)), 'bgOpacityVal');
   bindRange('bgImageDim', (v) => applyEdit((d) => (d.bg.imageDim = v)), 'bgImageDimVal');
   bindRange('bgImageRotate', (v) => applyEdit((d) => (d.bg.imageRotation = v)), 'bgImageRotateVal');
 
@@ -362,6 +364,7 @@ export function initUI() {
   bindColor('textColor', (v) => applyEdit((d) => {
     for (const t of textLayersOf(d)) t.color = v;
   }));
+  bindRange('textOpacity', (v) => applyRelative(state.ui.allText, textLayersOf, refText(), 'opacity', v, 10, 100), 'textOpacityVal');
   bindSeg('textAlign', (v) => applyEdit((d) => {
     for (const t of textLayersOf(d)) t.align = v;
   }));
@@ -568,6 +571,7 @@ export function syncInputsFromState() {
   setVal('bgColor2b', d.bg.gradTo);
   setRange('bgAngle', d.bg.angle, 'bgAngleVal');
   setRange('bgBlend', d.bg.blend === undefined ? 100 : d.bg.blend, 'bgBlendVal');
+  setRange('bgOpacity', d.bg.opacity === undefined ? 100 : d.bg.opacity, 'bgOpacityVal');
   setVal('bgImageFit', d.bg.imageFit);
   setRange('bgImageDim', d.bg.imageDim, 'bgImageDimVal');
   setRange('bgImageRotate', d.bg.imageRotation || 0, 'bgImageRotateVal');
@@ -593,6 +597,7 @@ export function syncInputsFromState() {
   rebuildWeightOptions(t.font, t.weight);
   setRange('textSize', t.size, 'textSizeVal');
   setVal('textColor', t.color);
+  setRange('textOpacity', t.opacity === undefined ? 100 : t.opacity, 'textOpacityVal');
   setRange('textX', t.x || 0, 'textXVal');
   setRange('textY', t.y || 0, 'textYVal');
   setRange('textRotate', t.rotation || 0, 'textRotateVal');
@@ -606,6 +611,7 @@ export function syncInputsFromState() {
   document.getElementById('bgSolidRow').classList.toggle('hidden', d.bg.mode !== 'solid');
   document.getElementById('bgGradientRows').classList.toggle('hidden', d.bg.mode !== 'gradient');
   document.getElementById('bgImageRows').classList.toggle('hidden', d.bg.mode !== 'image');
+  document.getElementById('bgOpacityRow').classList.toggle('hidden', d.bg.mode === 'image');
   setSeg('textAlign', t.align);
 
   setSeg('seriesMode', state.series.mode);

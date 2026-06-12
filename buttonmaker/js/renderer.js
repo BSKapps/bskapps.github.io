@@ -52,6 +52,7 @@ export async function renderDesign(canvas, design, opts = {}) {
   }
 
   const bg = design.bg;
+  const bgAlpha = (bg.opacity === undefined ? 100 : bg.opacity) / 100;
   if (bg.mode === 'gradient') {
     const a = ((bg.angle - 90) * Math.PI) / 180;
     const cx = size / 2;
@@ -66,8 +67,10 @@ export async function renderDesign(canvas, design, opts = {}) {
     const blend = bg.blend === undefined ? 100 : bg.blend;
     g.addColorStop(Math.max(0, 0.5 - blend / 200), bg.gradFrom);
     g.addColorStop(Math.min(1, 0.5 + blend / 200), bg.gradTo);
+    ctx.globalAlpha = bgAlpha;
     ctx.fillStyle = g;
     ctx.fillRect(-pad, -pad, size + pad * 2, size + pad * 2);
+    ctx.globalAlpha = 1;
   } else if (bg.mode === 'image' && bg.imageData) {
     ctx.fillStyle = '#000000';
     ctx.fillRect(-pad, -pad, size + pad * 2, size + pad * 2);
@@ -90,8 +93,10 @@ export async function renderDesign(canvas, design, opts = {}) {
       ctx.fillRect(-pad, -pad, size + pad * 2, size + pad * 2);
     }
   } else {
+    ctx.globalAlpha = bgAlpha;
     ctx.fillStyle = bg.color;
     ctx.fillRect(-pad, -pad, size + pad * 2, size + pad * 2);
+    ctx.globalAlpha = 1;
   }
 
   const zoom = (design.shape.zoom === undefined ? 100 : design.shape.zoom) / 100;
@@ -148,6 +153,7 @@ export async function renderDesign(canvas, design, opts = {}) {
   if (opts.bakeText !== false) {
     for (const text of design.texts || []) {
       if (!text.value) continue;
+      ctx.globalAlpha = (text.opacity === undefined ? 100 : text.opacity) / 100;
       ctx.fillStyle = text.color;
       ctx.font = text.weight + ' ' + text.size * u + 'px "' + text.font + '", sans-serif';
       const [h, v] = text.align.split(':');
@@ -207,6 +213,7 @@ export async function renderDesign(canvas, design, opts = {}) {
         ctx.fillText(line, x + dx + ox, startY + i * lineHeight + oy);
       });
       if (rot) ctx.restore();
+      ctx.globalAlpha = 1;
     }
   }
 
