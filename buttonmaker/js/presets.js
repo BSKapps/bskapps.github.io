@@ -1,5 +1,5 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=47';
-import { renderDesign } from './renderer.js?v=47';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=48';
+import { renderDesign } from './renderer.js?v=48';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -28,6 +28,11 @@ function builtinPresets() {
     return d;
   };
   return [
+    {
+      name: 'Blank',
+      builtin: true,
+      design: mk(() => {})
+    },
     {
       name: 'Dark Label',
       builtin: true,
