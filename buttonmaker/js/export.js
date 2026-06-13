@@ -1,8 +1,8 @@
-import { state, primarySelection, defaultTextLayer } from './state.js?v=89';
-import { renderToDataUrl, renderDesign } from './renderer.js?v=89';
-import { seriesVariants, safeFileName } from './series.js?v=89';
-import { downloadBlob } from './presets.js?v=89';
-import { buildCompanionPage } from './companion.js?v=89';
+import { state, primarySelection, defaultTextLayer, buttonCount } from './state.js?v=90';
+import { renderToDataUrl, renderDesign } from './renderer.js?v=90';
+import { seriesVariants, safeFileName } from './series.js?v=90';
+import { downloadBlob } from './presets.js?v=90';
+import { buildCompanionPage } from './companion.js?v=90';
 
 const SS = 4;
 const STATE_LIFT = [0, 0.12, 0.22];
@@ -21,10 +21,6 @@ function dataUrlToBlob(dataUrl) {
   return new Blob([arr], { type: mime });
 }
 
-function activeOnState() {
-  return state.export.onState && state.export.onState.enabled ? state.export.onState : null;
-}
-
 function overlay(ctx, size, color, alpha) {
   if (!alpha) return;
   ctx.save();
@@ -35,45 +31,11 @@ function overlay(ctx, size, color, alpha) {
   ctx.restore();
 }
 
-function drawDot(ctx, size, color) {
-  const r = size * 0.15;
-  const cx = size - r - size * 0.08;
-  const cy = r + size * 0.08;
-  ctx.save();
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.lineWidth = Math.max(1, size * 0.025);
-  ctx.strokeStyle = 'rgba(0,0,0,0.55)';
-  ctx.stroke();
-  ctx.restore();
-}
-
-export function invertCanvas(canvas) {
-  const ctx = canvas.getContext('2d');
-  const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const d = img.data;
-  for (let i = 0; i < d.length; i += 4) {
-    d[i] = 255 - d[i];
-    d[i + 1] = 255 - d[i + 1];
-    d[i + 2] = 255 - d[i + 2];
-  }
-  ctx.putImageData(img, 0, 0);
-}
-
-function applyOnState(ctx, size, onState) {
-  if (!onState) return;
-  if (onState.effect === 'tint') overlay(ctx, size, onState.color, 0.4);
-  else if (onState.effect === 'glow') overlay(ctx, size, '#ffffff', 0.24);
-}
-
-export async function buildStrip(design, cellSize, onState) {
+export async function buildStrip(design, cellSize) {
   const off = document.createElement('canvas');
   off.width = cellSize * SS;
   off.height = cellSize * SS;
   await renderDesign(off, design, { bakeText: true });
-  if (onState && onState.effect === 'invert') invertCanvas(off);
 
   const strip = document.createElement('canvas');
   strip.width = cellSize * 3;
@@ -88,24 +50,10 @@ export async function buildStrip(design, cellSize, onState) {
     cctx.imageSmoothingEnabled = true;
     cctx.imageSmoothingQuality = 'high';
     cctx.drawImage(off, 0, 0, cellSize, cellSize);
-    applyOnState(cctx, cellSize, onState);
     overlay(cctx, cellSize, '#ffffff', STATE_LIFT[c]);
-    if (onState && onState.effect === 'dot') drawDot(cctx, cellSize, onState.color);
     sctx.drawImage(cell, c * cellSize, 0);
   }
   return strip;
-}
-
-async function renderWithOnState(design, size, onState) {
-  const canvas = document.createElement('canvas');
-  canvas.width = size;
-  canvas.height = size;
-  await renderDesign(canvas, design, { bakeText: true });
-  if (onState && onState.effect === 'invert') invertCanvas(canvas);
-  const ctx = canvas.getContext('2d');
-  applyOnState(ctx, size, onState);
-  if (onState && onState.effect === 'dot') drawDot(ctx, size, onState.color);
-  return canvas.toDataURL('image/png');
 }
 
 function uniqueName(used, base) {
@@ -116,31 +64,50 @@ function uniqueName(used, base) {
   return name;
 }
 
-export async function buildPngZip(zip, variants, size, onState) {
+export async function buildPngZip(zip, variants, size) {
   const used = new Set();
   for (let i = 0; i < variants.length; i++) {
     const v = variants[i];
     const name = uniqueName(used, safeFileName(v.companionText || v.label, i));
     const url = await renderToDataUrl(v.design, size, { bakeText: true });
     zip.file(name + '.png', url.split(',')[1], { base64: true });
-    if (onState) {
-      const onUrl = await renderWithOnState(v.design, size, onState);
-      zip.file(name + '_on.png', onUrl.split(',')[1], { base64: true });
-    }
   }
   return zip;
 }
 
-export async function buildReaperZip(zip, variants, onState) {
+export function reaperLinks(items) {
+  const idToIndex = {};
+  (items || []).forEach((it, i) => {
+    if (it && it.id) idToIndex[it.id] = i;
+  });
+  const skip = new Set();
+  const onStateFor = {};
+  (items || []).forEach((it, i) => {
+    if (it && it.onStateOf && idToIndex[it.onStateOf] !== undefined) {
+      const src = idToIndex[it.onStateOf];
+      if (onStateFor[src] === undefined) {
+        onStateFor[src] = i;
+        skip.add(i);
+      }
+    }
+  });
+  return { skip, onStateFor };
+}
+
+export async function buildReaperZip(zip, variants, links) {
+  const skip = links && links.skip ? links.skip : new Set();
+  const onStateFor = (links && links.onStateFor) || {};
   const used = new Set();
   for (let i = 0; i < variants.length; i++) {
+    if (skip.has(i)) continue;
     const v = variants[i];
     const name = uniqueName(used, safeFileName(v.companionText || v.label, i));
+    const onIdx = onStateFor[i];
     for (const s of REAPER_SIZES) {
-      const off = await buildStrip(v.design, s.cell, null);
-      zip.file('toolbar_icons/' + s.dir + name + '.png', off.toDataURL('image/png').split(',')[1], { base64: true });
-      if (onState) {
-        const on = await buildStrip(v.design, s.cell, onState);
+      const base = await buildStrip(v.design, s.cell);
+      zip.file('toolbar_icons/' + s.dir + name + '.png', base.toDataURL('image/png').split(',')[1], { base64: true });
+      if (onIdx !== undefined && variants[onIdx]) {
+        const on = await buildStrip(variants[onIdx].design, s.cell);
         zip.file('toolbar_icons/' + s.dir + name + '_on.png', on.toDataURL('image/png').split(',')[1], { base64: true });
       }
     }
@@ -161,13 +128,9 @@ function segControl(id, getSet) {
 
 export function updateExportControls() {
   const reaper = state.export.mode === 'reaper';
-  const on = state.export.onState;
   document.getElementById('sdExports').classList.toggle('hidden', reaper);
   document.getElementById('reaperExports').classList.toggle('hidden', !reaper);
-  document.getElementById('onStateRows').classList.toggle('hidden', !on.enabled);
-  document.getElementById('onStateColorRow').classList.toggle('hidden', on.effect === 'glow' || on.effect === 'invert');
-  document.getElementById('exportPng').disabled = on.enabled;
-  document.getElementById('exportZip').disabled = !on.enabled && state.series.mode === 'off';
+  document.getElementById('exportZip').disabled = buttonCount() <= 1;
 }
 
 export function initExport() {
@@ -179,17 +142,6 @@ export function initExport() {
   segControl('exportMode', (v) => {
     state.export.mode = v;
     updateExportControls();
-  });
-  segControl('onStateEffect', (v) => {
-    state.export.onState.effect = v;
-    updateExportControls();
-  });
-  document.getElementById('onStateToggle').addEventListener('change', (e) => {
-    state.export.onState.enabled = e.target.checked;
-    updateExportControls();
-  });
-  document.getElementById('onStateColor').addEventListener('input', (e) => {
-    state.export.onState.color = e.target.value;
   });
 
   updateExportControls();
@@ -207,14 +159,15 @@ async function exportPng() {
 
 async function exportZip() {
   const zip = new JSZip();
-  await buildPngZip(zip, seriesVariants(), state.export.size, activeOnState());
+  await buildPngZip(zip, seriesVariants(), state.export.size);
   const blob = await zip.generateAsync({ type: 'blob' });
   downloadBlob(blob, 'buttons.zip');
 }
 
 async function exportReaper() {
   const zip = new JSZip();
-  await buildReaperZip(zip, seriesVariants(), activeOnState());
+  const links = state.series.mode === 'list' ? reaperLinks(state.series.items) : null;
+  await buildReaperZip(zip, seriesVariants(), links);
   const blob = await zip.generateAsync({ type: 'blob' });
   downloadBlob(blob, 'reaper-toolbar-icons.zip');
 }

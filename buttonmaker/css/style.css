@@ -515,6 +515,10 @@ body {
 .help-card .hint { margin: 7px 0; }
 .help-card .hint b { color: var(--text); font-weight: 600; }
 
+.effects-card { width: min(860px, 100%); margin-bottom: 0; }
+.effect-elements { display: flex; flex-wrap: wrap; gap: 16px; margin: 2px 0 8px; }
+.effect-elements .check { gap: 6px; font-size: 0.88rem; color: var(--text); cursor: pointer; }
+
 .sub-options { margin-top: 10px; border-top: 1px solid var(--border); padding-top: 8px; }
 
 .sub-options summary {
@@ -616,6 +620,29 @@ body {
 #preview.drop-target { outline: 3px dashed var(--brand); outline-offset: 5px; }
 
 .series-item span { color: var(--muted); font-size: 0.8rem; }
+
+.series-on-badge {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background: var(--brand);
+  color: #16181c;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.series-preview.compact { gap: 10px; }
+.series-preview.compact canvas { width: 64px; height: 64px; }
+.series-preview.compact .series-add { width: 64px; height: 64px; font-size: 1.4rem; }
+
+.series-preview.tiny { gap: 8px; }
+.series-preview.tiny canvas { width: 48px; height: 48px; }
+.series-preview.tiny .series-add { width: 48px; height: 48px; font-size: 1.1rem; }
 
 .preset-list { display: flex; flex-direction: column; gap: 6px; margin: 8px 0; }
 
@@ -897,6 +924,7 @@ body {
   .stage-cards { order: 4; flex-direction: column; padding: 0 12px 24px; box-sizing: border-box; width: 100%; }
   .stage-cards .section { flex: 0 0 auto; min-height: 0; }
   .edit-banner { order: 2; width: calc(100% - 24px); margin: 0 12px 12px; }
+  .effects-card { order: 4; width: calc(100% - 24px); margin: 0 12px 12px; }
   .help-card { order: 5; width: calc(100% - 24px); margin: 0 12px 24px; }
   .preset-actions { flex-wrap: wrap; }
   .preset-actions input[type="text"] { flex: 1 1 100%; }

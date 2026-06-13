@@ -1,9 +1,11 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=89';
-import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=89';
-import { buildCompanionPage } from '../js/companion.js?v=89';
-import { renderToDataUrl } from '../js/renderer.js?v=89';
-import { selectListItem, releaseSelection } from '../js/ui.js?v=89';
-import { invertCanvas, buildStrip, buildReaperZip, buildPngZip } from '../js/export.js?v=89';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=90';
+import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=90';
+import { buildCompanionPage } from '../js/companion.js?v=90';
+import { renderToDataUrl } from '../js/renderer.js?v=90';
+import { selectListItem, releaseSelection } from '../js/ui.js?v=90';
+import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=90';
+import { applyEffectToDesign, invertHex, mixHex, makeOnState } from '../js/effects.js?v=90';
+import { addSetToCurrent } from '../js/presets.js?v=90';
 
 const results = [];
 
@@ -227,6 +229,102 @@ function run() {
   copied.texts[0].value = 'MUTATED';
   check('a copied button design detaches from the source variant', pv[1].design.texts[0].value === 'REC');
 
+  const mkItem = (label, color) => {
+    const d = defaultDesign();
+    d.texts[0].value = label;
+    if (color) d.bg.color = color;
+    return { label, color: '', design: d };
+  };
+
+  resetState();
+  state.design.texts[0].value = 'ARM';
+  state.design.bg.color = '#b51f1f';
+  state.effect = { type: 'tint', color: '#1f9d3a', strength: 40, elements: { bg: true, icon: true, text: true }, link: true };
+  makeOnState();
+  check('makeOnState on a single button creates a 2-button set', state.series.mode === 'list' && state.series.items.length === 2);
+  check('makeOnState links the on-state to its source id', !!state.series.items[0].id && state.series.items[1].onStateOf === state.series.items[0].id);
+  check('makeOnState bakes the effect into the on-state design', state.series.items[1].design.bg.color !== '#b51f1f');
+  check('makeOnState selects the new on-state', state.ui.selectedItems.length === 1 && state.ui.selectedItems[0] === 1);
+  releaseSelection();
+
+  resetState();
+  state.series.mode = 'list';
+  state.series.items = [mkItem('A', '#111111'), mkItem('B', '#222222')];
+  state.ui.selectedItems = [0];
+  state.effect = { type: 'invert', color: '#1f9d3a', strength: 40, elements: { bg: true, icon: true, text: true }, link: true };
+  makeOnState();
+  check('makeOnState inserts the on-state right after its source', state.series.items.length === 3 && !!state.series.items[1].onStateOf && state.series.items[2].label === 'B');
+  check('makeOnState invert bakes the inverted source colour', state.series.items[1].design.bg.color === invertHex('#111111'));
+  releaseSelection();
+
+  resetState();
+  state.series.mode = 'list';
+  state.series.items = [mkItem('A'), mkItem('B'), mkItem('C')];
+  state.ui.selectedItems = [0, 2];
+  state.effect = { type: 'glow', color: '#1f9d3a', strength: 50, elements: { bg: true, icon: true, text: true }, link: true };
+  makeOnState();
+  check('makeOnState multi-select adds an on-state after each selected source', state.series.items.length === 5 && state.series.items[1].label.endsWith(' on') && state.series.items[2].label === 'B' && state.series.items[4].label.endsWith(' on'));
+  releaseSelection();
+
+  resetState();
+  state.series.mode = 'list';
+  state.design.bg.color = '#0000aa';
+  state.design.texts[0].value = 'X';
+  state.series.items = [{ label: 'CAM', color: '' }];
+  state.ui.selectedItems = [0];
+  state.effect = { type: 'tint', color: '#00ff00', strength: 50, elements: { bg: true, icon: true, text: true }, link: true };
+  makeOnState();
+  check('makeOnState on an inherited item builds the on-state from the resolved look, not bare base', state.series.items[1].design.texts.some((t) => t.value === 'CAM') && state.series.items[1].design.bg.color !== '#0000aa');
+  releaseSelection();
+
+  resetState();
+  state.series.mode = 'list';
+  state.series.items = [mkItem('A')];
+  state.ui.selectedItems = [0];
+  state.effect = { type: 'tint', color: '#00ff00', strength: 40, elements: { bg: true, icon: true, text: true }, link: false };
+  makeOnState();
+  check('makeOnState with link off sets no id or onStateOf', state.series.items.length === 2 && !state.series.items[1].onStateOf && !state.series.items[0].id);
+  releaseSelection();
+
+  resetState();
+  state.series.mode = 'list';
+  state.series.items = Array.from({ length: 64 }, (_, i) => mkItem('B' + i));
+  state.ui.selectedItems = [];
+  state.effect = { type: 'tint', color: '#00ff00', strength: 40, elements: { bg: true, icon: true, text: true }, link: true };
+  const origAlert = window.alert;
+  let capMsg = '';
+  window.alert = (m) => { capMsg = m; };
+  makeOnState();
+  check('makeOnState refuses to exceed the 64-button cap and warns', state.series.items.length === 64 && /64/.test(capMsg));
+  resetState();
+  state.series.mode = 'list';
+  state.series.items = Array.from({ length: 63 }, (_, i) => mkItem('B' + i));
+  state.ui.selectedItems = [];
+  capMsg = '';
+  makeOnState();
+  check('makeOnState fills up to 64 then warns about the rest', state.series.items.length === 64 && /skipped/.test(capMsg));
+  window.alert = origAlert;
+  releaseSelection();
+
+  resetState();
+  const linkedPreset = {
+    name: 'Toggle Set',
+    design: defaultDesign(),
+    series: {
+      mode: 'list',
+      from: 1,
+      to: 2,
+      colorTarget: 'bg',
+      items: [
+        { id: 'src1', label: 'ARM', design: (() => { const d = defaultDesign(); d.bg.color = '#b51f1f'; d.texts[0].value = 'ARM'; return d; })() },
+        { onStateOf: 'src1', label: 'ARM on', design: (() => { const d = defaultDesign(); d.bg.color = '#1c5334'; d.texts[0].value = 'ARM'; return d; })() }
+      ]
+    }
+  };
+  addSetToCurrent(linkedPreset);
+  check('re-adding a saved set keeps the on-state link with a fresh id', state.series.items.length === 2 && !!state.series.items[0].id && state.series.items[0].id !== 'src1' && state.series.items[1].onStateOf === state.series.items[0].id);
+  releaseSelection();
+
   resetState();
 }
 
@@ -284,47 +382,71 @@ async function runAsync() {
   const stripBase = defaultDesign();
   stripBase.bg.color = '#1d6fd0';
   stripBase.texts[0].value = 'GO';
-  const offStrip = await buildStrip(stripBase, 30, null);
+  const offStrip = await buildStrip(stripBase, 30);
   check('reaper strip is 90x30 (three 30px cells)', offStrip.width === 90 && offStrip.height === 30);
-  const strip45 = await buildStrip(stripBase, 45, null);
+  const strip45 = await buildStrip(stripBase, 45);
   check('reaper 1.5x strip is 135x45', strip45.width === 135 && strip45.height === 45);
-  const offUrl = offStrip.toDataURL('image/png');
-  const tintStrip = await buildStrip(stripBase, 30, { enabled: true, effect: 'tint', color: '#1f9d3a' });
-  check('on-state tint changes the strip pixels', tintStrip.toDataURL('image/png') !== offUrl);
 
-  const invStrip = await buildStrip(stripBase, 30, { enabled: true, effect: 'invert', color: '#1f9d3a' });
-  check('on-state invert changes the strip pixels', invStrip.toDataURL('image/png') !== offUrl);
-  const redBase = defaultDesign();
-  redBase.bg.color = '#ff0000';
-  redBase.texts[0].value = '';
-  const redInv = await buildStrip(redBase, 30, { enabled: true, effect: 'invert', color: '#1f9d3a' });
-  const px = redInv.getContext('2d').getImageData(15, 15, 1, 1).data;
-  check('proper invert turns a red button cyan (full negative, not bg-only)', px[0] < 40 && px[1] > 200 && px[2] > 200);
-  const probe = document.createElement('canvas');
-  probe.width = 4;
-  probe.height = 4;
-  const pctx = probe.getContext('2d');
-  pctx.fillStyle = '#204060';
-  pctx.fillRect(0, 0, 4, 4);
-  invertCanvas(probe);
-  const ip = pctx.getImageData(1, 1, 1, 1).data;
-  check('invertCanvas inverts rgb and keeps alpha', ip[0] === 223 && ip[1] === 191 && ip[2] === 159 && ip[3] === 255);
+  check('invertHex flips a colour', invertHex('#000000') === '#ffffff' && invertHex('#204060') === '#dfbf9f');
+  check('mixHex blends halfway', mixHex('#000000', '#ffffff', 0.5) === '#808080');
+  const armBase = defaultDesign();
+  armBase.bg.color = '#1d1d22';
+  armBase.texts[0].value = 'ARM';
+  armBase.texts[0].color = '#ffffff';
+  const invAll = applyEffectToDesign(armBase, { type: 'invert', elements: { bg: true, icon: true, text: true } });
+  check('invert effect lightens a dark background', invAll.bg.color === invertHex('#1d1d22'));
+  check('invert effect darkens white text to black', invAll.texts[0].color === '#000000');
+  check('applyEffectToDesign does not mutate the source design', armBase.bg.color === '#1d1d22' && armBase.texts[0].color === '#ffffff');
+  const bgOnly = applyEffectToDesign(armBase, { type: 'invert', elements: { bg: true, icon: false, text: false } });
+  check('element-choice invert leaves text untouched when only background is chosen', bgOnly.texts[0].color === '#ffffff' && bgOnly.bg.color !== '#1d1d22');
+  const blackBg = defaultDesign();
+  blackBg.bg.color = '#000000';
+  const tintDesign = applyEffectToDesign(blackBg, { type: 'tint', color: '#00ff00', strength: 50, elements: { bg: true, icon: true, text: true } });
+  check('tint mixes the background toward the tint colour', tintDesign.bg.color === '#008000');
+  const glowDesign = applyEffectToDesign(blackBg, { type: 'glow', strength: 50, elements: { bg: true, icon: true, text: true } });
+  check('glow brightens the background toward white', glowDesign.bg.color === '#808080');
+  const dotDesign = applyEffectToDesign(defaultDesign(), { type: 'dot', color: '#1f9d3a' });
+  check('dot effect adds a coloured circle icon layer', dotDesign.icons.length === defaultDesign().icons.length + 1 && dotDesign.icons[dotDesign.icons.length - 1].color === '#1f9d3a');
+  const gradBase = defaultDesign();
+  gradBase.bg.mode = 'gradient';
+  gradBase.bg.gradFrom = '#000000';
+  gradBase.bg.gradTo = '#ffffff';
+  const gradInv = applyEffectToDesign(gradBase, { type: 'invert', elements: { bg: true, icon: true, text: true } });
+  check('invert effect inverts both gradient stops', gradInv.bg.gradFrom === '#ffffff' && gradInv.bg.gradTo === '#000000');
+
+  const links = reaperLinks([{ id: 'a1', label: 'ARM' }, { onStateOf: 'a1', label: 'ARM on' }]);
+  check('reaperLinks marks the on-state to skip and pairs it to its source', links.skip.has(1) && links.onStateFor[0] === 1 && !links.skip.has(0));
+  const dangling = reaperLinks([{ onStateOf: 'missing', label: 'orphan' }]);
+  check('reaperLinks ignores a dangling on-state link', dangling.skip.size === 0);
 
   const variants2 = [
     { design: defaultDesign(), label: 'Play', companionText: 'Play' },
     { design: defaultDesign(), label: 'Stop', companionText: 'Stop' }
   ];
-  const rzOff = fileKeys(await buildReaperZip(new JSZip(), variants2, null));
-  check('reaper zip has base + 150 + 200 per button', rzOff.includes('toolbar_icons/play.png') && rzOff.includes('toolbar_icons/150/play.png') && rzOff.includes('toolbar_icons/200/play.png'));
-  check('reaper zip covers every button, off-only = 6 files', rzOff.includes('toolbar_icons/stop.png') && rzOff.length === 6);
-  check('reaper zip off-only has no _on files', !rzOff.some((k) => k.endsWith('_on.png')));
-  const rzOn = fileKeys(await buildReaperZip(new JSZip(), variants2, { enabled: true, effect: 'tint', color: '#1f9d3a' }));
-  check('reaper zip with on-state adds name_on at every size = 12 files', rzOn.includes('toolbar_icons/play_on.png') && rzOn.includes('toolbar_icons/150/play_on.png') && rzOn.includes('toolbar_icons/200/play_on.png') && rzOn.length === 12);
+  const rzPlain = fileKeys(await buildReaperZip(new JSZip(), variants2, null));
+  check('reaper zip has base + 150 + 200 per button', rzPlain.includes('toolbar_icons/play.png') && rzPlain.includes('toolbar_icons/150/play.png') && rzPlain.includes('toolbar_icons/200/play.png'));
+  check('reaper zip covers every button, unlinked = 6 files', rzPlain.includes('toolbar_icons/stop.png') && rzPlain.length === 6);
+  check('reaper zip unlinked has no _on files', !rzPlain.some((k) => k.endsWith('_on.png')));
+  const linkedVariants = [
+    { design: defaultDesign(), label: 'Play', companionText: 'Play' },
+    { design: defaultDesign(), label: 'Play on', companionText: 'Play on' }
+  ];
+  const rzLinked = fileKeys(await buildReaperZip(new JSZip(), linkedVariants, { skip: new Set([1]), onStateFor: { 0: 1 } }));
+  check('linked on-state exports as the source name_on at every size', rzLinked.includes('toolbar_icons/play.png') && rzLinked.includes('toolbar_icons/play_on.png') && rzLinked.includes('toolbar_icons/150/play_on.png') && rzLinked.includes('toolbar_icons/200/play_on.png'));
+  check('linked on-state is not a standalone strip and totals 6 files', !rzLinked.includes('toolbar_icons/play-on.png') && rzLinked.length === 6);
 
-  const pzOff = fileKeys(await buildPngZip(new JSZip(), variants2, 72, null));
-  check('png zip off-only is one file per button', pzOff.length === 2 && !pzOff.some((k) => k.endsWith('_on.png')));
-  const pzOn = fileKeys(await buildPngZip(new JSZip(), variants2, 72, { enabled: true, effect: 'glow', color: '#1f9d3a' }));
-  check('png zip with on-state adds _on per button', pzOn.includes('play_on.png') && pzOn.includes('stop_on.png') && pzOn.length === 4);
+  const twoOn = reaperLinks([{ id: 's1', label: 'ARM' }, { onStateOf: 's1', label: 'ARM on 1' }, { onStateOf: 's1', label: 'ARM on 2' }]);
+  check('reaperLinks pairs only the first on-state of a source', twoOn.onStateFor[0] === 1 && twoOn.skip.has(1) && !twoOn.skip.has(2));
+  const threeVariants = [
+    { design: defaultDesign(), label: 'ARM', companionText: 'ARM' },
+    { design: defaultDesign(), label: 'ARM on 1', companionText: 'ARM on 1' },
+    { design: defaultDesign(), label: 'ARM on 2', companionText: 'ARM on 2' }
+  ];
+  const rzTwoOn = fileKeys(await buildReaperZip(new JSZip(), threeVariants, twoOn));
+  check('first on-state becomes name_on, the extra exports as its own strip', rzTwoOn.includes('toolbar_icons/arm.png') && rzTwoOn.includes('toolbar_icons/arm_on.png') && rzTwoOn.includes('toolbar_icons/arm-on-2.png'));
+
+  const pzOff = fileKeys(await buildPngZip(new JSZip(), variants2, 72));
+  check('png zip is one file per button with no _on', pzOff.length === 2 && pzOff.includes('play.png') && pzOff.includes('stop.png') && !pzOff.some((k) => k.endsWith('_on.png')));
 
   resetState();
 }

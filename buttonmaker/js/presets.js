@@ -1,7 +1,8 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=89';
-import { renderDesign } from './renderer.js?v=89';
-import { numberSet, variantsFor } from './series.js?v=89';
-import { releaseSelection } from './ui.js?v=89';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=90';
+import { renderDesign } from './renderer.js?v=90';
+import { numberSet, variantsFor } from './series.js?v=90';
+import { releaseSelection } from './ui.js?v=90';
+import { newId } from './effects.js?v=90';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -720,27 +721,46 @@ function addVariantToSet(v, preset) {
   setPickerStatus('Added "' + name + '" to your set.');
 }
 
-function addSetToCurrent(preset) {
+export function addSetToCurrent(preset) {
   const variants = presetButtonVariants(preset);
   if (!variants.length) return;
+  const srcItems = preset.series && preset.series.mode !== 'numbers' && Array.isArray(preset.series.items)
+    ? preset.series.items
+    : [];
   releaseSelection();
   if (state.series.mode === 'off') {
     const startBlank = isBlankDesign();
     state.series.mode = 'list';
     state.series.items = startBlank ? [] : [{ label: '', color: '', design: deepClone(state.design) }];
   }
-  let added = 0;
-  for (const v of variants) {
-    if (state.series.items.length >= 64) break;
-    state.series.items.push({ label: v.companionText || v.label || '', color: '', design: deepClone(v.design) });
-    added++;
+  const idMap = {};
+  const newItems = [];
+  for (let i = 0; i < variants.length; i++) {
+    if (state.series.items.length + newItems.length >= 64) break;
+    const v = variants[i];
+    const src = srcItems[i];
+    const item = { label: v.companionText || v.label || '', color: '', design: deepClone(v.design) };
+    if (src && src.id) {
+      const nid = newId();
+      idMap[src.id] = nid;
+      item.id = nid;
+    }
+    if (src && src.onStateOf) item.onStateOf = src.onStateOf;
+    newItems.push(item);
   }
+  for (const item of newItems) {
+    if (item.onStateOf) {
+      if (idMap[item.onStateOf]) item.onStateOf = idMap[item.onStateOf];
+      else delete item.onStateOf;
+    }
+  }
+  state.series.items.push(...newItems);
   fillNameFromPreset(preset);
   emit();
-  if (added < variants.length) {
-    setPickerStatus('Added ' + added + ' of the ' + preset.name + ' set, 64 buttons is the most you can have.');
+  if (newItems.length < variants.length) {
+    setPickerStatus('Added ' + newItems.length + ' of the ' + preset.name + ' set, 64 buttons is the most you can have.');
   } else {
-    setPickerStatus('Added the ' + preset.name + ' set (' + added + ' buttons).');
+    setPickerStatus('Added the ' + preset.name + ' set (' + newItems.length + ' buttons).');
   }
 }
 

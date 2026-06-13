@@ -2,6 +2,15 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v90 - 2026-06-14
+- On states and effects are now a design tool, not an export option. New "On state and effects" card: pick Tint, Glow, Invert or a status Dot, then "Make on state" to drop a real, editable on-state button into your set. Edit it like any other button, or duplicate it and lower its opacity to build a ramp.
+- Invert lets you choose what flips - background, icon, text, or any combination.
+- Effects apply to your single button (which becomes a set), the selected buttons, or the whole set.
+- Linked on states show an "on" badge and pair automatically on REAPER export as name_on, so you assign the base icon and REAPER finds the on state - no renaming.
+- Removed the old "Include active toggle state" checkbox from the Download card; the effects card replaces it.
+- "Download set as ZIP" is now greyed whenever there is only one button (previously a set trimmed back to one button could leave it enabled).
+- Large sets stay readable: button thumbnails shrink as the set grows past 24 and 40 buttons (cap is still 64).
+
 ## v89 - 2026-06-14
 - New preset picker: "1. Pick a starting point" now opens one "Choose buttons & sets" picker instead of the side-scrolling strip. Click any button to add it to your set, or "Add set" to add a whole row in one go.
 - Your own presets sit at the top of the picker, marked (user), with rename (double-click the name) and delete (x). Adding one of your own brings its name back into the Save box so you can edit it and Save over it.

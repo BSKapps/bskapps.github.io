@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, defaultSeries, editTarget, editTargets, primarySelection } from './state.js?v=89';
-import { triggerIconUpload } from './icons.js?v=89';
-import { seriesVariants, numberSet } from './series.js?v=89';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=90';
+import { triggerIconUpload } from './icons.js?v=90';
+import { seriesVariants, numberSet } from './series.js?v=90';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -677,9 +677,8 @@ export function syncInputsFromState() {
   document.getElementById('clearIcon').disabled = state.ui.allIcons || !ic.svg;
   document.getElementById('openIconPicker').disabled = state.ui.allIcons;
   document.getElementById('iconUploadSidebar').disabled = state.ui.allIcons;
-  const onStateOn = state.export.onState && state.export.onState.enabled;
-  document.getElementById('exportPng').disabled = onStateOn;
-  document.getElementById('exportZip').disabled = !onStateOn && state.series.mode === 'off';
+  document.getElementById('exportPng').disabled = false;
+  document.getElementById('exportZip').disabled = buttonCount() <= 1;
 
   setSeg('iconAlign', ic.align || 'center:center');
 }

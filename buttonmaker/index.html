@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=89">
+<link rel="stylesheet" href="css/style.css?v=90">
 </head>
 <body>
 <header class="app-header">
@@ -196,6 +196,31 @@
       <span id="editBannerLabel"></span>
       <button class="btn ghost small hidden" id="editAllBtn" title="Go back to editing the whole set">Edit all</button>
     </div>
+    <details class="section effects-card" open>
+      <summary>On state &amp; effects</summary>
+      <div class="section-body">
+        <p class="hint">Optional. Pick an effect, then Make on state to add the on or active look as a real, editable button. Effects recolour solid and gradient backgrounds, single-colour icons and text; photos and multi-colour logos keep their look.</p>
+        <div class="seg" id="effectType">
+          <button data-val="tint" class="active">Tint</button>
+          <button data-val="glow">Glow</button>
+          <button data-val="invert">Invert</button>
+          <button data-val="dot">Dot</button>
+        </div>
+        <div class="row" id="effectColorRow"><label>Colour</label><input type="color" id="effectColor" value="#1f9d3a" data-label="Effect colour"></div>
+        <div class="row" id="effectStrengthRow"><label>Strength</label><input type="range" id="effectStrength" min="0" max="100" value="40" data-default="40"><input type="number" class="val" id="effectStrengthVal" value="40"></div>
+        <div id="effectElements">
+          <p class="hint" style="margin:6px 0 4px">Apply to</p>
+          <div class="effect-elements">
+            <label class="check"><input type="checkbox" id="effectBg" checked> Background</label>
+            <label class="check"><input type="checkbox" id="effectIcon" checked> Icon</label>
+            <label class="check"><input type="checkbox" id="effectText" checked> Text</label>
+          </div>
+        </div>
+        <div class="row check"><label for="effectLink">Link as on state, so REAPER exports it as _on</label><input type="checkbox" id="effectLink" checked></div>
+        <button class="btn primary" id="effectMake">Make on state</button>
+        <p class="hint" id="effectScopeHint"></p>
+      </div>
+    </details>
     <div class="stage-cards">
       <details class="section" open>
         <summary>3. Make it a set</summary>
@@ -222,17 +247,6 @@
             <button data-val="streamdeck" class="active">Stream Deck</button>
             <button data-val="reaper">REAPER</button>
           </div>
-          <div class="row check"><label for="onStateToggle">Include active toggle state</label><input type="checkbox" id="onStateToggle"></div>
-          <div id="onStateRows" class="hidden">
-            <div class="seg" id="onStateEffect">
-              <button data-val="tint" class="active">Tint</button>
-              <button data-val="glow">Glow</button>
-              <button data-val="invert">Invert</button>
-              <button data-val="dot">Dot</button>
-            </div>
-            <div class="row" id="onStateColorRow"><label>Colour</label><input type="color" id="onStateColor" value="#1f9d3a" data-label="Active colour"></div>
-            <p class="hint">The look shown while a toggle action is active (REAPER), or a button's on state in Companion. Exports an extra "on" image.</p>
-          </div>
 
           <div id="sdExports">
             <p class="hint" id="exportSummary"></p>
@@ -253,7 +267,7 @@
           </div>
 
           <div id="reaperExports" class="hidden">
-            <p class="hint">Each button becomes a REAPER toolbar strip (normal, hover, active) at 1x, 1.5x and 2x, zipped to match REAPER's toolbar_icons folder.</p>
+            <p class="hint">Each button becomes a REAPER toolbar strip (normal, hover, active) at 1x, 1.5x and 2x, zipped to match REAPER's toolbar_icons folder. Linked on states export as a matching name_on.</p>
             <button class="btn primary" id="exportReaper">Download REAPER toolbar icons (ZIP)</button>
             <p class="hint">Unzip into REAPER's <b>toolbar_icons</b> folder (Options &gt; Show REAPER resource path, open the Data folder, then toolbar_icons), restart REAPER, then assign each icon in the toolbar editor (right-click a toolbar &gt; Customize toolbar). The ZIP already has the 150 and 200 hi-DPI copies.</p>
           </div>
@@ -271,8 +285,8 @@
         <p class="hint"><b>Reorder and reuse:</b> Drag a button onto another to reorder, or onto the big preview to make it your single button.</p>
         <p class="hint"><b>Half-point sizes:</b> The Size boxes for text and image take half points - type a value like 32.5 for finer control at larger sizes. The sliders still move a point at a time.</p>
         <p class="hint"><b>PNG size:</b> 72 px is the exact size of a Companion or Stream Deck key, so it is the smallest file. 144 px suits high-res decks and retina screens. 288 px is sharpest and scales down cleanly to any key, which is why it is the default.</p>
-        <p class="hint"><b>Export for REAPER:</b> In the Download card, switch to REAPER to get toolbar icon strips (normal, hover and active in one PNG) as a ZIP that mirrors REAPER's toolbar_icons folder, with the 150 and 200 hi-DPI copies. Unzip it there, restart REAPER, and assign each icon in the toolbar editor.</p>
-        <p class="hint"><b>Active toggle state:</b> Tick "Include active toggle state" to add an on image for toggle buttons, in both Stream Deck and REAPER modes. Pick the look (Tint, Glow, Invert or a status Dot) and a colour. REAPER gets a matching name_on strip; Stream Deck mode switches to the ZIP so you get both the off and on PNG.</p>
+        <p class="hint"><b>Export for REAPER:</b> In the Download card, switch to REAPER to get toolbar icon strips (normal, hover and active in one PNG) as a ZIP that mirrors REAPER's toolbar_icons folder, with the 150 and 200 hi-DPI copies. Linked on states become a matching name_on strip, so you assign the base icon and REAPER finds the on state. Unzip it there, restart REAPER, and assign each icon in the toolbar editor.</p>
+        <p class="hint"><b>On states and effects:</b> Use the On state and effects card to make a button's on or active look. Pick Tint, Glow, Invert (choose background, icon or text) or a status Dot, then Make on state - it adds a real, editable button to your set. Leave "Link as on state" ticked and REAPER export pairs it as name_on, no renaming.</p>
         <p class="hint"><b>Shortcuts:</b> Double-click a slider to reset it. Cmd-Z undoes and Cmd-Shift-Z redoes, up to 50 steps back. In a set, Cmd-A selects every button.</p>
       </div>
     </details>
@@ -307,8 +321,8 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair or Cockos. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script>window.BM_V = '89';</script>
-<script src="vendor/jszip.min.js?v=89"></script>
-<script type="module" src="js/app.js?v=89"></script>
+<script>window.BM_V = '90';</script>
+<script src="vendor/jszip.min.js?v=90"></script>
+<script type="module" src="js/app.js?v=90"></script>
 </body>
 </html>

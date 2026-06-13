@@ -1,4 +1,4 @@
-export const APP_VERSION = '89';
+export const APP_VERSION = '90';
 
 export function defaultTextLayer() {
   return {
@@ -68,16 +68,31 @@ export function defaultSeries() {
   };
 }
 
+export function defaultEffect() {
+  return {
+    type: 'tint',
+    color: '#1f9d3a',
+    strength: 40,
+    elements: { bg: true, icon: true, text: true },
+    link: true
+  };
+}
+
 export const state = {
   design: defaultDesign(),
   series: defaultSeries(),
-  export: { size: 288, mode: 'streamdeck', onState: { enabled: false, effect: 'tint', color: '#1f9d3a' } },
+  export: { size: 288, mode: 'streamdeck' },
+  effect: defaultEffect(),
   ui: { activeText: 0, activeIcon: 0, allText: false, allIcons: false, selectedItems: [] }
 };
 
 export function primarySelection() {
   const sel = state.ui.selectedItems;
   return sel.length ? sel[sel.length - 1] : null;
+}
+
+export function buttonCount() {
+  return state.series.mode === 'list' ? state.series.items.length : 1;
 }
 
 export function editTarget() {
