@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=84';
-import { renderDesign } from './renderer.js?v=84';
-import { numberSet } from './series.js?v=84';
-import { releaseSelection } from './ui.js?v=84';
+import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=85';
+import { renderDesign } from './renderer.js?v=85';
+import { numberSet, variantsFor } from './series.js?v=85';
+import { releaseSelection } from './ui.js?v=85';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -649,7 +649,92 @@ export function initPresets() {
     importFile.value = '';
   });
 
+  const pickerModal = document.getElementById('presetPickerModal');
+  document.getElementById('addFromPreset').addEventListener('click', openPresetPicker);
+  document.getElementById('presetPickerClose').addEventListener('click', () => pickerModal.classList.add('hidden'));
+  pickerModal.addEventListener('click', (e) => {
+    if (e.target === pickerModal) pickerModal.classList.add('hidden');
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') pickerModal.classList.add('hidden');
+  });
+
   renderPresetList();
+}
+
+function presetButtonVariants(preset) {
+  const base = normalizeDesign(deepClone(preset.design));
+  if (!preset.series) return variantsFor(base, undefined);
+  const series = deepClone(preset.series);
+  if (series.mode === 'numbers') {
+    series.items = numberSet(base, series.from, series.to);
+    series.mode = 'list';
+  }
+  if (Array.isArray(series.items)) {
+    for (const it of series.items) {
+      if (it && it.design) it.design = normalizeDesign(it.design);
+    }
+  }
+  return variantsFor(base, series);
+}
+
+function setPickerStatus(msg) {
+  const status = document.getElementById('presetPickerStatus');
+  if (status) status.textContent = msg;
+}
+
+function addVariantToSet(v) {
+  if (state.series.items.length >= 64) {
+    setPickerStatus('Your set is full, 64 buttons is the most you can have.');
+    return;
+  }
+  state.series.mode = 'list';
+  state.series.items.push({
+    label: v.companionText || v.label || '',
+    color: '',
+    design: deepClone(v.design)
+  });
+  emit();
+  setPickerStatus('Added "' + (v.companionText || v.label || 'button') + '" to your set.');
+}
+
+function renderPresetPickerList() {
+  const wrap = document.getElementById('presetPickerList');
+  wrap.innerHTML = '';
+  const all = loadUserPresets().concat(builtinPresets());
+  for (const preset of all) {
+    const variants = presetButtonVariants(preset);
+    const group = document.createElement('div');
+    group.className = 'preset-picker-group';
+
+    const head = document.createElement('div');
+    head.className = 'preset-picker-name';
+    head.textContent = preset.series ? preset.name + ' (' + variants.length + ')' : preset.name;
+    group.appendChild(head);
+
+    const row = document.createElement('div');
+    row.className = 'preset-picker-row';
+    variants.forEach((v) => {
+      const tile = document.createElement('button');
+      tile.className = 'preset-picker-tile';
+      tile.title = 'Add "' + (v.companionText || v.label || preset.name) + '" to your set';
+      const c = document.createElement('canvas');
+      c.width = 72;
+      c.height = 72;
+      renderDesign(c, deepClone(v.design));
+      tile.appendChild(c);
+      tile.addEventListener('click', () => addVariantToSet(v));
+      row.appendChild(tile);
+    });
+    group.appendChild(row);
+    wrap.appendChild(group);
+  }
+}
+
+function openPresetPicker() {
+  renderPresetPickerList();
+  setPickerStatus('Click a button to drop it into your set. Add as many as you like, then Close.');
+  document.getElementById('presetPickerModal').classList.remove('hidden');
 }
 
 export function renderPresetList() {

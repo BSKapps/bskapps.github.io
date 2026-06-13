@@ -1,8 +1,8 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=84';
-import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet } from '../js/series.js?v=84';
-import { buildCompanionPage } from '../js/companion.js?v=84';
-import { renderToDataUrl } from '../js/renderer.js?v=84';
-import { selectListItem, releaseSelection } from '../js/ui.js?v=84';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=85';
+import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=85';
+import { buildCompanionPage } from '../js/companion.js?v=85';
+import { renderToDataUrl } from '../js/renderer.js?v=85';
+import { selectListItem, releaseSelection } from '../js/ui.js?v=85';
 
 const results = [];
 
@@ -207,6 +207,24 @@ function run() {
   const legacy = { bg: { color: '#101010' }, text: { value: 'OLD', size: 14 }, icon: {}, shape: {} };
   const clone = deepClone(legacy);
   check('deepClone detaches', (clone.bg.color = '#fff') && legacy.bg.color === '#101010');
+
+  const pvBase = defaultDesign();
+  pvBase.texts[0].value = '{label}';
+  const pvOwn = defaultDesign();
+  pvOwn.texts[0].value = 'REC';
+  pvOwn.bg.color = '#e53935';
+  const pvSeries = { mode: 'list', from: 1, to: 4, colorTarget: 'bg', items: [{ label: 'A', color: '#111111' }, { label: 'Rec', color: '', design: pvOwn }] };
+  const pv = variantsFor(pvBase, pvSeries);
+  check('variantsFor enumerates every button in a preset set', pv.length === 2);
+  check('variantsFor renders an item with its own design verbatim', pv[1].design.texts[0].value === 'REC' && pv[1].design.bg.color === '#e53935');
+  check('variantsFor derives an undesigned item from the base and colour', pv[0].design.texts[0].value === 'A' && pv[0].design.bg.color === '#111111');
+  const soloBase = defaultDesign();
+  soloBase.texts[0].value = 'SOLO';
+  const pvSingle = variantsFor(soloBase, undefined);
+  check('variantsFor treats a non-set preset as one button', pvSingle.length === 1 && pvSingle[0].design.texts[0].value === 'SOLO');
+  const copied = deepClone(pv[1].design);
+  copied.texts[0].value = 'MUTATED';
+  check('a copied button design detaches from the source variant', pv[1].design.texts[0].value === 'REC');
 
   resetState();
 }

@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v85 - 2026-06-14
+- New "Add from a preset" button in Make it a set (Custom set mode): opens a picker that lists every preset and its buttons as thumbnails, so you can drop a single button (like Transport's Rec) into the set you are building without rebuilding it by hand. Add as many as you like, the picker stays open.
+
 ## v84 - 2026-06-13
 - Tuned Mixer icon sizes: Mixer/Dock/Faders/Master/FX icons to 50, and the meter icons larger (Meters 70, Meters 8 92, Meters 2 82).
 

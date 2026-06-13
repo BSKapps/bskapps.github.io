@@ -1,4 +1,4 @@
-import { state, deepClone } from './state.js?v=84';
+import { state, deepClone } from './state.js?v=85';
 
 export function hasToken(design) {
   return design.texts.some((t) => t.value && (t.value.includes('{n}') || t.value.includes('{label}')));
@@ -44,13 +44,16 @@ export function numberSet(design, from, to) {
 }
 
 export function seriesVariants() {
-  const s = state.series;
-  const base = state.design;
+  return variantsFor(state.design, state.series);
+}
+
+export function variantsFor(base, series) {
+  const s = series || {};
   const variants = [];
   const tokens = hasToken(base);
 
   if (s.mode === 'list') {
-    s.items.slice(0, 64).forEach((item, i) => {
+    (s.items || []).slice(0, 64).forEach((item, i) => {
       if (item.design) {
         const d = deepClone(item.design);
         variants.push({ design: d, label: item.label || String(i + 1), companionText: item.label || firstText(d) });
@@ -83,8 +86,9 @@ export function seriesVariants() {
   } else {
     const d = deepClone(base);
     if (tokens) {
-      const firstLabel = (s.items[0] && s.items[0].label) || '';
-      substituteLayers(d, Math.min(s.from, s.to), firstLabel);
+      const firstLabel = (s.items && s.items[0] && s.items[0].label) || '';
+      const n = s.from === undefined ? 1 : Math.min(s.from, s.to);
+      substituteLayers(d, n, firstLabel);
     }
     variants.push({ design: d, label: '', companionText: firstText(d) });
   }
