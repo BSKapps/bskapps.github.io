@@ -1,7 +1,7 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=62';
-import { seriesVariants, safeFileName } from '../js/series.js?v=62';
-import { buildCompanionPage } from '../js/companion.js?v=62';
-import { renderToDataUrl } from '../js/renderer.js?v=62';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=64';
+import { seriesVariants, safeFileName, numberedRange, numberStep } from '../js/series.js?v=64';
+import { buildCompanionPage } from '../js/companion.js?v=64';
+import { renderToDataUrl } from '../js/renderer.js?v=64';
 
 const results = [];
 
@@ -38,6 +38,29 @@ function run() {
   state.series.from = 1;
   state.series.to = 500;
   check('numbered set capped at 64', seriesVariants().length === 64);
+
+  check('numberedRange integer sequence', JSON.stringify(numberedRange(1, 4)) === JSON.stringify(['1', '2', '3', '4']));
+  check('numberedRange tenths', JSON.stringify(numberedRange(0.1, 0.4)) === JSON.stringify(['0.1', '0.2', '0.3', '0.4']));
+  check('numberedRange mixed precision pads decimals', JSON.stringify(numberedRange(1, 1.5)) === JSON.stringify(['1.0', '1.1', '1.2', '1.3', '1.4', '1.5']));
+  check('numberedRange inverted range counts', numberedRange(9, 5).length === 5);
+  check('numberedRange decimal capped at 64', numberedRange(0, 100).length === 64);
+
+  check('numberStep integer is 1', numberStep(1, 4) === 1);
+  check('numberStep tenths is 0.1', numberStep(0.1, 0.5) === 0.1);
+  check('numberStep hundredths is 0.01', numberStep(1, 1.05) === 0.01);
+  check('adding one step grows a decimal set by exactly one', (() => {
+    const before = numberedRange(1.1, 1.3).length;
+    const to2 = Math.round((1.3 + numberStep(1.1, 1.3)) * 100) / 100;
+    return before === 3 && numberedRange(1.1, to2).length === 4;
+  })());
+
+  resetState();
+  state.design.texts[0].value = 'CUE';
+  state.series.mode = 'numbers';
+  state.series.from = 1.1;
+  state.series.to = 1.3;
+  v = seriesVariants();
+  check('decimal numbered appends decimals to stem', v.length === 3 && v[0].design.texts[0].value === 'CUE 1.1' && v[2].design.texts[0].value === 'CUE 1.3');
 
   resetState();
   state.design.texts[0].value = 'PC';

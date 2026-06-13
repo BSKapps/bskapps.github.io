@@ -131,6 +131,27 @@ body {
 
 .section-body { padding: 4px 16px 16px; }
 
+#controls .section summary { display: flex; align-items: center; gap: 8px; }
+#controls .section summary::after { margin-left: auto; }
+
+.card-icon { width: 16px; height: 16px; flex: none; color: var(--brand-bright); }
+
+.card-bg {
+  background-image: repeating-conic-gradient(rgba(255, 255, 255, 0.045) 0% 25%, transparent 0% 50%);
+  background-size: 16px 16px;
+}
+
+.card-image {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1.6px);
+  background-size: 11px 11px;
+}
+
+.card-text {
+  background-image: repeating-linear-gradient(transparent 0 20px, rgba(255, 255, 255, 0.05) 20px 21px);
+}
+
+.card-shape { border-radius: 18px; border-color: rgba(111, 163, 217, 0.32); }
+
 .row {
   display: flex;
   align-items: center;

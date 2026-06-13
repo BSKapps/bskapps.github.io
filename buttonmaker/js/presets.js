@@ -1,5 +1,6 @@
-import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=62';
-import { renderDesign } from './renderer.js?v=62';
+import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=64';
+import { renderDesign } from './renderer.js?v=64';
+import { releaseSelection } from './ui.js?v=64';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -344,9 +345,15 @@ export function renderPresetList() {
       Object.assign(state.design, normalizeDesign(deepClone(preset.design)));
       state.ui.activeText = 0;
       state.ui.activeIcon = 0;
-      state.ui.selectedItems = [];
+      releaseSelection();
       if (preset.series) {
-        Object.assign(state.series, deepClone(preset.series));
+        const series = deepClone(preset.series);
+        if (Array.isArray(series.items)) {
+          for (const it of series.items) {
+            if (it && it.design) it.design = normalizeDesign(it.design);
+          }
+        }
+        Object.assign(state.series, series);
       } else {
         Object.assign(state.series, defaultSeries());
       }
@@ -402,7 +409,7 @@ function thumbDesign(preset) {
   return d;
 }
 
-function normalizeDesign(design) {
+export function normalizeDesign(design) {
   const base = defaultDesign();
   const merged = deepClone(base);
   for (const key of Object.keys(base)) {

@@ -1,4 +1,4 @@
-export const APP_VERSION = '62';
+export const APP_VERSION = '64';
 
 export function defaultTextLayer() {
   return {
@@ -63,11 +63,7 @@ export function defaultSeries() {
     mode: 'off',
     from: 1,
     to: 4,
-    items: [
-      { label: 'ON AIR', color: '#b51f1f' },
-      { label: 'PREVIEW', color: '#1f9d3a' },
-      { label: 'OFF', color: '#55555c' }
-    ],
+    items: [],
     colorTarget: 'bg'
   };
 }

@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTarget, primarySelection } from './state.js?v=62';
-import { renderDesign } from './renderer.js?v=62';
-import { seriesVariants } from './series.js?v=62';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, selectRangeTo, deselectListItem, addListItem, removeListItem, seriesForSnapshot } from './ui.js?v=62';
-import { initIconPicker } from './icons.js?v=62';
-import { initPresets } from './presets.js?v=62';
-import { initExport } from './export.js?v=62';
-import { initColorPopover } from './colorpicker.js?v=62';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=64';
+import { renderDesign } from './renderer.js?v=64';
+import { seriesVariants, numberedRange, numberStep } from './series.js?v=64';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, selectRangeTo, deselectListItem, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=64';
+import { initIconPicker } from './icons.js?v=64';
+import { initPresets, normalizeDesign } from './presets.js?v=64';
+import { initExport } from './export.js?v=64';
+import { initColorPopover } from './colorpicker.js?v=64';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -63,7 +63,8 @@ async function renderOnce() {
 
   seriesWrap.innerHTML = '';
   const isList = state.series.mode === 'list';
-  if (variants.length > 1 || isList) {
+  const isNumbers = state.series.mode === 'numbers';
+  if (variants.length > 1 || isList || isNumbers) {
     variants.forEach((v, idx) => {
       const item = document.createElement('div');
       item.className = 'series-item';
@@ -125,6 +126,8 @@ async function renderOnce() {
     });
 
     if (isList && state.series.items.length < 64) {
+      const wrap = document.createElement('div');
+      wrap.className = 'series-add-tile';
       const add = document.createElement('button');
       add.className = 'series-add';
       add.textContent = '+';
@@ -152,7 +155,32 @@ async function renderOnce() {
         state.series.items.push(deepClone(src));
         emit();
       });
-      seriesWrap.appendChild(add);
+      const cap = document.createElement('span');
+      cap.textContent = 'Add';
+      wrap.appendChild(add);
+      wrap.appendChild(cap);
+      seriesWrap.appendChild(wrap);
+    } else if (isNumbers && variants.length < 64) {
+      const wrap = document.createElement('div');
+      wrap.className = 'series-add-tile';
+      const add = document.createElement('button');
+      add.className = 'series-add';
+      add.textContent = '+';
+      add.title = 'Add the next number to the set.';
+      add.addEventListener('click', () => {
+        const from = state.series.from;
+        const to = state.series.to;
+        if (numberedRange(from, to).length >= 64) return;
+        const step = numberStep(from, to);
+        if (to >= from) state.series.to = Math.round((to + step) * 100) / 100;
+        else state.series.from = Math.round((from + step) * 100) / 100;
+        emit();
+      });
+      const cap = document.createElement('span');
+      cap.textContent = 'Add';
+      wrap.appendChild(add);
+      wrap.appendChild(cap);
+      seriesWrap.appendChild(wrap);
     }
   }
 
@@ -164,6 +192,7 @@ async function renderOnce() {
     add.textContent = '+';
     add.title = 'Click to duplicate this button into an editable set.';
     add.addEventListener('click', () => {
+      releaseSelection();
       state.series.items = [{ label: '', color: '' }, { label: '', color: '' }];
       state.series.mode = 'list';
       selectListItem(1);
@@ -220,7 +249,8 @@ preview.addEventListener('drop', (e) => {
     if (!v) return;
     Object.assign(state.design, deepClone(v.design));
     state.ui.activeText = 0;
-    state.ui.selectedItems = [];
+    state.ui.activeIcon = 0;
+    releaseSelection();
     Object.assign(state.series, defaultSeries());
     emit();
     return;
@@ -232,9 +262,10 @@ preview.addEventListener('drop', (e) => {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
-      const d = editTarget();
-      d.bg.imageData = reader.result;
-      d.bg.mode = 'image';
+      for (const d of editTargets()) {
+        d.bg.imageData = reader.result;
+        d.bg.mode = 'image';
+      }
       emit();
     };
     reader.readAsDataURL(file);
@@ -250,12 +281,13 @@ document.addEventListener('paste', (e) => {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = () => {
-    const icons = editTarget().icons;
-    if (state.ui.activeIcon >= icons.length) state.ui.activeIcon = icons.length - 1;
-    const ic = icons[state.ui.activeIcon];
-    ic.svg = reader.result;
-    ic.name = 'pasted image';
-    ic.tint = false;
+    for (const d of editTargets()) {
+      const icons = d.icons;
+      const ic = icons[Math.max(0, Math.min(state.ui.activeIcon, icons.length - 1))];
+      ic.svg = reader.result;
+      ic.name = 'pasted image';
+      ic.tint = false;
+    }
     emit();
   };
   reader.readAsDataURL(file);
@@ -292,7 +324,9 @@ document.addEventListener('keydown', (e) => {
   applyingUndo = true;
   Object.assign(state.design, prev.design);
   Object.assign(state.series, prev.series);
-  state.ui.selectedItems = [];
+  state.ui.activeText = 0;
+  state.ui.activeIcon = 0;
+  releaseSelection();
   emit();
   applyingUndo = false;
 });
@@ -301,18 +335,17 @@ function restoreSession() {
   try {
     const saved = JSON.parse(localStorage.getItem(SESSION_KEY));
     if (saved && saved.design && Array.isArray(saved.design.texts)) {
-      if (!Array.isArray(saved.design.icons) || !saved.design.icons.length) {
-        saved.design.icons = saved.design.icon ? [saved.design.icon] : state.design.icons;
+      for (const t of saved.design.texts) {
+        if (t.value) t.value = t.value.replace(/\\n/g, '\n');
       }
-      delete saved.design.icon;
-      if (saved.design.bg && saved.design.bg.blend === undefined) saved.design.bg.blend = 100;
-      if (Array.isArray(saved.design.texts)) {
-        for (const t of saved.design.texts) {
-          if (t.value) t.value = t.value.replace(/\\n/g, '\n');
+      Object.assign(state.design, normalizeDesign(saved.design));
+      const series = saved.series || {};
+      if (Array.isArray(series.items)) {
+        for (const it of series.items) {
+          if (it && it.design) it.design = normalizeDesign(it.design);
         }
       }
-      Object.assign(state.design, saved.design);
-      Object.assign(state.series, saved.series || {});
+      Object.assign(state.series, series);
     }
   } catch (err) {}
 }
@@ -331,7 +364,7 @@ document.getElementById('resetDesign').addEventListener('click', () => {
   Object.assign(state.series, defaultSeries());
   state.ui.activeText = 0;
   state.ui.activeIcon = 0;
-  state.ui.selectedItems = [];
+  releaseSelection();
   emit();
 });
 

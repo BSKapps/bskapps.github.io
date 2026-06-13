@@ -1,7 +1,13 @@
 const imageCache = new Map();
+const CACHE_MAX = 80;
 
 function loadImage(src) {
-  if (imageCache.has(src)) return imageCache.get(src);
+  if (imageCache.has(src)) {
+    const cached = imageCache.get(src);
+    imageCache.delete(src);
+    imageCache.set(src, cached);
+    return cached;
+  }
   const p = new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => resolve(img);
@@ -9,6 +15,9 @@ function loadImage(src) {
     img.src = src;
   });
   imageCache.set(src, p);
+  if (imageCache.size > CACHE_MAX) {
+    imageCache.delete(imageCache.keys().next().value);
+  }
   return p;
 }
 

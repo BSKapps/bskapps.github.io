@@ -1,8 +1,12 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, defaultSeries, editTarget, editTargets, primarySelection } from './state.js?v=62';
-import { triggerIconUpload } from './icons.js?v=62';
-import { seriesVariants, hasToken } from './series.js?v=62';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, defaultSeries, editTarget, editTargets, primarySelection } from './state.js?v=64';
+import { triggerIconUpload } from './icons.js?v=64';
+import { seriesVariants, hasToken, numberedRange } from './series.js?v=64';
 
 const selectionSnapshots = new Map();
+
+function clampSeriesNum(n) {
+  return Math.max(0, Math.min(999, Math.round(n * 100) / 100));
+}
 
 function discardIfUnchanged(item) {
   if (!item) return;
@@ -13,7 +17,7 @@ function discardIfUnchanged(item) {
   selectionSnapshots.delete(item);
 }
 
-function releaseSelection() {
+export function releaseSelection() {
   for (const item of [...selectionSnapshots.keys()]) discardIfUnchanged(item);
   selectionSnapshots.clear();
   state.ui.selectedItems = [];
@@ -350,6 +354,18 @@ export function initUI() {
     if (state.series.mode === 'list' && !state.ui.selectedItems.length) return;
     applyEdit((d) => (textOf(d).value = e.target.value));
     syncSelectedLabels();
+    if (state.series.mode === 'numbers') {
+      const m = e.target.value.match(/(\d+(?:\.\d+)?)\s*$/);
+      if (m) {
+        const dot = m[1].indexOf('.');
+        const dp = dot === -1 ? 0 : Math.min(2, m[1].length - dot - 1);
+        const step = Math.pow(10, -dp);
+        const start = clampSeriesNum(parseFloat(m[1]));
+        const count = numberedRange(state.series.from, state.series.to).length;
+        state.series.from = start;
+        state.series.to = Math.min(999, Math.round((start + (count - 1) * step) * 100) / 100);
+      }
+    }
     emit();
   });
   bindSelect('textFont', (v) => {
@@ -386,24 +402,28 @@ export function initUI() {
 
   bindSeg('seriesMode', (v) => {
     const prev = state.series.mode;
-    if (v === 'off' && prev !== 'off') {
-      const variants = seriesVariants();
-      const sel = primarySelection();
-      const idx = prev === 'list' && sel !== null && variants[sel] ? sel : 0;
-      const chosen = variants[idx];
-      releaseSelection();
-      if (chosen) Object.assign(state.design, deepClone(chosen.design));
-      state.ui.activeText = 0;
-      state.ui.activeIcon = 0;
-      Object.assign(state.series, defaultSeries());
-    } else if (v === 'list' && prev === 'numbers') {
-      convertNumberedToList();
-    } else if (v === 'list' && prev === 'off') {
-      state.series.items = [{ label: '', color: '' }, { label: '', color: '' }];
-      state.series.mode = 'list';
-    } else {
-      if (v !== 'list') releaseSelection();
-      state.series.mode = v;
+    if (v !== prev) {
+      if (v === 'off') {
+        const variants = seriesVariants();
+        const sel = primarySelection();
+        const idx = prev === 'list' && sel !== null && variants[sel] ? sel : 0;
+        const chosen = variants[idx];
+        releaseSelection();
+        if (chosen) Object.assign(state.design, deepClone(chosen.design));
+        state.ui.activeText = 0;
+        state.ui.activeIcon = 0;
+        Object.assign(state.series, defaultSeries());
+      } else if (v === 'numbers') {
+        releaseSelection();
+        state.series.mode = 'numbers';
+      } else {
+        releaseSelection();
+        if (!state.series.items.length) {
+          if (prev === 'numbers') convertNumberedToList();
+          else state.series.items = [{ label: '', color: '' }, { label: '', color: '' }];
+        }
+        state.series.mode = 'list';
+      }
     }
     document.getElementById('seriesNumbersRows').classList.toggle('hidden', v !== 'numbers');
     document.getElementById('seriesListRows').classList.toggle('hidden', v !== 'list');
@@ -416,16 +436,25 @@ export function initUI() {
     emit();
   });
 
-  document.getElementById('seriesFrom').addEventListener('input', (e) => {
-    if (e.target.value === '') return;
-    state.series.from = Number(e.target.value) || 0;
-    emit();
-  });
-  document.getElementById('seriesTo').addEventListener('input', (e) => {
-    if (e.target.value === '') return;
-    state.series.to = Number(e.target.value) || 0;
-    emit();
-  });
+  const bindSeriesNum = (id, key) => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => {
+      const n = parseFloat(el.value);
+      if (Number.isNaN(n)) return;
+      state.series[key] = clampSeriesNum(n);
+      emit();
+    });
+    el.addEventListener('change', () => {
+      let n = parseFloat(el.value);
+      if (Number.isNaN(n)) n = state.series[key];
+      n = clampSeriesNum(n);
+      state.series[key] = n;
+      el.value = n;
+      emit();
+    });
+  };
+  bindSeriesNum('seriesFrom', 'from');
+  bindSeriesNum('seriesTo', 'to');
   bindSelect('exportSize', (v) => (state.export.size = Number(v)));
 
   renderTextLayerChips();
@@ -434,19 +463,17 @@ export function initUI() {
 }
 
 export function convertNumberedToList() {
-  const from = Math.min(state.series.from, state.series.to);
-  const to = Math.max(state.series.from, state.series.to);
-  const count = Math.min(to - from + 1, 64);
+  const nums = numberedRange(state.series.from, state.series.to);
   if (hasToken(state.design)) {
-    state.series.items = Array.from({ length: count }, (_, i) => ({ label: String(from + i), color: '' }));
+    state.series.items = nums.map((numStr) => ({ label: numStr, color: '' }));
     for (const t of state.design.texts) {
       t.value = t.value.replaceAll('{n}', '{label}');
     }
   } else {
     const t = state.design.texts.find((l) => l.value);
-    const stem = t ? t.value.replace(/\s*\d+$/, '') : '';
-    state.series.items = Array.from({ length: count }, (_, i) => ({
-      label: stem ? stem + ' ' + (from + i) : String(from + i),
+    const stem = t ? t.value.replace(/\s*\d+(\.\d+)?$/, '') : '';
+    state.series.items = nums.map((numStr) => ({
+      label: stem ? stem + ' ' + numStr : numStr,
       color: ''
     }));
   }

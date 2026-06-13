@@ -1,8 +1,8 @@
-import { state, primarySelection } from './state.js?v=62';
-import { renderToDataUrl } from './renderer.js?v=62';
-import { seriesVariants, safeFileName } from './series.js?v=62';
-import { downloadBlob } from './presets.js?v=62';
-import { buildCompanionPage } from './companion.js?v=62';
+import { state, primarySelection, defaultTextLayer } from './state.js?v=64';
+import { renderToDataUrl } from './renderer.js?v=64';
+import { seriesVariants, safeFileName } from './series.js?v=64';
+import { downloadBlob } from './presets.js?v=64';
+import { buildCompanionPage } from './companion.js?v=64';
 
 function dataUrlToBlob(dataUrl) {
   const [head, body] = dataUrl.split(',');
@@ -37,8 +37,10 @@ async function exportZip() {
   for (let i = 0; i < variants.length; i++) {
     const v = variants[i];
     const url = await renderToDataUrl(v.design, size, { bakeText: true });
-    let name = safeFileName(v.companionText || v.label, i);
-    if (used.has(name)) name = name + '-' + (i + 1);
+    const base = safeFileName(v.companionText || v.label, i);
+    let name = base;
+    let k = 2;
+    while (used.has(name)) name = base + '-' + k++;
     used.add(name);
     zip.file(name + '.png', url.split(',')[1], { base64: true });
   }
@@ -58,7 +60,7 @@ async function exportCompanion() {
   for (let i = 0; i < variants.length; i++) {
     const v = variants[i];
     const png = await renderToDataUrl(v.design, 72, { bakeText: true });
-    const firstLayer = v.design.texts.find((t) => t.value) || v.design.texts[0];
+    const firstLayer = v.design.texts.find((t) => t.value) || v.design.texts[0] || defaultTextLayer();
     buttons.push({
       png64: png.split(',')[1],
       text: '',

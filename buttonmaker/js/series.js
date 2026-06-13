@@ -1,4 +1,4 @@
-import { state, deepClone } from './state.js?v=62';
+import { state, deepClone } from './state.js?v=64';
 
 export function hasToken(design) {
   return design.texts.some((t) => t.value && (t.value.includes('{n}') || t.value.includes('{label}')));
@@ -8,6 +8,30 @@ function numberLayer(value) {
   return { value, font: 'Inter', weight: '600', size: 28, color: '#ffffff', align: 'center:center', x: 0, y: 0 };
 }
 
+function decimalsOf(n) {
+  const s = String(n);
+  const dot = s.indexOf('.');
+  return dot === -1 ? 0 : s.length - dot - 1;
+}
+
+export function numberedRange(from, to) {
+  const lo = Math.min(from, to);
+  const hi = Math.max(from, to);
+  const dp = Math.min(2, Math.max(decimalsOf(from), decimalsOf(to)));
+  const scale = Math.pow(10, dp);
+  const loS = Math.round(lo * scale);
+  const hiS = Math.round(hi * scale);
+  const count = Math.min(hiS - loS + 1, 64);
+  const out = [];
+  for (let i = 0; i < count; i++) out.push(((loS + i) / scale).toFixed(dp));
+  return out;
+}
+
+export function numberStep(from, to) {
+  const dp = Math.min(2, Math.max(decimalsOf(from), decimalsOf(to)));
+  return Math.pow(10, -dp);
+}
+
 export function seriesVariants() {
   const s = state.series;
   const base = state.design;
@@ -15,24 +39,20 @@ export function seriesVariants() {
   const tokens = hasToken(base);
 
   if (s.mode === 'numbers') {
-    const from = Math.min(s.from, s.to);
-    const to = Math.max(s.from, s.to);
-    const count = Math.min(to - from + 1, 64);
-    for (let i = 0; i < count; i++) {
-      const n = from + i;
+    for (const numStr of numberedRange(s.from, s.to)) {
       const d = deepClone(base);
       if (tokens) {
-        substituteLayers(d, n, String(n));
+        substituteLayers(d, numStr, numStr);
       } else {
         const t = d.texts.find((l) => l.value);
         if (t) {
-          const stem = t.value.replace(/\s*\d+$/, '');
-          t.value = stem ? stem + ' ' + n : String(n);
+          const stem = t.value.replace(/\s*\d+(\.\d+)?$/, '');
+          t.value = stem ? stem + ' ' + numStr : numStr;
         } else {
-          d.texts.push(numberLayer(String(n)));
+          d.texts.push(numberLayer(numStr));
         }
       }
-      variants.push({ design: d, label: String(n), companionText: firstText(d) });
+      variants.push({ design: d, label: numStr, companionText: firstText(d) });
     }
   } else if (s.mode === 'list') {
     s.items.slice(0, 64).forEach((item, i) => {

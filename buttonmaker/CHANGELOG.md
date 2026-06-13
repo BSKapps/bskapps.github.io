@@ -2,6 +2,22 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v64 - 2026-06-13
+- Switching One button / Numbered / Custom set is now stable: flipping between Numbered and Custom set no longer wipes or renumbers a custom set you have built. Clicking Custom set from a numbered set still turns the numbers into editable buttons.
+- Numbered sets now support decimals (handy for cue numbers): From 1.1 To 1.5 makes 1.1, 1.2, 1.3, 1.4, 1.5. The step matches the decimals you type.
+- Typing a trailing number in a numbered set now sets the start: "cue 22" makes cue 22, 23, 24..., and the From box follows.
+- Renamed the "Image" card to "Icon/Image" to match its Choose icon and Upload image buttons.
+
+## v63 - 2026-06-13
+- Sidebar cards now each carry a small icon and a subtle texture so Background, Image, Text and Border/Shape are easy to tell apart at a glance (Background gets the transparency checkerboard, Image a dot grid, Text ruled lines, Border/Shape a rounder edge).
+- Numbered sets now have an Add (+) tile under the preview to add the next number, matching custom sets.
+- The Add (+) tile in a custom set now has a label, like the Duplicate tile on a single button.
+- From and To now reject typed text: an invalid entry snaps back to the last number instead of sticking.
+- Dropping a background image onto the preview, or pasting an image, now applies to all the buttons you have selected, matching the sidebar pickers.
+- Image and text Opacity sliders now go down to 0, matching the background Opacity slider.
+- Companion and ZIP export are hardened against malformed imported presets, and ZIP filenames no longer collide on tricky labels.
+- Undo and "make this my single button" now reset the active layer cleanly, saved sessions heal old designs the same way loading a preset does, and the in-memory image cache is now capped.
+
 ## v62 - 2026-06-13
 - "One button" now keeps the button you are previewing (its icon, colour and text) instead of dropping to a blank base design. Same as dragging a button onto the preview.
 - "Custom set" from a single button now duplicates that button into the set (matches the + Duplicate tile) instead of jumping to the camera tally.
