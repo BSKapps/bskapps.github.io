@@ -2,6 +2,12 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v54 - 2026-06-13
+- Download PNG now saves the single button you are previewing. Download set as ZIP still saves all buttons. Previously, with a set, Download PNG quietly gave you the ZIP.
+- Accurate download summary: it no longer claims the PNG/ZIP lay out as a row on the Companion page (that only applies to the Companion page file).
+- Renamed "Custom list" to "Custom set" to match "Make it a set".
+- The "Editing X" status no longer changes height when you select or deselect buttons, so the cards below stay put.
+
 ## v53 - 2026-06-13
 - The "Editing X" status moved from the top of the sidebar to directly under the button row, where you actually select buttons.
 - Help now explains the PNG sizes (72/144/288) in full; the Download card keeps a one-line tip.

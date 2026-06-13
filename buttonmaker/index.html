@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=53">
+<link rel="stylesheet" href="css/style.css?v=54">
 </head>
 <body>
 <header class="app-header">
@@ -205,13 +205,13 @@
           <div class="seg" id="seriesMode">
             <button data-val="off" class="active">One button</button>
             <button data-val="numbers">Numbered</button>
-            <button data-val="list">Custom list</button>
+            <button data-val="list">Custom set</button>
           </div>
           <div id="seriesNumbersRows" class="hidden">
             <p class="hint">Numbers your buttons for you. Text "PC" becomes PC 1, PC 2, PC 3...</p>
             <div class="row"><label>From</label><input type="number" id="seriesFrom" value="1" min="0" max="999"></div>
             <div class="row"><label>To</label><input type="number" id="seriesTo" value="4" min="0" max="999"></div>
-            <button class="btn ghost" id="seriesConvertList">Convert to custom list to edit each button</button>
+            <button class="btn ghost" id="seriesConvertList">Convert to custom set to edit each button</button>
           </div>
           <div id="seriesListRows" class="hidden">
             <p class="hint">Your set is under the preview. Click a button to style it on its own. See Help below for selecting several, duplicating and reordering.</p>
@@ -244,7 +244,7 @@
       <div class="section-body">
         <p class="hint"><b>One button:</b> pick a starting point, then set background, image, text and shape. Download the PNG and drop it into a button's image box in Companion.</p>
         <p class="hint"><b>PNG size:</b> 72 px is the exact size of a Companion or Stream Deck key, so it is the smallest file. 144 px suits high-res decks and retina screens. 288 px is sharpest and scales down cleanly to any key, which is why it is the default.</p>
-        <p class="hint"><b>Make a set:</b> open "Make it a set" and choose Numbered (PC 1, PC 2...) or Custom list. The set shows under the preview.</p>
+        <p class="hint"><b>Make a set:</b> open "Make it a set" and choose Numbered (PC 1, PC 2...) or Custom set. The set shows under the preview.</p>
         <p class="hint"><b>Duplicate:</b> click the + tile under the preview to copy your button into a set, or drag any button in a set onto the + tile to duplicate it.</p>
         <p class="hint"><b>Edit one, some or all:</b> with a set, changes apply to every button by default. Click one button to style just that one. Cmd-click, or Shift-click for a range, to style a few together. Click empty space, or "Edit all", to go back to editing everything.</p>
         <p class="hint"><b>Reorder and reuse:</b> drag a button onto another to reorder, or onto the big preview to make it your single button.</p>
@@ -271,8 +271,8 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato or Corsair. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script>window.BM_V = '53';</script>
-<script src="vendor/jszip.min.js?v=53"></script>
-<script type="module" src="js/app.js?v=53"></script>
+<script>window.BM_V = '54';</script>
+<script src="vendor/jszip.min.js?v=54"></script>
+<script type="module" src="js/app.js?v=54"></script>
 </body>
 </html>

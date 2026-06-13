@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=53';
-import { triggerIconUpload } from './icons.js?v=53';
-import { seriesVariants, hasToken } from './series.js?v=53';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=54';
+import { triggerIconUpload } from './icons.js?v=54';
+import { seriesVariants, hasToken } from './series.js?v=54';
 
 const selectionSnapshots = new Map();
 
@@ -648,7 +648,7 @@ function updateEditBanner() {
   } else if (state.series.mode === 'list' && state.series.items.length) {
     banner.classList.remove('hidden');
     banner.classList.remove('one');
-    bLabel.textContent = 'Editing every button in the set. Click one to style it alone, Cmd-click to grab a few.';
+    bLabel.textContent = 'Editing every button in the set.';
     bAll.classList.add('hidden');
   } else {
     banner.classList.add('hidden');

@@ -1,8 +1,8 @@
-import { state } from './state.js?v=53';
-import { renderToDataUrl } from './renderer.js?v=53';
-import { seriesVariants, safeFileName } from './series.js?v=53';
-import { downloadBlob } from './presets.js?v=53';
-import { buildCompanionPage } from './companion.js?v=53';
+import { state, primarySelection } from './state.js?v=54';
+import { renderToDataUrl } from './renderer.js?v=54';
+import { seriesVariants, safeFileName } from './series.js?v=54';
+import { downloadBlob } from './presets.js?v=54';
+import { buildCompanionPage } from './companion.js?v=54';
 
 function dataUrlToBlob(dataUrl) {
   const [head, body] = dataUrl.split(',');
@@ -22,12 +22,11 @@ export function initExport() {
 async function exportPng() {
   const size = state.export.size;
   const variants = seriesVariants();
-  if (variants.length === 1) {
-    const url = await renderToDataUrl(variants[0].design, size, { bakeText: true });
-    downloadBlob(dataUrlToBlob(url), safeFileName(variants[0].companionText, 0) + '.png');
-  } else {
-    await exportZip();
-  }
+  const sel = primarySelection();
+  const idx = state.series.mode === 'list' && sel !== null && variants[sel] ? sel : 0;
+  const v = variants[idx] || variants[0];
+  const url = await renderToDataUrl(v.design, size, { bakeText: true });
+  downloadBlob(dataUrlToBlob(url), safeFileName(v.companionText, idx) + '.png');
 }
 
 async function exportZip() {

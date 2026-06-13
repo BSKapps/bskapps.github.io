@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, editTarget, primarySelection } from './state.js?v=53';
-import { renderDesign } from './renderer.js?v=53';
-import { seriesVariants } from './series.js?v=53';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, selectRangeTo, deselectListItem, addListItem, removeListItem, seriesForSnapshot } from './ui.js?v=53';
-import { initIconPicker } from './icons.js?v=53';
-import { initPresets } from './presets.js?v=53';
-import { initExport } from './export.js?v=53';
-import { initColorPopover } from './colorpicker.js?v=53';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, editTarget, primarySelection } from './state.js?v=54';
+import { renderDesign } from './renderer.js?v=54';
+import { seriesVariants } from './series.js?v=54';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, selectRangeTo, deselectListItem, addListItem, removeListItem, seriesForSnapshot } from './ui.js?v=54';
+import { initIconPicker } from './icons.js?v=54';
+import { initPresets } from './presets.js?v=54';
+import { initExport } from './export.js?v=54';
+import { initColorPopover } from './colorpicker.js?v=54';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -57,8 +57,8 @@ async function renderOnce() {
   const summary = document.getElementById('exportSummary');
   if (summary) {
     summary.textContent = variants.length === 1
-      ? 'Your downloads will contain this one button.'
-      : 'Your downloads will contain all ' + variants.length + ' buttons, laid out as one row on the Companion page.';
+      ? 'One button. Download the PNG and load it into a button in Companion.'
+      : variants.length + ' buttons. Download PNG saves the one you are previewing; the ZIP saves all ' + variants.length + ' as separate PNGs.';
   }
 
   seriesWrap.innerHTML = '';
