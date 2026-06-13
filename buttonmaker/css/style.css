@@ -231,6 +231,10 @@ body {
 .row textarea { resize: none; height: 52px; line-height: 1.4; }
 .row input[type="number"] { flex: 0 0 80px; }
 
+.number-range label { flex: 0 0 auto; }
+.number-range label:last-of-type { margin-left: 6px; }
+.number-range input[type="number"] { flex: 1 1 0; }
+
 .row input[type="file"] { flex: 1; color: var(--muted); font-size: 0.85rem; min-width: 0; }
 
 .val {

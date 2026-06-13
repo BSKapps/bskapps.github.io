@@ -2,6 +2,10 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v76 - 2026-06-13
+- Added Redo (Cmd-Shift-Z) alongside Undo, and Cmd-A to select every button in a set. Both noted in Help.
+- Tidied the Number them controls: the button now sits above the From/To boxes, From and To sit side by side, with a clearer note that they set how many buttons are built. Removed a redundant hint line.
+
 ## v75 - 2026-06-13
 - Refreshed the INPUT and Lower Thirds preset sets (now INPUT 1-8 and Lower Thirds 1-8, with bigger, clearer numbers and graphics).
 - On Chrome, Edge and other Chromium browsers, Restore now opens straight to your Downloads folder. Firefox and Safari open wherever the browser last left off.

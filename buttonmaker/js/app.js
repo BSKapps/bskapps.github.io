@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=75';
-import { renderDesign } from './renderer.js?v=75';
-import { seriesVariants, numberSet } from './series.js?v=75';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=75';
-import { initIconPicker } from './icons.js?v=75';
-import { initPresets, normalizeDesign } from './presets.js?v=75';
-import { initExport } from './export.js?v=75';
-import { initColorPopover } from './colorpicker.js?v=75';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=76';
+import { renderDesign } from './renderer.js?v=76';
+import { seriesVariants, numberSet } from './series.js?v=76';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=76';
+import { initIconPicker } from './icons.js?v=76';
+import { initPresets, normalizeDesign } from './presets.js?v=76';
+import { initExport } from './export.js?v=76';
+import { initColorPopover } from './colorpicker.js?v=76';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -265,6 +265,7 @@ document.addEventListener('paste', (e) => {
 
 const SESSION_KEY = 'bm-session-v1';
 const undoStack = [];
+const redoStack = [];
 let historyTimer = null;
 let applyingUndo = false;
 
@@ -277,20 +278,15 @@ function pushHistory() {
   if (undoStack[undoStack.length - 1] !== s) {
     undoStack.push(s);
     if (undoStack.length > 50) undoStack.shift();
+    redoStack.length = 0;
   }
   try {
     localStorage.setItem(SESSION_KEY, s);
   } catch (err) {}
 }
 
-document.addEventListener('keydown', (e) => {
-  if (!(e.metaKey || e.ctrlKey) || e.key !== 'z' || e.shiftKey) return;
-  const t = e.target;
-  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA') && t.type !== 'range' && t.type !== 'checkbox') return;
-  if (undoStack.length < 2) return;
-  e.preventDefault();
-  undoStack.pop();
-  const prev = JSON.parse(undoStack[undoStack.length - 1]);
+function applyHistory(s) {
+  const prev = JSON.parse(s);
   applyingUndo = true;
   Object.assign(state.design, prev.design);
   Object.assign(state.series, prev.series);
@@ -299,6 +295,29 @@ document.addEventListener('keydown', (e) => {
   releaseSelection();
   emit();
   applyingUndo = false;
+}
+
+document.addEventListener('keydown', (e) => {
+  if (!(e.metaKey || e.ctrlKey)) return;
+  const t = e.target;
+  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA') && t.type !== 'range' && t.type !== 'checkbox') return;
+  const key = e.key.toLowerCase();
+  if (key === 'z' && !e.shiftKey) {
+    if (undoStack.length < 2) return;
+    e.preventDefault();
+    redoStack.push(undoStack.pop());
+    applyHistory(undoStack[undoStack.length - 1]);
+  } else if ((key === 'z' && e.shiftKey) || key === 'y') {
+    if (!redoStack.length) return;
+    e.preventDefault();
+    const s = redoStack.pop();
+    undoStack.push(s);
+    applyHistory(s);
+  } else if (key === 'a') {
+    if (state.series.mode !== 'list' || !state.series.items.length) return;
+    e.preventDefault();
+    selectAllListItems();
+  }
 });
 
 function restoreSession() {

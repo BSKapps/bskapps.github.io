@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, defaultSeries, editTarget, editTargets, primarySelection } from './state.js?v=75';
-import { triggerIconUpload } from './icons.js?v=75';
-import { seriesVariants, numberSet } from './series.js?v=75';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, defaultSeries, editTarget, editTargets, primarySelection } from './state.js?v=76';
+import { triggerIconUpload } from './icons.js?v=76';
+import { seriesVariants, numberSet } from './series.js?v=76';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -93,6 +93,18 @@ export function deselectListItem() {
   releaseSelection();
   state.ui.activeText = 0;
   state.ui.activeIcon = 0;
+  emit();
+}
+
+export function selectAllListItems() {
+  if (state.series.mode !== 'list' || !state.series.items.length) return;
+  releaseSelection();
+  const sel = [];
+  for (let i = 0; i < state.series.items.length; i++) {
+    if (materialize(i)) sel.push(i);
+  }
+  state.ui.selectedItems = sel;
+  if (sel.length) focusActiveLayers();
   emit();
 }
 
