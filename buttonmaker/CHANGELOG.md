@@ -2,6 +2,23 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v52 - 2026-06-13
+- Text opacity fixed: in All-layers mode the slider now sets every layer to the chosen value instead of drifting or jumping. Behaves the same as image opacity.
+- Image position grid now lights up like the text grid: the chosen square stays highlighted while you fine-tune with Nudge X/Y, and the centre square is lit by default. Image alignment is now a coarse anchor plus a separate nudge, matching how text works. Existing designs and presets render exactly as before.
+- Smoother preview while dragging the colour picker sliders (renders are batched to one per frame).
+- Colour picker shows which control it belongs to and follows that control when you scroll.
+- Consistent control order in the Image and Text sections: Size, Colour, Position, Nudge X, Nudge Y, Opacity, Rotate.
+- Double-click any slider to reset it to its default.
+- Saved presets are editable: double-click a preset name to rename it, the x removes it, and saving with the same name updates that preset instead of making a duplicate.
+- Help panel under the Download card explaining single buttons, sets, editing one or many, duplicating, reordering and shortcuts.
+- A + tile now sits under the preview in single-button mode: click it to turn your button into an editable, duplicated set.
+
+## v51 - 2026-06-12
+- Hotfix: force fresh asset URLs so the broken v50 module imports clear from the CDN cache.
+
+## v50 - 2026-06-12
+- Background opacity (solid and gradient) and per-layer text opacity controls. Image opacity already existed.
+
 ## v49 - 2026-06-12
 - Icon search results show true colours: coloured icons (logos, emoji) no longer display inverted in the picker grid. Monochrome icons are requested light from the API (?color=) instead of CSS-inverting everything.
 

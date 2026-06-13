@@ -1,7 +1,7 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=51';
-import { seriesVariants, safeFileName } from '../js/series.js?v=51';
-import { buildCompanionPage } from '../js/companion.js?v=51';
-import { renderToDataUrl } from '../js/renderer.js?v=51';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=52';
+import { seriesVariants, safeFileName } from '../js/series.js?v=52';
+import { buildCompanionPage } from '../js/companion.js?v=52';
+import { renderToDataUrl } from '../js/renderer.js?v=52';
 
 const results = [];
 
@@ -165,6 +165,8 @@ function run() {
 
   check('gradient blend defaults to 100', defaultDesign().bg.blend === 100);
 
+  check('default icon is centred via align', defaultDesign().icons[0].align === 'center:center' && defaultDesign().icons[0].y === 0);
+
   const legacy = { bg: { color: '#101010' }, text: { value: 'OLD', size: 14 }, icon: {}, shape: {} };
   const clone = deepClone(legacy);
   check('deepClone detaches', (clone.bg.color = '#fff') && legacy.bg.color === '#101010');
@@ -192,6 +194,26 @@ async function runAsync() {
   delete legacySingle.icons;
   const legacyUrl = await renderToDataUrl(legacySingle, 72, {});
   check('legacy single-icon design still renders', legacyUrl.startsWith('data:image/png;base64,'));
+
+  resetState();
+  state.design.icons[0].svg = playSvg;
+  state.design.icons[0].size = 40;
+  const iconCentre = await renderToDataUrl(state.design, 72, { bakeText: false });
+  state.design.icons[0].align = 'right:center';
+  const iconRight = await renderToDataUrl(state.design, 72, { bakeText: false });
+  check('icon align moves the icon', iconCentre !== iconRight);
+
+  resetState();
+  const legacyIcon = deepClone(state.design);
+  legacyIcon.icons[0].svg = playSvg;
+  legacyIcon.icons[0].size = 40;
+  legacyIcon.icons[0].x = 20;
+  delete legacyIcon.icons[0].align;
+  const legacyPos = await renderToDataUrl(legacyIcon, 72, { bakeText: false });
+  const healedIcon = deepClone(legacyIcon);
+  healedIcon.icons[0].align = 'center:center';
+  const healedPos = await renderToDataUrl(healedIcon, 72, { bakeText: false });
+  check('legacy icon without align renders same as centre align', legacyPos === healedPos);
 
   resetState();
   state.design.bg.mode = 'gradient';

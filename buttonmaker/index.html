@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=51">
+<link rel="stylesheet" href="css/style.css?v=52">
 </head>
 <body>
 <header class="app-header">
@@ -51,15 +51,15 @@
         </div>
         <div class="row" id="bgSolidRow">
           <label>Colour</label>
-          <input type="color" id="bgColor" value="#1a2230">
+          <input type="color" id="bgColor" value="#1a2230" data-label="Background">
         </div>
         <div id="bgGradientRows" class="hidden">
-          <div class="row"><label>From</label><input type="color" id="bgColor2a" value="#16324f"></div>
-          <div class="row"><label>To</label><input type="color" id="bgColor2b" value="#0a0e14"></div>
-          <div class="row"><label>Angle</label><input type="range" id="bgAngle" min="0" max="360" value="135"><input type="number" class="val" id="bgAngleVal" value="135"></div>
-          <div class="row"><label>Blend</label><input type="range" id="bgBlend" min="0" max="100" value="100"><input type="number" class="val" id="bgBlendVal" value="100"></div>
+          <div class="row"><label>From</label><input type="color" id="bgColor2a" value="#16324f" data-label="Gradient from"></div>
+          <div class="row"><label>To</label><input type="color" id="bgColor2b" value="#0a0e14" data-label="Gradient to"></div>
+          <div class="row"><label>Angle</label><input type="range" id="bgAngle" min="0" max="360" value="135" data-default="135"><input type="number" class="val" id="bgAngleVal" value="135"></div>
+          <div class="row"><label>Blend</label><input type="range" id="bgBlend" min="0" max="100" value="100" data-default="100"><input type="number" class="val" id="bgBlendVal" value="100"></div>
         </div>
-        <div class="row" id="bgOpacityRow"><label>Opacity</label><input type="range" id="bgOpacity" min="0" max="100" value="100"><input type="number" class="val" id="bgOpacityVal" value="100"></div>
+        <div class="row" id="bgOpacityRow"><label>Opacity</label><input type="range" id="bgOpacity" min="0" max="100" value="100" data-default="100"><input type="number" class="val" id="bgOpacityVal" value="100"></div>
         <div id="bgImageRows" class="hidden">
           <div class="row">
             <label>File</label>
@@ -73,8 +73,8 @@
               <option value="stretch">Stretch</option>
             </select>
           </div>
-          <div class="row"><label>Dim</label><input type="range" id="bgImageDim" min="0" max="80" value="0"><input type="number" class="val" id="bgImageDimVal" value="0"></div>
-          <div class="row"><label>Rotate</label><input type="range" id="bgImageRotate" min="-180" max="180" value="0"><input type="number" class="val" id="bgImageRotateVal" value="0"></div>
+          <div class="row"><label>Dim</label><input type="range" id="bgImageDim" min="0" max="80" value="0" data-default="0"><input type="number" class="val" id="bgImageDimVal" value="0"></div>
+          <div class="row"><label>Rotate</label><input type="range" id="bgImageRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="bgImageRotateVal" value="0"></div>
         </div>
       </div>
     </details>
@@ -90,8 +90,8 @@
         <div class="row">
           <button class="btn ghost" id="clearIcon">Clear</button>
         </div>
-        <div class="row"><label>Size</label><input type="range" id="iconSize" min="10" max="150" value="52"><input type="number" class="val" id="iconSizeVal" value="52"></div>
-        <div class="row"><label>Colour</label><input type="color" id="iconColor" value="#ffffff"></div>
+        <div class="row"><label>Size</label><input type="range" id="iconSize" min="10" max="150" value="52" data-default="52"><input type="number" class="val" id="iconSizeVal" value="52"></div>
+        <div class="row"><label>Colour</label><input type="color" id="iconColor" value="#ffffff" data-label="Image colour"></div>
         <div class="row">
           <label>Position</label>
           <div class="align-grid" id="iconAlign">
@@ -106,10 +106,10 @@
             <button data-val="right:bottom"></button>
           </div>
         </div>
-        <div class="row"><label>Nudge X</label><input type="range" id="iconX" min="-40" max="40" value="0"><input type="number" class="val" id="iconXVal" value="0"></div>
-        <div class="row"><label>Nudge Y</label><input type="range" id="iconY" min="-40" max="40" value="-6"><input type="number" class="val" id="iconYVal" value="-6"></div>
-        <div class="row"><label>Opacity</label><input type="range" id="iconOpacity" min="10" max="100" value="100"><input type="number" class="val" id="iconOpacityVal" value="100"></div>
-        <div class="row"><label>Rotate</label><input type="range" id="iconRotate" min="-180" max="180" value="0"><input type="number" class="val" id="iconRotateVal" value="0"></div>
+        <div class="row"><label>Nudge X</label><input type="range" id="iconX" min="-40" max="40" value="0" data-default="0"><input type="number" class="val" id="iconXVal" value="0"></div>
+        <div class="row"><label>Nudge Y</label><input type="range" id="iconY" min="-40" max="40" value="0" data-default="0"><input type="number" class="val" id="iconYVal" value="0"></div>
+        <div class="row"><label>Opacity</label><input type="range" id="iconOpacity" min="10" max="100" value="100" data-default="100"><input type="number" class="val" id="iconOpacityVal" value="100"></div>
+        <div class="row"><label>Rotate</label><input type="range" id="iconRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="iconRotateVal" value="0"></div>
         <div class="row check"><label for="iconReverse">Reverse</label><input type="checkbox" id="iconReverse"></div>
       </div>
     </details>
@@ -146,9 +146,8 @@
             <option value="800">Heavy</option>
           </select>
         </div>
-        <div class="row"><label>Size</label><input type="range" id="textSize" min="6" max="96" value="11"><input type="number" class="val" id="textSizeVal" value="11"></div>
-        <div class="row"><label>Colour</label><input type="color" id="textColor" value="#ffffff"></div>
-        <div class="row"><label>Opacity</label><input type="range" id="textOpacity" min="10" max="100" value="100"><input type="number" class="val" id="textOpacityVal" value="100"></div>
+        <div class="row"><label>Size</label><input type="range" id="textSize" min="6" max="96" value="11" data-default="11"><input type="number" class="val" id="textSizeVal" value="11"></div>
+        <div class="row"><label>Colour</label><input type="color" id="textColor" value="#ffffff" data-label="Text colour"></div>
         <div class="row">
           <label>Position</label>
           <div class="align-grid" id="textAlign">
@@ -163,20 +162,21 @@
             <button data-val="right:bottom"></button>
           </div>
         </div>
-        <div class="row"><label>Nudge X</label><input type="range" id="textX" min="-40" max="40" value="0"><input type="number" class="val" id="textXVal" value="0"></div>
-        <div class="row"><label>Nudge Y</label><input type="range" id="textY" min="-40" max="40" value="0"><input type="number" class="val" id="textYVal" value="0"></div>
-        <div class="row"><label>Rotate</label><input type="range" id="textRotate" min="-180" max="180" value="0"><input type="number" class="val" id="textRotateVal" value="0"></div>
+        <div class="row"><label>Nudge X</label><input type="range" id="textX" min="-40" max="40" value="0" data-default="0"><input type="number" class="val" id="textXVal" value="0"></div>
+        <div class="row"><label>Nudge Y</label><input type="range" id="textY" min="-40" max="40" value="0" data-default="0"><input type="number" class="val" id="textYVal" value="0"></div>
+        <div class="row"><label>Opacity</label><input type="range" id="textOpacity" min="10" max="100" value="100" data-default="100"><input type="number" class="val" id="textOpacityVal" value="100"></div>
+        <div class="row"><label>Rotate</label><input type="range" id="textRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="textRotateVal" value="0"></div>
       </div>
     </details>
 
     <details class="section" open>
       <summary>Border/Shape</summary>
       <div class="section-body">
-        <div class="row"><label>Border</label><input type="range" id="shapeBorder" min="0" max="8" value="0"><input type="number" class="val" id="shapeBorderVal" value="0"></div>
-        <div class="row"><label>Border colour</label><input type="color" id="shapeBorderColor" value="#ffffff"></div>
-        <div class="row"><label>Corners</label><input type="range" id="shapeRadius" min="0" max="35" value="0"><input type="number" class="val" id="shapeRadiusVal" value="0"></div>
-        <div class="row"><label>Rotate</label><input type="range" id="shapeRotate" min="-180" max="180" value="0"><input type="number" class="val" id="shapeRotateVal" value="0"></div>
-        <div class="row"><label>Zoom</label><input type="range" id="shapeZoom" min="25" max="200" value="100"><input type="number" class="val" id="shapeZoomVal" value="100"></div>
+        <div class="row"><label>Border</label><input type="range" id="shapeBorder" min="0" max="8" value="0" data-default="0"><input type="number" class="val" id="shapeBorderVal" value="0"></div>
+        <div class="row"><label>Border colour</label><input type="color" id="shapeBorderColor" value="#ffffff" data-label="Border colour"></div>
+        <div class="row"><label>Corners</label><input type="range" id="shapeRadius" min="0" max="35" value="0" data-default="0"><input type="number" class="val" id="shapeRadiusVal" value="0"></div>
+        <div class="row"><label>Rotate</label><input type="range" id="shapeRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="shapeRotateVal" value="0"></div>
+        <div class="row"><label>Zoom</label><input type="range" id="shapeZoom" min="25" max="200" value="100" data-default="100"><input type="number" class="val" id="shapeZoomVal" value="100"></div>
       </div>
     </details>
 
@@ -215,8 +215,7 @@
             <button class="btn ghost" id="seriesConvertList">Convert to custom list to edit each button</button>
           </div>
           <div id="seriesListRows" class="hidden">
-            <p class="hint">Your set lives under the preview. Click a button to edit it on its own, Cmd-click or Shift-click to select a few and style them together. + adds a button, x removes one.</p>
-            <p class="hint">Drag buttons onto each other to reorder, onto + to duplicate, or onto the big preview to make one your single button. Cmd-Z undoes anything.</p>
+            <p class="hint">Your set is under the preview. Click a button to style it on its own. See Help below for selecting several, duplicating and reordering.</p>
           </div>
         </div>
       </details>
@@ -241,6 +240,17 @@
         </div>
       </details>
     </div>
+    <details class="section help-card">
+      <summary>Help</summary>
+      <div class="section-body">
+        <p class="hint"><b>One button:</b> pick a starting point, then set background, image, text and shape. Download the PNG and drop it into a button's image box in Companion.</p>
+        <p class="hint"><b>Make a set:</b> open "Make it a set" and choose Numbered (PC 1, PC 2...) or Custom list. Or click the + tile under the preview to duplicate the button you have. The set shows under the preview.</p>
+        <p class="hint"><b>Edit one, some or all:</b> with a set, changes apply to every button by default. Click one button to style just that one. Cmd-click, or Shift-click for a range, to style a few together. Use "Edit all" to go back.</p>
+        <p class="hint"><b>Reorder and reuse:</b> drag a button onto another to reorder, onto the + tile to duplicate, or onto the big preview to make it your single button.</p>
+        <p class="hint"><b>Presets:</b> click one to load it. For your own, double-click the name to rename, x to delete, or Save with the same name to update it.</p>
+        <p class="hint"><b>Shortcuts:</b> double-click a slider to reset it. Cmd-Z undoes the last change.</p>
+      </div>
+    </details>
   </section>
 </main>
 
@@ -260,8 +270,8 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato or Corsair. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script>window.BM_V = '51';</script>
-<script src="vendor/jszip.min.js?v=51"></script>
-<script type="module" src="js/app.js?v=51"></script>
+<script>window.BM_V = '52';</script>
+<script src="vendor/jszip.min.js?v=52"></script>
+<script type="module" src="js/app.js?v=52"></script>
 </body>
 </html>

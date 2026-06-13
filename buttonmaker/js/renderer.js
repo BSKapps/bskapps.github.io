@@ -132,8 +132,12 @@ export async function renderDesign(canvas, design, opts = {}) {
       let h = s;
       if (ratio > 1) h = s / ratio;
       else w = s * ratio;
-      const x = size / 2 - w / 2 + (icon.x / 100) * size;
-      const y = size / 2 - h / 2 + (icon.y / 100) * size;
+      const [iah, iav] = (icon.align || 'center:center').split(':');
+      const iaoff = Math.max(0, Math.min(40, Math.round(50 - icon.size / 2)));
+      const iax = iah === 'left' ? -iaoff : iah === 'right' ? iaoff : 0;
+      const iay = iav === 'top' ? -iaoff : iav === 'bottom' ? iaoff : 0;
+      const x = size / 2 - w / 2 + ((iax + (icon.x || 0)) / 100) * size;
+      const y = size / 2 - h / 2 + ((iay + (icon.y || 0)) / 100) * size;
       ctx.globalAlpha = (icon.opacity === undefined ? 100 : icon.opacity) / 100;
       const rot = ((icon.rotation || 0) * Math.PI) / 180;
       if (rot || icon.reverse) {

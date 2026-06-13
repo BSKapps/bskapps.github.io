@@ -53,6 +53,7 @@ function buildPopover() {
   pop = document.createElement('div');
   pop.className = 'color-pop hidden';
   pop.innerHTML =
+    '<div class="cp-title"></div>' +
     '<div class="cp-swatches"></div>' +
     '<div class="cp-row"><span>Hue</span><input type="range" id="cpH" min="0" max="360"></div>' +
     '<div class="cp-row"><span>Vivid</span><input type="range" id="cpS" min="0" max="100"></div>' +
@@ -100,6 +101,9 @@ function buildPopover() {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') close();
   });
+  window.addEventListener('scroll', () => {
+    if (targetInput && !pop.classList.contains('hidden')) reposition();
+  }, true);
 }
 
 function syncControls() {
@@ -131,12 +135,9 @@ function applyExact(hex) {
   }
 }
 
-function open(input) {
-  targetInput = input;
-  [h, s, l] = hexToHsl(input.value || '#ffffff');
-  syncControls();
-  pop.classList.remove('hidden');
-  const r = input.getBoundingClientRect();
+function reposition() {
+  if (!targetInput) return;
+  const r = targetInput.getBoundingClientRect();
   const pw = 280;
   const ph = pop.offsetHeight || 240;
   let x = Math.min(r.left, window.innerWidth - pw - 12);
@@ -144,6 +145,15 @@ function open(input) {
   if (y + ph > window.innerHeight - 12) y = Math.max(12, r.top - ph - 8);
   pop.style.left = Math.max(12, x) + 'px';
   pop.style.top = y + 'px';
+}
+
+function open(input) {
+  targetInput = input;
+  pop.querySelector('.cp-title').textContent = input.dataset.label || 'Colour';
+  [h, s, l] = hexToHsl(input.value || '#ffffff');
+  syncControls();
+  pop.classList.remove('hidden');
+  reposition();
 }
 
 function close() {

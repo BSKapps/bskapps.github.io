@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=51';
-import { triggerIconUpload } from './icons.js?v=51';
-import { seriesVariants, hasToken } from './series.js?v=51';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=52';
+import { triggerIconUpload } from './icons.js?v=52';
+import { seriesVariants, hasToken } from './series.js?v=52';
 
 const selectionSnapshots = new Map();
 
@@ -208,10 +208,6 @@ function rebuildWeightOptions(font, current) {
   return value;
 }
 
-function iconAnchorOffset() {
-  return Math.max(0, Math.min(40, Math.round(50 - refIcon().size / 2)));
-}
-
 function activeIcon() {
   const icons = editTarget().icons;
   if (state.ui.activeIcon >= icons.length) state.ui.activeIcon = icons.length - 1;
@@ -232,6 +228,15 @@ function bindRange(id, getSet, valId) {
     if (val) val.value = el.value;
     emit();
   });
+  if (el.dataset.default !== undefined) {
+    el.addEventListener('dblclick', () => {
+      const def = Number(el.dataset.default);
+      el.value = def;
+      if (val) val.value = def;
+      getSet(def);
+      emit();
+    });
+  }
   if (val) {
     val.min = el.min;
     val.max = el.max;
@@ -333,12 +338,7 @@ export function initUI() {
   document.getElementById('iconUploadSidebar').addEventListener('click', triggerIconUpload);
 
   bindSeg('iconAlign', (v) => applyEdit((d) => {
-    for (const ic of iconLayersOf(d)) {
-      const [hh, vv] = v.split(':');
-      const off = Math.max(0, Math.min(40, Math.round(50 - ic.size / 2)));
-      ic.x = hh === 'left' ? -off : hh === 'right' ? off : 0;
-      ic.y = vv === 'top' ? -off : vv === 'bottom' ? off : 0;
-    }
+    for (const ic of iconLayersOf(d)) ic.align = v;
   }));
 
   document.getElementById('textValue').addEventListener('input', (e) => {
@@ -364,7 +364,9 @@ export function initUI() {
   bindColor('textColor', (v) => applyEdit((d) => {
     for (const t of textLayersOf(d)) t.color = v;
   }));
-  bindRange('textOpacity', (v) => applyRelative(state.ui.allText, textLayersOf, refText(), 'opacity', v, 10, 100), 'textOpacityVal');
+  bindRange('textOpacity', (v) => applyEdit((d) => {
+    for (const t of textLayersOf(d)) t.opacity = v;
+  }), 'textOpacityVal');
   bindSeg('textAlign', (v) => applyEdit((d) => {
     for (const t of textLayersOf(d)) t.align = v;
   }));
@@ -625,14 +627,7 @@ export function syncInputsFromState() {
   document.getElementById('iconUploadSidebar').disabled = state.ui.allIcons;
   document.getElementById('exportZip').disabled = state.series.mode === 'off';
 
-  const off = iconAnchorOffset();
-  document.getElementById('iconAlign').querySelectorAll('button').forEach((b) => {
-    const [hh, vv] = b.dataset.val.split(':');
-    const bx = hh === 'left' ? -off : hh === 'right' ? off : 0;
-    const by = vv === 'top' ? -off : vv === 'bottom' ? off : 0;
-    const match = ic.x === bx && ic.y === by && (off !== 0 || b.dataset.val === 'center:center');
-    b.classList.toggle('active', match);
-  });
+  setSeg('iconAlign', ic.align || 'center:center');
 }
 
 function updateEditBanner() {

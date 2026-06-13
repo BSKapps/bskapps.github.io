@@ -1,4 +1,4 @@
-export const APP_VERSION = '51';
+export const APP_VERSION = '52';
 
 export function defaultTextLayer() {
   return {
@@ -22,8 +22,9 @@ export function defaultIconLayer() {
     color: '#ffffff',
     tint: false,
     size: 52,
+    align: 'center:center',
     x: 0,
-    y: -6,
+    y: 0,
     opacity: 100,
     rotation: 0,
     reverse: false

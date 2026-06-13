@@ -1,5 +1,5 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=51';
-import { renderDesign } from './renderer.js?v=51';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=52';
+import { renderDesign } from './renderer.js?v=52';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -254,7 +254,13 @@ export function initPresets() {
     const list = loadUserPresets();
     const preset = { name, design: deepClone(state.design) };
     if (state.series.mode !== 'off') preset.series = deepClone(state.series);
-    list.unshift(preset);
+    const existing = list.findIndex((p) => p.name.toLowerCase() === name.toLowerCase());
+    if (existing !== -1) {
+      if (!confirm('Update your preset "' + list[existing].name + '" with the current design?')) return;
+      list[existing] = preset;
+    } else {
+      list.unshift(preset);
+    }
     if (saveUserPresets(list)) {
       nameInput.value = '';
       renderPresetList();
@@ -317,6 +323,18 @@ export function renderPresetList() {
     const label = document.createElement('span');
     label.className = 'strip-name';
     label.textContent = preset.name;
+    if (!preset.builtin) {
+      label.title = 'Double-click to rename';
+      label.addEventListener('dblclick', (e) => {
+        e.stopPropagation();
+        const next = (prompt('Rename preset', preset.name) || '').trim();
+        if (!next) return;
+        const list = loadUserPresets();
+        list[preset.userIndex].name = next;
+        saveUserPresets(list);
+        renderPresetList();
+      });
+    }
 
     tile.appendChild(thumb);
     tile.appendChild(label);

@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, editTarget, primarySelection } from './state.js?v=51';
-import { renderDesign } from './renderer.js?v=51';
-import { seriesVariants } from './series.js?v=51';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, selectRangeTo, deselectListItem, addListItem, removeListItem, seriesForSnapshot } from './ui.js?v=51';
-import { initIconPicker } from './icons.js?v=51';
-import { initPresets } from './presets.js?v=51';
-import { initExport } from './export.js?v=51';
-import { initColorPopover } from './colorpicker.js?v=51';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, editTarget, primarySelection } from './state.js?v=52';
+import { renderDesign } from './renderer.js?v=52';
+import { seriesVariants } from './series.js?v=52';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, selectRangeTo, deselectListItem, addListItem, removeListItem, seriesForSnapshot } from './ui.js?v=52';
+import { initIconPicker } from './icons.js?v=52';
+import { initPresets } from './presets.js?v=52';
+import { initExport } from './export.js?v=52';
+import { initColorPopover } from './colorpicker.js?v=52';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -19,6 +19,15 @@ document.querySelector('.stage').addEventListener('click', (e) => {
 
 let rendering = false;
 let renderPending = false;
+let rafId = null;
+
+function scheduleRender() {
+  if (rafId !== null) return;
+  rafId = requestAnimationFrame(() => {
+    rafId = null;
+    renderAll();
+  });
+}
 
 async function renderAll() {
   if (rendering) {
@@ -145,6 +154,19 @@ async function renderOnce() {
       });
       seriesWrap.appendChild(add);
     }
+  }
+
+  if (state.series.mode === 'off') {
+    const add = document.createElement('button');
+    add.className = 'series-add';
+    add.textContent = '+';
+    add.title = 'Click to turn this button into an editable set you can duplicate and tweak.';
+    add.addEventListener('click', () => {
+      state.series.items = [{ label: '', color: '' }, { label: '', color: '' }];
+      state.series.mode = 'list';
+      selectListItem(1);
+    });
+    seriesWrap.appendChild(add);
   }
 }
 
@@ -324,7 +346,7 @@ onChange(() => {
   renderTextLayerChips();
   renderIconLayerChips();
   syncInputsFromState();
-  renderAll();
+  scheduleRender();
   if (!applyingUndo) {
     clearTimeout(historyTimer);
     historyTimer = setTimeout(pushHistory, 400);
