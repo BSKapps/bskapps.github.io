@@ -2,6 +2,10 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v78 - 2026-06-13
+- Made the "Number them" button a solid, clearly clickable button instead of a faint outline.
+- Reworded its hint so "Number them" is explained first, then From and To.
+
 ## v77 - 2026-06-13
 - The set button tooltip now mentions dragging a button onto the big preview to use just that one.
 - Redo is Cmd-Shift-Z (Ctrl-Y on Windows); dropped Cmd-Y on Mac since browsers use it for their own window.
