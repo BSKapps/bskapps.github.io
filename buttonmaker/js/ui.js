@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=61';
-import { triggerIconUpload } from './icons.js?v=61';
-import { seriesVariants, hasToken } from './series.js?v=61';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, defaultSeries, editTarget, editTargets, primarySelection } from './state.js?v=62';
+import { triggerIconUpload } from './icons.js?v=62';
+import { seriesVariants, hasToken } from './series.js?v=62';
 
 const selectionSnapshots = new Map();
 
@@ -101,6 +101,10 @@ export function removeListItem(i) {
     .filter((s) => s !== i)
     .map((s) => (s > i ? s - 1 : s));
   state.series.items.splice(i, 1);
+  if (state.series.items.length === 0) {
+    state.series.mode = 'off';
+    state.ui.selectedItems = [];
+  }
   emit();
 }
 
@@ -381,8 +385,26 @@ export function initUI() {
   bindRange('shapeZoom', (v) => applyEdit((d) => (d.shape.zoom = v)), 'shapeZoomVal');
 
   bindSeg('seriesMode', (v) => {
-    if (v !== 'list') releaseSelection();
-    state.series.mode = v;
+    const prev = state.series.mode;
+    if (v === 'off' && prev !== 'off') {
+      const variants = seriesVariants();
+      const sel = primarySelection();
+      const idx = prev === 'list' && sel !== null && variants[sel] ? sel : 0;
+      const chosen = variants[idx];
+      releaseSelection();
+      if (chosen) Object.assign(state.design, deepClone(chosen.design));
+      state.ui.activeText = 0;
+      state.ui.activeIcon = 0;
+      Object.assign(state.series, defaultSeries());
+    } else if (v === 'list' && prev === 'numbers') {
+      convertNumberedToList();
+    } else if (v === 'list' && prev === 'off') {
+      state.series.items = [{ label: '', color: '' }, { label: '', color: '' }];
+      state.series.mode = 'list';
+    } else {
+      if (v !== 'list') releaseSelection();
+      state.series.mode = v;
+    }
     document.getElementById('seriesNumbersRows').classList.toggle('hidden', v !== 'numbers');
     document.getElementById('seriesListRows').classList.toggle('hidden', v !== 'list');
   });

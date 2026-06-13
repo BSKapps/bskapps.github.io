@@ -2,6 +2,12 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v62 - 2026-06-13
+- "One button" now keeps the button you are previewing (its icon, colour and text) instead of dropping to a blank base design. Same as dragging a button onto the preview.
+- "Custom set" from a single button now duplicates that button into the set (matches the + Duplicate tile) instead of jumping to the camera tally.
+- "Custom set" from Numbered now converts your numbered buttons into the editable set.
+- Deleting every button in a set drops back to single-button mode: the base design stays and the ZIP button correctly disables (no more empty ZIP).
+
 ## v61 - 2026-06-13
 - Fixed the set list holding onto a previously-loaded set (e.g. Transport) and resurrecting it. Loading a non-set preset, or dragging a button onto the preview to make it single, now resets the set back to the default. Toggling One button and Custom set on a set you are building still keeps it.
 
