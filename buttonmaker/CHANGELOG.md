@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v84 - 2026-06-13
+- Tuned Mixer icon sizes: Mixer/Dock/Faders/Master/FX icons to 50, and the meter icons larger (Meters 70, Meters 8 92, Meters 2 82).
+
 ## v83 - 2026-06-13
 - Mixer Master button now has a single-fader icon (matching the other icon buttons in the set) instead of being a text-only tile.
 - Renamed the Mixer Fader button to Faders.

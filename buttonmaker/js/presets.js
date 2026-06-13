@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=83';
-import { renderDesign } from './renderer.js?v=83';
-import { numberSet } from './series.js?v=83';
-import { releaseSelection } from './ui.js?v=83';
+import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=84';
+import { renderDesign } from './renderer.js?v=84';
+import { numberSet } from './series.js?v=84';
+import { releaseSelection } from './ui.js?v=84';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -335,7 +335,7 @@ function builtinPresets() {
             color: '#1d1d22',
             design: mk((d) => {
               d.bg.color = '#1d1d22';
-              Object.assign(d.icons[0], { svg: meterSvg(4, [5, 7, 4, 6]), name: 'builtin:meters4', size: 50, y: -7 });
+              Object.assign(d.icons[0], { svg: meterSvg(4, [5, 7, 4, 6]), name: 'builtin:meters4', size: 70, y: -7 });
               Object.assign(d.texts[0], { value: 'METERS', font: 'Oswald', weight: '700', size: 11, align: 'center:bottom', y: 3 });
             })
           },
@@ -344,7 +344,7 @@ function builtinPresets() {
             color: '#1d1d22',
             design: mk((d) => {
               d.bg.color = '#1d1d22';
-              Object.assign(d.icons[0], { svg: meterSvg(8, [4, 6, 3, 5, 7, 4, 6, 5]), name: 'builtin:meters8', size: 62, y: 0 });
+              Object.assign(d.icons[0], { svg: meterSvg(8, [4, 6, 3, 5, 7, 4, 6, 5]), name: 'builtin:meters8', size: 92, y: 0 });
               d.texts[0].value = '';
             })
           },
@@ -353,7 +353,7 @@ function builtinPresets() {
             color: '#1d1d22',
             design: mk((d) => {
               d.bg.color = '#1d1d22';
-              Object.assign(d.icons[0], { svg: meterSvg(2, [6, 5]), name: 'builtin:meters2', size: 46, y: 0 });
+              Object.assign(d.icons[0], { svg: meterSvg(2, [6, 5]), name: 'builtin:meters2', size: 82, y: 0 });
               d.texts[0].value = '';
             })
           }
@@ -361,7 +361,7 @@ function builtinPresets() {
         colorTarget: 'bg'
       },
       design: mk((d) => {
-        d.icons[0].size = 40;
+        d.icons[0].size = 50;
         d.icons[0].y = -7;
         Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 10, align: 'center:bottom', y: 3 });
       })
