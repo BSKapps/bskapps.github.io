@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, defaultSeries, editTarget, editTargets, primarySelection } from './state.js?v=80';
-import { triggerIconUpload } from './icons.js?v=80';
-import { seriesVariants, numberSet } from './series.js?v=80';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, defaultSeries, editTarget, editTargets, primarySelection } from './state.js?v=81';
+import { triggerIconUpload } from './icons.js?v=81';
+import { seriesVariants, numberSet } from './series.js?v=81';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -153,6 +153,16 @@ function syncSelectedLabels() {
 
 function applyEdit(fn) {
   for (const d of editTargets()) fn(d);
+}
+
+function darken(hex, f) {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex || '');
+  if (!m) return hex;
+  const n = parseInt(m[1], 16);
+  const r = Math.round(((n >> 16) & 255) * f);
+  const g = Math.round(((n >> 8) & 255) * f);
+  const b = Math.round((n & 255) * f);
+  return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 }
 
 function textOf(d) {
@@ -312,7 +322,13 @@ function bindSeg(id, getSet) {
 
 export function initUI() {
   bindSeg('bgMode', (v) => {
-    applyEdit((d) => (d.bg.mode = v));
+    applyEdit((d) => {
+      if (v === 'gradient' && d.bg.mode === 'solid') {
+        d.bg.gradFrom = d.bg.color;
+        d.bg.gradTo = darken(d.bg.color, 0.45);
+      }
+      d.bg.mode = v;
+    });
     document.getElementById('bgSolidRow').classList.toggle('hidden', v !== 'solid');
     document.getElementById('bgGradientRows').classList.toggle('hidden', v !== 'gradient');
     document.getElementById('bgImageRows').classList.toggle('hidden', v !== 'image');

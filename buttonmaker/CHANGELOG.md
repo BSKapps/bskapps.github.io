@@ -2,6 +2,11 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v81 - 2026-06-13
+- Reworked the Track set: removed Region, renamed Marker/Prev/Next to Drop Marker / Prev Marker / Next Marker, and added Save and Go To Start (with new save and go-to-start icons).
+- Mixed up the fonts: the Mixer Master button now uses Bebas Neue and the Edit set labels use Montserrat.
+- Switching a background from Solid to Gradient now seeds the gradient from the solid colour you were on (top colour = your solid, bottom = a darker shade) instead of jumping to the default blue.
+
 ## v80 - 2026-06-13
 - Gave the Track, Edit and Mixer sets real icons (record, mute, solo, monitor, marker, region, split, heal, glue, fade, crop, nudge, normalize, render, mixer, dock, fader, FX) so they show off what is possible, not just text tiles.
 - Mixer set: dropped Strip and 2nd Row, added FX and a stereo meter variant.

@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=80';
-import { renderDesign } from './renderer.js?v=80';
-import { numberSet } from './series.js?v=80';
-import { releaseSelection } from './ui.js?v=80';
+import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=81';
+import { renderDesign } from './renderer.js?v=81';
+import { numberSet } from './series.js?v=81';
+import { releaseSelection } from './ui.js?v=81';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -34,7 +34,9 @@ const ICONS = {
   render: mdi('M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z'),
   mixer: mdi('M3,17V19H9V17H3M3,5V7H13V5H3M13,21V19H21V17H13V15H11V21H13M7,9V11H3V13H7V15H9V9H7M21,13V11H11V13H21M15,9H17V7H21V5H17V3H15V9Z'),
   dock: mdi('M20,4A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4H20M20,14H4V18H20V14Z'),
-  fx: mdi('M7.5,5.6L5,7L6.4,4.5L5,2L7.5,3.4L10,2L8.6,4.5L10,7L7.5,5.6M19.5,15.4L22,14L20.6,16.5L22,19L19.5,17.6L17,19L18.4,16.5L17,14L19.5,15.4M22,2L20.6,4.5L22,7L19.5,5.6L17,7L18.4,4.5L17,2L19.5,3.4L22,2M13.34,12.78L15.78,10.34L13.66,8.22L11.22,10.66L13.34,12.78M14.37,7.29C14,6.9 13.35,6.9 12.96,7.29L1.29,18.96C0.9,19.35 0.9,20 1.29,20.37L3.63,22.71C4,23.1 4.65,23.1 5.04,22.71L16.71,11.04C17.1,10.65 17.1,10 16.71,9.63L14.37,7.29Z')
+  fx: mdi('M7.5,5.6L5,7L6.4,4.5L5,2L7.5,3.4L10,2L8.6,4.5L10,7L7.5,5.6M19.5,15.4L22,14L20.6,16.5L22,19L19.5,17.6L17,19L18.4,16.5L17,14L19.5,15.4M22,2L20.6,4.5L22,7L19.5,5.6L17,7L18.4,4.5L17,2L19.5,3.4L22,2M13.34,12.78L15.78,10.34L13.66,8.22L11.22,10.66L13.34,12.78M14.37,7.29C14,6.9 13.35,6.9 12.96,7.29L1.29,18.96C0.9,19.35 0.9,20 1.29,20.37L3.63,22.71C4,23.1 4.65,23.1 5.04,22.71L16.71,11.04C17.1,10.65 17.1,10 16.71,9.63L14.37,7.29Z'),
+  save: mdi('M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z'),
+  gotostart: mdi('M18.41,16.59L13.82,12L18.41,7.41L17,6L11,12L17,18L18.41,16.59M6,6H8V18H6V6Z')
 };
 
 const faderSvg =
@@ -201,10 +203,51 @@ function builtinPresets() {
           { label: 'MUTE', color: '#ffb300', iconSvg: ICONS.mute, iconName: 'builtin:mute' },
           { label: 'SOLO', color: '#ffd54f', iconSvg: ICONS.solo, iconName: 'builtin:solo' },
           { label: 'MON', color: '#6fa3d9', iconSvg: ICONS.monitor, iconName: 'builtin:monitor' },
-          { label: 'MARKER', color: '#2fd0b0', iconSvg: ICONS.marker, iconName: 'builtin:marker' },
-          { label: 'REGION', color: '#b487e8', iconSvg: ICONS.region, iconName: 'builtin:region' },
-          { label: 'PREV', color: '#ffffff', iconSvg: ICONS.prev, iconName: 'builtin:prev' },
-          { label: 'NEXT', color: '#ffffff', iconSvg: ICONS.next, iconName: 'builtin:next' }
+          {
+            label: 'Drop Marker',
+            color: '#2fd0b0',
+            iconSvg: ICONS.marker,
+            iconName: 'builtin:marker',
+            design: mk((d) => {
+              d.bg.color = '#1d1d22';
+              Object.assign(d.icons[0], { svg: ICONS.marker, name: 'builtin:marker', color: '#2fd0b0', size: 34, y: -12 });
+              Object.assign(d.texts[0], { value: 'DROP\nMARKER', font: 'Oswald', weight: '700', size: 11, align: 'center:bottom', y: 2 });
+            })
+          },
+          {
+            label: 'Prev Marker',
+            color: '#ffffff',
+            iconSvg: ICONS.prev,
+            iconName: 'builtin:prev',
+            design: mk((d) => {
+              d.bg.color = '#1d1d22';
+              Object.assign(d.icons[0], { svg: ICONS.prev, name: 'builtin:prev', color: '#ffffff', size: 32, y: -12 });
+              Object.assign(d.texts[0], { value: 'PREV\nMARKER', font: 'Oswald', weight: '700', size: 11, align: 'center:bottom', y: 2 });
+            })
+          },
+          {
+            label: 'Next Marker',
+            color: '#ffffff',
+            iconSvg: ICONS.next,
+            iconName: 'builtin:next',
+            design: mk((d) => {
+              d.bg.color = '#1d1d22';
+              Object.assign(d.icons[0], { svg: ICONS.next, name: 'builtin:next', color: '#ffffff', size: 32, y: -12 });
+              Object.assign(d.texts[0], { value: 'NEXT\nMARKER', font: 'Oswald', weight: '700', size: 11, align: 'center:bottom', y: 2 });
+            })
+          },
+          { label: 'SAVE', color: '#3e8e5f', iconSvg: ICONS.save, iconName: 'builtin:save' },
+          {
+            label: 'Go To Start',
+            color: '#ffffff',
+            iconSvg: ICONS.gotostart,
+            iconName: 'builtin:gotostart',
+            design: mk((d) => {
+              d.bg.color = '#1d1d22';
+              Object.assign(d.icons[0], { svg: ICONS.gotostart, name: 'builtin:gotostart', color: '#ffffff', size: 36, y: -12 });
+              Object.assign(d.texts[0], { value: 'GO TO\nSTART', font: 'Oswald', weight: '700', size: 11, align: 'center:bottom', y: 2 });
+            })
+          }
         ],
         colorTarget: 'icon'
       },
@@ -237,7 +280,7 @@ function builtinPresets() {
       design: mk((d) => {
         d.icons[0].size = 38;
         d.icons[0].y = -7;
-        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 10, align: 'center:bottom', y: 3 });
+        Object.assign(d.texts[0], { value: '{label}', font: 'Montserrat', weight: '800', size: 10, align: 'center:bottom', y: 3 });
       })
     },
     {
@@ -280,7 +323,7 @@ function builtinPresets() {
             color: '#2f8f57',
             design: mk((d) => {
               d.bg.color = '#2f8f57';
-              Object.assign(d.texts[0], { value: 'MASTER', font: 'Oswald', weight: '700', size: 17, align: 'center:center' });
+              Object.assign(d.texts[0], { value: 'MASTER', font: 'Bebas Neue', weight: '400', size: 26, align: 'center:center' });
             })
           },
           { label: 'FX', color: '#6b4fa0', iconSvg: ICONS.fx, iconName: 'builtin:fx' },
