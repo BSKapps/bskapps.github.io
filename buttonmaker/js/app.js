@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=81';
-import { renderDesign } from './renderer.js?v=81';
-import { seriesVariants, numberSet } from './series.js?v=81';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=81';
-import { initIconPicker } from './icons.js?v=81';
-import { initPresets, normalizeDesign } from './presets.js?v=81';
-import { initExport } from './export.js?v=81';
-import { initColorPopover } from './colorpicker.js?v=81';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=82';
+import { renderDesign } from './renderer.js?v=82';
+import { seriesVariants, numberSet } from './series.js?v=82';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=82';
+import { initIconPicker } from './icons.js?v=82';
+import { initPresets, normalizeDesign } from './presets.js?v=82';
+import { initExport } from './export.js?v=82';
+import { initColorPopover } from './colorpicker.js?v=82';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -80,12 +80,9 @@ async function renderOnce() {
       c.height = 144;
       renderDesign(c, v.design, { bakeText: true });
       item.appendChild(c);
-      const hasText = (v.design.texts || []).some((t) => t.value && t.value.trim());
-      if (!hasText) {
-        const span = document.createElement('span');
-        span.textContent = v.label;
-        item.appendChild(span);
-      }
+      const span = document.createElement('span');
+      span.textContent = String(idx + 1);
+      item.appendChild(span);
 
       if (isList) {
         const del = document.createElement('button');

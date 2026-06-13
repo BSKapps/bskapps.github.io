@@ -2,6 +2,11 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v82 - 2026-06-13
+- The label under each button in a set is now just its position number (1, 2, 3...), a simple count - no names or reflected text.
+- Mixer button icon is now an upright 5-fader bank instead of the sideways sliders.
+- Mixer Master button back to the set's Oswald font so the Mixer set is visually consistent.
+
 ## v81 - 2026-06-13
 - Reworked the Track set: removed Region, renamed Marker/Prev/Next to Drop Marker / Prev Marker / Next Marker, and added Save and Go To Start (with new save and go-to-start icons).
 - Mixed up the fonts: the Mixer Master button now uses Bebas Neue and the Edit set labels use Montserrat.

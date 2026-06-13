@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=81';
-import { renderDesign } from './renderer.js?v=81';
-import { numberSet } from './series.js?v=81';
-import { releaseSelection } from './ui.js?v=81';
+import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=82';
+import { renderDesign } from './renderer.js?v=82';
+import { numberSet } from './series.js?v=82';
+import { releaseSelection } from './ui.js?v=82';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -39,14 +39,23 @@ const ICONS = {
   gotostart: mdi('M18.41,16.59L13.82,12L18.41,7.41L17,6L11,12L17,18L18.41,16.59M6,6H8V18H6V6Z')
 };
 
-const faderSvg =
-  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="currentColor">' +
-  '<rect x="4.4" y="3" width="1.3" height="18" rx="0.65"/>' +
-  '<rect x="11.35" y="3" width="1.3" height="18" rx="0.65"/>' +
-  '<rect x="18.3" y="3" width="1.3" height="18" rx="0.65"/>' +
-  '<rect x="2.6" y="12.4" width="4.9" height="2.9" rx="1.3"/>' +
-  '<rect x="9.55" y="6.4" width="4.9" height="2.9" rx="1.3"/>' +
-  '<rect x="16.5" y="9.4" width="4.9" height="2.9" rx="1.3"/></g></svg>';
+const faderBank = (cols, knobs) => {
+  const margin = 3;
+  const step = (24 - 2 * margin) / cols;
+  const tw = 1.2;
+  const kw = Math.min(5, step * 0.78);
+  let r = '';
+  for (let i = 0; i < cols; i++) {
+    const cx = margin + step * (i + 0.5);
+    const ky = knobs[i % knobs.length];
+    r += '<rect x="' + (cx - tw / 2).toFixed(2) + '" y="3" width="' + tw + '" height="18" rx="0.6"/>';
+    r += '<rect x="' + (cx - kw / 2).toFixed(2) + '" y="' + ky + '" width="' + kw.toFixed(2) + '" height="2.8" rx="1.3"/>';
+  }
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="currentColor">' + r + '</g></svg>';
+};
+
+const faderSvg = faderBank(3, [12.4, 6.4, 9.4]);
+const mixerSvg = faderBank(5, [12, 6.5, 9.5, 7, 11]);
 
 const meterSvg = (cols, levels) => {
   const rows = 7;
@@ -315,7 +324,7 @@ function builtinPresets() {
         from: 1,
         to: 4,
         items: [
-          { label: 'MIXER', color: '#3a6ea5', iconSvg: ICONS.mixer, iconName: 'builtin:mixer' },
+          { label: 'MIXER', color: '#3a6ea5', iconSvg: mixerSvg, iconName: 'builtin:mixerbank' },
           { label: 'DOCK', color: '#55555c', iconSvg: ICONS.dock, iconName: 'builtin:dock' },
           { label: 'FADER', color: '#1f7a8c', iconSvg: faderSvg, iconName: 'builtin:fader' },
           {
@@ -323,7 +332,7 @@ function builtinPresets() {
             color: '#2f8f57',
             design: mk((d) => {
               d.bg.color = '#2f8f57';
-              Object.assign(d.texts[0], { value: 'MASTER', font: 'Bebas Neue', weight: '400', size: 26, align: 'center:center' });
+              Object.assign(d.texts[0], { value: 'MASTER', font: 'Oswald', weight: '700', size: 17, align: 'center:center' });
             })
           },
           { label: 'FX', color: '#6b4fa0', iconSvg: ICONS.fx, iconName: 'builtin:fx' },
