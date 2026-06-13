@@ -1,5 +1,5 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=58';
-import { renderDesign } from './renderer.js?v=58';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=59';
+import { renderDesign } from './renderer.js?v=59';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -264,6 +264,13 @@ export function initPresets() {
     if (saveUserPresets(list)) {
       nameInput.value = '';
       renderPresetList();
+    }
+  });
+
+  nameInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      document.getElementById('presetSave').click();
     }
   });
 

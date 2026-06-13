@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v59 - 2026-06-13
+- Pressing Enter in the preset name field now saves (or updates) the preset, same as clicking Save to my presets.
+
 ## v58 - 2026-06-13
 - The delete x on your saved presets is now a tidy circular badge in the corner that appears on hover, matching the x on set buttons (was a bare character floating off-corner).
 
