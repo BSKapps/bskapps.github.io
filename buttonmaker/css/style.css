@@ -89,10 +89,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  background: var(--bg);
   padding: 16px 0 10px;
   margin-bottom: 6px;
   border-bottom: 1px solid var(--border);
@@ -840,10 +836,23 @@ body {
 .preset-picker-group { display: flex; flex-direction: column; gap: 6px; }
 
 .preset-picker-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: var(--muted);
   font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.04em;
+}
+
+.picker-user-tag { color: var(--faint); font-weight: 400; }
+
+.preset-picker-name .picker-addset { margin-left: auto; }
+
+.preset-picker-name .picker-del {
+  position: static;
+  opacity: 1;
+  margin-left: auto;
 }
 
 .preset-picker-row { display: flex; flex-wrap: wrap; gap: 8px; }

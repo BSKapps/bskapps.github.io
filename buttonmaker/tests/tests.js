@@ -1,9 +1,9 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=88';
-import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=88';
-import { buildCompanionPage } from '../js/companion.js?v=88';
-import { renderToDataUrl } from '../js/renderer.js?v=88';
-import { selectListItem, releaseSelection } from '../js/ui.js?v=88';
-import { invertCanvas, buildStrip, buildReaperZip, buildPngZip } from '../js/export.js?v=88';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=89';
+import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=89';
+import { buildCompanionPage } from '../js/companion.js?v=89';
+import { renderToDataUrl } from '../js/renderer.js?v=89';
+import { selectListItem, releaseSelection } from '../js/ui.js?v=89';
+import { invertCanvas, buildStrip, buildReaperZip, buildPngZip } from '../js/export.js?v=89';
 
 const results = [];
 

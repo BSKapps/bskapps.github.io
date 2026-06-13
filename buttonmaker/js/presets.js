@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=88';
-import { renderDesign } from './renderer.js?v=88';
-import { numberSet, variantsFor } from './series.js?v=88';
-import { releaseSelection } from './ui.js?v=88';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=89';
+import { renderDesign } from './renderer.js?v=89';
+import { numberSet, variantsFor } from './series.js?v=89';
+import { releaseSelection } from './ui.js?v=89';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -650,7 +650,7 @@ export function initPresets() {
   });
 
   const pickerModal = document.getElementById('presetPickerModal');
-  document.getElementById('addFromPreset').addEventListener('click', openPresetPicker);
+  document.getElementById('openPickerBtn').addEventListener('click', openPresetPicker);
   document.getElementById('presetPickerClose').addEventListener('click', () => pickerModal.classList.add('hidden'));
   pickerModal.addEventListener('click', (e) => {
     if (e.target === pickerModal) pickerModal.classList.add('hidden');
@@ -683,172 +683,180 @@ function setPickerStatus(msg) {
   if (status) status.textContent = msg;
 }
 
-function addVariantToSet(v) {
+function fillNameFromPreset(preset) {
+  if (preset && !preset.builtin) {
+    const el = document.getElementById('presetName');
+    if (el) el.value = preset.name;
+  }
+}
+
+function isBlankDesign() {
+  return JSON.stringify(state.design) === JSON.stringify(defaultDesign());
+}
+
+function addVariantToSet(v, preset) {
+  const name = v.companionText || v.label || (preset && preset.name) || 'button';
+  if (state.series.mode === 'off') {
+    releaseSelection();
+    if (isBlankDesign()) {
+      Object.assign(state.design, deepClone(v.design));
+      state.ui.activeText = 0;
+      state.ui.activeIcon = 0;
+      fillNameFromPreset(preset);
+      emit();
+      setPickerStatus('Loaded "' + name + '" as your button. Click another to start a set.');
+      return;
+    }
+    state.series.mode = 'list';
+    state.series.items = [{ label: '', color: '', design: deepClone(state.design) }];
+  }
   if (state.series.items.length >= 64) {
     setPickerStatus('Your set is full, 64 buttons is the most you can have.');
     return;
   }
-  state.series.mode = 'list';
-  state.series.items.push({
-    label: v.companionText || v.label || '',
-    color: '',
-    design: deepClone(v.design)
-  });
+  state.series.items.push({ label: v.companionText || v.label || '', color: '', design: deepClone(v.design) });
+  fillNameFromPreset(preset);
   emit();
-  setPickerStatus('Added "' + (v.companionText || v.label || 'button') + '" to your set.');
+  setPickerStatus('Added "' + name + '" to your set.');
 }
 
-function renderPresetPickerList() {
+function addSetToCurrent(preset) {
+  const variants = presetButtonVariants(preset);
+  if (!variants.length) return;
+  releaseSelection();
+  if (state.series.mode === 'off') {
+    const startBlank = isBlankDesign();
+    state.series.mode = 'list';
+    state.series.items = startBlank ? [] : [{ label: '', color: '', design: deepClone(state.design) }];
+  }
+  let added = 0;
+  for (const v of variants) {
+    if (state.series.items.length >= 64) break;
+    state.series.items.push({ label: v.companionText || v.label || '', color: '', design: deepClone(v.design) });
+    added++;
+  }
+  fillNameFromPreset(preset);
+  emit();
+  if (added < variants.length) {
+    setPickerStatus('Added ' + added + ' of the ' + preset.name + ' set, 64 buttons is the most you can have.');
+  } else {
+    setPickerStatus('Added the ' + preset.name + ' set (' + added + ' buttons).');
+  }
+}
+
+function pickerTile(v, preset) {
+  const tile = document.createElement('button');
+  tile.className = 'preset-picker-tile';
+  tile.title = 'Add "' + (v.companionText || v.label || (preset && preset.name) || 'button') + '" to your set';
+  const c = document.createElement('canvas');
+  c.width = 72;
+  c.height = 72;
+  renderDesign(c, deepClone(v.design));
+  tile.appendChild(c);
+  tile.addEventListener('click', () => addVariantToSet(v, preset));
+  return tile;
+}
+
+function pickerGroup(preset, isUser) {
+  const variants = presetButtonVariants(preset);
+  const group = document.createElement('div');
+  group.className = 'preset-picker-group';
+
+  const head = document.createElement('div');
+  head.className = 'preset-picker-name';
+
+  const nameText = document.createElement('span');
+  nameText.className = 'picker-name-text';
+  nameText.textContent = preset.name;
+  head.appendChild(nameText);
+
+  if (isUser) {
+    const tag = document.createElement('span');
+    tag.className = 'picker-user-tag';
+    tag.textContent = '(user)';
+    head.appendChild(tag);
+    nameText.title = 'Double-click to rename';
+    nameText.addEventListener('dblclick', () => {
+      const next = (prompt('Rename preset', preset.name) || '').trim();
+      if (!next) return;
+      const list = loadUserPresets();
+      list[preset.userIndex].name = next;
+      saveUserPresets(list);
+      renderPresetList();
+    });
+  }
+
+  if (preset.series && variants.length > 1) {
+    const addSet = document.createElement('button');
+    addSet.className = 'btn ghost small picker-addset';
+    addSet.textContent = 'Add set';
+    addSet.title = 'Add all ' + variants.length + ' buttons to your set';
+    addSet.addEventListener('click', () => addSetToCurrent(preset));
+    head.appendChild(addSet);
+  }
+
+  if (isUser) {
+    const del = document.createElement('span');
+    del.className = 'strip-del picker-del';
+    del.textContent = 'x';
+    del.title = 'Delete preset';
+    del.addEventListener('click', () => {
+      const list = loadUserPresets();
+      list.splice(preset.userIndex, 1);
+      saveUserPresets(list);
+      renderPresetList();
+    });
+    head.appendChild(del);
+  }
+
+  group.appendChild(head);
+
+  const row = document.createElement('div');
+  row.className = 'preset-picker-row';
+  variants.forEach((v) => row.appendChild(pickerTile(v, preset)));
+  group.appendChild(row);
+  return group;
+}
+
+export function renderPresetList() {
   const wrap = document.getElementById('presetPickerList');
+  if (!wrap) return;
   wrap.innerHTML = '';
-  const all = loadUserPresets().concat(builtinPresets());
-  for (const preset of all) {
-    const variants = presetButtonVariants(preset);
+
+  const user = loadUserPresets().map((p, i) => ({ ...p, userIndex: i }));
+  for (const preset of user) wrap.appendChild(pickerGroup(preset, true));
+
+  const builtins = builtinPresets();
+  const basics = builtins.filter((p) => !p.series);
+  if (basics.length) {
     const group = document.createElement('div');
     group.className = 'preset-picker-group';
-
     const head = document.createElement('div');
     head.className = 'preset-picker-name';
-    head.textContent = preset.series ? preset.name + ' (' + variants.length + ')' : preset.name;
+    const nameText = document.createElement('span');
+    nameText.className = 'picker-name-text';
+    nameText.textContent = 'Basics';
+    head.appendChild(nameText);
     group.appendChild(head);
-
     const row = document.createElement('div');
     row.className = 'preset-picker-row';
-    variants.forEach((v) => {
-      const tile = document.createElement('button');
-      tile.className = 'preset-picker-tile';
-      tile.title = 'Add "' + (v.companionText || v.label || preset.name) + '" to your set';
-      const c = document.createElement('canvas');
-      c.width = 72;
-      c.height = 72;
-      renderDesign(c, deepClone(v.design));
-      tile.appendChild(c);
-      tile.addEventListener('click', () => addVariantToSet(v));
-      row.appendChild(tile);
-    });
+    for (const preset of basics) {
+      const v = presetButtonVariants(preset)[0];
+      if (v) row.appendChild(pickerTile(v, preset));
+    }
     group.appendChild(row);
     wrap.appendChild(group);
+  }
+
+  for (const preset of builtins.filter((p) => p.series)) {
+    wrap.appendChild(pickerGroup(preset, false));
   }
 }
 
 function openPresetPicker() {
-  renderPresetPickerList();
-  setPickerStatus('Click a button to drop it into your set. Add as many as you like, then Close.');
+  renderPresetList();
+  setPickerStatus('Click a button to add it, or "Add set" for a whole row. Add as many as you like, then Close.');
   document.getElementById('presetPickerModal').classList.remove('hidden');
-}
-
-export function renderPresetList() {
-  const wrap = document.getElementById('presetList');
-  wrap.innerHTML = '';
-  const user = loadUserPresets();
-  const all = user.map((p, i) => ({ ...p, userIndex: i })).concat(builtinPresets());
-
-  for (const preset of all) {
-    const tile = document.createElement('div');
-    tile.className = 'strip-item';
-    tile.title = preset.name + (preset.series ? ' - loads a whole set' : '');
-
-    const thumb = document.createElement('canvas');
-    thumb.width = 72;
-    thumb.height = 72;
-    renderDesign(thumb, thumbDesign(preset));
-
-    const label = document.createElement('span');
-    label.className = 'strip-name';
-    label.textContent = preset.name;
-    if (!preset.builtin) {
-      label.title = 'Double-click to rename';
-      label.addEventListener('dblclick', (e) => {
-        e.stopPropagation();
-        const next = (prompt('Rename preset', preset.name) || '').trim();
-        if (!next) return;
-        const list = loadUserPresets();
-        list[preset.userIndex].name = next;
-        saveUserPresets(list);
-        renderPresetList();
-      });
-    }
-
-    tile.appendChild(thumb);
-    tile.appendChild(label);
-
-    if (preset.series) {
-      const setTag = document.createElement('span');
-      setTag.className = 'strip-set';
-      setTag.textContent = 'SET';
-      tile.appendChild(setTag);
-    }
-
-    tile.addEventListener('click', () => {
-      Object.assign(state.design, normalizeDesign(deepClone(preset.design)));
-      state.ui.activeText = 0;
-      state.ui.activeIcon = 0;
-      releaseSelection();
-      if (preset.series) {
-        const series = deepClone(preset.series);
-        if (series.mode === 'numbers') {
-          series.items = numberSet(state.design, series.from, series.to);
-          series.mode = 'list';
-        }
-        if (Array.isArray(series.items)) {
-          for (const it of series.items) {
-            if (it && it.design) it.design = normalizeDesign(it.design);
-          }
-        }
-        Object.assign(state.series, series);
-      } else {
-        Object.assign(state.series, defaultSeries());
-      }
-      document.getElementById('presetName').value = preset.builtin ? '' : preset.name;
-      emit();
-    });
-
-    if (!preset.builtin) {
-      const delBtn = document.createElement('span');
-      delBtn.className = 'strip-del';
-      delBtn.textContent = 'x';
-      delBtn.title = 'Delete preset';
-      delBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const list = loadUserPresets();
-        list.splice(preset.userIndex, 1);
-        saveUserPresets(list);
-        renderPresetList();
-      });
-      tile.appendChild(delBtn);
-    }
-
-    wrap.appendChild(tile);
-  }
-}
-
-function thumbDesign(preset) {
-  const s = preset.series;
-  if (s && s.mode === 'list' && s.items[0] && s.items[0].design) {
-    return normalizeDesign(deepClone(s.items[0].design));
-  }
-  const d = normalizeDesign(deepClone(preset.design));
-  const n = s && s.mode === 'numbers' ? String(Math.min(s.from, s.to)) : '1';
-  const first = s && s.mode === 'list' && s.items[0] ? s.items[0] : null;
-  const label = first ? first.label : '';
-  for (const t of d.texts) {
-    t.value = t.value.replaceAll('{n}', n).replaceAll('{label}', label);
-  }
-  if (first && first.iconSvg) {
-    d.icons[0].svg = first.iconSvg;
-    d.icons[0].name = first.iconName || null;
-  }
-  if (first && first.color) {
-    if (s.colorTarget === 'bg' && d.bg.mode !== 'image') {
-      d.bg.mode = 'solid';
-      d.bg.color = first.color;
-    } else if (s.colorTarget === 'icon') {
-      for (const ic of d.icons) ic.color = first.color;
-    } else if (s.colorTarget === 'text') {
-      for (const t of d.texts) t.color = first.color;
-    }
-  }
-  return d;
 }
 
 export function normalizeDesign(design) {

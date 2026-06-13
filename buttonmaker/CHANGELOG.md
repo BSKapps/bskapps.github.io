@@ -2,6 +2,12 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v89 - 2026-06-14
+- New preset picker: "1. Pick a starting point" now opens one "Choose buttons & sets" picker instead of the side-scrolling strip. Click any button to add it to your set, or "Add set" to add a whole row in one go.
+- Your own presets sit at the top of the picker, marked (user), with rename (double-click the name) and delete (x). Adding one of your own brings its name back into the Save box so you can edit it and Save over it.
+- "Start fresh" moved into the picker. The first button you add to an empty canvas becomes your single button; add a second and it turns into a set.
+- Removed the separate "Add from a preset" button under "Make it a set" - the one picker now both starts you off and adds buttons to a set.
+
 ## v88 - 2026-06-14
 - Active toggle state: Invert is now a proper full invert - the whole button goes negative (background, icon and text) instead of only flipping the background, so text stays legible on dark buttons.
 
