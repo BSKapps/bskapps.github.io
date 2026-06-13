@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=78';
-import { renderDesign } from './renderer.js?v=78';
-import { numberSet } from './series.js?v=78';
-import { releaseSelection } from './ui.js?v=78';
+import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=79';
+import { renderDesign } from './renderer.js?v=79';
+import { numberSet } from './series.js?v=79';
+import { releaseSelection } from './ui.js?v=79';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -19,6 +19,38 @@ const ICONS = {
   repeat: mdi('M17 17H7v-3l-4 4l4 4v-3h12v-6h-2M7 7h10v3l4-4l-4-4v3H5v6h2z'),
   record: mdi('M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z'),
   lowerthird: mdi('M3,13.5H13V15.5H3V13.5M3,17H21V19.5H3V17Z')
+};
+
+const faderSvg =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="currentColor">' +
+  '<rect x="4.4" y="3" width="1.3" height="18" rx="0.65"/>' +
+  '<rect x="11.35" y="3" width="1.3" height="18" rx="0.65"/>' +
+  '<rect x="18.3" y="3" width="1.3" height="18" rx="0.65"/>' +
+  '<rect x="2.6" y="12.4" width="4.9" height="2.9" rx="1.3"/>' +
+  '<rect x="9.55" y="6.4" width="4.9" height="2.9" rx="1.3"/>' +
+  '<rect x="16.5" y="9.4" width="4.9" height="2.9" rx="1.3"/></g></svg>';
+
+const meterSvg = (cols, levels) => {
+  const rows = 7;
+  const top = 2.5;
+  const bottom = 21.5;
+  const sg = 0.6;
+  const sh = (bottom - top - sg * (rows - 1)) / rows;
+  const left = 2.5;
+  const right = 21.5;
+  const cg = cols > 4 ? 0.8 : 1.4;
+  const cw = (right - left - cg * (cols - 1)) / cols;
+  const tone = ['#2fbf4f', '#2fbf4f', '#2fbf4f', '#9acb3b', '#d8b026', '#e8881f', '#e5484d'];
+  let r = '';
+  for (let c = 0; c < cols; c++) {
+    const x = (left + c * (cw + cg)).toFixed(2);
+    for (let i = 0; i < rows; i++) {
+      const y = (bottom - sh - i * (sh + sg)).toFixed(2);
+      const fill = i < levels[c] ? tone[i] : '#2a2f37';
+      r += '<rect x="' + x + '" y="' + y + '" width="' + cw.toFixed(2) + '" height="' + sh.toFixed(2) + '" rx="0.4" fill="' + fill + '"/>';
+    }
+  }
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">' + r + '</svg>';
 };
 
 function builtinPresets() {
@@ -139,6 +171,134 @@ function builtinPresets() {
         d.icons[0].size = 69;
         d.icons[0].y = -4;
         Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 10, align: 'center:bottom', y: 3 });
+      })
+    },
+    {
+      name: 'Track',
+      builtin: true,
+      series: {
+        mode: 'list',
+        from: 1,
+        to: 4,
+        items: [
+          { label: 'ARM', color: '#e5484d' },
+          { label: 'MUTE', color: '#d8881f' },
+          { label: 'SOLO', color: '#d8b026' },
+          { label: 'MON', color: '#3a6ea5' },
+          {
+            label: 'MARKER',
+            color: '#1f9d8c',
+            design: mk((d) => {
+              d.bg.color = '#1f9d8c';
+              Object.assign(d.texts[0], { value: 'MARKER', font: 'Oswald', weight: '700', size: 17, align: 'center:center' });
+            })
+          },
+          {
+            label: 'REGION',
+            color: '#6b4fa0',
+            design: mk((d) => {
+              d.bg.color = '#6b4fa0';
+              Object.assign(d.texts[0], { value: 'REGION', font: 'Oswald', weight: '700', size: 17, align: 'center:center' });
+            })
+          },
+          { label: 'PREV', color: '#55555c' },
+          { label: 'NEXT', color: '#55555c' }
+        ],
+        colorTarget: 'bg'
+      },
+      design: mk((d) => {
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 22, align: 'center:center' });
+      })
+    },
+    {
+      name: 'Mixer',
+      builtin: true,
+      series: {
+        mode: 'list',
+        from: 1,
+        to: 4,
+        items: [
+          { label: 'MIXER', color: '#3a6ea5' },
+          { label: 'STRIP', color: '#3a6ea5' },
+          { label: 'DOCK', color: '#55555c' },
+          {
+            label: '2ND ROW',
+            color: '#55555c',
+            design: mk((d) => {
+              d.bg.color = '#55555c';
+              Object.assign(d.texts[0], { value: '2ND\nROW', font: 'Oswald', weight: '700', size: 19, align: 'center:center' });
+            })
+          },
+          {
+            label: 'MASTER',
+            color: '#2f8f57',
+            design: mk((d) => {
+              d.bg.color = '#2f8f57';
+              Object.assign(d.texts[0], { value: 'MASTER', font: 'Oswald', weight: '700', size: 17, align: 'center:center' });
+            })
+          },
+          {
+            label: 'FADER',
+            color: '#1f7a8c',
+            design: mk((d) => {
+              d.bg.color = '#1f7a8c';
+              Object.assign(d.icons[0], { svg: faderSvg, name: 'builtin:fader', color: '#ffffff', size: 44, y: -8 });
+              Object.assign(d.texts[0], { value: 'FADER', font: 'Oswald', weight: '700', size: 11, align: 'center:bottom', y: 3 });
+            })
+          },
+          {
+            label: 'METERS',
+            color: '#1d1d22',
+            design: mk((d) => {
+              d.bg.color = '#1d1d22';
+              Object.assign(d.icons[0], { svg: meterSvg(4, [5, 7, 4, 6]), name: 'builtin:meters4', size: 50, y: -7 });
+              Object.assign(d.texts[0], { value: 'METERS', font: 'Oswald', weight: '700', size: 11, align: 'center:bottom', y: 3 });
+            })
+          },
+          {
+            label: 'Meters 8',
+            color: '#1d1d22',
+            design: mk((d) => {
+              d.bg.color = '#1d1d22';
+              Object.assign(d.icons[0], { svg: meterSvg(8, [4, 6, 3, 5, 7, 4, 6, 5]), name: 'builtin:meters8', size: 62, y: 0 });
+              d.texts[0].value = '';
+            })
+          }
+        ],
+        colorTarget: 'bg'
+      },
+      design: mk((d) => {
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 22, align: 'center:center' });
+      })
+    },
+    {
+      name: 'Edit',
+      builtin: true,
+      series: {
+        mode: 'list',
+        from: 1,
+        to: 4,
+        items: [
+          { label: 'SPLIT', color: '#e8881f' },
+          { label: 'HEAL', color: '#1f9d8c' },
+          { label: 'GLUE', color: '#2f8f57' },
+          { label: 'FADE', color: '#3a6ea5' },
+          { label: 'CROP', color: '#6b4fa0' },
+          { label: 'NUDGE', color: '#55555c' },
+          { label: 'NORM', color: '#6d9c2a' },
+          {
+            label: 'RENDER',
+            color: '#b51f1f',
+            design: mk((d) => {
+              d.bg.color = '#b51f1f';
+              Object.assign(d.texts[0], { value: 'RENDER', font: 'Oswald', weight: '700', size: 17, align: 'center:center' });
+            })
+          }
+        ],
+        colorTarget: 'bg'
+      },
+      design: mk((d) => {
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 22, align: 'center:center' });
       })
     },
     {

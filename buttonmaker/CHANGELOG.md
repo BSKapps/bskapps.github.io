@@ -2,6 +2,10 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v79 - 2026-06-13
+- Added three REAPER-oriented preset sets: Track (Arm, Mute, Solo, Mon, Marker, Region, Prev, Next), Mixer (Mixer, Strip, Dock, 2nd Row, Master, Fader, plus green-yellow-red LED meter buttons), and Edit (Split, Heal, Glue, Fade, Crop, Nudge, Norm, Render).
+- New meterbridge-style LED meter and fader icons used by the Mixer set.
+
 ## v78 - 2026-06-13
 - Made the "Number them" button a solid, clearly clickable button instead of a faint outline.
 - Reworded its hint so "Number them" is explained first, then From and To.
