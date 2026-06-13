@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=74';
-import { renderDesign } from './renderer.js?v=74';
-import { numberSet } from './series.js?v=74';
-import { releaseSelection } from './ui.js?v=74';
+import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=75';
+import { renderDesign } from './renderer.js?v=75';
+import { numberSet } from './series.js?v=75';
+import { releaseSelection } from './ui.js?v=75';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -20,8 +20,6 @@ const ICONS = {
   record: mdi('M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z'),
   lowerthird: mdi('M3,13.5H13V15.5H3V13.5M3,17H21V19.5H3V17Z')
 };
-
-const numberedSet = (from, to) => ({ mode: 'numbers', from, to, items: [], colorTarget: 'bg' });
 
 function builtinPresets() {
   const mk = (over) => {
@@ -304,29 +302,51 @@ function builtinPresets() {
     {
       name: 'INPUT 1-8',
       builtin: true,
-      series: numberedSet(1, 8),
+      series: {
+        mode: 'list',
+        from: 1,
+        to: 8,
+        items: [
+          { label: '1' }, { label: '2' }, { label: '3' }, { label: '4' },
+          { label: '5' }, { label: '6' }, { label: '7' }, { label: '8' }
+        ],
+        colorTarget: 'bg'
+      },
       design: mk((d) => {
         d.bg.mode = 'gradient';
-        d.bg.gradFrom = '#16324f';
+        d.bg.gradFrom = '#24507f';
         d.bg.gradTo = '#0a0e14';
-        Object.assign(d.texts[0], { value: 'INPUT', font: 'Roboto Condensed', weight: '700', size: 11, align: 'center:top' });
-        d.texts.push({ value: '{n}', font: 'Bebas Neue', weight: '400', size: 34, color: '#ffffff', align: 'center:center' });
+        d.bg.angle = 182;
+        Object.assign(d.texts[0], { value: 'INPUT', font: 'Roboto Condensed', weight: '700', size: 11, align: 'center:top', y: 4 });
+        d.texts.push({ value: '{label}', font: 'Bebas Neue', weight: '400', size: 38, color: '#ffffff', align: 'center:center', x: 0, y: 4 });
       })
     },
     {
-      name: 'Lower Third 1-4',
+      name: 'Lower Thirds 1-8',
       builtin: true,
-      series: numberedSet(1, 4),
+      series: {
+        mode: 'list',
+        from: 1,
+        to: 8,
+        items: [
+          { label: '1' }, { label: '2' }, { label: '3' }, { label: '4' },
+          { label: '5' }, { label: '6' }, { label: '7' }, { label: '8' }
+        ],
+        colorTarget: 'bg'
+      },
       design: mk((d) => {
         d.bg.mode = 'gradient';
         d.bg.gradFrom = '#2c3440';
         d.bg.gradTo = '#0d1014';
+        d.bg.angle = 0;
         d.icons[0].svg = ICONS.lowerthird;
         d.icons[0].name = 'builtin:lowerthird';
         d.icons[0].color = '#ffd54f';
-        d.icons[0].size = 56;
-        d.icons[0].y = 10;
-        Object.assign(d.texts[0], { value: 'L3 {n}', font: 'Roboto Condensed', weight: '700', size: 10, align: 'center:top' });
+        d.icons[0].size = 76;
+        d.icons[0].x = 2;
+        d.icons[0].y = 6;
+        d.icons[0].align = 'left:bottom';
+        Object.assign(d.texts[0], { value: 'L3 {label}', font: 'Roboto Condensed', weight: '700', size: 16, align: 'center:top', y: 2 });
       })
     }
   ];
@@ -391,9 +411,8 @@ export function initPresets() {
   });
 
   const importFile = document.getElementById('presetImportFile');
-  document.getElementById('presetImportBtn').addEventListener('click', () => importFile.click());
-  importFile.addEventListener('change', async () => {
-    const file = importFile.files[0];
+
+  async function applyImportedFile(file) {
     if (!file) return;
     try {
       const data = JSON.parse(await file.text());
@@ -408,6 +427,24 @@ export function initPresets() {
     } catch (e) {
       alert('Could not read that file.');
     }
+  }
+
+  document.getElementById('presetImportBtn').addEventListener('click', async () => {
+    if (window.showOpenFilePicker) {
+      try {
+        const [handle] = await window.showOpenFilePicker({
+          startIn: 'downloads',
+          types: [{ description: 'BSK Button presets', accept: { 'application/json': ['.json'] } }]
+        });
+        await applyImportedFile(await handle.getFile());
+      } catch (e) {}
+      return;
+    }
+    importFile.click();
+  });
+
+  importFile.addEventListener('change', async () => {
+    await applyImportedFile(importFile.files[0]);
     importFile.value = '';
   });
 

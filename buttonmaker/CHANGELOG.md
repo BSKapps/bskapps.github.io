@@ -2,6 +2,10 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v75 - 2026-06-13
+- Refreshed the INPUT and Lower Thirds preset sets (now INPUT 1-8 and Lower Thirds 1-8, with bigger, clearer numbers and graphics).
+- On Chrome, Edge and other Chromium browsers, Restore now opens straight to your Downloads folder. Firefox and Safari open wherever the browser last left off.
+
 ## v74 - 2026-06-13
 - Refreshed the Transport, QLab and Timers preset sets: better-centred transport icons, sized-up QLab labels, and a fuller Timers set (new colours, plus START, STOP, RESET and a SEND MESSAGE button).
 
