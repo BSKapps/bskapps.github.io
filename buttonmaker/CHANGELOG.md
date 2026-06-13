@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v56 - 2026-06-13
+- Download summary for a set drops the leading button count (you can see them under the preview): "Download PNG saves the one you are previewing; the ZIP saves all N as separate PNGs."
+
 ## v55 - 2026-06-13
 - The + tile under a single button now has a "Duplicate" label so it is clear that clicking it copies the button into a set.
 - Clearer set guidance: "Click one to style it alone, Cmd-click or Shift-click to grab a few" in the set hint and Help.

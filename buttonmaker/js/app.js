@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, editTarget, primarySelection } from './state.js?v=55';
-import { renderDesign } from './renderer.js?v=55';
-import { seriesVariants } from './series.js?v=55';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, selectRangeTo, deselectListItem, addListItem, removeListItem, seriesForSnapshot } from './ui.js?v=55';
-import { initIconPicker } from './icons.js?v=55';
-import { initPresets } from './presets.js?v=55';
-import { initExport } from './export.js?v=55';
-import { initColorPopover } from './colorpicker.js?v=55';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, editTarget, primarySelection } from './state.js?v=56';
+import { renderDesign } from './renderer.js?v=56';
+import { seriesVariants } from './series.js?v=56';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, selectRangeTo, deselectListItem, addListItem, removeListItem, seriesForSnapshot } from './ui.js?v=56';
+import { initIconPicker } from './icons.js?v=56';
+import { initPresets } from './presets.js?v=56';
+import { initExport } from './export.js?v=56';
+import { initColorPopover } from './colorpicker.js?v=56';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -58,7 +58,7 @@ async function renderOnce() {
   if (summary) {
     summary.textContent = variants.length === 1
       ? 'One button. Download the PNG and load it into a button in Companion.'
-      : variants.length + ' buttons. Download PNG saves the one you are previewing; the ZIP saves all ' + variants.length + ' as separate PNGs.';
+      : 'Download PNG saves the one you are previewing; the ZIP saves all ' + variants.length + ' as separate PNGs.';
   }
 
   seriesWrap.innerHTML = '';
