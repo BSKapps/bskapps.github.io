@@ -1,8 +1,9 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, defaultSeries, editTarget, editTargets, primarySelection } from './state.js?v=68';
-import { triggerIconUpload } from './icons.js?v=68';
-import { seriesVariants, hasToken, numberedRange } from './series.js?v=68';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, defaultSeries, editTarget, editTargets, primarySelection } from './state.js?v=74';
+import { triggerIconUpload } from './icons.js?v=74';
+import { seriesVariants, numberSet } from './series.js?v=74';
 
 const selectionSnapshots = new Map();
+const materializedHere = new Set();
 
 function clampSeriesNum(n) {
   return Math.max(0, Math.min(999, Math.round(n * 100) / 100));
@@ -11,15 +12,17 @@ function clampSeriesNum(n) {
 function discardIfUnchanged(item) {
   if (!item) return;
   const snap = selectionSnapshots.get(item);
-  if (item.design && snap && JSON.stringify(item.design) === snap) {
+  if (item.design && snap && materializedHere.has(item) && JSON.stringify(item.design) === snap) {
     delete item.design;
   }
   selectionSnapshots.delete(item);
+  materializedHere.delete(item);
 }
 
 export function releaseSelection() {
   for (const item of [...selectionSnapshots.keys()]) discardIfUnchanged(item);
   selectionSnapshots.clear();
+  materializedHere.clear();
   state.ui.selectedItems = [];
 }
 
@@ -30,6 +33,7 @@ function materialize(i) {
     const v = seriesVariants()[i];
     if (!v) return false;
     item.design = v.design;
+    materializedHere.add(item);
   }
   if (!selectionSnapshots.has(item)) selectionSnapshots.set(item, JSON.stringify(item.design));
   return true;
@@ -100,7 +104,10 @@ export function addListItem() {
 
 export function removeListItem(i) {
   const item = state.series.items[i];
-  if (item) selectionSnapshots.delete(item);
+  if (item) {
+    selectionSnapshots.delete(item);
+    materializedHere.delete(item);
+  }
   state.ui.selectedItems = state.ui.selectedItems
     .filter((s) => s !== i)
     .map((s) => (s > i ? s - 1 : s));
@@ -117,7 +124,7 @@ export function seriesForSnapshot() {
   s.items.forEach((clone, i) => {
     const orig = state.series.items[i];
     const snap = orig && selectionSnapshots.get(orig);
-    if (clone.design && snap && JSON.stringify(orig.design) === snap) delete clone.design;
+    if (clone.design && snap && materializedHere.has(orig) && JSON.stringify(orig.design) === snap) delete clone.design;
   });
   return s;
 }
@@ -354,19 +361,6 @@ export function initUI() {
     if (state.series.mode === 'list' && !state.ui.selectedItems.length) return;
     applyEdit((d) => (textOf(d).value = e.target.value));
     syncSelectedLabels();
-    if (state.series.mode === 'numbers') {
-      state.series.items = [];
-      const m = e.target.value.match(/(\d+(?:\.\d+)?)\s*$/);
-      if (m) {
-        const dot = m[1].indexOf('.');
-        const dp = dot === -1 ? 0 : Math.min(2, m[1].length - dot - 1);
-        const step = Math.pow(10, -dp);
-        const start = clampSeriesNum(parseFloat(m[1]));
-        const count = numberedRange(state.series.from, state.series.to).length;
-        state.series.from = start;
-        state.series.to = Math.min(999, Math.round((start + (count - 1) * step) * 100) / 100);
-      }
-    }
     emit();
   });
   bindSelect('textFont', (v) => {
@@ -414,46 +408,37 @@ export function initUI() {
         state.ui.activeText = 0;
         state.ui.activeIcon = 0;
         Object.assign(state.series, defaultSeries());
-      } else if (v === 'numbers') {
-        releaseSelection();
-        state.series.mode = 'numbers';
       } else {
         releaseSelection();
         if (!state.series.items.length) {
-          if (prev === 'numbers') convertNumberedToList();
-          else state.series.items = [{ label: '', color: '' }, { label: '', color: '' }];
+          state.series.items = [{ label: '', color: '' }, { label: '', color: '' }];
         }
         state.series.mode = 'list';
       }
     }
-    document.getElementById('seriesNumbersRows').classList.toggle('hidden', v !== 'numbers');
     document.getElementById('seriesListRows').classList.toggle('hidden', v !== 'list');
   });
 
   document.getElementById('editAllBtn').addEventListener('click', deselectListItem);
 
-  document.getElementById('seriesConvertList').addEventListener('click', () => {
+  document.getElementById('seriesNumberBtn').addEventListener('click', () => {
+    document.getElementById('seriesFrom').dispatchEvent(new Event('change'));
+    document.getElementById('seriesTo').dispatchEvent(new Event('change'));
+    const hasContent = state.series.items.some((it) => it.design || (it.label && it.label.trim()));
+    if (hasContent && !confirm('Replace the ' + state.series.items.length + ' buttons in your set with a numbered set?')) return;
+    releaseSelection();
     convertNumberedToList();
     emit();
   });
 
   const bindSeriesNum = (id, key) => {
     const el = document.getElementById(id);
-    el.addEventListener('input', () => {
-      const n = parseFloat(el.value);
-      if (Number.isNaN(n)) return;
-      state.series[key] = clampSeriesNum(n);
-      state.series.items = [];
-      emit();
-    });
     el.addEventListener('change', () => {
       let n = parseFloat(el.value);
       if (Number.isNaN(n)) n = state.series[key];
       n = clampSeriesNum(n);
       state.series[key] = n;
       el.value = n;
-      state.series.items = [];
-      emit();
     });
   };
   bindSeriesNum('seriesFrom', 'from');
@@ -466,20 +451,7 @@ export function initUI() {
 }
 
 export function convertNumberedToList() {
-  const nums = numberedRange(state.series.from, state.series.to);
-  if (hasToken(state.design)) {
-    state.series.items = nums.map((numStr) => ({ label: numStr, color: '' }));
-    for (const t of state.design.texts) {
-      t.value = t.value.replaceAll('{n}', '{label}');
-    }
-  } else {
-    const t = state.design.texts.find((l) => l.value);
-    const stem = t ? t.value.replace(/\s*\d+(\.\d+)?$/, '') : '';
-    state.series.items = nums.map((numStr) => ({
-      label: stem ? stem + ' ' + numStr : numStr,
-      color: ''
-    }));
-  }
+  state.series.items = numberSet(state.design, state.series.from, state.series.to);
   state.series.mode = 'list';
 }
 
@@ -669,7 +641,6 @@ export function syncInputsFromState() {
   setSeg('textAlign', t.align);
 
   setSeg('seriesMode', state.series.mode);
-  document.getElementById('seriesNumbersRows').classList.toggle('hidden', state.series.mode !== 'numbers');
   document.getElementById('seriesListRows').classList.toggle('hidden', state.series.mode !== 'list');
   setVal('seriesFrom', state.series.from);
   setVal('seriesTo', state.series.to);
@@ -688,7 +659,7 @@ function updateEditBanner() {
   const bAll = document.getElementById('editAllBtn');
   const sel = state.ui.selectedItems;
   if (state.series.mode === 'list' && sel.length) {
-    banner.classList.remove('hidden');
+    banner.classList.remove('idle');
     banner.classList.add('one');
     if (sel.length === 1) {
       const item = state.series.items[sel[0]];
@@ -698,12 +669,15 @@ function updateEditBanner() {
     }
     bAll.classList.remove('hidden');
   } else if (state.series.mode === 'list' && state.series.items.length) {
-    banner.classList.remove('hidden');
+    banner.classList.remove('idle');
     banner.classList.remove('one');
     bLabel.textContent = 'Editing every button in the set.';
     bAll.classList.add('hidden');
   } else {
-    banner.classList.add('hidden');
+    banner.classList.add('idle');
+    banner.classList.remove('one');
+    bLabel.textContent = '';
+    bAll.classList.add('hidden');
   }
 }
 

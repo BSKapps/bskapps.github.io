@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=68';
-import { renderDesign } from './renderer.js?v=68';
-import { seriesVariants, numberedRange, numberStep } from './series.js?v=68';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, selectRangeTo, deselectListItem, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=68';
-import { initIconPicker } from './icons.js?v=68';
-import { initPresets, normalizeDesign } from './presets.js?v=68';
-import { initExport } from './export.js?v=68';
-import { initColorPopover } from './colorpicker.js?v=68';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=74';
+import { renderDesign } from './renderer.js?v=74';
+import { seriesVariants, numberSet } from './series.js?v=74';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=74';
+import { initIconPicker } from './icons.js?v=74';
+import { initPresets, normalizeDesign } from './presets.js?v=74';
+import { initExport } from './export.js?v=74';
+import { initColorPopover } from './colorpicker.js?v=74';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -63,8 +63,7 @@ async function renderOnce() {
 
   seriesWrap.innerHTML = '';
   const isList = state.series.mode === 'list';
-  const isNumbers = state.series.mode === 'numbers';
-  if (variants.length > 1 || isList || isNumbers) {
+  if (isList) {
     variants.forEach((v, idx) => {
       const item = document.createElement('div');
       item.className = 'series-item';
@@ -72,11 +71,6 @@ async function renderOnce() {
       item.draggable = true;
       item.title = 'Click to edit this button on its own, Cmd-click to select several. Drag onto another button to reorder.';
       item.addEventListener('click', (e) => {
-        if (state.series.mode === 'numbers') {
-          convertNumberedToList();
-          selectListItem(idx);
-          return;
-        }
         if (state.series.mode !== 'list') return;
         if (e.shiftKey) selectRangeTo(idx);
         else selectListItem(idx, e.metaKey || e.ctrlKey);
@@ -160,27 +154,6 @@ async function renderOnce() {
       wrap.appendChild(add);
       wrap.appendChild(cap);
       seriesWrap.appendChild(wrap);
-    } else if (isNumbers && variants.length < 64) {
-      const wrap = document.createElement('div');
-      wrap.className = 'series-add-tile';
-      const add = document.createElement('button');
-      add.className = 'series-add';
-      add.textContent = '+';
-      add.title = 'Add the next number to the set.';
-      add.addEventListener('click', () => {
-        const from = state.series.from;
-        const to = state.series.to;
-        if (numberedRange(from, to).length >= 64) return;
-        const step = numberStep(from, to);
-        if (to >= from) state.series.to = Math.round((to + step) * 100) / 100;
-        else state.series.from = Math.round((from + step) * 100) / 100;
-        emit();
-      });
-      const cap = document.createElement('span');
-      cap.textContent = 'Add';
-      wrap.appendChild(add);
-      wrap.appendChild(cap);
-      seriesWrap.appendChild(wrap);
     }
   }
 
@@ -208,9 +181,6 @@ async function renderOnce() {
 let gridDragIndex = null;
 
 function reorderSet(from, to) {
-  if (state.series.mode === 'numbers') {
-    convertNumberedToList();
-  }
   const items = state.series.items;
   const selObjects = state.ui.selectedItems.map((i) => items[i]);
   const [moved] = items.splice(from, 1);
@@ -340,6 +310,10 @@ function restoreSession() {
       }
       Object.assign(state.design, normalizeDesign(saved.design));
       const series = saved.series || {};
+      if (series.mode === 'numbers') {
+        series.items = numberSet(state.design, series.from, series.to);
+        series.mode = 'list';
+      }
       if (Array.isArray(series.items)) {
         for (const it of series.items) {
           if (it && it.design) it.design = normalizeDesign(it.design);

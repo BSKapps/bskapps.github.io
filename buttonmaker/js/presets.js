@@ -1,6 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=68';
-import { renderDesign } from './renderer.js?v=68';
-import { releaseSelection } from './ui.js?v=68';
+import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=74';
+import { renderDesign } from './renderer.js?v=74';
+import { numberSet } from './series.js?v=74';
+import { releaseSelection } from './ui.js?v=74';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -64,22 +65,82 @@ function builtinPresets() {
         items: [
           { label: 'Play', color: '#4caf50', iconSvg: ICONS.play, iconName: 'builtin:play' },
           { label: 'Pause', color: '#ffb300', iconSvg: ICONS.pause, iconName: 'builtin:pause' },
-          { label: 'Stop', color: '#e53935', iconSvg: ICONS.stop, iconName: 'builtin:stop' },
+          {
+            label: 'Stop',
+            color: '#e53935',
+            iconSvg: ICONS.stop,
+            iconName: 'builtin:stop',
+            design: mk((d) => {
+              d.bg.color = '#1d1d22';
+              Object.assign(d.icons[0], { svg: ICONS.stop, name: 'builtin:stop', color: '#e53935', size: 75, y: -4 });
+              Object.assign(d.texts[0], { value: 'Stop', font: 'Oswald', weight: '700', size: 10, align: 'center:bottom', y: 3 });
+            })
+          },
           { label: 'Prev', color: '#ffffff', iconSvg: ICONS.prev, iconName: 'builtin:prev' },
-          { label: 'Next', color: '#ffffff', iconSvg: ICONS.next, iconName: 'builtin:next' },
-          { label: 'Rew', color: '#ffffff', iconSvg: ICONS.rewind, iconName: 'builtin:rewind' },
+          {
+            label: 'Next',
+            color: '#ffffff',
+            iconSvg: ICONS.next,
+            iconName: 'builtin:next',
+            design: mk((d) => {
+              d.bg.color = '#1d1d22';
+              Object.assign(d.icons[0], { svg: ICONS.next, name: 'builtin:next', color: '#ffffff', size: 69, y: 0 });
+              Object.assign(d.texts[0], { value: 'Next', font: 'Oswald', weight: '700', size: 10, align: 'center:bottom', y: 3 });
+            })
+          },
+          {
+            label: 'Rew',
+            color: '#ffffff',
+            iconSvg: ICONS.rewind,
+            iconName: 'builtin:rewind',
+            design: mk((d) => {
+              d.bg.color = '#1d1d22';
+              Object.assign(d.icons[0], { svg: ICONS.rewind, name: 'builtin:rewind', color: '#ffffff', size: 69, y: 0 });
+              Object.assign(d.texts[0], { value: 'Rew', font: 'Oswald', weight: '700', size: 10, align: 'center:bottom', y: 3 });
+            })
+          },
           { label: 'FFwd', color: '#ffffff', iconSvg: ICONS.ffwd, iconName: 'builtin:ffwd' },
-          { label: 'Shuffle', color: '#ffffff', iconSvg: ICONS.shuffle, iconName: 'builtin:shuffle' },
-          { label: 'Repeat', color: '#ffffff', iconSvg: ICONS.repeat, iconName: 'builtin:repeat' },
-          { label: 'Rec', color: '#e53935', iconSvg: ICONS.record, iconName: 'builtin:record' }
+          {
+            label: 'Shuffle',
+            color: '#ffffff',
+            iconSvg: ICONS.shuffle,
+            iconName: 'builtin:shuffle',
+            design: mk((d) => {
+              d.bg.color = '#1d1d22';
+              Object.assign(d.icons[0], { svg: ICONS.shuffle, name: 'builtin:shuffle', color: '#ffffff', size: 69, y: -7 });
+              Object.assign(d.texts[0], { value: 'Shuffle', font: 'Oswald', weight: '700', size: 10, align: 'center:bottom', y: 3 });
+            })
+          },
+          {
+            label: 'Repeat',
+            color: '#ffffff',
+            iconSvg: ICONS.repeat,
+            iconName: 'builtin:repeat',
+            design: mk((d) => {
+              d.bg.color = '#1d1d22';
+              Object.assign(d.icons[0], { svg: ICONS.repeat, name: 'builtin:repeat', color: '#ffffff', size: 69, y: -7 });
+              Object.assign(d.texts[0], { value: 'Repeat', font: 'Oswald', weight: '700', size: 10, align: 'center:bottom', y: 3 });
+            })
+          },
+          {
+            label: 'Rec',
+            color: '#e53935',
+            iconSvg: ICONS.record,
+            iconName: 'builtin:record',
+            design: mk((d) => {
+              d.bg.color = '#1d1d22';
+              Object.assign(d.icons[0], { svg: ICONS.record, name: 'builtin:record', color: '#e53935', size: 56, y: -6 });
+              Object.assign(d.texts[0], { value: 'Rec', font: 'Oswald', weight: '700', size: 10, align: 'center:bottom', y: 3 });
+            })
+          }
         ],
         colorTarget: 'icon'
       },
       design: mk((d) => {
         d.bg.color = '#1d1d22';
-        d.icons[0].size = 72;
+        d.icons[0].size = 69;
         d.icons[0].y = -4;
-        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 10, align: 'center:bottom' });
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 10, align: 'center:bottom', y: 3 });
       })
     },
     {
@@ -99,17 +160,31 @@ function builtinPresets() {
             })
           },
           { label: 'PAUSE', color: '#c9a227' },
-          { label: 'RESUME', color: '#3a6ea5' },
+          {
+            label: 'RESUME',
+            color: '#3a6ea5',
+            design: mk((d) => {
+              d.bg.color = '#3a6ea5';
+              Object.assign(d.texts[0], { value: 'RESUME', font: 'Oswald', weight: '700', size: 20, align: 'center:center' });
+            })
+          },
           { label: 'PANIC', color: '#b51f1f' },
           { label: 'PREV', color: '#55555c' },
           { label: 'NEXT', color: '#55555c' },
-          { label: 'PREVIEW', color: '#6b4fa0' },
+          {
+            label: 'PREVIEW',
+            color: '#6b4fa0',
+            design: mk((d) => {
+              d.bg.color = '#6b4fa0';
+              Object.assign(d.texts[0], { value: 'PREVIEW', font: 'Oswald', weight: '700', size: 18, align: 'center:center' });
+            })
+          },
           { label: 'LOOP', color: '#1f7a8c' }
         ],
         colorTarget: 'bg'
       },
       design: mk((d) => {
-        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 18, align: 'center:center' });
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 22, align: 'center:center' });
       })
     },
     {
@@ -144,19 +219,59 @@ function builtinPresets() {
         from: 1,
         to: 4,
         items: [
-          { label: '60', color: '#1f9d3a' },
+          { label: '60', color: '#1d7730' },
           { label: '45', color: '#6d9c2a' },
           { label: '30', color: '#9aa427' },
           { label: '15', color: '#c9a227' },
-          { label: '5', color: '#b51f1f' },
-          { label: '+1', color: '#1f9d3a' },
-          { label: '-1', color: '#b51f1f' },
+          { label: '5', color: '#c96a17' },
           {
-            label: 'Message',
+            label: '+1',
+            color: '#3e8e5f',
+            design: mk((d) => {
+              d.bg.color = '#3e8e5f';
+              Object.assign(d.texts[0], { value: '+1', font: 'Bebas Neue', weight: '400', size: 48, align: 'center:center', x: -4, y: -5 });
+              d.texts.push({ value: 'MIN', font: 'Oswald', weight: '700', size: 11, color: '#ffffff', align: 'center:bottom', x: 0, y: 2 });
+            })
+          },
+          {
+            label: '-1',
+            color: '#ed4a80',
+            design: mk((d) => {
+              d.bg.color = '#ed4a80';
+              Object.assign(d.texts[0], { value: '-1', font: 'Bebas Neue', weight: '400', size: 48, align: 'center:center', x: -4, y: -5 });
+              d.texts.push({ value: 'MIN', font: 'Oswald', weight: '700', size: 11, color: '#ffffff', align: 'center:bottom', x: 0, y: 2 });
+            })
+          },
+          {
+            label: 'SEND',
             color: '#3a6ea5',
             design: mk((d) => {
               d.bg.color = '#3a6ea5';
-              Object.assign(d.texts[0], { value: 'MESSAGE', font: 'Oswald', weight: '700', size: 15, align: 'center:center' });
+              Object.assign(d.texts[0], { value: 'SEND\nMESSAGE', font: 'Oswald', weight: '700', size: 17, align: 'center:center' });
+            })
+          },
+          {
+            label: 'START',
+            color: '#1f9d3a',
+            design: mk((d) => {
+              d.bg.color = '#1f9d3a';
+              Object.assign(d.texts[0], { value: 'START', font: 'Bebas Neue', weight: '400', size: 35, align: 'center:center' });
+            })
+          },
+          {
+            label: 'STOP',
+            color: '#b51f1f',
+            design: mk((d) => {
+              d.bg.color = '#b51f1f';
+              Object.assign(d.texts[0], { value: 'STOP', font: 'Bebas Neue', weight: '400', size: 35, align: 'center:center' });
+            })
+          },
+          {
+            label: 'RESET',
+            color: '#c9a227',
+            design: mk((d) => {
+              d.bg.color = '#c9a227';
+              Object.assign(d.texts[0], { value: 'RESET', font: 'Bebas Neue', weight: '400', size: 35, align: 'center:center' });
             })
           }
         ],
@@ -348,6 +463,10 @@ export function renderPresetList() {
       releaseSelection();
       if (preset.series) {
         const series = deepClone(preset.series);
+        if (series.mode === 'numbers') {
+          series.items = numberSet(state.design, series.from, series.to);
+          series.mode = 'list';
+        }
         if (Array.isArray(series.items)) {
           for (const it of series.items) {
             if (it && it.design) it.design = normalizeDesign(it.design);

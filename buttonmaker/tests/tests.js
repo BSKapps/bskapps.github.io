@@ -1,7 +1,8 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=68';
-import { seriesVariants, safeFileName, numberedRange, numberStep } from '../js/series.js?v=68';
-import { buildCompanionPage } from '../js/companion.js?v=68';
-import { renderToDataUrl } from '../js/renderer.js?v=68';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=74';
+import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet } from '../js/series.js?v=74';
+import { buildCompanionPage } from '../js/companion.js?v=74';
+import { renderToDataUrl } from '../js/renderer.js?v=74';
+import { selectListItem, releaseSelection } from '../js/ui.js?v=74';
 
 const results = [];
 
@@ -24,20 +25,19 @@ function resetState() {
 function run() {
   resetState();
   state.design.texts[0].value = 'CAM {n}';
-  state.series.mode = 'numbers';
+  state.series.items = numberSet(state.design, 1, 4);
+  state.series.mode = 'list';
   let v = seriesVariants();
-  check('numbered set produces 4 variants', v.length === 4);
+  check('number fill produces 4 variants', v.length === 4);
   check('token {n} substituted', v[0].design.texts[0].value === 'CAM 1' && v[3].design.texts[0].value === 'CAM 4');
   check('companionText carries substituted text', v[2].companionText === 'CAM 3');
-  check('base design untouched by variants', state.design.texts[0].value === 'CAM {n}');
+  check('numbering swaps base token to {label}, variants do not mutate it', state.design.texts[0].value === 'CAM {label}');
 
-  state.series.from = 9;
-  state.series.to = 5;
+  state.series.items = numberSet(state.design, 9, 5);
   check('inverted range still counts', seriesVariants().length === 5);
 
-  state.series.from = 1;
-  state.series.to = 500;
-  check('numbered set capped at 64', seriesVariants().length === 64);
+  state.series.items = numberSet(state.design, 1, 500);
+  check('number fill capped at 64', seriesVariants().length === 64);
 
   check('numberedRange integer sequence', JSON.stringify(numberedRange(1, 4)) === JSON.stringify(['1', '2', '3', '4']));
   check('numberedRange tenths', JSON.stringify(numberedRange(0.1, 0.4)) === JSON.stringify(['0.1', '0.2', '0.3', '0.4']));
@@ -56,30 +56,28 @@ function run() {
 
   resetState();
   state.design.texts[0].value = 'CUE';
-  state.series.mode = 'numbers';
-  state.series.from = 1.1;
-  state.series.to = 1.3;
+  state.series.items = numberSet(state.design, 1.1, 1.3);
+  state.series.mode = 'list';
   v = seriesVariants();
   check('decimal numbered appends decimals to stem', v.length === 3 && v[0].design.texts[0].value === 'CUE 1.1' && v[2].design.texts[0].value === 'CUE 1.3');
 
   resetState();
   state.design.texts[0].value = 'PC';
-  state.series.mode = 'numbers';
-  state.series.to = 3;
+  state.series.items = numberSet(state.design, 1, 3);
+  state.series.mode = 'list';
   v = seriesVariants();
   check('plain text numbered: PC becomes PC 1, PC 2, PC 3', v[0].design.texts[0].value === 'PC 1' && v[2].design.texts[0].value === 'PC 3');
 
   resetState();
-  state.series.mode = 'numbers';
-  state.series.to = 2;
+  state.series.items = numberSet(state.design, 1, 2);
+  state.series.mode = 'list';
   v = seriesVariants();
   check('empty design numbered: number drawn as big centred text', v[0].design.texts.some((t) => t.value === '1' && t.align === 'center:center'));
 
   resetState();
   state.design.texts[0].value = 'PC 1';
-  state.series.mode = 'numbers';
-  state.series.from = 2;
-  state.series.to = 4;
+  state.series.items = numberSet(state.design, 2, 4);
+  state.series.mode = 'list';
   v = seriesVariants();
   check('existing trailing number replaced: PC 1 from 2 gives PC 2..PC 4', v[0].design.texts[0].value === 'PC 2' && v[2].design.texts[0].value === 'PC 4');
 
@@ -185,6 +183,22 @@ function run() {
   check('editTargets with no selection covers base and detached designs', all.length === 2 && all[0] === state.design && all[1] === dA);
   resetState();
   check('editTargets outside list mode is just the base design', editTargets().length === 1 && editTargets()[0] === state.design);
+
+  resetState();
+  state.series.mode = 'list';
+  state.design.texts[0].value = 'BASE';
+  const preDesign = defaultDesign();
+  preDesign.texts[0].value = 'MESSAGE';
+  state.series.items = [
+    { label: 'A', color: '' },
+    { label: 'Message', color: '', design: preDesign }
+  ];
+  selectListItem(1);
+  selectListItem(0);
+  check('pre-existing per-item design survives look-only selection', !!state.series.items[1].design && state.series.items[1].design.texts[0].value === 'MESSAGE');
+  const inheritedHadDesign = !!state.series.items[0].design;
+  releaseSelection();
+  check('look-only inherited selection does not bake a per-item design', inheritedHadDesign && !state.series.items[0].design);
 
   check('gradient blend defaults to 100', defaultDesign().bg.blend === 100);
 

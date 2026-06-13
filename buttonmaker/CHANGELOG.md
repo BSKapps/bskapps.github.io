@@ -2,6 +2,30 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v74 - 2026-06-13
+- Refreshed the Transport, QLab and Timers preset sets: better-centred transport icons, sized-up QLab labels, and a fuller Timers set (new colours, plus START, STOP, RESET and a SEND MESSAGE button).
+
+## v73 - 2026-06-13
+- "Number them" now uses the From/To values even if you click it straight after typing, without clicking away first.
+- "Number them" now asks before replacing a set you have already built, so you do not lose your buttons by accident.
+- Old sets left open from before this update now restore correctly as editable sets. Plus internal tidy-ups from a review of the set logic.
+
+## v72 - 2026-06-13
+- Fixed buttons with their own style (like the Message button in the Timers set) losing that style and reverting to the big number look when you clicked between buttons.
+
+## v71 - 2026-06-13
+- Simplified sets: there are now just two choices, One button and Custom set. The separate "Numbered" mode is gone.
+- Custom set gains a "Number them" tool (From / To) that fills the set with numbered buttons you can edit straight away - "PC" becomes PC 1, PC 2..., and cue numbers like 1.1 to 1.5 work too.
+- This removes the old, confusing behaviour where switching between modes could change which buttons appeared. Numbered presets like INPUT 1-8 now open straight as an editable set.
+
+## v70 - 2026-06-13
+- The page header and the "2. Make it yours / Start fresh" row now stay pinned in place instead of scrolling away, so Start fresh is always reachable and the page stops shifting around as you scroll.
+- Card titles "Icon / Image" and "Border / Shape" now use the same, tighter spacing around the slash.
+- Made the Border / Shape card's edge a touch more visible.
+
+## v69 - 2026-06-13
+- Step 3 and 4 no longer jump down when you switch to Custom set. The "Editing the set" banner now keeps its place, so clicking Custom set (or any set mode) holds the cards still instead of shoving them down.
+
 ## v68 - 2026-06-13
 - Made the Icon / Image and Text card watermarks a touch larger.
 

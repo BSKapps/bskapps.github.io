@@ -1,4 +1,4 @@
-import { state, deepClone } from './state.js?v=68';
+import { state, deepClone } from './state.js?v=74';
 
 export function hasToken(design) {
   return design.texts.some((t) => t.value && (t.value.includes('{n}') || t.value.includes('{label}')));
@@ -32,29 +32,24 @@ export function numberStep(from, to) {
   return Math.pow(10, -dp);
 }
 
+export function numberSet(design, from, to) {
+  const nums = numberedRange(from, to);
+  if (hasToken(design)) {
+    for (const t of design.texts) t.value = t.value.replaceAll('{n}', '{label}');
+    return nums.map((numStr) => ({ label: numStr, color: '' }));
+  }
+  const t = design.texts.find((l) => l.value);
+  const stem = t ? t.value.replace(/\s*\d+(\.\d+)?$/, '') : '';
+  return nums.map((numStr) => ({ label: stem ? stem + ' ' + numStr : numStr, color: '' }));
+}
+
 export function seriesVariants() {
   const s = state.series;
   const base = state.design;
   const variants = [];
   const tokens = hasToken(base);
 
-  if (s.mode === 'numbers') {
-    for (const numStr of numberedRange(s.from, s.to)) {
-      const d = deepClone(base);
-      if (tokens) {
-        substituteLayers(d, numStr, numStr);
-      } else {
-        const t = d.texts.find((l) => l.value);
-        if (t) {
-          const stem = t.value.replace(/\s*\d+(\.\d+)?$/, '');
-          t.value = stem ? stem + ' ' + numStr : numStr;
-        } else {
-          d.texts.push(numberLayer(numStr));
-        }
-      }
-      variants.push({ design: d, label: numStr, companionText: firstText(d) });
-    }
-  } else if (s.mode === 'list') {
+  if (s.mode === 'list') {
     s.items.slice(0, 64).forEach((item, i) => {
       if (item.design) {
         const d = deepClone(item.design);
