@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=82';
-import { renderDesign } from './renderer.js?v=82';
-import { numberSet } from './series.js?v=82';
-import { releaseSelection } from './ui.js?v=82';
+import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=83';
+import { renderDesign } from './renderer.js?v=83';
+import { numberSet } from './series.js?v=83';
+import { releaseSelection } from './ui.js?v=83';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -56,6 +56,7 @@ const faderBank = (cols, knobs) => {
 
 const faderSvg = faderBank(3, [12.4, 6.4, 9.4]);
 const mixerSvg = faderBank(5, [12, 6.5, 9.5, 7, 11]);
+const masterFaderSvg = faderBank(1, [8]);
 
 const meterSvg = (cols, levels) => {
   const rows = 7;
@@ -326,15 +327,8 @@ function builtinPresets() {
         items: [
           { label: 'MIXER', color: '#3a6ea5', iconSvg: mixerSvg, iconName: 'builtin:mixerbank' },
           { label: 'DOCK', color: '#55555c', iconSvg: ICONS.dock, iconName: 'builtin:dock' },
-          { label: 'FADER', color: '#1f7a8c', iconSvg: faderSvg, iconName: 'builtin:fader' },
-          {
-            label: 'MASTER',
-            color: '#2f8f57',
-            design: mk((d) => {
-              d.bg.color = '#2f8f57';
-              Object.assign(d.texts[0], { value: 'MASTER', font: 'Oswald', weight: '700', size: 17, align: 'center:center' });
-            })
-          },
+          { label: 'FADERS', color: '#1f7a8c', iconSvg: faderSvg, iconName: 'builtin:fader' },
+          { label: 'MASTER', color: '#2f8f57', iconSvg: masterFaderSvg, iconName: 'builtin:masterfader' },
           { label: 'FX', color: '#6b4fa0', iconSvg: ICONS.fx, iconName: 'builtin:fx' },
           {
             label: 'METERS',

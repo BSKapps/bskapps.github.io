@@ -1,4 +1,4 @@
-import { state, deepClone } from './state.js?v=82';
+import { state, deepClone } from './state.js?v=83';
 
 export function hasToken(design) {
   return design.texts.some((t) => t.value && (t.value.includes('{n}') || t.value.includes('{label}')));

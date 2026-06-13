@@ -1,4 +1,4 @@
-export const APP_VERSION = '82';
+export const APP_VERSION = '83';
 
 export function defaultTextLayer() {
   return {
