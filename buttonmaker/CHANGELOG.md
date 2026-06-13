@@ -2,6 +2,11 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v67 - 2026-06-13
+- Icon / Image and Text cards now carry a single faint watermark beside the Position grid (instead of a repeating pattern), so the controls and labels stay easy to read.
+- Background card icon changed to a colour palette; the "Image" card is now labelled "Icon / Image".
+- Fixed a numbered set "blowing out" when switching to Custom set: once you change a numbered set's From/To or text, Custom set now converts the numbered set you see instead of restoring an earlier custom set.
+
 ## v65 - 2026-06-13
 - Icon/Image card now uses a faint picture motif instead of a dot grid.
 - Background card icon is now a paint-fill icon (the previous droplet read as water).

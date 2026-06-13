@@ -1,7 +1,7 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=65';
-import { seriesVariants, safeFileName, numberedRange, numberStep } from '../js/series.js?v=65';
-import { buildCompanionPage } from '../js/companion.js?v=65';
-import { renderToDataUrl } from '../js/renderer.js?v=65';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=67';
+import { seriesVariants, safeFileName, numberedRange, numberStep } from '../js/series.js?v=67';
+import { buildCompanionPage } from '../js/companion.js?v=67';
+import { renderToDataUrl } from '../js/renderer.js?v=67';
 
 const results = [];
 

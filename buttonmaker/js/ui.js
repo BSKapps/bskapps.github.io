@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, defaultSeries, editTarget, editTargets, primarySelection } from './state.js?v=65';
-import { triggerIconUpload } from './icons.js?v=65';
-import { seriesVariants, hasToken, numberedRange } from './series.js?v=65';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, defaultSeries, editTarget, editTargets, primarySelection } from './state.js?v=67';
+import { triggerIconUpload } from './icons.js?v=67';
+import { seriesVariants, hasToken, numberedRange } from './series.js?v=67';
 
 const selectionSnapshots = new Map();
 
@@ -355,6 +355,7 @@ export function initUI() {
     applyEdit((d) => (textOf(d).value = e.target.value));
     syncSelectedLabels();
     if (state.series.mode === 'numbers') {
+      state.series.items = [];
       const m = e.target.value.match(/(\d+(?:\.\d+)?)\s*$/);
       if (m) {
         const dot = m[1].indexOf('.');
@@ -442,6 +443,7 @@ export function initUI() {
       const n = parseFloat(el.value);
       if (Number.isNaN(n)) return;
       state.series[key] = clampSeriesNum(n);
+      state.series.items = [];
       emit();
     });
     el.addEventListener('change', () => {
@@ -450,6 +452,7 @@ export function initUI() {
       n = clampSeriesNum(n);
       state.series[key] = n;
       el.value = n;
+      state.series.items = [];
       emit();
     });
   };
