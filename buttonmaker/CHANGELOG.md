@@ -2,6 +2,10 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v77 - 2026-06-13
+- The set button tooltip now mentions dragging a button onto the big preview to use just that one.
+- Redo is Cmd-Shift-Z (Ctrl-Y on Windows); dropped Cmd-Y on Mac since browsers use it for their own window.
+
 ## v76 - 2026-06-13
 - Added Redo (Cmd-Shift-Z) alongside Undo, and Cmd-A to select every button in a set. Both noted in Help.
 - Tidied the Number them controls: the button now sits above the From/To boxes, From and To sit side by side, with a clearer note that they set how many buttons are built. Removed a redundant hint line.

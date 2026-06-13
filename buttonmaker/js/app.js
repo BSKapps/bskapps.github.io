@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=76';
-import { renderDesign } from './renderer.js?v=76';
-import { seriesVariants, numberSet } from './series.js?v=76';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=76';
-import { initIconPicker } from './icons.js?v=76';
-import { initPresets, normalizeDesign } from './presets.js?v=76';
-import { initExport } from './export.js?v=76';
-import { initColorPopover } from './colorpicker.js?v=76';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=77';
+import { renderDesign } from './renderer.js?v=77';
+import { seriesVariants, numberSet } from './series.js?v=77';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=77';
+import { initIconPicker } from './icons.js?v=77';
+import { initPresets, normalizeDesign } from './presets.js?v=77';
+import { initExport } from './export.js?v=77';
+import { initColorPopover } from './colorpicker.js?v=77';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -69,7 +69,7 @@ async function renderOnce() {
       item.className = 'series-item';
       item.classList.toggle('selected', isList && state.ui.selectedItems.includes(idx));
       item.draggable = true;
-      item.title = 'Click to edit this button on its own, Cmd-click to select several. Drag onto another button to reorder.';
+      item.title = 'Click to style it alone, Cmd-click to grab several, drag onto another to reorder, or onto the big preview to make it your single button.';
       item.addEventListener('click', (e) => {
         if (state.series.mode !== 'list') return;
         if (e.shiftKey) selectRangeTo(idx);
@@ -307,7 +307,7 @@ document.addEventListener('keydown', (e) => {
     e.preventDefault();
     redoStack.push(undoStack.pop());
     applyHistory(undoStack[undoStack.length - 1]);
-  } else if ((key === 'z' && e.shiftKey) || key === 'y') {
+  } else if ((key === 'z' && e.shiftKey) || (key === 'y' && e.ctrlKey && !e.metaKey)) {
     if (!redoStack.length) return;
     e.preventDefault();
     const s = redoStack.pop();
