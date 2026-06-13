@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BSK Button Maker - Free Companion and Stream Deck Button Designer</title>
-<meta name="description" content="Free button designer for Bitfocus Companion and Stream Deck. Icon library, presets, button sets, PNG and Companion page export.">
+<title>BSK Button Maker - Free Companion, Stream Deck and REAPER Button Designer</title>
+<meta name="description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars. Icon library, presets, button sets, PNG, Companion page and REAPER toolbar export.">
 <meta property="og:title" content="BSK Button Maker">
-<meta property="og:description" content="Free button designer for Bitfocus Companion and Stream Deck. Icon library, presets, button sets, PNG and Companion page export.">
+<meta property="og:description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars. Icon library, presets, button sets, PNG, Companion page and REAPER toolbar export.">
 <meta property="og:image" content="https://bskapps.com/images/buttonmaker-og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=85">
+<link rel="stylesheet" href="css/style.css?v=87">
 </head>
 <body>
 <header class="app-header">
@@ -25,7 +25,7 @@
     <a href="/" title="BSK Apps home"><img src="images/bsk-logo-small.png" alt="BSK Apps" width="32" height="32"></a>
     <h1>BSK Button Maker</h1>
   </div>
-  <p class="tagline">Free button designer for Bitfocus Companion and Stream Deck</p>
+  <p class="tagline">Free button designer for Bitfocus Companion, Stream Deck and REAPER</p>
 </header>
 
 <main class="layout">
@@ -214,28 +214,52 @@
             </div>
             <p class="hint">"Number them" fills the set from your current design, so "PC" becomes PC 1, PC 2... and cue numbers like 1.1 to 1.5 work too. From and To set how many buttons get built.</p>
             <button class="btn" id="addFromPreset">Add from a preset</button>
-            <p class="hint">Pull a single button out of any preset, like Transport's Rec, into this set.</p>
+            <p class="hint">Pull a button out of any preset, into this set.</p>
           </div>
         </div>
       </details>
       <details class="section" open>
         <summary>4. Download</summary>
         <div class="section-body">
-          <p class="hint" id="exportSummary"></p>
-          <button class="btn primary" id="exportPng">Download PNG</button>
-          <button class="btn primary" id="exportZip">Download set as ZIP</button>
-          <p class="hint">In Companion, edit a button and click its image box to load the PNG. The ZIP unpacks to a folder of them.</p>
-          <div class="row">
-            <label>PNG size</label>
-            <select id="exportSize">
-              <option value="72">72 px</option>
-              <option value="144">144 px</option>
-              <option value="288" selected>288 px</option>
-            </select>
+          <div class="seg" id="exportMode">
+            <button data-val="streamdeck" class="active">Stream Deck</button>
+            <button data-val="reaper">REAPER</button>
           </div>
-          <p class="hint">288 px is a safe default. See Help for which size to pick.</p>
-          <button class="btn primary" id="exportCompanion">Download as Companion page file</button>
-          <p class="hint">Optional: a whole page of finished buttons in one import. Aim it at an EMPTY page - it replaces the page you point it at.</p>
+          <div class="row check"><label for="onStateToggle">Include active toggle state</label><input type="checkbox" id="onStateToggle"></div>
+          <div id="onStateRows" class="hidden">
+            <div class="seg" id="onStateEffect">
+              <button data-val="tint" class="active">Tint</button>
+              <button data-val="glow">Glow</button>
+              <button data-val="invert">Invert</button>
+              <button data-val="dot">Dot</button>
+            </div>
+            <div class="row" id="onStateColorRow"><label>Colour</label><input type="color" id="onStateColor" value="#1f9d3a" data-label="Active colour"></div>
+            <p class="hint">The look shown while a toggle action is active (REAPER), or a button's on state in Companion. Exports an extra "on" image.</p>
+          </div>
+
+          <div id="sdExports">
+            <p class="hint" id="exportSummary"></p>
+            <button class="btn primary" id="exportPng">Download PNG</button>
+            <button class="btn primary" id="exportZip">Download set as ZIP</button>
+            <p class="hint">In Companion, edit a button and click its image box to load the PNG. The ZIP unpacks to a folder of them.</p>
+            <div class="row">
+              <label>PNG size</label>
+              <select id="exportSize">
+                <option value="72">72 px</option>
+                <option value="144">144 px</option>
+                <option value="288" selected>288 px</option>
+              </select>
+            </div>
+            <p class="hint">288 px is a safe default. See Help for which size to pick.</p>
+            <button class="btn primary" id="exportCompanion">Download as Companion page file</button>
+            <p class="hint">Optional: a whole page of finished buttons in one import. Aim it at an EMPTY page - it replaces the page you point it at.</p>
+          </div>
+
+          <div id="reaperExports" class="hidden">
+            <p class="hint">Each button becomes a REAPER toolbar strip (normal, hover, active) at 1x, 1.5x and 2x, zipped to match REAPER's toolbar_icons folder.</p>
+            <button class="btn primary" id="exportReaper">Download REAPER toolbar icons (ZIP)</button>
+            <p class="hint">Unzip into REAPER's <b>toolbar_icons</b> folder (Options &gt; Show REAPER resource path, open the Data folder, then toolbar_icons), restart REAPER, then assign each icon in the toolbar editor (right-click a toolbar &gt; Customize toolbar). The ZIP already has the 150 and 200 hi-DPI copies.</p>
+          </div>
         </div>
       </details>
     </div>
@@ -245,10 +269,13 @@
         <p class="hint"><b>One button:</b> Pick a starting point, then set background, image, text and shape. Download the PNG and drop it into a button's image box in Companion.</p>
         <p class="hint"><b>Presets:</b> Click one to load it. Loading one of your own brings its name back, so you can edit it (a single button or a whole set) and Save to update it. Double-click a name to rename, x to delete.</p>
         <p class="hint"><b>Make a set:</b> Switch to Custom set under "Make it a set". Build buttons by hand, or use "Number them" to fill the set with a numbered range (PC 1, PC 2... or cue numbers like 1.1 to 1.5). The set shows under the preview.</p>
-        <p class="hint"><b>Duplicate:</b> Click the + tile under the preview to copy your button into a set, or drag any button in a set onto the + tile to duplicate it.</p>
+        <p class="hint"><b>Duplicate:</b> Click the + tile under the preview to copy your button into a set, or drag any button in a set onto the + tile to duplicate it. Use "Add from a preset" to pull buttons out of any preset into your set.</p>
         <p class="hint"><b>Edit one, some or all:</b> With a set, changes apply to every button by default. Click one to style it alone, Cmd-click or Shift-click to grab a few. Click empty space, or "Edit all", to go back to editing everything.</p>
         <p class="hint"><b>Reorder and reuse:</b> Drag a button onto another to reorder, or onto the big preview to make it your single button.</p>
+        <p class="hint"><b>Half-point sizes:</b> The Size boxes for text and image take half points - type a value like 32.5 for finer control at larger sizes. The sliders still move a point at a time.</p>
         <p class="hint"><b>PNG size:</b> 72 px is the exact size of a Companion or Stream Deck key, so it is the smallest file. 144 px suits high-res decks and retina screens. 288 px is sharpest and scales down cleanly to any key, which is why it is the default.</p>
+        <p class="hint"><b>Export for REAPER:</b> In the Download card, switch to REAPER to get toolbar icon strips (normal, hover and active in one PNG) as a ZIP that mirrors REAPER's toolbar_icons folder, with the 150 and 200 hi-DPI copies. Unzip it there, restart REAPER, and assign each icon in the toolbar editor.</p>
+        <p class="hint"><b>Active toggle state:</b> Tick "Include active toggle state" to add an on image for toggle buttons, in both Stream Deck and REAPER modes. Pick the look (Tint, Glow, Invert or a status Dot) and a colour. REAPER gets a matching name_on strip; Stream Deck mode switches to the ZIP so you get both the off and on PNG.</p>
         <p class="hint"><b>Shortcuts:</b> Double-click a slider to reset it. Cmd-Z undoes and Cmd-Shift-Z redoes, up to 50 steps back. In a set, Cmd-A selects every button.</p>
       </div>
     </details>
@@ -279,11 +306,11 @@
 </div>
 
 <footer class="app-footer">
-  <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato or Corsair. Icons from the Iconify project, individual icon licences apply.</p>
+  <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair or Cockos. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script>window.BM_V = '85';</script>
-<script src="vendor/jszip.min.js?v=85"></script>
-<script type="module" src="js/app.js?v=85"></script>
+<script>window.BM_V = '87';</script>
+<script src="vendor/jszip.min.js?v=87"></script>
+<script type="module" src="js/app.js?v=87"></script>
 </body>
 </html>

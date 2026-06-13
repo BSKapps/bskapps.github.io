@@ -1,8 +1,16 @@
-import { state, primarySelection, defaultTextLayer } from './state.js?v=85';
-import { renderToDataUrl } from './renderer.js?v=85';
-import { seriesVariants, safeFileName } from './series.js?v=85';
-import { downloadBlob } from './presets.js?v=85';
-import { buildCompanionPage } from './companion.js?v=85';
+import { state, primarySelection, defaultTextLayer, deepClone } from './state.js?v=87';
+import { renderToDataUrl, renderDesign } from './renderer.js?v=87';
+import { seriesVariants, safeFileName } from './series.js?v=87';
+import { downloadBlob } from './presets.js?v=87';
+import { buildCompanionPage } from './companion.js?v=87';
+
+const SS = 4;
+const STATE_LIFT = [0, 0.12, 0.22];
+const REAPER_SIZES = [
+  { dir: '', cell: 30 },
+  { dir: '150/', cell: 45 },
+  { dir: '200/', cell: 60 }
+];
 
 function dataUrlToBlob(dataUrl) {
   const [head, body] = dataUrl.split(',');
@@ -13,10 +21,183 @@ function dataUrlToBlob(dataUrl) {
   return new Blob([arr], { type: mime });
 }
 
+function activeOnState() {
+  return state.export.onState && state.export.onState.enabled ? state.export.onState : null;
+}
+
+function overlay(ctx, size, color, alpha) {
+  if (!alpha) return;
+  ctx.save();
+  ctx.globalCompositeOperation = 'source-atop';
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, size, size);
+  ctx.restore();
+}
+
+function drawDot(ctx, size, color) {
+  const r = size * 0.15;
+  const cx = size - r - size * 0.08;
+  const cy = r + size * 0.08;
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.lineWidth = Math.max(1, size * 0.025);
+  ctx.strokeStyle = 'rgba(0,0,0,0.55)';
+  ctx.stroke();
+  ctx.restore();
+}
+
+export function invertBg(design) {
+  const d = deepClone(design);
+  const inv = (hex) => {
+    const m = /^#?([0-9a-f]{6})$/i.exec(hex || '');
+    if (!m) return hex;
+    const n = parseInt(m[1], 16);
+    const r = 255 - ((n >> 16) & 255);
+    const g = 255 - ((n >> 8) & 255);
+    const b = 255 - (n & 255);
+    return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  };
+  d.bg.color = inv(d.bg.color);
+  d.bg.gradFrom = inv(d.bg.gradFrom);
+  d.bg.gradTo = inv(d.bg.gradTo);
+  return d;
+}
+
+function applyOnState(ctx, size, onState) {
+  if (!onState) return;
+  if (onState.effect === 'tint') overlay(ctx, size, onState.color, 0.4);
+  else if (onState.effect === 'glow') overlay(ctx, size, '#ffffff', 0.24);
+}
+
+export async function buildStrip(design, cellSize, onState) {
+  const base = onState && onState.effect === 'invert' ? invertBg(design) : design;
+  const off = document.createElement('canvas');
+  off.width = cellSize * SS;
+  off.height = cellSize * SS;
+  await renderDesign(off, base, { bakeText: true });
+
+  const strip = document.createElement('canvas');
+  strip.width = cellSize * 3;
+  strip.height = cellSize;
+  const sctx = strip.getContext('2d');
+
+  for (let c = 0; c < 3; c++) {
+    const cell = document.createElement('canvas');
+    cell.width = cellSize;
+    cell.height = cellSize;
+    const cctx = cell.getContext('2d');
+    cctx.imageSmoothingEnabled = true;
+    cctx.imageSmoothingQuality = 'high';
+    cctx.drawImage(off, 0, 0, cellSize, cellSize);
+    applyOnState(cctx, cellSize, onState);
+    overlay(cctx, cellSize, '#ffffff', STATE_LIFT[c]);
+    if (onState && onState.effect === 'dot') drawDot(cctx, cellSize, onState.color);
+    sctx.drawImage(cell, c * cellSize, 0);
+  }
+  return strip;
+}
+
+async function renderWithOnState(design, size, onState) {
+  const base = onState && onState.effect === 'invert' ? invertBg(design) : design;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  await renderDesign(canvas, base, { bakeText: true });
+  const ctx = canvas.getContext('2d');
+  applyOnState(ctx, size, onState);
+  if (onState && onState.effect === 'dot') drawDot(ctx, size, onState.color);
+  return canvas.toDataURL('image/png');
+}
+
+function uniqueName(used, base) {
+  let name = base;
+  let k = 2;
+  while (used.has(name)) name = base + '-' + k++;
+  used.add(name);
+  return name;
+}
+
+export async function buildPngZip(zip, variants, size, onState) {
+  const used = new Set();
+  for (let i = 0; i < variants.length; i++) {
+    const v = variants[i];
+    const name = uniqueName(used, safeFileName(v.companionText || v.label, i));
+    const url = await renderToDataUrl(v.design, size, { bakeText: true });
+    zip.file(name + '.png', url.split(',')[1], { base64: true });
+    if (onState) {
+      const onUrl = await renderWithOnState(v.design, size, onState);
+      zip.file(name + '_on.png', onUrl.split(',')[1], { base64: true });
+    }
+  }
+  return zip;
+}
+
+export async function buildReaperZip(zip, variants, onState) {
+  const used = new Set();
+  for (let i = 0; i < variants.length; i++) {
+    const v = variants[i];
+    const name = uniqueName(used, safeFileName(v.companionText || v.label, i));
+    for (const s of REAPER_SIZES) {
+      const off = await buildStrip(v.design, s.cell, null);
+      zip.file('toolbar_icons/' + s.dir + name + '.png', off.toDataURL('image/png').split(',')[1], { base64: true });
+      if (onState) {
+        const on = await buildStrip(v.design, s.cell, onState);
+        zip.file('toolbar_icons/' + s.dir + name + '_on.png', on.toDataURL('image/png').split(',')[1], { base64: true });
+      }
+    }
+  }
+  return zip;
+}
+
+function segControl(id, getSet) {
+  const seg = document.getElementById(id);
+  seg.querySelectorAll('button').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      seg.querySelectorAll('button').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      getSet(btn.dataset.val);
+    });
+  });
+}
+
+export function updateExportControls() {
+  const reaper = state.export.mode === 'reaper';
+  const on = state.export.onState;
+  document.getElementById('sdExports').classList.toggle('hidden', reaper);
+  document.getElementById('reaperExports').classList.toggle('hidden', !reaper);
+  document.getElementById('onStateRows').classList.toggle('hidden', !on.enabled);
+  document.getElementById('onStateColorRow').classList.toggle('hidden', on.effect === 'glow' || on.effect === 'invert');
+  document.getElementById('exportPng').disabled = on.enabled;
+  document.getElementById('exportZip').disabled = !on.enabled && state.series.mode === 'off';
+}
+
 export function initExport() {
   document.getElementById('exportPng').addEventListener('click', exportPng);
   document.getElementById('exportZip').addEventListener('click', exportZip);
   document.getElementById('exportCompanion').addEventListener('click', exportCompanion);
+  document.getElementById('exportReaper').addEventListener('click', exportReaper);
+
+  segControl('exportMode', (v) => {
+    state.export.mode = v;
+    updateExportControls();
+  });
+  segControl('onStateEffect', (v) => {
+    state.export.onState.effect = v;
+    updateExportControls();
+  });
+  document.getElementById('onStateToggle').addEventListener('change', (e) => {
+    state.export.onState.enabled = e.target.checked;
+    updateExportControls();
+  });
+  document.getElementById('onStateColor').addEventListener('input', (e) => {
+    state.export.onState.color = e.target.value;
+  });
+
+  updateExportControls();
 }
 
 async function exportPng() {
@@ -30,22 +211,17 @@ async function exportPng() {
 }
 
 async function exportZip() {
-  const size = state.export.size;
-  const variants = seriesVariants();
   const zip = new JSZip();
-  const used = new Set();
-  for (let i = 0; i < variants.length; i++) {
-    const v = variants[i];
-    const url = await renderToDataUrl(v.design, size, { bakeText: true });
-    const base = safeFileName(v.companionText || v.label, i);
-    let name = base;
-    let k = 2;
-    while (used.has(name)) name = base + '-' + k++;
-    used.add(name);
-    zip.file(name + '.png', url.split(',')[1], { base64: true });
-  }
+  await buildPngZip(zip, seriesVariants(), state.export.size, activeOnState());
   const blob = await zip.generateAsync({ type: 'blob' });
   downloadBlob(blob, 'buttons.zip');
+}
+
+async function exportReaper() {
+  const zip = new JSZip();
+  await buildReaperZip(zip, seriesVariants(), activeOnState());
+  const blob = await zip.generateAsync({ type: 'blob' });
+  downloadBlob(blob, 'reaper-toolbar-icons.zip');
 }
 
 async function exportCompanion() {

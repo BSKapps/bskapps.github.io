@@ -1,8 +1,9 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=85';
-import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=85';
-import { buildCompanionPage } from '../js/companion.js?v=85';
-import { renderToDataUrl } from '../js/renderer.js?v=85';
-import { selectListItem, releaseSelection } from '../js/ui.js?v=85';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=87';
+import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=87';
+import { buildCompanionPage } from '../js/companion.js?v=87';
+import { renderToDataUrl } from '../js/renderer.js?v=87';
+import { selectListItem, releaseSelection } from '../js/ui.js?v=87';
+import { invertBg, buildStrip, buildReaperZip, buildPngZip } from '../js/export.js?v=87';
 
 const results = [];
 
@@ -277,6 +278,39 @@ async function runAsync() {
   state.design.bg.blend = 100;
   const soft = await renderToDataUrl(state.design, 72, {});
   check('gradient blend changes output', hard !== soft);
+
+  resetState();
+  const fileKeys = (z) => Object.keys(z.files).filter((k) => !z.files[k].dir);
+  const stripBase = defaultDesign();
+  stripBase.bg.color = '#1d6fd0';
+  stripBase.texts[0].value = 'GO';
+  const offStrip = await buildStrip(stripBase, 30, null);
+  check('reaper strip is 90x30 (three 30px cells)', offStrip.width === 90 && offStrip.height === 30);
+  const strip45 = await buildStrip(stripBase, 45, null);
+  check('reaper 1.5x strip is 135x45', strip45.width === 135 && strip45.height === 45);
+  const offUrl = offStrip.toDataURL('image/png');
+  const tintStrip = await buildStrip(stripBase, 30, { enabled: true, effect: 'tint', color: '#1f9d3a' });
+  check('on-state tint changes the strip pixels', tintStrip.toDataURL('image/png') !== offUrl);
+
+  const inv = invertBg(stripBase);
+  check('invertBg flips the background colour and detaches', inv.bg.color !== stripBase.bg.color && stripBase.bg.color === '#1d6fd0');
+
+  const variants2 = [
+    { design: defaultDesign(), label: 'Play', companionText: 'Play' },
+    { design: defaultDesign(), label: 'Stop', companionText: 'Stop' }
+  ];
+  const rzOff = fileKeys(await buildReaperZip(new JSZip(), variants2, null));
+  check('reaper zip has base + 150 + 200 per button', rzOff.includes('toolbar_icons/play.png') && rzOff.includes('toolbar_icons/150/play.png') && rzOff.includes('toolbar_icons/200/play.png'));
+  check('reaper zip covers every button, off-only = 6 files', rzOff.includes('toolbar_icons/stop.png') && rzOff.length === 6);
+  check('reaper zip off-only has no _on files', !rzOff.some((k) => k.endsWith('_on.png')));
+  const rzOn = fileKeys(await buildReaperZip(new JSZip(), variants2, { enabled: true, effect: 'tint', color: '#1f9d3a' }));
+  check('reaper zip with on-state adds name_on at every size = 12 files', rzOn.includes('toolbar_icons/play_on.png') && rzOn.includes('toolbar_icons/150/play_on.png') && rzOn.includes('toolbar_icons/200/play_on.png') && rzOn.length === 12);
+
+  const pzOff = fileKeys(await buildPngZip(new JSZip(), variants2, 72, null));
+  check('png zip off-only is one file per button', pzOff.length === 2 && !pzOff.some((k) => k.endsWith('_on.png')));
+  const pzOn = fileKeys(await buildPngZip(new JSZip(), variants2, 72, { enabled: true, effect: 'glow', color: '#1f9d3a' }));
+  check('png zip with on-state adds _on per button', pzOn.includes('play_on.png') && pzOn.includes('stop_on.png') && pzOn.length === 4);
+
   resetState();
 }
 

@@ -2,6 +2,12 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v87 - 2026-06-14
+- REAPER export: a Stream Deck / REAPER toggle in the Download card. REAPER mode turns each button into a 3-state toolbar strip (normal, hover, active) at 1x, 1.5x and 2x, zipped to mirror REAPER's toolbar_icons folder (with the 150 and 200 hi-DPI subfolders).
+- Active toggle state (both Stream Deck and REAPER): tick "Include active toggle state" to add an on image, with a choice of Tint (colour), Glow, Invert or a status Dot. REAPER gets a matching name_on strip; in Stream Deck mode the PNG button greys out and the ZIP carries both the off and on PNG.
+- Text and image Size boxes now accept half points: type a value like 32.5 for finer control at larger sizes. The sliders still move a point at a time.
+- Tagline and footer now mention REAPER (and Cockos in the not-affiliated line).
+
 ## v85 - 2026-06-14
 - New "Add from a preset" button in Make it a set (Custom set mode): opens a picker that lists every preset and its buttons as thumbnails, so you can drop a single button (like Transport's Rec) into the set you are building without rebuilding it by hand. Add as many as you like, the picker stays open.
 

@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, defaultSeries, editTarget, editTargets, primarySelection } from './state.js?v=85';
-import { triggerIconUpload } from './icons.js?v=85';
-import { seriesVariants, numberSet } from './series.js?v=85';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, defaultSeries, editTarget, editTargets, primarySelection } from './state.js?v=87';
+import { triggerIconUpload } from './icons.js?v=87';
+import { seriesVariants, numberSet } from './series.js?v=87';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -257,7 +257,7 @@ function activeText() {
   return texts[state.ui.activeText];
 }
 
-function bindRange(id, getSet, valId) {
+function bindRange(id, getSet, valId, step = 1) {
   const el = document.getElementById(id);
   const val = valId ? document.getElementById(valId) : null;
   el.addEventListener('input', () => {
@@ -277,13 +277,14 @@ function bindRange(id, getSet, valId) {
   if (val) {
     val.min = el.min;
     val.max = el.max;
+    if (step !== 1) val.step = step;
     val.addEventListener('change', () => {
       let n = Number(val.value);
       if (val.value === '' || Number.isNaN(n)) {
         val.value = el.value;
         return;
       }
-      n = Math.max(Number(el.min), Math.min(Number(el.max), Math.round(n)));
+      n = Math.max(Number(el.min), Math.min(Number(el.max), Math.round(n / step) * step));
       val.value = n;
       el.value = n;
       getSet(n);
@@ -364,7 +365,7 @@ export function initUI() {
       ic.tint = true;
     }
   }));
-  bindRange('iconSize', (v) => applyRelative(state.ui.allIcons, iconLayersOf, refIcon(), 'size', v, 10, 150), 'iconSizeVal');
+  bindRange('iconSize', (v) => applyRelative(state.ui.allIcons, iconLayersOf, refIcon(), 'size', v, 10, 150), 'iconSizeVal', 0.5);
   bindRange('iconX', (v) => applyRelative(state.ui.allIcons, iconLayersOf, refIcon(), 'x', v, -40, 40), 'iconXVal');
   bindRange('iconY', (v) => applyRelative(state.ui.allIcons, iconLayersOf, refIcon(), 'y', v, -40, 40), 'iconYVal');
   bindRange('iconOpacity', (v) => applyEdit((d) => {
@@ -403,7 +404,7 @@ export function initUI() {
   bindSelect('textWeight', (v) => applyEdit((d) => {
     for (const t of textLayersOf(d)) t.weight = v;
   }));
-  bindRange('textSize', (v) => applyRelative(state.ui.allText, textLayersOf, refText(), 'size', v, 6, 96), 'textSizeVal');
+  bindRange('textSize', (v) => applyRelative(state.ui.allText, textLayersOf, refText(), 'size', v, 6, 96), 'textSizeVal', 0.5);
   bindColor('textColor', (v) => applyEdit((d) => {
     for (const t of textLayersOf(d)) t.color = v;
   }));
@@ -676,7 +677,9 @@ export function syncInputsFromState() {
   document.getElementById('clearIcon').disabled = state.ui.allIcons || !ic.svg;
   document.getElementById('openIconPicker').disabled = state.ui.allIcons;
   document.getElementById('iconUploadSidebar').disabled = state.ui.allIcons;
-  document.getElementById('exportZip').disabled = state.series.mode === 'off';
+  const onStateOn = state.export.onState && state.export.onState.enabled;
+  document.getElementById('exportPng').disabled = onStateOn;
+  document.getElementById('exportZip').disabled = !onStateOn && state.series.mode === 'off';
 
   setSeg('iconAlign', ic.align || 'center:center');
 }
