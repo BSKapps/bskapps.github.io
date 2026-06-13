@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v58 - 2026-06-13
+- The delete x on your saved presets is now a tidy circular badge in the corner that appears on hover, matching the x on set buttons (was a bare character floating off-corner).
+
 ## v57 - 2026-06-13
 - Loading one of your own presets now fills in its name, so editing it is a clean loop: load, tweak, Save with the same name to update it (works for sets too). Loading a built-in clears the name. Delete is still the x on your preset tiles.
 

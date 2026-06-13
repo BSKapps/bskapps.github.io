@@ -382,14 +382,26 @@ body {
 
 .strip-del {
   position: absolute;
-  top: 1px;
-  right: 7px;
+  top: 3px;
+  right: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--card-hover);
+  border: 1px solid var(--border-strong);
   color: var(--muted);
-  font-size: 0.8rem;
-  padding: 2px;
+  font-size: 0.7rem;
+  line-height: 16px;
+  text-align: center;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.12s;
 }
 
-.strip-del:hover { color: var(--text); }
+.strip-item:hover .strip-del { opacity: 1; }
+
+.strip-del:hover { color: var(--text); border-color: var(--brand); }
 
 .preset-actions {
   display: flex;
