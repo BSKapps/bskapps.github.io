@@ -2,6 +2,11 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v53 - 2026-06-13
+- The "Editing X" status moved from the top of the sidebar to directly under the button row, where you actually select buttons.
+- Help now explains the PNG sizes (72/144/288) in full; the Download card keeps a one-line tip.
+- Help gained a dedicated Duplicate line and the tip that clicking empty space goes back to editing all.
+
 ## v52 - 2026-06-13
 - Text opacity fixed: in All-layers mode the slider now sets every layer to the chosen value instead of drifting or jumping. Behaves the same as image opacity.
 - Image position grid now lights up like the text grid: the chosen square stays highlighted while you fine-tune with Nudge X/Y, and the centre square is lit by default. Image alignment is now a coarse anchor plus a separate nudge, matching how text works. Existing designs and presets render exactly as before.
