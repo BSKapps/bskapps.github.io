@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v60 - 2026-06-13
+- Removed the standalone Record preset from the strip (the Transport set already includes a Rec button), tidying the row.
+
 ## v59 - 2026-06-13
 - Pressing Enter in the preset name field now saves (or updates) the preset, same as clicking Save to my presets.
 

@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=59';
-import { triggerIconUpload } from './icons.js?v=59';
-import { seriesVariants, hasToken } from './series.js?v=59';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, editTarget, editTargets, primarySelection } from './state.js?v=60';
+import { triggerIconUpload } from './icons.js?v=60';
+import { seriesVariants, hasToken } from './series.js?v=60';
 
 const selectionSnapshots = new Map();
 
