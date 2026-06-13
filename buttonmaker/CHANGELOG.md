@@ -2,6 +2,10 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v55 - 2026-06-13
+- The + tile under a single button now has a "Duplicate" label so it is clear that clicking it copies the button into a set.
+- Clearer set guidance: "Click one to style it alone, Cmd-click or Shift-click to grab a few" in the set hint and Help.
+
 ## v54 - 2026-06-13
 - Download PNG now saves the single button you are previewing. Download set as ZIP still saves all buttons. Previously, with a set, Download PNG quietly gave you the ZIP.
 - Accurate download summary: it no longer claims the PNG/ZIP lay out as a row on the Companion page (that only applies to the Companion page file).

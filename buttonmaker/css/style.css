@@ -539,6 +539,10 @@ body {
 
 .series-add:hover, .series-add.drop-target { border-color: var(--brand); color: var(--brand); }
 
+.series-add-tile { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 4px; }
+.series-add-tile .series-add { margin: 0; align-self: center; }
+.series-add-tile span { color: var(--muted); font-size: 0.8rem; }
+
 #preview.drop-ready { outline: 2px dashed var(--border-strong); outline-offset: 5px; }
 
 #preview.drop-target { outline: 3px dashed var(--brand); outline-offset: 5px; }

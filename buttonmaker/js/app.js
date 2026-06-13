@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, editTarget, primarySelection } from './state.js?v=54';
-import { renderDesign } from './renderer.js?v=54';
-import { seriesVariants } from './series.js?v=54';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, selectRangeTo, deselectListItem, addListItem, removeListItem, seriesForSnapshot } from './ui.js?v=54';
-import { initIconPicker } from './icons.js?v=54';
-import { initPresets } from './presets.js?v=54';
-import { initExport } from './export.js?v=54';
-import { initColorPopover } from './colorpicker.js?v=54';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, editTarget, primarySelection } from './state.js?v=55';
+import { renderDesign } from './renderer.js?v=55';
+import { seriesVariants } from './series.js?v=55';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, selectRangeTo, deselectListItem, addListItem, removeListItem, seriesForSnapshot } from './ui.js?v=55';
+import { initIconPicker } from './icons.js?v=55';
+import { initPresets } from './presets.js?v=55';
+import { initExport } from './export.js?v=55';
+import { initColorPopover } from './colorpicker.js?v=55';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -157,16 +157,22 @@ async function renderOnce() {
   }
 
   if (state.series.mode === 'off') {
+    const wrap = document.createElement('div');
+    wrap.className = 'series-add-tile';
     const add = document.createElement('button');
     add.className = 'series-add';
     add.textContent = '+';
-    add.title = 'Click to turn this button into an editable set you can duplicate and tweak.';
+    add.title = 'Click to duplicate this button into an editable set.';
     add.addEventListener('click', () => {
       state.series.items = [{ label: '', color: '' }, { label: '', color: '' }];
       state.series.mode = 'list';
       selectListItem(1);
     });
-    seriesWrap.appendChild(add);
+    const cap = document.createElement('span');
+    cap.textContent = 'Duplicate';
+    wrap.appendChild(add);
+    wrap.appendChild(cap);
+    seriesWrap.appendChild(wrap);
   }
 }
 
