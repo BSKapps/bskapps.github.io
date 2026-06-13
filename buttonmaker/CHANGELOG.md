@@ -2,6 +2,11 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v65 - 2026-06-13
+- Icon/Image card now uses a faint picture motif instead of a dot grid.
+- Background card icon is now a paint-fill icon (the previous droplet read as water).
+- Card icons no longer flash at full size for a moment while the page loads.
+
 ## v64 - 2026-06-13
 - Switching One button / Numbered / Custom set is now stable: flipping between Numbered and Custom set no longer wipes or renumbers a custom set you have built. Clicking Custom set from a numbered set still turns the numbers into editable buttons.
 - Numbered sets now support decimals (handy for cue numbers): From 1.1 To 1.5 makes 1.1, 1.2, 1.3, 1.4, 1.5. The step matches the decimals you type.
