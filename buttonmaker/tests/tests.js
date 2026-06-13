@@ -1,9 +1,9 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=87';
-import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=87';
-import { buildCompanionPage } from '../js/companion.js?v=87';
-import { renderToDataUrl } from '../js/renderer.js?v=87';
-import { selectListItem, releaseSelection } from '../js/ui.js?v=87';
-import { invertBg, buildStrip, buildReaperZip, buildPngZip } from '../js/export.js?v=87';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=88';
+import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=88';
+import { buildCompanionPage } from '../js/companion.js?v=88';
+import { renderToDataUrl } from '../js/renderer.js?v=88';
+import { selectListItem, releaseSelection } from '../js/ui.js?v=88';
+import { invertCanvas, buildStrip, buildReaperZip, buildPngZip } from '../js/export.js?v=88';
 
 const results = [];
 
@@ -292,8 +292,23 @@ async function runAsync() {
   const tintStrip = await buildStrip(stripBase, 30, { enabled: true, effect: 'tint', color: '#1f9d3a' });
   check('on-state tint changes the strip pixels', tintStrip.toDataURL('image/png') !== offUrl);
 
-  const inv = invertBg(stripBase);
-  check('invertBg flips the background colour and detaches', inv.bg.color !== stripBase.bg.color && stripBase.bg.color === '#1d6fd0');
+  const invStrip = await buildStrip(stripBase, 30, { enabled: true, effect: 'invert', color: '#1f9d3a' });
+  check('on-state invert changes the strip pixels', invStrip.toDataURL('image/png') !== offUrl);
+  const redBase = defaultDesign();
+  redBase.bg.color = '#ff0000';
+  redBase.texts[0].value = '';
+  const redInv = await buildStrip(redBase, 30, { enabled: true, effect: 'invert', color: '#1f9d3a' });
+  const px = redInv.getContext('2d').getImageData(15, 15, 1, 1).data;
+  check('proper invert turns a red button cyan (full negative, not bg-only)', px[0] < 40 && px[1] > 200 && px[2] > 200);
+  const probe = document.createElement('canvas');
+  probe.width = 4;
+  probe.height = 4;
+  const pctx = probe.getContext('2d');
+  pctx.fillStyle = '#204060';
+  pctx.fillRect(0, 0, 4, 4);
+  invertCanvas(probe);
+  const ip = pctx.getImageData(1, 1, 1, 1).data;
+  check('invertCanvas inverts rgb and keeps alpha', ip[0] === 223 && ip[1] === 191 && ip[2] === 159 && ip[3] === 255);
 
   const variants2 = [
     { design: defaultDesign(), label: 'Play', companionText: 'Play' },

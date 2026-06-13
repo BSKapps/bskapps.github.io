@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=87';
-import { renderDesign } from './renderer.js?v=87';
-import { seriesVariants, numberSet } from './series.js?v=87';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=87';
-import { initIconPicker } from './icons.js?v=87';
-import { initPresets, normalizeDesign } from './presets.js?v=87';
-import { initExport } from './export.js?v=87';
-import { initColorPopover } from './colorpicker.js?v=87';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=88';
+import { renderDesign } from './renderer.js?v=88';
+import { seriesVariants, numberSet } from './series.js?v=88';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=88';
+import { initIconPicker } from './icons.js?v=88';
+import { initPresets, normalizeDesign } from './presets.js?v=88';
+import { initExport } from './export.js?v=88';
+import { initColorPopover } from './colorpicker.js?v=88';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');

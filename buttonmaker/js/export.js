@@ -1,8 +1,8 @@
-import { state, primarySelection, defaultTextLayer, deepClone } from './state.js?v=87';
-import { renderToDataUrl, renderDesign } from './renderer.js?v=87';
-import { seriesVariants, safeFileName } from './series.js?v=87';
-import { downloadBlob } from './presets.js?v=87';
-import { buildCompanionPage } from './companion.js?v=87';
+import { state, primarySelection, defaultTextLayer } from './state.js?v=88';
+import { renderToDataUrl, renderDesign } from './renderer.js?v=88';
+import { seriesVariants, safeFileName } from './series.js?v=88';
+import { downloadBlob } from './presets.js?v=88';
+import { buildCompanionPage } from './companion.js?v=88';
 
 const SS = 4;
 const STATE_LIFT = [0, 0.12, 0.22];
@@ -50,21 +50,16 @@ function drawDot(ctx, size, color) {
   ctx.restore();
 }
 
-export function invertBg(design) {
-  const d = deepClone(design);
-  const inv = (hex) => {
-    const m = /^#?([0-9a-f]{6})$/i.exec(hex || '');
-    if (!m) return hex;
-    const n = parseInt(m[1], 16);
-    const r = 255 - ((n >> 16) & 255);
-    const g = 255 - ((n >> 8) & 255);
-    const b = 255 - (n & 255);
-    return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-  };
-  d.bg.color = inv(d.bg.color);
-  d.bg.gradFrom = inv(d.bg.gradFrom);
-  d.bg.gradTo = inv(d.bg.gradTo);
-  return d;
+export function invertCanvas(canvas) {
+  const ctx = canvas.getContext('2d');
+  const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const d = img.data;
+  for (let i = 0; i < d.length; i += 4) {
+    d[i] = 255 - d[i];
+    d[i + 1] = 255 - d[i + 1];
+    d[i + 2] = 255 - d[i + 2];
+  }
+  ctx.putImageData(img, 0, 0);
 }
 
 function applyOnState(ctx, size, onState) {
@@ -74,11 +69,11 @@ function applyOnState(ctx, size, onState) {
 }
 
 export async function buildStrip(design, cellSize, onState) {
-  const base = onState && onState.effect === 'invert' ? invertBg(design) : design;
   const off = document.createElement('canvas');
   off.width = cellSize * SS;
   off.height = cellSize * SS;
-  await renderDesign(off, base, { bakeText: true });
+  await renderDesign(off, design, { bakeText: true });
+  if (onState && onState.effect === 'invert') invertCanvas(off);
 
   const strip = document.createElement('canvas');
   strip.width = cellSize * 3;
@@ -102,11 +97,11 @@ export async function buildStrip(design, cellSize, onState) {
 }
 
 async function renderWithOnState(design, size, onState) {
-  const base = onState && onState.effect === 'invert' ? invertBg(design) : design;
   const canvas = document.createElement('canvas');
   canvas.width = size;
   canvas.height = size;
-  await renderDesign(canvas, base, { bakeText: true });
+  await renderDesign(canvas, design, { bakeText: true });
+  if (onState && onState.effect === 'invert') invertCanvas(canvas);
   const ctx = canvas.getContext('2d');
   applyOnState(ctx, size, onState);
   if (onState && onState.effect === 'dot') drawDot(ctx, size, onState.color);
