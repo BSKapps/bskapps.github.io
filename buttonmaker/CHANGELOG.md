@@ -2,6 +2,12 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v80 - 2026-06-13
+- Gave the Track, Edit and Mixer sets real icons (record, mute, solo, monitor, marker, region, split, heal, glue, fade, crop, nudge, normalize, render, mixer, dock, fader, FX) so they show off what is possible, not just text tiles.
+- Mixer set: dropped Strip and 2nd Row, added FX and a stereo meter variant.
+- Reordered the preset strip: Track and Edit now follow Transport, Mixer follows Video Switch, QLab sits before Timers, and Traffic Lights is last.
+- The little name caption under each button in a set now only shows for icon-only buttons, so it no longer mirrors text the button already displays.
+
 ## v79 - 2026-06-13
 - Added three REAPER-oriented preset sets: Track (Arm, Mute, Solo, Mon, Marker, Region, Prev, Next), Mixer (Mixer, Strip, Dock, 2nd Row, Master, Fader, plus green-yellow-red LED meter buttons), and Edit (Split, Heal, Glue, Fade, Crop, Nudge, Norm, Render).
 - New meterbridge-style LED meter and fader icons used by the Mixer set.

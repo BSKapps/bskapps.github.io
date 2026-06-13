@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=79';
-import { renderDesign } from './renderer.js?v=79';
-import { numberSet } from './series.js?v=79';
-import { releaseSelection } from './ui.js?v=79';
+import { state, emit, deepClone, defaultDesign, defaultSeries } from './state.js?v=80';
+import { renderDesign } from './renderer.js?v=80';
+import { numberSet } from './series.js?v=80';
+import { releaseSelection } from './ui.js?v=80';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -18,7 +18,23 @@ const ICONS = {
   shuffle: mdi('m17 3l5.25 4.5L17 12l5.25 4.5L17 21v-3h-2.74l-2.82-2.82l2.12-2.12L15.5 15H17V9h-1.5l-9 9H2v-3h3.26l9-9H17zM2 6h4.5l2.82 2.82l-2.12 2.12L5.26 9H2z'),
   repeat: mdi('M17 17H7v-3l-4 4l4 4v-3h12v-6h-2M7 7h10v3l4-4l-4-4v3H5v6h2z'),
   record: mdi('M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z'),
-  lowerthird: mdi('M3,13.5H13V15.5H3V13.5M3,17H21V19.5H3V17Z')
+  lowerthird: mdi('M3,13.5H13V15.5H3V13.5M3,17H21V19.5H3V17Z'),
+  mute: mdi('M12,4L9.91,6.09L12,8.18M4.27,3L3,4.27L7.73,9H3V15H7L12,20V13.27L16.25,17.53C15.58,18.04 14.83,18.46 14,18.7V20.77C15.38,20.45 16.63,19.82 17.68,18.96L19.73,21L21,19.73L12,10.73M19,12C19,12.94 18.8,13.82 18.46,14.64L19.97,16.15C20.62,14.91 21,13.5 21,12C21,7.72 18,4.14 14,3.23V5.29C16.89,6.15 19,8.83 19,12M16.5,12C16.5,10.23 15.5,8.71 14,7.97V10.18L16.45,12.63C16.5,12.43 16.5,12.21 16.5,12Z'),
+  solo: mdi('M12,1C7,1 3,5 3,10V17A3,3 0 0,0 6,20H9V12H5V10A7,7 0 0,1 12,3A7,7 0 0,1 19,10V12H15V20H18A3,3 0 0,0 21,17V10C21,5 16.97,1 12,1Z'),
+  monitor: mdi('M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.85 14,18.71V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z'),
+  marker: mdi('M14.4,6L14,4H5V21H7V14H12.6L13,16H20V6H14.4Z'),
+  region: mdi('M9,3H5V21H9V19H7V5H9V3M19,3H15V5H17V19H15V21H19V3Z'),
+  split: mdi('M19,3L13,9L15,11L22,4V3M12,12.5A0.5,0.5 0 0,1 11.5,12A0.5,0.5 0 0,1 12,11.5A0.5,0.5 0 0,1 12.5,12A0.5,0.5 0 0,1 12,12.5M6,20A2,2 0 0,1 4,18C4,16.89 4.9,16 6,16A2,2 0 0,1 8,18A2,2 0 0,1 6,20M6,8A2,2 0 0,1 4,6C4,4.89 4.9,4 6,4A2,2 0 0,1 8,6A2,2 0 0,1 6,8M9.64,7.64C9.87,7.14 10,6.59 10,6A4,4 0 0,0 6,2A4,4 0 0,0 2,6A4,4 0 0,0 6,10C6.59,10 7.14,9.87 7.64,9.64L10,12L7.64,14.36C7.14,14.13 6.59,14 6,14A4,4 0 0,0 2,18A4,4 0 0,0 6,22A4,4 0 0,0 10,18C10,17.41 9.87,16.86 9.64,16.36L12,14L19,21H22V20L9.64,7.64Z'),
+  heal: mdi('M17.73,12L19.5,10.23C21.17,8.55 21.17,5.83 19.5,4.16C17.83,2.5 15.11,2.5 13.44,4.16L11.67,5.93L17.73,12M10.94,6.66L4.16,13.44C2.5,15.11 2.5,17.83 4.16,19.5C5.83,21.17 8.55,21.17 10.23,19.5L17,12.72L10.94,6.66M8.5,10A1,1 0 0,1 9.5,11A1,1 0 0,1 8.5,12A1,1 0 0,1 7.5,11A1,1 0 0,1 8.5,10M11.5,13A1,1 0 0,1 12.5,14A1,1 0 0,1 11.5,15A1,1 0 0,1 10.5,14A1,1 0 0,1 11.5,13M8.5,14A1,1 0 0,1 9.5,15A1,1 0 0,1 8.5,16A1,1 0 0,1 7.5,15A1,1 0 0,1 8.5,14M14.04,12.61L11.39,9.96L9.96,11.39L12.61,14.04L14.04,12.61Z'),
+  glue: mdi('M10.59,13.41C11,13.8 11,14.44 10.59,14.83C10.2,15.22 9.56,15.22 9.17,14.83C7.22,12.88 7.22,9.71 9.17,7.76V7.76L12.71,4.22C14.66,2.27 17.83,2.27 19.78,4.22C21.73,6.17 21.73,9.34 19.78,11.29L18.29,12.78C18.3,11.96 18.17,11.14 17.89,10.36L18.36,9.88C19.54,8.71 19.54,6.81 18.36,5.64C17.19,4.46 15.29,4.46 14.12,5.64L10.59,9.17C9.41,10.34 9.41,12.24 10.59,13.41M13.41,9.17C13.8,8.78 14.44,8.78 14.83,9.17C16.78,11.12 16.78,14.29 14.83,16.24V16.24L11.29,19.78C9.34,21.73 6.17,21.73 4.22,19.78C2.27,17.83 2.27,14.66 4.22,12.71L5.71,11.22C5.7,12.04 5.83,12.86 6.11,13.65L5.64,14.12C4.46,15.29 4.46,17.19 5.64,18.36C6.81,19.54 8.71,19.54 9.88,18.36L13.41,14.83C14.59,13.66 14.59,11.76 13.41,10.59C13,10.2 13,9.56 13.41,9.17Z'),
+  fade: mdi('M4,20H20V4L4,20Z'),
+  crop: mdi('M7,17V1H5V5H1V7H5V17A2,2 0 0,0 7,19H17V23H19V19H23V17M17,15H19V7C19,5.89 18.1,5 17,5H9V7H17V15Z'),
+  nudge: mdi('M13,11H18L16.5,9.5L17.92,8.08L21.84,12L17.92,15.92L16.5,14.5L18,13H13V18L14.5,16.5L15.92,17.92L12,21.84L8.08,17.92L9.5,16.5L11,18V13H6L7.5,14.5L6.08,15.92L2.16,12L6.08,8.08L7.5,9.5L6,11H11V6L9.5,7.5L8.08,6.08L12,2.16L15.92,6.08L14.5,7.5L13,6V11Z'),
+  norm: mdi('M10,20H14V4H10V20M4,20H8V12H4V20M16,9V20H20V9H16Z'),
+  render: mdi('M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z'),
+  mixer: mdi('M3,17V19H9V17H3M3,5V7H13V5H3M13,21V19H21V17H13V15H11V21H13M7,9V11H3V13H7V15H9V9H7M21,13V11H11V13H21M15,9H17V7H21V5H17V3H15V9Z'),
+  dock: mdi('M20,4A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4H20M20,14H4V18H20V14Z'),
+  fx: mdi('M7.5,5.6L5,7L6.4,4.5L5,2L7.5,3.4L10,2L8.6,4.5L10,7L7.5,5.6M19.5,15.4L22,14L20.6,16.5L22,19L19.5,17.6L17,19L18.4,16.5L17,14L19.5,15.4M22,2L20.6,4.5L22,7L19.5,5.6L17,7L18.4,4.5L17,2L19.5,3.4L22,2M13.34,12.78L15.78,10.34L13.66,8.22L11.22,10.66L13.34,12.78M14.37,7.29C14,6.9 13.35,6.9 12.96,7.29L1.29,18.96C0.9,19.35 0.9,20 1.29,20.37L3.63,22.71C4,23.1 4.65,23.1 5.04,22.71L16.71,11.04C17.1,10.65 17.1,10 16.71,9.63L14.37,7.29Z')
 };
 
 const faderSvg =
@@ -181,33 +197,71 @@ function builtinPresets() {
         from: 1,
         to: 4,
         items: [
-          { label: 'ARM', color: '#e5484d' },
-          { label: 'MUTE', color: '#d8881f' },
-          { label: 'SOLO', color: '#d8b026' },
-          { label: 'MON', color: '#3a6ea5' },
-          {
-            label: 'MARKER',
-            color: '#1f9d8c',
-            design: mk((d) => {
-              d.bg.color = '#1f9d8c';
-              Object.assign(d.texts[0], { value: 'MARKER', font: 'Oswald', weight: '700', size: 17, align: 'center:center' });
-            })
-          },
-          {
-            label: 'REGION',
-            color: '#6b4fa0',
-            design: mk((d) => {
-              d.bg.color = '#6b4fa0';
-              Object.assign(d.texts[0], { value: 'REGION', font: 'Oswald', weight: '700', size: 17, align: 'center:center' });
-            })
-          },
-          { label: 'PREV', color: '#55555c' },
-          { label: 'NEXT', color: '#55555c' }
+          { label: 'ARM', color: '#ff5a52', iconSvg: ICONS.record, iconName: 'builtin:record' },
+          { label: 'MUTE', color: '#ffb300', iconSvg: ICONS.mute, iconName: 'builtin:mute' },
+          { label: 'SOLO', color: '#ffd54f', iconSvg: ICONS.solo, iconName: 'builtin:solo' },
+          { label: 'MON', color: '#6fa3d9', iconSvg: ICONS.monitor, iconName: 'builtin:monitor' },
+          { label: 'MARKER', color: '#2fd0b0', iconSvg: ICONS.marker, iconName: 'builtin:marker' },
+          { label: 'REGION', color: '#b487e8', iconSvg: ICONS.region, iconName: 'builtin:region' },
+          { label: 'PREV', color: '#ffffff', iconSvg: ICONS.prev, iconName: 'builtin:prev' },
+          { label: 'NEXT', color: '#ffffff', iconSvg: ICONS.next, iconName: 'builtin:next' }
+        ],
+        colorTarget: 'icon'
+      },
+      design: mk((d) => {
+        d.bg.color = '#1d1d22';
+        d.icons[0].size = 50;
+        d.icons[0].y = -6;
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 10, align: 'center:bottom', y: 3 });
+      })
+    },
+    {
+      name: 'Edit',
+      builtin: true,
+      series: {
+        mode: 'list',
+        from: 1,
+        to: 4,
+        items: [
+          { label: 'SPLIT', color: '#e8881f', iconSvg: ICONS.split, iconName: 'builtin:split' },
+          { label: 'HEAL', color: '#2f9f8c', iconSvg: ICONS.heal, iconName: 'builtin:heal' },
+          { label: 'GLUE', color: '#2f8f57', iconSvg: ICONS.glue, iconName: 'builtin:glue' },
+          { label: 'FADE', color: '#3a6ea5', iconSvg: ICONS.fade, iconName: 'builtin:fade' },
+          { label: 'CROP', color: '#6b4fa0', iconSvg: ICONS.crop, iconName: 'builtin:crop' },
+          { label: 'NUDGE', color: '#55555c', iconSvg: ICONS.nudge, iconName: 'builtin:nudge' },
+          { label: 'NORM', color: '#6d9c2a', iconSvg: ICONS.norm, iconName: 'builtin:norm' },
+          { label: 'RENDER', color: '#b51f1f', iconSvg: ICONS.render, iconName: 'builtin:render' }
         ],
         colorTarget: 'bg'
       },
       design: mk((d) => {
-        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 22, align: 'center:center' });
+        d.icons[0].size = 38;
+        d.icons[0].y = -7;
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 10, align: 'center:bottom', y: 3 });
+      })
+    },
+    {
+      name: 'Video Switch',
+      builtin: true,
+      series: {
+        mode: 'list',
+        from: 1,
+        to: 4,
+        items: [
+          { label: 'AUTO', color: '#c9a227' },
+          { label: 'CUT', color: '#e53935' },
+          { label: 'PVW', color: '#1f9d3a' },
+          { label: 'PGM', color: '#b51f1f' },
+          { label: 'AUX', color: '#3a6ea5' },
+          { label: 'IN 1', color: '#16324f' },
+          { label: 'IN 2', color: '#16324f' },
+          { label: 'IN 3', color: '#16324f' },
+          { label: 'IN 4', color: '#16324f' }
+        ],
+        colorTarget: 'bg'
+      },
+      design: mk((d) => {
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 25, align: 'center:center' });
       })
     },
     {
@@ -218,17 +272,9 @@ function builtinPresets() {
         from: 1,
         to: 4,
         items: [
-          { label: 'MIXER', color: '#3a6ea5' },
-          { label: 'STRIP', color: '#3a6ea5' },
-          { label: 'DOCK', color: '#55555c' },
-          {
-            label: '2ND ROW',
-            color: '#55555c',
-            design: mk((d) => {
-              d.bg.color = '#55555c';
-              Object.assign(d.texts[0], { value: '2ND\nROW', font: 'Oswald', weight: '700', size: 19, align: 'center:center' });
-            })
-          },
+          { label: 'MIXER', color: '#3a6ea5', iconSvg: ICONS.mixer, iconName: 'builtin:mixer' },
+          { label: 'DOCK', color: '#55555c', iconSvg: ICONS.dock, iconName: 'builtin:dock' },
+          { label: 'FADER', color: '#1f7a8c', iconSvg: faderSvg, iconName: 'builtin:fader' },
           {
             label: 'MASTER',
             color: '#2f8f57',
@@ -237,15 +283,7 @@ function builtinPresets() {
               Object.assign(d.texts[0], { value: 'MASTER', font: 'Oswald', weight: '700', size: 17, align: 'center:center' });
             })
           },
-          {
-            label: 'FADER',
-            color: '#1f7a8c',
-            design: mk((d) => {
-              d.bg.color = '#1f7a8c';
-              Object.assign(d.icons[0], { svg: faderSvg, name: 'builtin:fader', color: '#ffffff', size: 44, y: -8 });
-              Object.assign(d.texts[0], { value: 'FADER', font: 'Oswald', weight: '700', size: 11, align: 'center:bottom', y: 3 });
-            })
-          },
+          { label: 'FX', color: '#6b4fa0', iconSvg: ICONS.fx, iconName: 'builtin:fx' },
           {
             label: 'METERS',
             color: '#1d1d22',
@@ -263,42 +301,23 @@ function builtinPresets() {
               Object.assign(d.icons[0], { svg: meterSvg(8, [4, 6, 3, 5, 7, 4, 6, 5]), name: 'builtin:meters8', size: 62, y: 0 });
               d.texts[0].value = '';
             })
-          }
-        ],
-        colorTarget: 'bg'
-      },
-      design: mk((d) => {
-        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 22, align: 'center:center' });
-      })
-    },
-    {
-      name: 'Edit',
-      builtin: true,
-      series: {
-        mode: 'list',
-        from: 1,
-        to: 4,
-        items: [
-          { label: 'SPLIT', color: '#e8881f' },
-          { label: 'HEAL', color: '#1f9d8c' },
-          { label: 'GLUE', color: '#2f8f57' },
-          { label: 'FADE', color: '#3a6ea5' },
-          { label: 'CROP', color: '#6b4fa0' },
-          { label: 'NUDGE', color: '#55555c' },
-          { label: 'NORM', color: '#6d9c2a' },
+          },
           {
-            label: 'RENDER',
-            color: '#b51f1f',
+            label: 'Meters 2',
+            color: '#1d1d22',
             design: mk((d) => {
-              d.bg.color = '#b51f1f';
-              Object.assign(d.texts[0], { value: 'RENDER', font: 'Oswald', weight: '700', size: 17, align: 'center:center' });
+              d.bg.color = '#1d1d22';
+              Object.assign(d.icons[0], { svg: meterSvg(2, [6, 5]), name: 'builtin:meters2', size: 46, y: 0 });
+              d.texts[0].value = '';
             })
           }
         ],
         colorTarget: 'bg'
       },
       design: mk((d) => {
-        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 22, align: 'center:center' });
+        d.icons[0].size = 40;
+        d.icons[0].y = -7;
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 10, align: 'center:bottom', y: 3 });
       })
     },
     {
@@ -343,30 +362,6 @@ function builtinPresets() {
       },
       design: mk((d) => {
         Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 22, align: 'center:center' });
-      })
-    },
-    {
-      name: 'Video Switch',
-      builtin: true,
-      series: {
-        mode: 'list',
-        from: 1,
-        to: 4,
-        items: [
-          { label: 'AUTO', color: '#c9a227' },
-          { label: 'CUT', color: '#e53935' },
-          { label: 'PVW', color: '#1f9d3a' },
-          { label: 'PGM', color: '#b51f1f' },
-          { label: 'AUX', color: '#3a6ea5' },
-          { label: 'IN 1', color: '#16324f' },
-          { label: 'IN 2', color: '#16324f' },
-          { label: 'IN 3', color: '#16324f' },
-          { label: 'IN 4', color: '#16324f' }
-        ],
-        colorTarget: 'bg'
-      },
-      design: mk((d) => {
-        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 25, align: 'center:center' });
       })
     },
     {
@@ -441,25 +436,6 @@ function builtinPresets() {
       })
     },
     {
-      name: 'Traffic Lights',
-      builtin: true,
-      series: {
-        mode: 'list',
-        from: 1,
-        to: 4,
-        items: [
-          { label: 'GO', color: '#1f9d3a' },
-          { label: 'WARN', color: '#c9a227' },
-          { label: 'HOLD', color: '#c96a17' },
-          { label: 'STOP', color: '#b51f1f' }
-        ],
-        colorTarget: 'bg'
-      },
-      design: mk((d) => {
-        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 25, align: 'center:center' });
-      })
-    },
-    {
       name: 'INPUT 1-8',
       builtin: true,
       series: {
@@ -507,6 +483,25 @@ function builtinPresets() {
         d.icons[0].y = 6;
         d.icons[0].align = 'left:bottom';
         Object.assign(d.texts[0], { value: 'L3 {label}', font: 'Roboto Condensed', weight: '700', size: 16, align: 'center:top', y: 2 });
+      })
+    },
+    {
+      name: 'Traffic Lights',
+      builtin: true,
+      series: {
+        mode: 'list',
+        from: 1,
+        to: 4,
+        items: [
+          { label: 'GO', color: '#1f9d3a' },
+          { label: 'WARN', color: '#c9a227' },
+          { label: 'HOLD', color: '#c96a17' },
+          { label: 'STOP', color: '#b51f1f' }
+        ],
+        colorTarget: 'bg'
+      },
+      design: mk((d) => {
+        Object.assign(d.texts[0], { value: '{label}', font: 'Oswald', weight: '700', size: 25, align: 'center:center' });
       })
     }
   ];
