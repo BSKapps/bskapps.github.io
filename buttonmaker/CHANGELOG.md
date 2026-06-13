@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v57 - 2026-06-13
+- Loading one of your own presets now fills in its name, so editing it is a clean loop: load, tweak, Save with the same name to update it (works for sets too). Loading a built-in clears the name. Delete is still the x on your preset tiles.
+
 ## v56 - 2026-06-13
 - Download summary for a set drops the leading button count (you can see them under the preview): "Download PNG saves the one you are previewing; the ZIP saves all N as separate PNGs."
 

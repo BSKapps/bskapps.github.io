@@ -1,5 +1,5 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=56';
-import { renderDesign } from './renderer.js?v=56';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=57';
+import { renderDesign } from './renderer.js?v=57';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -356,6 +356,7 @@ export function renderPresetList() {
       } else {
         state.series.mode = 'off';
       }
+      document.getElementById('presetName').value = preset.builtin ? '' : preset.name;
       emit();
     });
 
