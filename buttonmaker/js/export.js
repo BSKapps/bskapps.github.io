@@ -1,8 +1,8 @@
-import { state, primarySelection } from './state.js?v=60';
-import { renderToDataUrl } from './renderer.js?v=60';
-import { seriesVariants, safeFileName } from './series.js?v=60';
-import { downloadBlob } from './presets.js?v=60';
-import { buildCompanionPage } from './companion.js?v=60';
+import { state, primarySelection } from './state.js?v=61';
+import { renderToDataUrl } from './renderer.js?v=61';
+import { seriesVariants, safeFileName } from './series.js?v=61';
+import { downloadBlob } from './presets.js?v=61';
+import { buildCompanionPage } from './companion.js?v=61';
 
 function dataUrlToBlob(dataUrl) {
   const [head, body] = dataUrl.split(',');

@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v61 - 2026-06-13
+- Fixed the set list holding onto a previously-loaded set (e.g. Transport) and resurrecting it. Loading a non-set preset, or dragging a button onto the preview to make it single, now resets the set back to the default. Toggling One button and Custom set on a set you are building still keeps it.
+
 ## v60 - 2026-06-13
 - Removed the standalone Record preset from the strip (the Transport set already includes a Rec button), tidying the row.
 

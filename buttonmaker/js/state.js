@@ -1,4 +1,4 @@
-export const APP_VERSION = '60';
+export const APP_VERSION = '61';
 
 export function defaultTextLayer() {
   return {
@@ -58,9 +58,8 @@ export function defaultDesign() {
   };
 }
 
-export const state = {
-  design: defaultDesign(),
-  series: {
+export function defaultSeries() {
+  return {
     mode: 'off',
     from: 1,
     to: 4,
@@ -70,7 +69,12 @@ export const state = {
       { label: 'OFF', color: '#55555c' }
     ],
     colorTarget: 'bg'
-  },
+  };
+}
+
+export const state = {
+  design: defaultDesign(),
+  series: defaultSeries(),
   export: { size: 288 },
   ui: { activeText: 0, activeIcon: 0, allText: false, allIcons: false, selectedItems: [] }
 };

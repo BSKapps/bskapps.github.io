@@ -1,11 +1,11 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, editTarget, primarySelection } from './state.js?v=60';
-import { renderDesign } from './renderer.js?v=60';
-import { seriesVariants } from './series.js?v=60';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, selectRangeTo, deselectListItem, addListItem, removeListItem, seriesForSnapshot } from './ui.js?v=60';
-import { initIconPicker } from './icons.js?v=60';
-import { initPresets } from './presets.js?v=60';
-import { initExport } from './export.js?v=60';
-import { initColorPopover } from './colorpicker.js?v=60';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTarget, primarySelection } from './state.js?v=61';
+import { renderDesign } from './renderer.js?v=61';
+import { seriesVariants } from './series.js?v=61';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, convertNumberedToList, selectListItem, selectRangeTo, deselectListItem, addListItem, removeListItem, seriesForSnapshot } from './ui.js?v=61';
+import { initIconPicker } from './icons.js?v=61';
+import { initPresets } from './presets.js?v=61';
+import { initExport } from './export.js?v=61';
+import { initColorPopover } from './colorpicker.js?v=61';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -220,7 +220,8 @@ preview.addEventListener('drop', (e) => {
     if (!v) return;
     Object.assign(state.design, deepClone(v.design));
     state.ui.activeText = 0;
-    state.series.mode = 'off';
+    state.ui.selectedItems = [];
+    Object.assign(state.series, defaultSeries());
     emit();
     return;
   }
@@ -327,13 +328,7 @@ if (window.BM_V && window.BM_V !== APP_VERSION) {
 
 document.getElementById('resetDesign').addEventListener('click', () => {
   Object.assign(state.design, defaultDesign());
-  state.series.mode = 'off';
-  state.series.items = [
-    { label: 'ON AIR', color: '#b51f1f' },
-    { label: 'PREVIEW', color: '#1f9d3a' },
-    { label: 'OFF', color: '#55555c' }
-  ];
-  state.series.colorTarget = 'bg';
+  Object.assign(state.series, defaultSeries());
   state.ui.activeText = 0;
   state.ui.activeIcon = 0;
   state.ui.selectedItems = [];
