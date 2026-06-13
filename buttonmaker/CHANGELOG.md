@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v68 - 2026-06-13
+- Made the Icon / Image and Text card watermarks a touch larger.
+
 ## v67 - 2026-06-13
 - Icon / Image and Text cards now carry a single faint watermark beside the Position grid (instead of a repeating pattern), so the controls and labels stay easy to read.
 - Background card icon changed to a colour palette; the "Image" card is now labelled "Icon / Image".
