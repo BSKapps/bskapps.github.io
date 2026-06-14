@@ -1,8 +1,8 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=90';
-import { renderDesign } from './renderer.js?v=90';
-import { numberSet, variantsFor } from './series.js?v=90';
-import { releaseSelection } from './ui.js?v=90';
-import { newId } from './effects.js?v=90';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=91';
+import { renderDesign } from './renderer.js?v=91';
+import { numberSet, variantsFor } from './series.js?v=91';
+import { releaseSelection } from './ui.js?v=91';
+import { newId } from './effects.js?v=91';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -806,15 +806,6 @@ function pickerGroup(preset, isUser) {
     });
   }
 
-  if (preset.series && variants.length > 1) {
-    const addSet = document.createElement('button');
-    addSet.className = 'btn ghost small picker-addset';
-    addSet.textContent = 'Add set';
-    addSet.title = 'Add all ' + variants.length + ' buttons to your set';
-    addSet.addEventListener('click', () => addSetToCurrent(preset));
-    head.appendChild(addSet);
-  }
-
   if (isUser) {
     const del = document.createElement('span');
     del.className = 'strip-del picker-del';
@@ -827,6 +818,15 @@ function pickerGroup(preset, isUser) {
       renderPresetList();
     });
     head.appendChild(del);
+  }
+
+  if (preset.series && variants.length > 1) {
+    const addSet = document.createElement('button');
+    addSet.className = 'btn ghost small picker-addset';
+    addSet.textContent = 'Add set';
+    addSet.title = 'Add all ' + variants.length + ' buttons to your set';
+    addSet.addEventListener('click', () => addSetToCurrent(preset));
+    head.appendChild(addSet);
   }
 
   group.appendChild(head);

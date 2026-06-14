@@ -1,12 +1,12 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=90';
-import { renderDesign } from './renderer.js?v=90';
-import { seriesVariants, numberSet } from './series.js?v=90';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=90';
-import { initIconPicker } from './icons.js?v=90';
-import { initPresets, normalizeDesign } from './presets.js?v=90';
-import { initExport } from './export.js?v=90';
-import { initEffects, updateEffectControls } from './effects.js?v=90';
-import { initColorPopover } from './colorpicker.js?v=90';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=91';
+import { renderDesign } from './renderer.js?v=91';
+import { seriesVariants, numberSet } from './series.js?v=91';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=91';
+import { initIconPicker } from './icons.js?v=91';
+import { initPresets, normalizeDesign } from './presets.js?v=91';
+import { initExport } from './export.js?v=91';
+import { initEffects, updateEffectControls } from './effects.js?v=91';
+import { initColorPopover } from './colorpicker.js?v=91';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -370,14 +370,16 @@ if (window.BM_V && window.BM_V !== APP_VERSION) {
   sessionStorage.removeItem('bm-skew-reload');
 }
 
-document.getElementById('resetDesign').addEventListener('click', () => {
+function startFresh() {
   Object.assign(state.design, defaultDesign());
   Object.assign(state.series, defaultSeries());
   state.ui.activeText = 0;
   state.ui.activeIcon = 0;
   releaseSelection();
   emit();
-});
+}
+document.getElementById('resetDesign').addEventListener('click', startFresh);
+document.getElementById('resetDesignStep').addEventListener('click', startFresh);
 
 restoreSession();
 

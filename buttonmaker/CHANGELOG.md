@@ -2,6 +2,17 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v91 - 2026-06-14
+- The "On state & effects" card is now just four presets: Tint, Glow, Invert and Dot. Pick one and it drops a linked, editable on state button into your set, shown in the main preview - then tweak it with the cards on the left, like any other button.
+- One on state per button: picking a preset creates it once and updates that same one next time, instead of adding more. Selecting either the button or its on state and picking again updates it.
+- On states link automatically, so REAPER still exports name_on with no renaming.
+- Invert is now a tick in the Background, Icon and Text cards, next to each colour: flip just that part of any button, live. The Invert preset is the same thing, applied to all three at once.
+- New "Status dot" button in the Icon/Image card adds a dot you can colour, size and place.
+- Picker: "Start fresh" also sits next to "Choose buttons & sets"; the (user) delete x sits right after the preset name; "Add set" buttons line up on the right; button tiles are lighter and cleaner.
+- Sets and on states are now one card, "Make a set & on states", with the on state presets under their own heading - they are the heart of the app, so they sit together as the headline feature. Download is its own card below it.
+- Dropped the step numbers and the "Pick a starting point" / "Make it yours" headings; the layout reads as a free-form tool, not a numbered wizard.
+- The little x to remove a button from a set, and the x on your own presets, now sit centred in their circles.
+
 ## v90 - 2026-06-14
 - On states and effects are now a design tool, not an export option. New "On state and effects" card: pick Tint, Glow, Invert or a status Dot, then "Make on state" to drop a real, editable on-state button into your set. Edit it like any other button, or duplicate it and lower its opacity to build a ramp.
 - Invert lets you choose what flips - background, icon, text, or any combination.

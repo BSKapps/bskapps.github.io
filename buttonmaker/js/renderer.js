@@ -1,3 +1,5 @@
+import { invertHex } from './color.js?v=91';
+
 const imageCache = new Map();
 const CACHE_MAX = 80;
 
@@ -61,6 +63,7 @@ export async function renderDesign(canvas, design, opts = {}) {
   }
 
   const bg = design.bg;
+  const bgInv = bg.invert ? invertHex : (h) => h;
   const bgAlpha = (bg.opacity === undefined ? 100 : bg.opacity) / 100;
   if (bg.mode === 'gradient') {
     const a = ((bg.angle - 90) * Math.PI) / 180;
@@ -74,8 +77,8 @@ export async function renderDesign(canvas, design, opts = {}) {
       cy + Math.sin(a) * len
     );
     const blend = bg.blend === undefined ? 100 : bg.blend;
-    g.addColorStop(Math.max(0, 0.5 - blend / 200), bg.gradFrom);
-    g.addColorStop(Math.min(1, 0.5 + blend / 200), bg.gradTo);
+    g.addColorStop(Math.max(0, 0.5 - blend / 200), bgInv(bg.gradFrom));
+    g.addColorStop(Math.min(1, 0.5 + blend / 200), bgInv(bg.gradTo));
     ctx.globalAlpha = bgAlpha;
     ctx.fillStyle = g;
     ctx.fillRect(-pad, -pad, size + pad * 2, size + pad * 2);
@@ -103,7 +106,7 @@ export async function renderDesign(canvas, design, opts = {}) {
     }
   } else {
     ctx.globalAlpha = bgAlpha;
-    ctx.fillStyle = bg.color;
+    ctx.fillStyle = bgInv(bg.color);
     ctx.fillRect(-pad, -pad, size + pad * 2, size + pad * 2);
     ctx.globalAlpha = 1;
   }
@@ -122,7 +125,8 @@ export async function renderDesign(canvas, design, opts = {}) {
     try {
       const isSvg = icon.svg.trim().startsWith('<');
       const hasCC = isSvg && icon.svg.includes('currentColor');
-      const src = !isSvg ? icon.svg : hasCC ? svgToDataUrl(icon.svg, icon.color) : svgToDataUrl(icon.svg, '#000000');
+      const iconColor = icon.invert ? invertHex(icon.color) : icon.color;
+      const src = !isSvg ? icon.svg : hasCC ? svgToDataUrl(icon.svg, iconColor) : svgToDataUrl(icon.svg, '#000000');
       let img = await loadImage(src);
       if (!hasCC && icon.tint) {
         const off = document.createElement('canvas');
@@ -131,7 +135,7 @@ export async function renderDesign(canvas, design, opts = {}) {
         const octx = off.getContext('2d');
         octx.drawImage(img, 0, 0, off.width, off.height);
         octx.globalCompositeOperation = 'source-in';
-        octx.fillStyle = icon.color;
+        octx.fillStyle = iconColor;
         octx.fillRect(0, 0, off.width, off.height);
         img = off;
       }
@@ -167,7 +171,7 @@ export async function renderDesign(canvas, design, opts = {}) {
     for (const text of design.texts || []) {
       if (!text.value) continue;
       ctx.globalAlpha = (text.opacity === undefined ? 100 : text.opacity) / 100;
-      ctx.fillStyle = text.color;
+      ctx.fillStyle = text.invert ? invertHex(text.color) : text.color;
       ctx.font = text.weight + ' ' + text.size * u + 'px "' + text.font + '", sans-serif';
       const [h, v] = text.align.split(':');
       ctx.textAlign = h === 'left' ? 'left' : h === 'right' ? 'right' : 'center';

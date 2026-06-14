@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=90';
-import { triggerIconUpload } from './icons.js?v=90';
-import { seriesVariants, numberSet } from './series.js?v=90';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=91';
+import { triggerIconUpload } from './icons.js?v=91';
+import { seriesVariants, numberSet } from './series.js?v=91';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -334,6 +334,7 @@ export function initUI() {
     document.getElementById('bgGradientRows').classList.toggle('hidden', v !== 'gradient');
     document.getElementById('bgImageRows').classList.toggle('hidden', v !== 'image');
     document.getElementById('bgOpacityRow').classList.toggle('hidden', v === 'image');
+    document.getElementById('bgInvertRow').classList.toggle('hidden', v === 'image');
   });
   bindColor('bgColor', (v) => applyEdit((d) => (d.bg.color = v)));
   bindColor('bgColor2a', (v) => applyEdit((d) => (d.bg.gradFrom = v)));
@@ -380,6 +381,32 @@ export function initUI() {
   });
 
   document.getElementById('iconUploadSidebar').addEventListener('click', triggerIconUpload);
+
+  document.getElementById('iconAddDot').addEventListener('click', () => {
+    applyEdit((d) => {
+      if (d.icons.length < 6) d.icons.push(dotLayer());
+    });
+    state.ui.allIcons = false;
+    state.ui.activeIcon = editTarget().icons.length - 1;
+    emit();
+  });
+
+  document.getElementById('bgInvert').addEventListener('change', (e) => {
+    applyEdit((d) => (d.bg.invert = e.target.checked));
+    emit();
+  });
+  document.getElementById('iconInvert').addEventListener('change', (e) => {
+    applyEdit((d) => {
+      for (const ic of iconLayersOf(d)) ic.invert = e.target.checked;
+    });
+    emit();
+  });
+  document.getElementById('textInvert').addEventListener('change', (e) => {
+    applyEdit((d) => {
+      for (const t of textLayersOf(d)) t.invert = e.target.checked;
+    });
+    emit();
+  });
 
   bindSeg('iconAlign', (v) => applyEdit((d) => {
     for (const ic of iconLayersOf(d)) ic.align = v;
@@ -638,6 +665,7 @@ export function syncInputsFromState() {
   setRange('iconOpacity', ic.opacity === undefined ? 100 : ic.opacity, 'iconOpacityVal');
   setRange('iconRotate', ic.rotation || 0, 'iconRotateVal');
   document.getElementById('iconReverse').checked = !!ic.reverse;
+  document.getElementById('iconInvert').checked = !!ic.invert;
   const t = refText();
   const textField = document.getElementById('textValue');
   const listEditAll = state.series.mode === 'list' && !state.ui.selectedItems.length;
@@ -652,6 +680,7 @@ export function syncInputsFromState() {
   rebuildWeightOptions(t.font, t.weight);
   setRange('textSize', t.size, 'textSizeVal');
   setVal('textColor', t.color);
+  document.getElementById('textInvert').checked = !!t.invert;
   setRange('textOpacity', t.opacity === undefined ? 100 : t.opacity, 'textOpacityVal');
   setRange('textX', t.x || 0, 'textXVal');
   setRange('textY', t.y || 0, 'textYVal');
@@ -667,6 +696,8 @@ export function syncInputsFromState() {
   document.getElementById('bgGradientRows').classList.toggle('hidden', d.bg.mode !== 'gradient');
   document.getElementById('bgImageRows').classList.toggle('hidden', d.bg.mode !== 'image');
   document.getElementById('bgOpacityRow').classList.toggle('hidden', d.bg.mode === 'image');
+  document.getElementById('bgInvertRow').classList.toggle('hidden', d.bg.mode === 'image');
+  document.getElementById('bgInvert').checked = !!d.bg.invert;
   setSeg('textAlign', t.align);
 
   setSeg('seriesMode', state.series.mode);

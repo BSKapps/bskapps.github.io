@@ -1,16 +1,34 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets } from '../js/state.js?v=90';
-import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=90';
-import { buildCompanionPage } from '../js/companion.js?v=90';
-import { renderToDataUrl } from '../js/renderer.js?v=90';
-import { selectListItem, releaseSelection } from '../js/ui.js?v=90';
-import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=90';
-import { applyEffectToDesign, invertHex, mixHex, makeOnState } from '../js/effects.js?v=90';
-import { addSetToCurrent } from '../js/presets.js?v=90';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer } from '../js/state.js?v=91';
+import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=91';
+import { buildCompanionPage } from '../js/companion.js?v=91';
+import { renderToDataUrl } from '../js/renderer.js?v=91';
+import { selectListItem, releaseSelection } from '../js/ui.js?v=91';
+import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=91';
+import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=91';
+import { invertHex, mixHex } from '../js/color.js?v=91';
+import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=91';
 
 const results = [];
 
 function check(name, cond) {
   results.push({ name, pass: !!cond });
+}
+
+async function centerPixel(design, size = 24) {
+  const url = await renderToDataUrl(design, size, { bakeText: false });
+  const img = await new Promise((res, rej) => {
+    const im = new Image();
+    im.onload = () => res(im);
+    im.onerror = rej;
+    im.src = url;
+  });
+  const cv = document.createElement('canvas');
+  cv.width = size;
+  cv.height = size;
+  const cx = cv.getContext('2d');
+  cx.drawImage(img, 0, 0);
+  const d = cx.getImageData(size / 2, size / 2, 1, 1).data;
+  return [d[0], d[1], d[2]];
 }
 
 function resetState() {
@@ -205,6 +223,12 @@ function run() {
 
   check('gradient blend defaults to 100', defaultDesign().bg.blend === 100);
 
+  check('background, icon and text invert default to false', defaultDesign().bg.invert === false && defaultDesign().icons[0].invert === false && defaultDesign().texts[0].invert === false);
+  check('normalizeDesign heals an old design without invert flags to false', (() => {
+    const healed = normalizeDesign({ bg: { mode: 'solid', color: '#222222' }, texts: [{ value: 'X' }], icons: [{ svg: null }] });
+    return healed.bg.invert === false && healed.texts[0].invert === false && healed.icons[0].invert === false;
+  })());
+
   check('default icon is centred via align', defaultDesign().icons[0].align === 'center:center' && defaultDesign().icons[0].y === 0);
 
   const legacy = { bg: { color: '#101010' }, text: { value: 'OLD', size: 14 }, icon: {}, shape: {} };
@@ -239,10 +263,9 @@ function run() {
   resetState();
   state.design.texts[0].value = 'ARM';
   state.design.bg.color = '#b51f1f';
-  state.effect = { type: 'tint', color: '#1f9d3a', strength: 40, elements: { bg: true, icon: true, text: true }, link: true };
-  makeOnState();
+  makeOnState({ type: 'tint', color: '#1f9d3a', strength: 40, elements: { bg: true, icon: true, text: true } });
   check('makeOnState on a single button creates a 2-button set', state.series.mode === 'list' && state.series.items.length === 2);
-  check('makeOnState links the on-state to its source id', !!state.series.items[0].id && state.series.items[1].onStateOf === state.series.items[0].id);
+  check('makeOnState auto-links the on-state to its source id', !!state.series.items[0].id && state.series.items[1].onStateOf === state.series.items[0].id);
   check('makeOnState bakes the effect into the on-state design', state.series.items[1].design.bg.color !== '#b51f1f');
   check('makeOnState selects the new on-state', state.ui.selectedItems.length === 1 && state.ui.selectedItems[0] === 1);
   releaseSelection();
@@ -251,18 +274,16 @@ function run() {
   state.series.mode = 'list';
   state.series.items = [mkItem('A', '#111111'), mkItem('B', '#222222')];
   state.ui.selectedItems = [0];
-  state.effect = { type: 'invert', color: '#1f9d3a', strength: 40, elements: { bg: true, icon: true, text: true }, link: true };
-  makeOnState();
+  makeOnState({ type: 'invert', elements: { bg: true, icon: true, text: true } });
   check('makeOnState inserts the on-state right after its source', state.series.items.length === 3 && !!state.series.items[1].onStateOf && state.series.items[2].label === 'B');
-  check('makeOnState invert bakes the inverted source colour', state.series.items[1].design.bg.color === invertHex('#111111'));
+  check('makeOnState invert sets the invert flag on the on-state, leaving the colour to flip at render', state.series.items[1].design.bg.invert === true && state.series.items[1].design.bg.color === '#111111');
   releaseSelection();
 
   resetState();
   state.series.mode = 'list';
   state.series.items = [mkItem('A'), mkItem('B'), mkItem('C')];
   state.ui.selectedItems = [0, 2];
-  state.effect = { type: 'glow', color: '#1f9d3a', strength: 50, elements: { bg: true, icon: true, text: true }, link: true };
-  makeOnState();
+  makeOnState({ type: 'glow', strength: 50, elements: { bg: true, icon: true, text: true } });
   check('makeOnState multi-select adds an on-state after each selected source', state.series.items.length === 5 && state.series.items[1].label.endsWith(' on') && state.series.items[2].label === 'B' && state.series.items[4].label.endsWith(' on'));
   releaseSelection();
 
@@ -272,39 +293,55 @@ function run() {
   state.design.texts[0].value = 'X';
   state.series.items = [{ label: 'CAM', color: '' }];
   state.ui.selectedItems = [0];
-  state.effect = { type: 'tint', color: '#00ff00', strength: 50, elements: { bg: true, icon: true, text: true }, link: true };
-  makeOnState();
+  makeOnState({ type: 'tint', color: '#00ff00', strength: 50, elements: { bg: true, icon: true, text: true } });
   check('makeOnState on an inherited item builds the on-state from the resolved look, not bare base', state.series.items[1].design.texts.some((t) => t.value === 'CAM') && state.series.items[1].design.bg.color !== '#0000aa');
   releaseSelection();
 
   resetState();
   state.series.mode = 'list';
-  state.series.items = [mkItem('A')];
+  state.series.items = [mkItem('A', '#111111')];
   state.ui.selectedItems = [0];
-  state.effect = { type: 'tint', color: '#00ff00', strength: 40, elements: { bg: true, icon: true, text: true }, link: false };
-  makeOnState();
-  check('makeOnState with link off sets no id or onStateOf', state.series.items.length === 2 && !state.series.items[1].onStateOf && !state.series.items[0].id);
+  makeOnState({ type: 'tint', color: '#00ff00', strength: 50, elements: { bg: true, icon: true, text: true } });
+  const onIdFirst = state.series.items[1].onStateOf;
+  const onBgFirst = state.series.items[1].design.bg.color;
+  state.ui.selectedItems = [0];
+  makeOnState({ type: 'tint', color: '#0000ff', strength: 50, elements: { bg: true, icon: true, text: true } });
+  check('re-Make from the source updates the single on-state instead of adding another', state.series.items.length === 2 && state.series.items[1].onStateOf === onIdFirst && state.series.items[1].design.bg.color !== onBgFirst);
+  state.ui.selectedItems = [1];
+  makeOnState({ type: 'tint', color: '#ffff00', strength: 50, elements: { bg: true, icon: true, text: true } });
+  check('re-Make from the on-state itself updates it, no chaining', state.series.items.length === 2 && state.series.items[1].onStateOf === onIdFirst);
   releaseSelection();
 
   resetState();
   state.series.mode = 'list';
   state.series.items = Array.from({ length: 64 }, (_, i) => mkItem('B' + i));
   state.ui.selectedItems = [];
-  state.effect = { type: 'tint', color: '#00ff00', strength: 40, elements: { bg: true, icon: true, text: true }, link: true };
   const origAlert = window.alert;
   let capMsg = '';
   window.alert = (m) => { capMsg = m; };
-  makeOnState();
+  makeOnState({ type: 'tint', color: '#00ff00', strength: 40, elements: { bg: true, icon: true, text: true } });
   check('makeOnState refuses to exceed the 64-button cap and warns', state.series.items.length === 64 && /64/.test(capMsg));
   resetState();
   state.series.mode = 'list';
   state.series.items = Array.from({ length: 63 }, (_, i) => mkItem('B' + i));
   state.ui.selectedItems = [];
   capMsg = '';
-  makeOnState();
-  check('makeOnState fills up to 64 then warns about the rest', state.series.items.length === 64 && /skipped/.test(capMsg));
+  makeOnState({ type: 'tint', color: '#00ff00', strength: 40, elements: { bg: true, icon: true, text: true } });
+  check('makeOnState fills up to 64 then warns about the rest', state.series.items.length === 64 && /could not be added/.test(capMsg));
   window.alert = origAlert;
   releaseSelection();
+
+  resetState();
+  state.series.mode = 'list';
+  const orphanDesign = defaultDesign();
+  orphanDesign.bg.color = '#123456';
+  state.series.items = [{ label: 'orphan', color: '', design: orphanDesign, onStateOf: 'gone-source' }];
+  state.ui.selectedItems = [0];
+  makeOnState({ type: 'tint', color: '#00ff00', strength: 50, elements: { bg: true, icon: true, text: true } });
+  check('makeOnState clears a dangling onStateOf and treats the orphan as its own source', state.series.items[0].onStateOf === undefined && state.series.items.length === 2 && state.series.items[1].onStateOf === state.series.items[0].id);
+  releaseSelection();
+  const dl = dotLayer('#1f9d3a');
+  check('dotLayer is a currentColor circle in the given colour', dl.svg.includes('currentColor') && dl.color === '#1f9d3a' && dl.align === 'right:top');
 
   resetState();
   const linkedPreset = {
@@ -394,11 +431,11 @@ async function runAsync() {
   armBase.texts[0].value = 'ARM';
   armBase.texts[0].color = '#ffffff';
   const invAll = applyEffectToDesign(armBase, { type: 'invert', elements: { bg: true, icon: true, text: true } });
-  check('invert effect lightens a dark background', invAll.bg.color === invertHex('#1d1d22'));
-  check('invert effect darkens white text to black', invAll.texts[0].color === '#000000');
-  check('applyEffectToDesign does not mutate the source design', armBase.bg.color === '#1d1d22' && armBase.texts[0].color === '#ffffff');
+  check('invert effect flags the background to invert at render', invAll.bg.invert === true && invAll.bg.color === '#1d1d22');
+  check('invert effect flags the text to invert at render', invAll.texts[0].invert === true && invAll.texts[0].color === '#ffffff');
+  check('applyEffectToDesign does not mutate the source design', armBase.bg.color === '#1d1d22' && armBase.texts[0].color === '#ffffff' && armBase.bg.invert === false);
   const bgOnly = applyEffectToDesign(armBase, { type: 'invert', elements: { bg: true, icon: false, text: false } });
-  check('element-choice invert leaves text untouched when only background is chosen', bgOnly.texts[0].color === '#ffffff' && bgOnly.bg.color !== '#1d1d22');
+  check('element-choice invert flags only the background when only background is chosen', bgOnly.bg.invert === true && bgOnly.texts[0].invert === false);
   const blackBg = defaultDesign();
   blackBg.bg.color = '#000000';
   const tintDesign = applyEffectToDesign(blackBg, { type: 'tint', color: '#00ff00', strength: 50, elements: { bg: true, icon: true, text: true } });
@@ -412,7 +449,14 @@ async function runAsync() {
   gradBase.bg.gradFrom = '#000000';
   gradBase.bg.gradTo = '#ffffff';
   const gradInv = applyEffectToDesign(gradBase, { type: 'invert', elements: { bg: true, icon: true, text: true } });
-  check('invert effect inverts both gradient stops', gradInv.bg.gradFrom === '#ffffff' && gradInv.bg.gradTo === '#000000');
+  check('invert effect flags a gradient background to invert, stops unchanged', gradInv.bg.invert === true && gradInv.bg.gradFrom === '#000000' && gradInv.bg.gradTo === '#ffffff');
+
+  const invRenderBase = defaultDesign();
+  invRenderBase.bg.color = '#102030';
+  const normalPx = await centerPixel(invRenderBase);
+  invRenderBase.bg.invert = true;
+  const invertedPx = await centerPixel(invRenderBase);
+  check('renderer flips a solid background when bg.invert is set', invertedPx[0] === 255 - normalPx[0] && invertedPx[1] === 255 - normalPx[1] && invertedPx[2] === 255 - normalPx[2]);
 
   const links = reaperLinks([{ id: 'a1', label: 'ARM' }, { onStateOf: 'a1', label: 'ARM on' }]);
   check('reaperLinks marks the on-state to skip and pairs it to its source', links.skip.has(1) && links.onStateFor[0] === 1 && !links.skip.has(0));

@@ -1,4 +1,4 @@
-export const APP_VERSION = '90';
+export const APP_VERSION = '91';
 
 export function defaultTextLayer() {
   return {
@@ -11,7 +11,8 @@ export function defaultTextLayer() {
     align: 'center:bottom',
     x: 0,
     y: 0,
-    rotation: 0
+    rotation: 0,
+    invert: false
   };
 }
 
@@ -27,8 +28,19 @@ export function defaultIconLayer() {
     y: 0,
     opacity: 100,
     rotation: 0,
-    reverse: false
+    reverse: false,
+    invert: false
   };
+}
+
+export function dotLayer(color) {
+  return Object.assign(defaultIconLayer(), {
+    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor"/></svg>',
+    name: 'status-dot',
+    color: color || '#1f9d3a',
+    size: 22,
+    align: 'right:top'
+  });
 }
 
 export function defaultDesign() {
@@ -44,7 +56,8 @@ export function defaultDesign() {
       imageData: null,
       imageFit: 'cover',
       imageDim: 0,
-      imageRotation: 0
+      imageRotation: 0,
+      invert: false
     },
     icons: [defaultIconLayer()],
     texts: [defaultTextLayer()],
@@ -68,21 +81,10 @@ export function defaultSeries() {
   };
 }
 
-export function defaultEffect() {
-  return {
-    type: 'tint',
-    color: '#1f9d3a',
-    strength: 40,
-    elements: { bg: true, icon: true, text: true },
-    link: true
-  };
-}
-
 export const state = {
   design: defaultDesign(),
   series: defaultSeries(),
   export: { size: 288, mode: 'streamdeck' },
-  effect: defaultEffect(),
   ui: { activeText: 0, activeIcon: 0, allText: false, allIcons: false, selectedItems: [] }
 };
 
