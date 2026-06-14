@@ -871,6 +871,91 @@ body {
 
 .preset-picker-tile canvas { display: block; width: 54px; height: 54px; border-radius: 6px; }
 
+.more-bsk {
+  border-top: 1px solid var(--border);
+  padding: 22px 24px 4px;
+}
+
+.more-bsk .group-label {
+  margin: 0 0 10px;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--faint);
+}
+
+.more-bsk .bsk-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.bsk-tile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--text);
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.bsk-tile:hover {
+  background: var(--card-hover);
+  border-color: var(--border-strong);
+}
+
+.bsk-tile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 9px;
+  flex: 0 0 auto;
+}
+
+.bsk-tile-body {
+  min-width: 0;
+}
+
+.bsk-tile h3 {
+  margin: 0 0 2px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--heading);
+}
+
+.bsk-tile p {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.bsk-tile .bsk-meta {
+  color: var(--faint);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.72rem;
+}
+
+.more-bsk-all {
+  margin: -6px 0 18px;
+  font-size: 0.82rem;
+}
+
+.more-bsk-all a {
+  color: var(--brand);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.more-bsk-all a:hover {
+  color: var(--brand-bright);
+}
+
 .app-footer {
   border-top: 1px solid var(--border);
   padding: 14px 24px;

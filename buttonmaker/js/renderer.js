@@ -1,4 +1,4 @@
-import { invertHex } from './color.js?v=95';
+import { invertHex } from './color.js?v=96';
 
 const imageCache = new Map();
 const CACHE_MAX = 80;
