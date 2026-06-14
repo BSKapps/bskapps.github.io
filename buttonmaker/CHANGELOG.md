@@ -2,6 +2,11 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v95 - 2026-06-14
+- Deleting a button now also removes its linked on state, so you no longer get a stray "... on" button left behind. To keep an on state, duplicate it first (the copy is independent) and then delete the original.
+- Invert now works on image backgrounds too, not just solid and gradient, so an image button can have a proper inverted on state.
+- Brought the test suite version markers in line with the app version.
+
 ## v94 - 2026-06-14
 - The little x to remove a button from a set now sits centred in its circle, instead of a touch low.
 

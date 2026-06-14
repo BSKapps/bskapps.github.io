@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=94';
-import { triggerIconUpload } from './icons.js?v=94';
-import { seriesVariants, numberSet } from './series.js?v=94';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=95';
+import { triggerIconUpload } from './icons.js?v=95';
+import { seriesVariants, numberSet } from './series.js?v=95';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -115,16 +115,24 @@ export function addListItem() {
 }
 
 export function removeListItem(i) {
-  const item = state.series.items[i];
-  if (item) {
-    selectionSnapshots.delete(item);
-    materializedHere.delete(item);
+  const items = state.series.items;
+  const target = items[i];
+  if (!target) return;
+  const removeIdx = [i];
+  if (target.id) {
+    const onIdx = items.findIndex((it) => it && it.onStateOf === target.id);
+    if (onIdx >= 0 && onIdx !== i) removeIdx.push(onIdx);
   }
+  for (const idx of removeIdx) {
+    selectionSnapshots.delete(items[idx]);
+    materializedHere.delete(items[idx]);
+  }
+  const removeSet = new Set(removeIdx);
   state.ui.selectedItems = state.ui.selectedItems
-    .filter((s) => s !== i)
-    .map((s) => (s > i ? s - 1 : s));
-  state.series.items.splice(i, 1);
-  if (state.series.items.length === 0) {
+    .filter((s) => !removeSet.has(s))
+    .map((s) => s - removeIdx.filter((r) => r < s).length);
+  removeIdx.sort((a, b) => b - a).forEach((idx) => items.splice(idx, 1));
+  if (items.length === 0) {
     state.series.mode = 'off';
     state.ui.selectedItems = [];
   }

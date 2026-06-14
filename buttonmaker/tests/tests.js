@@ -1,12 +1,12 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer } from '../js/state.js?v=92';
-import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=92';
-import { buildCompanionPage } from '../js/companion.js?v=92';
-import { renderToDataUrl } from '../js/renderer.js?v=92';
-import { selectListItem, releaseSelection } from '../js/ui.js?v=92';
-import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=92';
-import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=92';
-import { invertHex, mixHex } from '../js/color.js?v=92';
-import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=92';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer } from '../js/state.js?v=95';
+import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=95';
+import { buildCompanionPage } from '../js/companion.js?v=95';
+import { renderToDataUrl } from '../js/renderer.js?v=95';
+import { selectListItem, releaseSelection, removeListItem } from '../js/ui.js?v=95';
+import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=95';
+import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=95';
+import { invertHex, mixHex } from '../js/color.js?v=95';
+import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=95';
 
 const results = [];
 
@@ -289,6 +289,24 @@ function run() {
 
   resetState();
   state.series.mode = 'list';
+  state.series.items = [mkItem('A'), mkItem('B')];
+  state.ui.selectedItems = [0];
+  makeOnState({ type: 'invert', elements: { bg: true, icon: true, text: true } });
+  removeListItem(0);
+  check('deleting a source also removes its linked on-state', state.series.items.length === 1 && state.series.items[0].label === 'B' && !state.series.items.some((it) => it.onStateOf));
+  releaseSelection();
+
+  resetState();
+  state.series.mode = 'list';
+  state.series.items = [mkItem('A'), mkItem('B')];
+  state.ui.selectedItems = [0];
+  makeOnState({ type: 'invert', elements: { bg: true, icon: true, text: true } });
+  removeListItem(1);
+  check('deleting an on-state leaves its source button', state.series.items.length === 2 && !!state.series.items[0].id && state.series.items[1].label === 'B');
+  releaseSelection();
+
+  resetState();
+  state.series.mode = 'list';
   state.design.bg.color = '#0000aa';
   state.design.texts[0].value = 'X';
   state.series.items = [{ label: 'CAM', color: '' }];
@@ -462,6 +480,23 @@ async function runAsync() {
   invRenderBase.bg.invert = true;
   const invertedPx = await centerPixel(invRenderBase);
   check('renderer flips a solid background when bg.invert is set', invertedPx[0] === 255 - normalPx[0] && invertedPx[1] === 255 - normalPx[1] && invertedPx[2] === 255 - normalPx[2]);
+
+  const redCanvas = document.createElement('canvas');
+  redCanvas.width = 4;
+  redCanvas.height = 4;
+  const redCtx = redCanvas.getContext('2d');
+  redCtx.fillStyle = '#ff0000';
+  redCtx.fillRect(0, 0, 4, 4);
+  const imgInvBase = defaultDesign();
+  imgInvBase.bg.mode = 'image';
+  imgInvBase.bg.imageData = redCanvas.toDataURL('image/png');
+  imgInvBase.bg.imageFit = 'cover';
+  imgInvBase.icons = [];
+  imgInvBase.texts = [];
+  const imgNormalPx = await centerPixel(imgInvBase);
+  imgInvBase.bg.invert = true;
+  const imgInvertedPx = await centerPixel(imgInvBase);
+  check('renderer flips an image background when bg.invert is set', imgNormalPx[0] > 200 && imgNormalPx[1] < 60 && imgInvertedPx[0] < 60 && imgInvertedPx[1] > 200 && imgInvertedPx[2] > 200);
 
   const links = reaperLinks([{ id: 'a1', label: 'ARM' }, { onStateOf: 'a1', label: 'ARM on' }]);
   check('reaperLinks marks the on-state to skip and pairs it to its source', links.skip.has(1) && links.onStateFor[0] === 1 && !links.skip.has(0));

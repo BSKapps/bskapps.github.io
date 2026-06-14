@@ -1,4 +1,4 @@
-import { invertHex } from './color.js?v=94';
+import { invertHex } from './color.js?v=95';
 
 const imageCache = new Map();
 const CACHE_MAX = 80;
@@ -91,6 +91,7 @@ export async function renderDesign(canvas, design, opts = {}) {
       const imgRot = ((bg.imageRotation || 0) * Math.PI) / 180;
       const ipad = imgRot || faceRot ? size * 0.21 : 0;
       ctx.save();
+      if (bg.invert) ctx.filter = 'invert(1)';
       if (imgRot) {
         ctx.translate(size / 2, size / 2);
         ctx.rotate(imgRot);
