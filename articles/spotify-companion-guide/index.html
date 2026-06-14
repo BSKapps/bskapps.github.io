@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to control Spotify from Bitfocus Companion - BSK Apps</title>
+    <meta name="description" content="Control Spotify from Bitfocus Companion and a Stream Deck with a free module: play, pause, volume fades, cue points, playlists, album art and now-playing variables.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/spotify-companion-guide">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="How to control Spotify from Bitfocus Companion">
+    <meta property="og:description" content="A free Bitfocus Companion module for Spotify: transport, volume fades, cue points, playlists, album art and now-playing variables, with a macOS offline fallback.">
+    <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
+    <link rel="stylesheet" href="/css/site.css?v=20260611">
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>How to control Spotify from Bitfocus Companion</h1>
+            <p class="date">14 June 2026</p>
+
+            <p>If you run a Stream Deck through Bitfocus Companion, you can drive Spotify from it: start a track, pause cleanly, fade the volume, jump to a cue point, and show what is playing on the keys. <a href="/tools/companion">BSK Spotify for Companion</a> is a free, open-source module that does this through the Spotify Web API. This is a quick overview; the module's page has the full step-by-step setup.</p>
+
+            <h2>What it does</h2>
+            <ul>
+                <li>Transport control: play, pause, next, previous.</li>
+                <li>Volume control with smooth fades, not just a jump.</li>
+                <li>Cue-point playback: start a track from a set timestamp, and named bookmarks to jump to.</li>
+                <li>Playlist control.</li>
+                <li>Album art on the buttons, including 2x2 and 3x3 art grids.</li>
+                <li>99 ready-made presets, so most buttons are drag-and-drop.</li>
+                <li>30 dynamic variables for track name, artist, timing and playback state, to build now-playing displays.</li>
+            </ul>
+
+            <h2>What you need</h2>
+            <p>Bitfocus Companion 4.x, a Spotify Premium account, and a free Spotify Developer app (one per Companion install) for the sign-in. You do not need a paid developer subscription; your normal Spotify account is fine.</p>
+
+            <h2>Setting it up</h2>
+            <p>In short:</p>
+            <ol>
+                <li>Download the module's <code>.tgz</code> from the latest release (do not extract it).</li>
+                <li>In Companion, open <strong>Modules</strong> and use <strong>Import module package</strong> to load the <code>.tgz</code>.</li>
+                <li>Open <strong>Connections</strong>, add a new connection, and search for <strong>BSK Spotify</strong>.</li>
+                <li>Paste in your Spotify app's Client ID and Client Secret, then click <strong>Authenticate</strong> and sign in.</li>
+            </ol>
+            <p>The full walkthrough, including how to create the Spotify Developer app and the exact redirect URI to use, is on the <a href="/tools/companion">module page</a>.</p>
+
+            <h2>Using it on the buttons</h2>
+            <p>Drop the ready-made presets onto your Stream Deck pages for instant transport, volume and playlist buttons, then swap in the variables to show the current track and time. Build a cue point or bookmark button when you need a song to start from an exact moment in a show.</p>
+
+            <h2>If the connection drops mid-show</h2>
+            <p>On macOS the module has an offline fallback: if the Web API drops out, the transport buttons keep working through the local Spotify app, and it recovers automatically when the API comes back. That safety net is the reason it is worth running over a generic web request.</p>
+
+            <p>It is free and MIT licensed, with the source on GitHub.</p>
+
+            <div class="article-cta">
+                <h3>BSK Spotify for Companion</h3>
+                <p>Full Spotify control inside Bitfocus Companion: transport, fades, cue points, playlists, album art and 30 variables. Free.</p>
+                <a class="cta-link" href="/tools/companion">Get the module &rarr;</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>
