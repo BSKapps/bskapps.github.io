@@ -562,7 +562,7 @@ body {
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.12s;
-  padding: 0;
+  padding: 0 0 2px;
 }
 
 .series-item:hover .series-del { opacity: 1; }

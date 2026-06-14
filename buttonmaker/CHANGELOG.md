@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v94 - 2026-06-14
+- The little x to remove a button from a set now sits centred in its circle, instead of a touch low.
+
 ## v93 - 2026-06-14
 - "Number them" only shows when it can be used safely: a brand new Custom set, or a plain numbered set you can re-range. Once a set holds real buttons (added from the picker or edited on their own), it hides, so it can no longer wipe them.
 - The Custom set tools no longer make the card jump: the space for "Number them" is held even on a single button, so picking Custom set just reveals the controls in place.
