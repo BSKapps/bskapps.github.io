@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v97 - 2026-06-14
+- The "More from BSK" section now sits under the main column, lined up with the Download and Help cards, instead of stretching full width under the sidebar.
+
 ## v96 - 2026-06-14
 - Added a "More from BSK" section at the bottom of the page: a couple of other free tools (REAPER Lua Scripts, BSK Spotify for Companion) and a few BSK Mac apps for live production (Quicker IP, Lab Assistant, Target Trace), with a link to see them all.
 

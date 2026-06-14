@@ -872,8 +872,10 @@ body {
 .preset-picker-tile canvas { display: block; width: 54px; height: 54px; border-radius: 6px; }
 
 .more-bsk {
+  width: min(860px, 100%);
+  box-sizing: border-box;
   border-top: 1px solid var(--border);
-  padding: 22px 24px 4px;
+  padding: 22px 0 4px;
 }
 
 .more-bsk .group-label {
