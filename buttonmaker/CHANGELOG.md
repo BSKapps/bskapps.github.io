@@ -2,6 +2,12 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v92 - 2026-06-14
+- Duplicating a button now makes a plain, independent button: it drops the on state link, so the copy no longer carries the "on" tag. Only the on state made by the presets keeps it. To turn an on state into a normal button, duplicate it.
+- The "on" tag now sits below the button next to its number, instead of over the top corner, so it no longer looks like part of the button. It is only an on-screen marker and never appears in exports.
+- Renamed the Glow preset to Highlight, and made it adapt to the button: it lifts dark buttons brighter and deepens light ones, so it always reads as an active state instead of washing a white button's text out.
+- "Number them" and the From and To boxes now sit on one line at a normal size.
+
 ## v91 - 2026-06-14
 - The "On state & effects" card is now just four presets: Tint, Glow, Invert and Dot. Pick one and it drops a linked, editable on state button into your set, shown in the main preview - then tweak it with the cards on the left, like any other button.
 - One on state per button: picking a preset creates it once and updates that same one next time, instead of adding more. Selecting either the button or its on state and picking again updates it.

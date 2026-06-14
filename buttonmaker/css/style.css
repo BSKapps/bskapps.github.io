@@ -207,9 +207,11 @@ body {
 .row textarea { resize: none; height: 52px; line-height: 1.4; }
 .row input[type="number"] { flex: 0 0 80px; }
 
+.number-range { flex-wrap: wrap; }
+.row.number-range .btn { flex: 0 0 auto; width: auto; margin: 0; }
 .number-range label { flex: 0 0 auto; }
 .number-range label:last-of-type { margin-left: 6px; }
-.number-range input[type="number"] { flex: 1 1 0; }
+.number-range input[type="number"] { flex: 0 0 68px; }
 
 .row input[type="file"] { flex: 1; color: var(--muted); font-size: 0.85rem; min-width: 0; }
 
@@ -535,7 +537,7 @@ body {
 
 .series-item.selected { border-color: var(--brand); }
 
-.series-item.selected span { color: var(--text); }
+.series-item.selected .series-num { color: var(--text); }
 
 .series-del {
   position: absolute;
@@ -586,21 +588,20 @@ body {
 
 #preview.drop-target { outline: 3px dashed var(--brand); outline-offset: 5px; }
 
-.series-item span { color: var(--muted); font-size: 0.8rem; }
+.series-caption { display: flex; align-items: center; gap: 6px; }
+
+.series-num { color: var(--muted); font-size: 0.8rem; }
 
 .series-on-badge {
-  position: absolute;
-  top: -2px;
-  left: -2px;
   background: var(--brand);
   color: #16181c;
-  font-size: 0.58rem;
+  font-size: 0.56rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 1px 6px;
-  border-radius: 8px;
-  pointer-events: none;
+  padding: 1px 5px;
+  border-radius: 7px;
+  line-height: 1.55;
 }
 
 .series-preview.compact { gap: 10px; }

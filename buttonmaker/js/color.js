@@ -26,3 +26,9 @@ export function mixHex(hex, target, t) {
   if (!a || !b) return hex;
   return toHex(a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t);
 }
+
+export function isLightColor(hex) {
+  const c = parseHex(hex);
+  if (!c) return false;
+  return 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2] > 150;
+}

@@ -1,12 +1,12 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=91';
-import { renderDesign } from './renderer.js?v=91';
-import { seriesVariants, numberSet } from './series.js?v=91';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=91';
-import { initIconPicker } from './icons.js?v=91';
-import { initPresets, normalizeDesign } from './presets.js?v=91';
-import { initExport } from './export.js?v=91';
-import { initEffects, updateEffectControls } from './effects.js?v=91';
-import { initColorPopover } from './colorpicker.js?v=91';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=92';
+import { renderDesign } from './renderer.js?v=92';
+import { seriesVariants, numberSet } from './series.js?v=92';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=92';
+import { initIconPicker } from './icons.js?v=92';
+import { initPresets, normalizeDesign } from './presets.js?v=92';
+import { initExport } from './export.js?v=92';
+import { initEffects, updateEffectControls } from './effects.js?v=92';
+import { initColorPopover } from './colorpicker.js?v=92';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -85,9 +85,12 @@ async function renderOnce() {
       c.height = 144;
       renderDesign(c, v.design, { bakeText: true });
       item.appendChild(c);
-      const span = document.createElement('span');
-      span.textContent = String(idx + 1);
-      item.appendChild(span);
+      const caption = document.createElement('div');
+      caption.className = 'series-caption';
+      const num = document.createElement('span');
+      num.className = 'series-num';
+      num.textContent = String(idx + 1);
+      caption.appendChild(num);
 
       const srcItem = state.series.items[idx];
       if (srcItem && srcItem.onStateOf && linkedIds.has(srcItem.onStateOf)) {
@@ -95,8 +98,9 @@ async function renderOnce() {
         badge.className = 'series-on-badge';
         badge.textContent = 'on';
         badge.title = 'On state, linked to its button. REAPER export pairs it as _on.';
-        item.appendChild(badge);
+        caption.appendChild(badge);
       }
+      item.appendChild(caption);
 
       if (isList) {
         const del = document.createElement('button');
@@ -160,7 +164,10 @@ async function renderOnce() {
         const src = state.series.items[gridDragIndex];
         gridDragIndex = null;
         if (!src || state.series.items.length >= 64) return;
-        state.series.items.push(deepClone(src));
+        const clone = deepClone(src);
+        delete clone.onStateOf;
+        delete clone.id;
+        state.series.items.push(clone);
         emit();
       });
       const cap = document.createElement('span');

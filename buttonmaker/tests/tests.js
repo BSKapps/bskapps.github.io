@@ -1,12 +1,12 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer } from '../js/state.js?v=91';
-import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=91';
-import { buildCompanionPage } from '../js/companion.js?v=91';
-import { renderToDataUrl } from '../js/renderer.js?v=91';
-import { selectListItem, releaseSelection } from '../js/ui.js?v=91';
-import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=91';
-import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=91';
-import { invertHex, mixHex } from '../js/color.js?v=91';
-import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=91';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer } from '../js/state.js?v=92';
+import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=92';
+import { buildCompanionPage } from '../js/companion.js?v=92';
+import { renderToDataUrl } from '../js/renderer.js?v=92';
+import { selectListItem, releaseSelection } from '../js/ui.js?v=92';
+import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=92';
+import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=92';
+import { invertHex, mixHex } from '../js/color.js?v=92';
+import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=92';
 
 const results = [];
 
@@ -283,7 +283,7 @@ function run() {
   state.series.mode = 'list';
   state.series.items = [mkItem('A'), mkItem('B'), mkItem('C')];
   state.ui.selectedItems = [0, 2];
-  makeOnState({ type: 'glow', strength: 50, elements: { bg: true, icon: true, text: true } });
+  makeOnState({ type: 'highlight', strength: 50, elements: { bg: true, icon: true, text: true } });
   check('makeOnState multi-select adds an on-state after each selected source', state.series.items.length === 5 && state.series.items[1].label.endsWith(' on') && state.series.items[2].label === 'B' && state.series.items[4].label.endsWith(' on'));
   releaseSelection();
 
@@ -440,8 +440,13 @@ async function runAsync() {
   blackBg.bg.color = '#000000';
   const tintDesign = applyEffectToDesign(blackBg, { type: 'tint', color: '#00ff00', strength: 50, elements: { bg: true, icon: true, text: true } });
   check('tint mixes the background toward the tint colour', tintDesign.bg.color === '#008000');
-  const glowDesign = applyEffectToDesign(blackBg, { type: 'glow', strength: 50, elements: { bg: true, icon: true, text: true } });
-  check('glow brightens the background toward white', glowDesign.bg.color === '#808080');
+  const highlightDark = applyEffectToDesign(blackBg, { type: 'highlight', strength: 50, elements: { bg: true, icon: true, text: true } });
+  check('highlight brightens a dark background toward white', highlightDark.bg.color === '#808080');
+  const lightBg = defaultDesign();
+  lightBg.bg.color = '#ffffff';
+  lightBg.texts[0].color = '#16181c';
+  const highlightLight = applyEffectToDesign(lightBg, { type: 'highlight', strength: 50, elements: { bg: true, icon: true, text: true } });
+  check('highlight deepens a light background instead of washing it out', highlightLight.bg.color === '#808080' && parseInt(highlightLight.texts[0].color.slice(1, 3), 16) < 0x16);
   const dotDesign = applyEffectToDesign(defaultDesign(), { type: 'dot', color: '#1f9d3a' });
   check('dot effect adds a coloured circle icon layer', dotDesign.icons.length === defaultDesign().icons.length + 1 && dotDesign.icons[dotDesign.icons.length - 1].color === '#1f9d3a');
   const gradBase = defaultDesign();

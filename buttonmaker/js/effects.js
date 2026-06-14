@@ -1,11 +1,11 @@
-import { state, emit, deepClone, dotLayer } from './state.js?v=91';
-import { seriesVariants } from './series.js?v=91';
-import { mixHex } from './color.js?v=91';
-import { releaseSelection, selectListItem } from './ui.js?v=91';
+import { state, emit, deepClone, dotLayer } from './state.js?v=92';
+import { seriesVariants } from './series.js?v=92';
+import { mixHex, isLightColor } from './color.js?v=92';
+import { releaseSelection, selectListItem } from './ui.js?v=92';
 
 export const EFFECT_DEFAULTS = {
   tint: { type: 'tint', color: '#1f9d3a', strength: 40, elements: { bg: true, icon: true, text: true } },
-  glow: { type: 'glow', strength: 35, elements: { bg: true, icon: true, text: true } },
+  highlight: { type: 'highlight', strength: 35, elements: { bg: true, icon: true, text: true } },
   invert: { type: 'invert', elements: { bg: true, icon: true, text: true } },
   dot: { type: 'dot', color: '#1f9d3a' }
 };
@@ -24,7 +24,14 @@ export function applyEffectToDesign(design, effect) {
     return d;
   }
   const k = (effect.strength === undefined ? 40 : effect.strength) / 100;
-  const tf = effect.type === 'glow' ? (h) => mixHex(h, '#ffffff', k) : (h) => mixHex(h, effect.color, k);
+  let tf;
+  if (effect.type === 'highlight') {
+    const judge = d.bg.mode === 'gradient' ? d.bg.gradFrom : d.bg.mode === 'solid' ? d.bg.color : '#000000';
+    const target = isLightColor(judge) ? '#000000' : '#ffffff';
+    tf = (h) => mixHex(h, target, k);
+  } else {
+    tf = (h) => mixHex(h, effect.color, k);
+  }
   if (els.bg) {
     if (d.bg.mode === 'gradient') {
       d.bg.gradFrom = tf(d.bg.gradFrom);
