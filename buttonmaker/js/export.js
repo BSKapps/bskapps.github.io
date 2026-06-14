@@ -1,8 +1,8 @@
-import { state, primarySelection, defaultTextLayer, buttonCount } from './state.js?v=92';
-import { renderToDataUrl, renderDesign } from './renderer.js?v=92';
-import { seriesVariants, safeFileName } from './series.js?v=92';
-import { downloadBlob } from './presets.js?v=92';
-import { buildCompanionPage } from './companion.js?v=92';
+import { state, primarySelection, defaultTextLayer, buttonCount } from './state.js?v=93';
+import { renderToDataUrl, renderDesign } from './renderer.js?v=93';
+import { seriesVariants, safeFileName } from './series.js?v=93';
+import { downloadBlob } from './presets.js?v=93';
+import { buildCompanionPage } from './companion.js?v=93';
 
 const SS = 4;
 const STATE_LIFT = [0, 0.12, 0.22];
@@ -115,21 +115,7 @@ export async function buildReaperZip(zip, variants, links) {
   return zip;
 }
 
-function segControl(id, getSet) {
-  const seg = document.getElementById(id);
-  seg.querySelectorAll('button').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      seg.querySelectorAll('button').forEach((b) => b.classList.remove('active'));
-      btn.classList.add('active');
-      getSet(btn.dataset.val);
-    });
-  });
-}
-
 export function updateExportControls() {
-  const reaper = state.export.mode === 'reaper';
-  document.getElementById('sdExports').classList.toggle('hidden', reaper);
-  document.getElementById('reaperExports').classList.toggle('hidden', !reaper);
   document.getElementById('exportZip').disabled = buttonCount() <= 1;
 }
 
@@ -138,11 +124,6 @@ export function initExport() {
   document.getElementById('exportZip').addEventListener('click', exportZip);
   document.getElementById('exportCompanion').addEventListener('click', exportCompanion);
   document.getElementById('exportReaper').addEventListener('click', exportReaper);
-
-  segControl('exportMode', (v) => {
-    state.export.mode = v;
-    updateExportControls();
-  });
 
   updateExportControls();
 }

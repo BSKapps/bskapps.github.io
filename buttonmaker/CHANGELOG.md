@@ -2,6 +2,12 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
 
+## v93 - 2026-06-14
+- "Number them" only shows when it can be used safely: a brand new Custom set, or a plain numbered set you can re-range. Once a set holds real buttons (added from the picker or edited on their own), it hides, so it can no longer wipe them.
+- The Custom set tools no longer make the card jump: the space for "Number them" is held even on a single button, so picking Custom set just reveals the controls in place.
+- Split the old "Make a set & on states" card into two: "Make a set" and "On states".
+- Tidied the Download card. The Stream Deck / REAPER switch is gone; PNG, Set as ZIP, Companion page and REAPER icons now sit on one row, with the extra tip lines moved into Help.
+
 ## v92 - 2026-06-14
 - Duplicating a button now makes a plain, independent button: it drops the on state link, so the copy no longer carries the "on" tag. Only the on state made by the presets keeps it. To turn an on state into a normal button, duplicate it.
 - The "on" tag now sits below the button next to its number, instead of over the top corner, so it no longer looks like part of the button. It is only an on-screen marker and never appears in exports.

@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=92';
-import { triggerIconUpload } from './icons.js?v=92';
-import { seriesVariants, numberSet } from './series.js?v=92';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=93';
+import { triggerIconUpload } from './icons.js?v=93';
+import { seriesVariants, numberSet } from './series.js?v=93';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -472,7 +472,6 @@ export function initUI() {
         state.series.mode = 'list';
       }
     }
-    document.getElementById('seriesListRows').classList.toggle('hidden', v !== 'list');
   });
 
   document.getElementById('editAllBtn').addEventListener('click', deselectListItem);
@@ -701,7 +700,9 @@ export function syncInputsFromState() {
   setSeg('textAlign', t.align);
 
   setSeg('seriesMode', state.series.mode);
-  document.getElementById('seriesListRows').classList.toggle('hidden', state.series.mode !== 'list');
+  const lockNumber = state.series.items.some((it) => it.design);
+  const showNumber = state.series.mode === 'list' && !lockNumber;
+  document.getElementById('seriesListRows').classList.toggle('reserved', !showNumber);
   setVal('seriesFrom', state.series.from);
   setVal('seriesTo', state.series.to);
 
