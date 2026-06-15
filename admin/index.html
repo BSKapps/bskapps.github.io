@@ -424,10 +424,11 @@
 <div id="login">
     <h1>BSK Apps Admin</h1>
     <p>Enter your GitHub token to manage site content and view analytics.</p>
-    <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off">
-    <div id="login-error">Invalid token or no repo access. Check it has "repo" scope.</div>
+    <input type="password" id="gh-token" placeholder="github_pat_..." autocomplete="off">
+    <div id="login-error">Invalid token, or it lacks access to the required repos and permissions.</div>
     <button class="btn-primary" onclick="login()">Sign In</button>
-    <a href="https://github.com/settings/tokens/new?scopes=repo&description=BSK+Apps+Admin" target="_blank">Create a GitHub token (repo scope) &rarr;</a>
+    <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">Create a fine-grained GitHub token &rarr;</a>
+    <p>Scope it to repositories <strong>bskapps.github.io</strong> and <strong>bsk-stats</strong>, with permissions <strong>Contents: Read and write</strong> and <strong>Secrets: Read and write</strong>. Existing classic repo-scope tokens still work.</p>
 </div>
 
 <!-- DASHBOARD -->

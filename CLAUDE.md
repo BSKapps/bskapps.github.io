@@ -99,7 +99,7 @@ Do NOT add an Articles link to the footer - articles are reached via the homepag
 ## Admin (/admin)
 
 - Single self-contained page, own inline CSS in the site palette (only page not using site.css)
-- GitHub token auth (repo scope, stored in localStorage). Edits commit directly to main → deploys live
+- GitHub token auth, stored in localStorage (persists across launches, auto-restores on load). Recommended: fine-grained token scoped to bskapps.github.io + bsk-stats with Contents + Secrets read/write; classic repo-scope tokens still work. Edits commit directly to main → deploys live
 - Content tab: site title/tagline + per-app fields incl. description and features (see content.json section)
 - Articles tab: edits title/meta description/h1/date/body of article pages (parses markers: `<h1>`, `<p class="date">`, body runs to `<div class="article-cta">` or `</article>` - keep these markers when editing article HTML)
 - Analytics tab: reads stats.json from BSKapps/bsk-stats (hourly Action), ranges 24h/7d/30d/90d/FY, USD/AUD, LS gross/net, Apple sales/proceeds, conversion. API Keys panel writes encrypted GitHub Action secrets (CF_API_TOKEN, LS_API_KEY, APPLE_*)
