@@ -1,6 +1,10 @@
 # BSK Button Maker changelog
 
-Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (window.BM_V) and every ?v= asset URL - all three move together on each release.
+Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
+
+## v98 - 2026-06-15
+- Added a Content-Security-Policy so the browser only runs the page's own scripts and only talks to the icon library and font host. Internal hardening, no change to how the tool works.
+- Moved the page version from an inline script into a meta tag, so the script policy can stay strict without needing to allow an inline script.
 
 ## v97 - 2026-06-14
 - The "More from BSK" section now sits under the main column, lined up with the Download and Help cards, instead of stretching full width under the sidebar.
