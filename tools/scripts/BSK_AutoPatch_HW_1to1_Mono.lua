@@ -13,6 +13,14 @@ if hwOutputs == 0 and hwInputs == 0 then
     return
 end
 
+local proceed = reaper.ShowMessageBox(
+    "Mono tracks only. A stereo track patches one channel, not both. Use two mono tracks (L and R).\n\nContinue?",
+    "Auto Patch", 1)
+
+if proceed ~= 1 then
+    return
+end
+
 local inputsPatched = 0
 local outputsPatched = 0
 
