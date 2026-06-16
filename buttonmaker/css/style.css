@@ -352,7 +352,7 @@ body {
 .layer-chips button.chip-action { border-style: dashed; }
 
 .chip-x {
-  margin-left: 6px;
+  margin-left: 11px;
   padding: 0 3px;
   border-radius: 4px;
   opacity: 0;

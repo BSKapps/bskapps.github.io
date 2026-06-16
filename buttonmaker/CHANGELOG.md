@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v110 - 2026-06-16
+- The delete x on each layer chip now sits further right, away from the chip's label, so it is harder to hit by accident when selecting a layer.
+
 ## v109 - 2026-06-16
 - New Border edges row (T / B / L / R checkboxes) under the Border slider: draw the border on only the edges you want, e.g. a single underline or just the sides. All four on is the normal full border (existing buttons are unchanged). Partial edges draw as straight lines; rounded corners still apply when all four edges are on.
 - The preset name no longer clears after you save a preset, so the field still matches the design you are looking at.
