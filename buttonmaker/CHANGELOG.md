@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v103 - 2026-06-16
+- Set selection borders: editing all now uses the same border as a multi-select (dropped the extra-faint all border). Single pick keeps its stronger border.
+
 ## v102 - 2026-06-16
 - The Icon/Image source buttons are now a segmented control (Icon | Image | Status dot) matching the Background's Solid/Gradient/Image, with the current layer's source highlighted.
 - Each image and text layer chip now has its own small x to delete that layer (on hover), replacing the separate Delete Layer button that moved around. The last layer can't be deleted.

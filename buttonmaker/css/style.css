@@ -583,8 +583,8 @@ body {
 .series-item:active { cursor: grabbing; }
 
 .series-item.selected { border-color: var(--brand); }
-.series-item.sel-multi { border-color: rgba(111, 163, 217, 0.65); }
-.series-item.sel-all { border-color: rgba(111, 163, 217, 0.28); }
+.series-item.sel-multi,
+.series-item.sel-all { border-color: rgba(111, 163, 217, 0.65); }
 
 .series-item.selected .series-num { color: var(--text); }
 
