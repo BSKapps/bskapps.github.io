@@ -1,4 +1,4 @@
--- @description BSK Transport: Play (only if stopped or paused, never toggles)
+-- @description BSK Transport: Safe Rec Play (only if stopped or paused, never toggles)
 -- @author BSK
 -- @version 3.0
 -- @about Starts playback only if stopped or paused. Does nothing if already playing or recording.

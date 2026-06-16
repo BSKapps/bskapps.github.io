@@ -1,4 +1,4 @@
--- @description BSK Transport: Pause/Unpause (ignore if stopped or actively recording)
+-- @description BSK Transport: Safe Rec Pause/Unpause (ignore if stopped or actively recording)
 -- @author BSK
 -- @version 4.1
 -- @about Pauses if playing, unpauses if paused (including paused recording). Does nothing if stopped or actively recording.

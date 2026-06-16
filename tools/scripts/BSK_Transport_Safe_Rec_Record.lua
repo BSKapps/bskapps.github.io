@@ -1,4 +1,4 @@
--- @description BSK Transport: Record (only if not already recording)
+-- @description BSK Transport: Safe Rec Record (only if not already recording)
 -- @author BSK
 -- @version 3.0
 -- @about Starts recording only if not already recording. Does nothing if recording is active.

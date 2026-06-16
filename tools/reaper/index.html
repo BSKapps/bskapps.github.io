@@ -20,12 +20,12 @@
         "@type": "ItemList",
         "name": "Free REAPER Lua Scripts",
         "description": "Free REAPER Lua scripts for Stream Deck transport control and hardware patching",
-        "numberOfItems": 6,
+        "numberOfItems": 7,
         "itemListElement": [
             {
                 "@type": "SoftwareSourceCode",
                 "position": 1,
-                "name": "BSK Transport: Play",
+                "name": "BSK Transport: Safe Rec Play",
                 "description": "Starts playback only if stopped or paused. Designed for Stream Deck transport buttons.",
                 "programmingLanguage": "Lua",
                 "runtimePlatform": "REAPER DAW",
@@ -34,7 +34,7 @@
             {
                 "@type": "SoftwareSourceCode",
                 "position": 2,
-                "name": "BSK Transport: Pause",
+                "name": "BSK Transport: Safe Rec Pause",
                 "description": "Pauses if playing, unpauses if paused. Designed for Stream Deck transport buttons.",
                 "programmingLanguage": "Lua",
                 "runtimePlatform": "REAPER DAW",
@@ -43,7 +43,7 @@
             {
                 "@type": "SoftwareSourceCode",
                 "position": 3,
-                "name": "BSK Transport: Record",
+                "name": "BSK Transport: Safe Rec Record",
                 "description": "Starts recording only if not already recording. Designed for Stream Deck transport buttons.",
                 "programmingLanguage": "Lua",
                 "runtimePlatform": "REAPER DAW",
@@ -75,6 +75,15 @@
                 "programmingLanguage": "Lua",
                 "runtimePlatform": "REAPER DAW",
                 "isAccessibleForFree": true
+            },
+            {
+                "@type": "SoftwareSourceCode",
+                "position": 7,
+                "name": "BSK Rec On State",
+                "description": "Lights a toolbar button to its on-state icon while REAPER is recording. Assign your record button to this script and provide a name_on.png icon.",
+                "programmingLanguage": "Lua",
+                "runtimePlatform": "REAPER DAW",
+                "isAccessibleForFree": true
             }
         ]
     }
@@ -90,21 +99,27 @@
         <p class="section-desc">Drop these into your REAPER Scripts folder and assign them to actions or toolbar buttons.</p>
 
         <div class="script-card">
-            <h3>BSK Transport: Play <span class="badge lua">Lua</span></h3>
+            <h3>BSK Transport: Safe Rec Play <span class="badge lua">Lua</span></h3>
             <p>Starts playback only if stopped or paused. Does nothing if already playing or recording. Designed to make your Stream Deck transport buttons safe.</p>
-            <a class="download-link" href="/tools/scripts/BSK_Transport_Play.lua" download>Download BSK_Transport_Play.lua</a>
+            <a class="download-link" href="/tools/scripts/BSK_Transport_Safe_Rec_Play.lua" download>Download BSK_Transport_Safe_Rec_Play.lua</a>
         </div>
 
         <div class="script-card">
-            <h3>BSK Transport: Pause <span class="badge lua">Lua</span></h3>
+            <h3>BSK Transport: Safe Rec Pause <span class="badge lua">Lua</span></h3>
             <p>Pauses if playing, unpauses if paused (including paused recording). Does nothing if stopped or actively recording. Designed to make your Stream Deck transport buttons safe.</p>
-            <a class="download-link" href="/tools/scripts/BSK_Transport_Pause.lua" download>Download BSK_Transport_Pause.lua</a>
+            <a class="download-link" href="/tools/scripts/BSK_Transport_Safe_Rec_Pause.lua" download>Download BSK_Transport_Safe_Rec_Pause.lua</a>
         </div>
 
         <div class="script-card">
-            <h3>BSK Transport: Record <span class="badge lua">Lua</span></h3>
+            <h3>BSK Transport: Safe Rec Record <span class="badge lua">Lua</span></h3>
             <p>Starts recording only if not already recording. Designed to make your Stream Deck transport buttons safe.</p>
-            <a class="download-link" href="/tools/scripts/BSK_Transport_Record.lua" download>Download BSK_Transport_Record.lua</a>
+            <a class="download-link" href="/tools/scripts/BSK_Transport_Safe_Rec_Record.lua" download>Download BSK_Transport_Safe_Rec_Record.lua</a>
+        </div>
+
+        <div class="script-card">
+            <h3>BSK Rec On State <span class="badge lua">Lua</span></h3>
+            <p>Lights a toolbar button while REAPER is recording. Make a normal and an on-state icon in <a href="/buttonmaker/">BSK Button Maker</a> (the REAPER export gives you name.png and name_on.png), assign your record button to this script, then run it once or set it as a startup action. While recording, REAPER shows the on-state icon; when you stop, it returns to normal.</p>
+            <a class="download-link" href="/tools/scripts/BSK_Rec_On_State.lua" download>Download BSK_Rec_On_State.lua</a>
         </div>
 
         <div class="script-card">
