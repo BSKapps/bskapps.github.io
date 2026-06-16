@@ -1,4 +1,4 @@
-import { invertHex } from './color.js?v=107';
+import { invertHex } from './color.js?v=108';
 
 const imageCache = new Map();
 const CACHE_MAX = 80;
@@ -186,7 +186,8 @@ export async function renderDesign(canvas, design, opts = {}) {
       if (ratio > 1) h = s / ratio;
       else w = s * ratio;
       const [iah, iav] = (icon.align || 'center:center').split(':');
-      const iaoff = Math.max(0, Math.min(40, Math.round(50 - icon.size / 2)));
+      const room = 50 - icon.size / 2;
+      const iaoff = Math.min(40, room >= 0 ? room : -room);
       const iax = iah === 'left' ? -iaoff : iah === 'right' ? iaoff : 0;
       const iay = iav === 'top' ? -iaoff : iav === 'bottom' ? iaoff : 0;
       let x = size / 2 - w / 2 + ((iax + (icon.x || 0)) / 100) * size;
@@ -269,16 +270,25 @@ export async function renderDesign(canvas, design, opts = {}) {
         ctx.rotate(rot);
         ctx.translate(-px, -py);
       }
-      lines.forEach((line, i) => {
-        let dx = 0;
-        if (h === 'center') {
-          const m = ctx.measureText(line);
-          if (m.actualBoundingBoxLeft !== undefined) {
-            dx = (m.actualBoundingBoxLeft - m.actualBoundingBoxRight) / 2;
+      const bend = text.bend || 0;
+      if (bend && lines.length === 1) {
+        const line = lines[0];
+        const lineW = ctx.measureText(line).width;
+        const ax = (h === 'left' ? pad + lineW / 2 : h === 'right' ? size - pad - lineW / 2 : size / 2) + ox;
+        const ay = (v === 'top' ? pad + (text.size * u) / 2 : v === 'bottom' ? size - pad - (text.size * u) / 2 : size / 2) + oy;
+        drawArcText(ctx, line, bend, ax, ay);
+      } else {
+        lines.forEach((line, i) => {
+          let dx = 0;
+          if (h === 'center') {
+            const m = ctx.measureText(line);
+            if (m.actualBoundingBoxLeft !== undefined) {
+              dx = (m.actualBoundingBoxLeft - m.actualBoundingBoxRight) / 2;
+            }
           }
-        }
-        ctx.fillText(line, x + dx + ox, startY + i * lineHeight + oy);
-      });
+          ctx.fillText(line, x + dx + ox, startY + i * lineHeight + oy);
+        });
+      }
       if (rot) ctx.restore();
       ctx.globalAlpha = 1;
     }
@@ -300,6 +310,35 @@ export async function renderDesign(canvas, design, opts = {}) {
   }
 
   ctx.restore();
+}
+
+function drawArcText(ctx, line, bend, ax, ay) {
+  const chars = [...line];
+  const W = ctx.measureText(line).width;
+  if (!W) return;
+  const theta = (bend / 100) * Math.PI;
+  const R = W / Math.abs(theta);
+  const sign = Math.sign(theta);
+  const prevAlign = ctx.textAlign;
+  const prevBaseline = ctx.textBaseline;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.save();
+  ctx.translate(ax, ay + sign * R);
+  let acc = -W / 2;
+  for (const ch of chars) {
+    const cw = ctx.measureText(ch).width;
+    const phi = sign * ((acc + cw / 2) / R);
+    ctx.save();
+    ctx.rotate(phi);
+    ctx.translate(0, -sign * R);
+    ctx.fillText(ch, 0, 0);
+    ctx.restore();
+    acc += cw;
+  }
+  ctx.restore();
+  ctx.textAlign = prevAlign;
+  ctx.textBaseline = prevBaseline;
 }
 
 function drawFitted(ctx, img, off, size, fit) {

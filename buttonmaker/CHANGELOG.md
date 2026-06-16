@@ -2,6 +2,14 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v108 - 2026-06-16
+- New Bend control under Rotate (text only): curves a single line of text into an arc, positive bends up, negative bends down. Multi-line text stays straight.
+- Border now takes half-points, by typing or on the slider (0.5 steps), matching Text Size.
+- A large icon now responds to the position grid: instead of locking to centre once it fills the button, it shifts toward the chosen corner and overhangs. Bigger icons move further.
+- When editing every button in a set at once, the controls now read from the first button in the set instead of a hidden master design. Fixes the weight dropdown locking up (and other controls showing the wrong values) when the master happened to be on a different font.
+- The text layer you are editing now stays selected when you click between buttons in a set, instead of jumping back to layer 1.
+- Adding a second text layer now copies the current layer's look (font, weight, size, colour, alignment, bend) with the text left blank, instead of resetting to white Inter.
+
 ## v107 - 2026-06-16
 - Icon-only buttons now export with the icon's name (e.g. volume-x.png) instead of button-1.png. The filename falls back text first, then icon name, then a numbered button name - so a REAPER toolbar set no longer lands as button-1/2/3 spread across folders to rename by hand.
 

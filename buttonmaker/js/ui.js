@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=107';
-import { triggerIconUpload } from './icons.js?v=107';
-import { seriesVariants, numberSet } from './series.js?v=107';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=108';
+import { triggerIconUpload } from './icons.js?v=108';
+import { seriesVariants, numberSet } from './series.js?v=108';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -41,8 +41,8 @@ function materialize(i) {
 
 function focusActiveLayers() {
   const d = editTarget();
-  state.ui.activeText = Math.max(0, d.texts.findIndex((t) => t.value));
-  state.ui.activeIcon = Math.max(0, d.icons.findIndex((ic) => ic.svg));
+  state.ui.activeText = Math.min(state.ui.activeText, d.texts.length - 1);
+  state.ui.activeIcon = Math.min(state.ui.activeIcon, d.icons.length - 1);
 }
 
 export function selectListItem(i, additive = false) {
@@ -494,9 +494,12 @@ export function initUI() {
   bindRange('textX', (v) => applyRelative(state.ui.allText, textLayersOf, refText(), 'x', v, -40, 40), 'textXVal');
   bindRange('textY', (v) => applyRelative(state.ui.allText, textLayersOf, refText(), 'y', v, -40, 40), 'textYVal');
   bindRange('textRotate', (v) => applyRelative(state.ui.allText, textLayersOf, refText(), 'rotation', v, -180, 180), 'textRotateVal');
+  bindRange('textBend', (v) => applyEdit((d) => {
+    for (const t of textLayersOf(d)) t.bend = v;
+  }), 'textBendVal');
 
   bindRange('shapeRadius', (v) => applyEdit((d) => (d.shape.radius = v)), 'shapeRadiusVal');
-  bindRange('shapeBorder', (v) => applyEdit((d) => (d.shape.border = v)), 'shapeBorderVal');
+  bindRange('shapeBorder', (v) => applyEdit((d) => (d.shape.border = v)), 'shapeBorderVal', 0.5);
   bindColor('shapeBorderColor', (v) => applyEdit((d) => (d.shape.borderColor = v)));
   bindRange('shapeRotate', (v) => applyEdit((d) => (d.shape.rotation = v)), 'shapeRotateVal');
   bindRange('shapeZoom', (v) => applyEdit((d) => (d.shape.zoom = v)), 'shapeZoomVal');
@@ -605,8 +608,12 @@ export function renderTextLayerChips() {
     add.className = 'chip-action';
     add.textContent = '+ Layer';
     add.addEventListener('click', () => {
+      const li = Math.min(state.ui.activeText, editTarget().texts.length - 1);
       applyEdit((d) => {
-        if (d.texts.length < 12) d.texts.push(defaultTextLayer());
+        if (d.texts.length < 12) {
+          const src = d.texts[Math.min(li, d.texts.length - 1)];
+          d.texts.push(Object.assign(deepClone(src), { value: '' }));
+        }
       });
       state.ui.allText = false;
       state.ui.activeText = editTarget().texts.length - 1;
@@ -736,6 +743,7 @@ export function syncInputsFromState() {
   setRange('textX', t.x || 0, 'textXVal');
   setRange('textY', t.y || 0, 'textYVal');
   setRange('textRotate', t.rotation || 0, 'textRotateVal');
+  setRange('textBend', t.bend || 0, 'textBendVal');
   setRange('shapeRadius', d.shape.radius, 'shapeRadiusVal');
   setRange('shapeBorder', d.shape.border, 'shapeBorderVal');
   setVal('shapeBorderColor', d.shape.borderColor);

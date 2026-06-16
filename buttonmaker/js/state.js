@@ -1,4 +1,4 @@
-export const APP_VERSION = '107';
+export const APP_VERSION = '108';
 
 export function defaultTextLayer() {
   return {
@@ -12,6 +12,7 @@ export function defaultTextLayer() {
     x: 0,
     y: 0,
     rotation: 0,
+    bend: 0,
     invert: false
   };
 }
@@ -99,8 +100,8 @@ export function buttonCount() {
 
 export function editTarget() {
   const i = primarySelection();
-  if (state.series.mode === 'list' && i !== null) {
-    const item = state.series.items[i];
+  if (state.series.mode === 'list') {
+    const item = state.series.items[i !== null ? i : 0];
     if (item && item.design) return item.design;
   }
   return state.design;

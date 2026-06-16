@@ -1,12 +1,12 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer } from '../js/state.js?v=107';
-import { seriesVariants, safeFileName, variantFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=107';
-import { buildCompanionPage } from '../js/companion.js?v=107';
-import { renderToDataUrl } from '../js/renderer.js?v=107';
-import { selectListItem, releaseSelection, removeListItem } from '../js/ui.js?v=107';
-import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=107';
-import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=107';
-import { invertHex, mixHex } from '../js/color.js?v=107';
-import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=107';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer } from '../js/state.js?v=108';
+import { seriesVariants, safeFileName, variantFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=108';
+import { buildCompanionPage } from '../js/companion.js?v=108';
+import { renderToDataUrl } from '../js/renderer.js?v=108';
+import { selectListItem, releaseSelection, removeListItem } from '../js/ui.js?v=108';
+import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=108';
+import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=108';
+import { invertHex, mixHex } from '../js/color.js?v=108';
+import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=108';
 
 const results = [];
 
@@ -147,6 +147,29 @@ function run() {
   check('variantFileName upload icon name strips prefix', variantFileName({ design: { icons: [{ svg: 'x', name: 'upload:mute' }] }, companionText: '', label: '' }, 0) === 'mute');
   check('variantFileName falls back to label', variantFileName({ design: { icons: [{ svg: null, name: null }] }, companionText: '', label: '3' }, 2) === '3');
   check('variantFileName blank numbered', variantFileName({ design: { icons: [] }, companionText: '', label: '' }, 4) === 'button-5');
+
+  resetState();
+  state.series.mode = 'list';
+  state.series.items = [
+    { label: 'A', color: '', design: defaultDesign() },
+    { label: 'B', color: '', design: defaultDesign() }
+  ];
+  state.ui.selectedItems = [];
+  check('edit-all targets the first button, not the hidden master', editTarget() === state.series.items[0].design);
+  state.ui.selectedItems = [1];
+  check('selecting one button targets that button', editTarget() === state.series.items[1].design);
+
+  resetState();
+  state.series.mode = 'list';
+  const twoLayer = () => { const d = defaultDesign(); d.texts.push(defaultTextLayer()); return d; };
+  state.series.items = [
+    { label: 'A', color: '', design: twoLayer() },
+    { label: 'B', color: '', design: twoLayer() }
+  ];
+  state.ui.selectedItems = [0];
+  state.ui.activeText = 1;
+  selectListItem(1);
+  check('active text layer persists across button selection', state.ui.activeText === 1);
 
   const buttons = Array.from({ length: 10 }, (_, i) => ({
     png64: 'iVBORfake' + i,
@@ -402,6 +425,29 @@ async function runAsync() {
   state.design.icons.push(Object.assign(deepClone(state.design.icons[0]), { x: 20, color: '#ff0000' }));
   const twoIcons = await renderToDataUrl(state.design, 72, { bakeText: false });
   check('second icon layer changes output', twoIcons !== noText);
+
+  resetState();
+  state.design.texts[0].value = '';
+  state.design.icons[0].svg = playSvg;
+  state.design.icons[0].size = 120;
+  state.design.icons[0].align = 'left:top';
+  const bigLeftTop = await renderToDataUrl(state.design, 72, { bakeText: false });
+  state.design.icons[0].align = 'right:bottom';
+  const bigRightBottom = await renderToDataUrl(state.design, 72, { bakeText: false });
+  check('large icon still responds to grid position', bigLeftTop !== bigRightBottom);
+
+  resetState();
+  state.design.texts[0].value = 'ARC';
+  state.design.texts[0].align = 'center:center';
+  const bendStraight = await renderToDataUrl(state.design, 72, { bakeText: true });
+  state.design.texts[0].bend = 60;
+  const bendCurved = await renderToDataUrl(state.design, 72, { bakeText: true });
+  check('single-line bend changes the render', bendCurved !== bendStraight);
+  state.design.texts[0].value = 'AR\nC';
+  const bendMulti = await renderToDataUrl(state.design, 72, { bakeText: true });
+  state.design.texts[0].bend = 0;
+  const bendMultiStraight = await renderToDataUrl(state.design, 72, { bakeText: true });
+  check('multi-line ignores bend', bendMulti === bendMultiStraight);
 
   resetState();
   const legacySingle = deepClone(state.design);

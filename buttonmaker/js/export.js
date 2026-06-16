@@ -1,8 +1,8 @@
-import { state, primarySelection, defaultTextLayer, buttonCount } from './state.js?v=107';
-import { renderToDataUrl, renderDesign } from './renderer.js?v=107';
-import { seriesVariants, variantFileName } from './series.js?v=107';
-import { downloadBlob } from './presets.js?v=107';
-import { buildCompanionPage } from './companion.js?v=107';
+import { state, primarySelection, defaultTextLayer, buttonCount } from './state.js?v=108';
+import { renderToDataUrl, renderDesign } from './renderer.js?v=108';
+import { seriesVariants, variantFileName } from './series.js?v=108';
+import { downloadBlob } from './presets.js?v=108';
+import { buildCompanionPage } from './companion.js?v=108';
 
 const SS = 4;
 const STATE_LIFT = [0, 0.05, 0.12];
