@@ -1,4 +1,4 @@
-import { state, deepClone } from './state.js?v=106';
+import { state, deepClone } from './state.js?v=107';
 
 export function hasToken(design) {
   return design.texts.some((t) => t.value && (t.value.includes('{n}') || t.value.includes('{label}')));
@@ -110,6 +110,15 @@ function firstText(design) {
 function substitute(text, n, label) {
   if (!text) return text;
   return text.replaceAll('{n}', String(n)).replaceAll('{label}', label);
+}
+
+function iconLabel(design) {
+  const ic = (design.icons || []).find((i) => i.svg && i.name);
+  return ic ? ic.name.split(':').pop() : '';
+}
+
+export function variantFileName(v, index) {
+  return safeFileName(v.companionText || iconLabel(v.design) || v.label, index);
 }
 
 export function safeFileName(text, index) {

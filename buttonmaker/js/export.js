@@ -1,8 +1,8 @@
-import { state, primarySelection, defaultTextLayer, buttonCount } from './state.js?v=106';
-import { renderToDataUrl, renderDesign } from './renderer.js?v=106';
-import { seriesVariants, safeFileName } from './series.js?v=106';
-import { downloadBlob } from './presets.js?v=106';
-import { buildCompanionPage } from './companion.js?v=106';
+import { state, primarySelection, defaultTextLayer, buttonCount } from './state.js?v=107';
+import { renderToDataUrl, renderDesign } from './renderer.js?v=107';
+import { seriesVariants, variantFileName } from './series.js?v=107';
+import { downloadBlob } from './presets.js?v=107';
+import { buildCompanionPage } from './companion.js?v=107';
 
 const SS = 4;
 const STATE_LIFT = [0, 0.05, 0.12];
@@ -68,7 +68,7 @@ export async function buildPngZip(zip, variants, size) {
   const used = new Set();
   for (let i = 0; i < variants.length; i++) {
     const v = variants[i];
-    const name = uniqueName(used, safeFileName(v.companionText || v.label, i));
+    const name = uniqueName(used, variantFileName(v, i));
     const url = await renderToDataUrl(v.design, size, { bakeText: true });
     zip.file(name + '.png', url.split(',')[1], { base64: true });
   }
@@ -101,7 +101,7 @@ export async function buildReaperZip(zip, variants, links) {
   for (let i = 0; i < variants.length; i++) {
     if (skip.has(i)) continue;
     const v = variants[i];
-    const name = uniqueName(used, safeFileName(v.companionText || v.label, i));
+    const name = uniqueName(used, variantFileName(v, i));
     const onIdx = onStateFor[i];
     for (const s of REAPER_SIZES) {
       const base = await buildStrip(v.design, s.cell);
@@ -135,7 +135,7 @@ async function exportPng() {
   const idx = state.series.mode === 'list' && sel !== null && variants[sel] ? sel : 0;
   const v = variants[idx] || variants[0];
   const url = await renderToDataUrl(v.design, size, { bakeText: true });
-  downloadBlob(dataUrlToBlob(url), safeFileName(v.companionText, idx) + '.png');
+  downloadBlob(dataUrlToBlob(url), variantFileName(v, idx) + '.png');
 }
 
 async function exportZip() {

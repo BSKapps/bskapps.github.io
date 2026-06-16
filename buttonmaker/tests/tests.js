@@ -1,12 +1,12 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer } from '../js/state.js?v=106';
-import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=106';
-import { buildCompanionPage } from '../js/companion.js?v=106';
-import { renderToDataUrl } from '../js/renderer.js?v=106';
-import { selectListItem, releaseSelection, removeListItem } from '../js/ui.js?v=106';
-import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=106';
-import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=106';
-import { invertHex, mixHex } from '../js/color.js?v=106';
-import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=106';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer } from '../js/state.js?v=107';
+import { seriesVariants, safeFileName, variantFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=107';
+import { buildCompanionPage } from '../js/companion.js?v=107';
+import { renderToDataUrl } from '../js/renderer.js?v=107';
+import { selectListItem, releaseSelection, removeListItem } from '../js/ui.js?v=107';
+import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=107';
+import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=107';
+import { invertHex, mixHex } from '../js/color.js?v=107';
+import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=107';
 
 const results = [];
 
@@ -141,6 +141,12 @@ function run() {
   check('safeFileName slugifies', safeFileName('CAM 1 / *#!', 0) === 'cam-1');
   check('safeFileName empty text numbered', safeFileName('', 4) === 'button-5');
   check('safeFileName symbols-only numbered', safeFileName('***', 0) === 'button-1');
+
+  check('variantFileName text wins', variantFileName({ design: { icons: [{ svg: 'x', name: 'lucide:play' }] }, companionText: 'Go', label: '1' }, 0) === 'go');
+  check('variantFileName falls back to icon name', variantFileName({ design: { icons: [{ svg: 'x', name: 'lucide:volume-x' }] }, companionText: '', label: '2' }, 1) === 'volume-x');
+  check('variantFileName upload icon name strips prefix', variantFileName({ design: { icons: [{ svg: 'x', name: 'upload:mute' }] }, companionText: '', label: '' }, 0) === 'mute');
+  check('variantFileName falls back to label', variantFileName({ design: { icons: [{ svg: null, name: null }] }, companionText: '', label: '3' }, 2) === '3');
+  check('variantFileName blank numbered', variantFileName({ design: { icons: [] }, companionText: '', label: '' }, 4) === 'button-5');
 
   const buttons = Array.from({ length: 10 }, (_, i) => ({
     png64: 'iVBORfake' + i,

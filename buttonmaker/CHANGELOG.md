@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v107 - 2026-06-16
+- Icon-only buttons now export with the icon's name (e.g. volume-x.png) instead of button-1.png. The filename falls back text first, then icon name, then a numbered button name - so a REAPER toolbar set no longer lands as button-1/2/3 spread across folders to rename by hand.
+
 ## v106 - 2026-06-16
 - A single button now shows as "1" in the row with the + tile, same as a set. The + always adds a clean blank button, and dragging a button onto + always copies it - consistent whether you have one button or many (no more "the first + duplicates").
 
