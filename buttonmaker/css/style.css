@@ -370,6 +370,12 @@ body {
 
 .check label { flex: none; color: var(--text); font-size: 0.92rem; }
 
+.edge-toggles { display: flex; flex: 1; gap: 16px; }
+
+.edge-toggles label { flex: none; display: flex; align-items: center; gap: 5px; color: var(--text); font-size: 0.9rem; }
+
+.edge-toggles input { accent-color: var(--brand); }
+
 .stage {
   display: flex;
   flex-direction: column;

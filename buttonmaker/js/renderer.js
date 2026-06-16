@@ -1,4 +1,4 @@
-import { invertHex } from './color.js?v=108';
+import { invertHex } from './color.js?v=109';
 
 const imageCache = new Map();
 const CACHE_MAX = 80;
@@ -299,13 +299,23 @@ export async function renderDesign(canvas, design, opts = {}) {
 
   if (design.shape.border > 0) {
     const bw = design.shape.border * u;
+    const e = design.shape.edges || { top: true, bottom: true, left: true, right: true };
+    const allEdges = e.top && e.bottom && e.left && e.right;
     ctx.strokeStyle = design.shape.borderColor;
     ctx.lineWidth = bw;
-    if (radius > 0) {
+    if (allEdges && radius > 0) {
       roundedPath(ctx, bw / 2, bw / 2, size - bw, size - bw, Math.max(0, radius - bw / 2));
       ctx.stroke();
-    } else {
+    } else if (allEdges) {
       ctx.strokeRect(bw / 2, bw / 2, size - bw, size - bw);
+    } else {
+      const o = bw / 2;
+      ctx.beginPath();
+      if (e.top) { ctx.moveTo(0, o); ctx.lineTo(size, o); }
+      if (e.bottom) { ctx.moveTo(0, size - o); ctx.lineTo(size, size - o); }
+      if (e.left) { ctx.moveTo(o, 0); ctx.lineTo(o, size); }
+      if (e.right) { ctx.moveTo(size - o, 0); ctx.lineTo(size - o, size); }
+      ctx.stroke();
     }
   }
 

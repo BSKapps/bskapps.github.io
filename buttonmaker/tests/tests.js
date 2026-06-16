@@ -1,12 +1,12 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer } from '../js/state.js?v=108';
-import { seriesVariants, safeFileName, variantFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=108';
-import { buildCompanionPage } from '../js/companion.js?v=108';
-import { renderToDataUrl } from '../js/renderer.js?v=108';
-import { selectListItem, releaseSelection, removeListItem } from '../js/ui.js?v=108';
-import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=108';
-import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=108';
-import { invertHex, mixHex } from '../js/color.js?v=108';
-import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=108';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer } from '../js/state.js?v=109';
+import { seriesVariants, safeFileName, variantFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=109';
+import { buildCompanionPage } from '../js/companion.js?v=109';
+import { renderToDataUrl } from '../js/renderer.js?v=109';
+import { selectListItem, releaseSelection, removeListItem } from '../js/ui.js?v=109';
+import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=109';
+import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=109';
+import { invertHex, mixHex } from '../js/color.js?v=109';
+import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=109';
 
 const results = [];
 
@@ -435,6 +435,20 @@ async function runAsync() {
   state.design.icons[0].align = 'right:bottom';
   const bigRightBottom = await renderToDataUrl(state.design, 72, { bakeText: false });
   check('large icon still responds to grid position', bigLeftTop !== bigRightBottom);
+
+  resetState();
+  state.design.texts[0].value = '';
+  state.design.shape.border = 4;
+  state.design.shape.borderColor = '#ff0000';
+  const fullBorder = await renderToDataUrl(state.design, 72, { bakeText: false });
+  state.design.shape.edges = { top: true, bottom: false, left: false, right: false };
+  const topEdgeOnly = await renderToDataUrl(state.design, 72, { bakeText: false });
+  check('partial border edges render differently from full border', topEdgeOnly !== fullBorder);
+  const allEdges = deepClone(state.design);
+  allEdges.shape.edges = { top: true, bottom: true, left: true, right: true };
+  const undefEdges = deepClone(state.design);
+  delete undefEdges.shape.edges;
+  check('missing edges field renders as a full border', (await renderToDataUrl(allEdges, 72, { bakeText: false })) === (await renderToDataUrl(undefEdges, 72, { bakeText: false })));
 
   resetState();
   state.design.texts[0].value = 'ARC';

@@ -1,8 +1,8 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=108';
-import { renderDesign } from './renderer.js?v=108';
-import { numberSet, variantsFor } from './series.js?v=108';
-import { releaseSelection } from './ui.js?v=108';
-import { newId } from './effects.js?v=108';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=109';
+import { renderDesign } from './renderer.js?v=109';
+import { numberSet, variantsFor } from './series.js?v=109';
+import { releaseSelection } from './ui.js?v=109';
+import { newId } from './effects.js?v=109';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -587,7 +587,6 @@ export function initPresets() {
       list.unshift(preset);
     }
     if (saveUserPresets(list)) {
-      nameInput.value = '';
       renderPresetList();
     }
   });

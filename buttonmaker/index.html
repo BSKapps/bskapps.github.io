@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://bskapps.com; connect-src 'self' https://api.iconify.design; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="bm-version" content="108">
+<meta name="bm-version" content="109">
 <title>BSK Button Maker - Free Companion, Stream Deck and REAPER Button Designer</title>
 <meta name="description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars. Icon library, presets, button sets, PNG, Companion page and REAPER toolbar export.">
 <meta property="og:title" content="BSK Button Maker">
@@ -41,7 +41,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=108">
+<link rel="stylesheet" href="css/style.css?v=109">
 </head>
 <body>
 <header class="app-header">
@@ -193,6 +193,12 @@
       <summary><svg class="card-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2,2H8V4H4V8H2V2M16,2H22V8H20V4H16V2M20,16H22V22H16V20H20V16M8,20V22H2V16H4V20H8Z"/></svg><span class="card-title">Border<span class="card-sep">/</span>Shape</span></summary>
       <div class="section-body">
         <div class="row"><label>Border</label><input type="range" id="shapeBorder" min="0" max="8" value="0" step="0.5" data-default="0"><input type="number" class="val" id="shapeBorderVal" value="0"></div>
+        <div class="row"><label>Border edges</label><div class="edge-toggles">
+          <label><input type="checkbox" id="edgeTop" checked> T</label>
+          <label><input type="checkbox" id="edgeBottom" checked> B</label>
+          <label><input type="checkbox" id="edgeLeft" checked> L</label>
+          <label><input type="checkbox" id="edgeRight" checked> R</label>
+        </div></div>
         <div class="row"><label>Border colour</label><input type="color" id="shapeBorderColor" value="#ffffff" data-label="Border colour"></div>
         <div class="row"><label>Corners</label><input type="range" id="shapeRadius" min="0" max="35" value="0" data-default="0"><input type="number" class="val" id="shapeRadiusVal" value="0"></div>
         <div class="row"><label>Rotate</label><input type="range" id="shapeRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="shapeRotateVal" value="0"></div>
@@ -374,7 +380,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair or Cockos. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=108"></script>
-<script type="module" src="js/app.js?v=108"></script>
+<script src="vendor/jszip.min.js?v=109"></script>
+<script type="module" src="js/app.js?v=109"></script>
 </body>
 </html>

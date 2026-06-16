@@ -1,4 +1,4 @@
-export const APP_VERSION = '108';
+export const APP_VERSION = '109';
 
 export function defaultTextLayer() {
   return {
@@ -66,6 +66,7 @@ export function defaultDesign() {
       radius: 0,
       border: 0,
       borderColor: '#ffffff',
+      edges: { top: true, bottom: true, left: true, right: true },
       rotation: 0,
       zoom: 100
     }

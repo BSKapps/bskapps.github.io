@@ -2,6 +2,11 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v109 - 2026-06-16
+- New Border edges row (T / B / L / R checkboxes) under the Border slider: draw the border on only the edges you want, e.g. a single underline or just the sides. All four on is the normal full border (existing buttons are unchanged). Partial edges draw as straight lines; rounded corners still apply when all four edges are on.
+- The preset name no longer clears after you save a preset, so the field still matches the design you are looking at.
+- Every layer chip now has a delete x, including the first/only one. Deleting the last remaining text or image layer resets it to a fresh blank layer (a button always keeps one of each). Clear still empties a layer in place.
+
 ## v108 - 2026-06-16
 - New Bend control under Rotate (text only): curves a single line of text into an arc, positive bends up, negative bends down. Multi-line text stays straight.
 - Border now takes half-points, by typing or on the slider (0.5 steps), matching Text Size.

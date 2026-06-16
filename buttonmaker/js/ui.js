@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=108';
-import { triggerIconUpload } from './icons.js?v=108';
-import { seriesVariants, numberSet } from './series.js?v=108';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=109';
+import { triggerIconUpload } from './icons.js?v=109';
+import { seriesVariants, numberSet } from './series.js?v=109';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -456,6 +456,15 @@ export function initUI() {
     });
     emit();
   });
+  for (const edge of ['top', 'bottom', 'left', 'right']) {
+    document.getElementById('edge' + edge[0].toUpperCase() + edge.slice(1)).addEventListener('change', (e) => {
+      applyEdit((d) => {
+        if (!d.shape.edges) d.shape.edges = { top: true, bottom: true, left: true, right: true };
+        d.shape.edges[edge] = e.target.checked;
+      });
+      emit();
+    });
+  }
 
   bindSeg('iconAlign', (v) => applyEdit((d) => {
     for (const ic of iconLayersOf(d)) ic.align = v;
@@ -590,16 +599,17 @@ export function renderTextLayerChips() {
       state.ui.activeText = i;
       emit();
     });
-    if (texts.length > 1) {
-      chip.appendChild(chipDeleteX(() => {
-        applyEdit((d) => { if (d.texts.length > 1) d.texts.splice(i, 1); });
-        if (i <= state.ui.activeText) state.ui.activeText = Math.max(0, state.ui.activeText - 1);
-        state.ui.activeText = Math.min(state.ui.activeText, editTarget().texts.length - 1);
-        state.ui.allText = false;
-        syncSelectedLabels();
-        emit();
-      }));
-    }
+    chip.appendChild(chipDeleteX(() => {
+      applyEdit((d) => {
+        if (d.texts.length > 1) d.texts.splice(i, 1);
+        else d.texts[0] = defaultTextLayer();
+      });
+      if (i <= state.ui.activeText) state.ui.activeText = Math.max(0, state.ui.activeText - 1);
+      state.ui.activeText = Math.min(state.ui.activeText, editTarget().texts.length - 1);
+      state.ui.allText = false;
+      syncSelectedLabels();
+      emit();
+    }));
     wrap.appendChild(chip);
   });
 
@@ -651,15 +661,16 @@ export function renderIconLayerChips() {
       state.ui.activeIcon = i;
       emit();
     });
-    if (icons.length > 1) {
-      chip.appendChild(chipDeleteX(() => {
-        applyEdit((d) => { if (d.icons.length > 1) d.icons.splice(i, 1); });
-        if (i <= state.ui.activeIcon) state.ui.activeIcon = Math.max(0, state.ui.activeIcon - 1);
-        state.ui.activeIcon = Math.min(state.ui.activeIcon, editTarget().icons.length - 1);
-        state.ui.allIcons = false;
-        emit();
-      }));
-    }
+    chip.appendChild(chipDeleteX(() => {
+      applyEdit((d) => {
+        if (d.icons.length > 1) d.icons.splice(i, 1);
+        else d.icons[0] = defaultIconLayer();
+      });
+      if (i <= state.ui.activeIcon) state.ui.activeIcon = Math.max(0, state.ui.activeIcon - 1);
+      state.ui.activeIcon = Math.min(state.ui.activeIcon, editTarget().icons.length - 1);
+      state.ui.allIcons = false;
+      emit();
+    }));
     wrap.appendChild(chip);
   });
 
@@ -747,6 +758,10 @@ export function syncInputsFromState() {
   setRange('shapeRadius', d.shape.radius, 'shapeRadiusVal');
   setRange('shapeBorder', d.shape.border, 'shapeBorderVal');
   setVal('shapeBorderColor', d.shape.borderColor);
+  const edges = d.shape.edges || { top: true, bottom: true, left: true, right: true };
+  for (const edge of ['top', 'bottom', 'left', 'right']) {
+    document.getElementById('edge' + edge[0].toUpperCase() + edge.slice(1)).checked = edges[edge] !== false;
+  }
   setRange('shapeRotate', d.shape.rotation || 0, 'shapeRotateVal');
   setRange('shapeZoom', d.shape.zoom === undefined ? 100 : d.shape.zoom, 'shapeZoomVal');
 
