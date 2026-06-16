@@ -2,6 +2,12 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v102 - 2026-06-16
+- The Icon/Image source buttons are now a segmented control (Icon | Image | Status dot) matching the Background's Solid/Gradient/Image, with the current layer's source highlighted.
+- Each image and text layer chip now has its own small x to delete that layer (on hover), replacing the separate Delete Layer button that moved around. The last layer can't be deleted.
+- Clear now works on every layer at once when "All" is selected (the button reads Clear All).
+- Set selection borders are now tiered: a single picked button gets the full border, a few get a medium border, and editing all shows a faint border on every button.
+
 ## v101 - 2026-06-16
 - Centre guides now remembers whether it is on. Reloading the page used to drop the crosshair while leaving the checkbox ticked; the setting is saved, so the checkbox and the lines always match and the crosshair stays on if you left it on.
 

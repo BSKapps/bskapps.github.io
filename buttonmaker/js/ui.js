@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=101';
-import { triggerIconUpload } from './icons.js?v=101';
-import { seriesVariants, numberSet } from './series.js?v=101';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=102';
+import { triggerIconUpload } from './icons.js?v=102';
+import { seriesVariants, numberSet } from './series.js?v=102';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -568,6 +568,16 @@ export function renderTextLayerChips() {
       state.ui.activeText = i;
       emit();
     });
+    if (texts.length > 1) {
+      chip.appendChild(chipDeleteX(() => {
+        applyEdit((d) => { if (d.texts.length > 1) d.texts.splice(i, 1); });
+        if (i <= state.ui.activeText) state.ui.activeText = Math.max(0, state.ui.activeText - 1);
+        state.ui.activeText = Math.min(state.ui.activeText, editTarget().texts.length - 1);
+        state.ui.allText = false;
+        syncSelectedLabels();
+        emit();
+      }));
+    }
     wrap.appendChild(chip);
   });
 
@@ -586,22 +596,6 @@ export function renderTextLayerChips() {
     wrap.appendChild(add);
   }
 
-  const activeT = texts[Math.max(0, Math.min(state.ui.activeText, texts.length - 1))];
-  if (!state.ui.allText && (texts.length > 1 || (activeT && activeT.value))) {
-    const del = document.createElement('button');
-    del.className = 'chip-action';
-    del.textContent = 'Delete Layer';
-    del.addEventListener('click', () => {
-      applyEdit((d) => {
-        if (d.texts.length > 1 && state.ui.activeText < d.texts.length) d.texts.splice(state.ui.activeText, 1);
-        else Object.assign(d.texts[0], defaultTextLayer());
-      });
-      state.ui.activeText = Math.max(0, state.ui.activeText - 1);
-      syncSelectedLabels();
-      emit();
-    });
-    wrap.appendChild(del);
-  }
 }
 
 export function renderIconLayerChips() {
@@ -631,6 +625,15 @@ export function renderIconLayerChips() {
       state.ui.activeIcon = i;
       emit();
     });
+    if (icons.length > 1) {
+      chip.appendChild(chipDeleteX(() => {
+        applyEdit((d) => { if (d.icons.length > 1) d.icons.splice(i, 1); });
+        if (i <= state.ui.activeIcon) state.ui.activeIcon = Math.max(0, state.ui.activeIcon - 1);
+        state.ui.activeIcon = Math.min(state.ui.activeIcon, editTarget().icons.length - 1);
+        state.ui.allIcons = false;
+        emit();
+      }));
+    }
     wrap.appendChild(chip);
   });
 
@@ -649,23 +652,22 @@ export function renderIconLayerChips() {
     wrap.appendChild(add);
   }
 
-  if (icons.length > 1 && !state.ui.allIcons) {
-    const del = document.createElement('button');
-    del.className = 'chip-action';
-    del.textContent = 'Delete Layer';
-    del.addEventListener('click', () => {
-      applyEdit((d) => {
-        if (d.icons.length > 1 && state.ui.activeIcon < d.icons.length) d.icons.splice(state.ui.activeIcon, 1);
-      });
-      state.ui.activeIcon = Math.max(0, state.ui.activeIcon - 1);
-      emit();
-    });
-    wrap.appendChild(del);
-  }
 }
 
 function truncate(s, len) {
   return s.length > len ? s.slice(0, len) + '...' : s;
+}
+
+function chipDeleteX(onDelete) {
+  const x = document.createElement('span');
+  x.className = 'chip-x';
+  x.textContent = 'x';
+  x.title = 'Delete this layer';
+  x.addEventListener('click', (e) => {
+    e.stopPropagation();
+    onDelete();
+  });
+  return x;
 }
 
 export function syncInputsFromState() {
@@ -737,10 +739,20 @@ export function syncInputsFromState() {
   setVal('seriesFrom', state.series.from);
   setVal('seriesTo', state.series.to);
 
-  document.getElementById('clearIcon').disabled = state.ui.allIcons || !ic.svg;
+  const iconLayers = editTarget().icons;
+  const clearBtn = document.getElementById('clearIcon');
+  clearBtn.textContent = state.ui.allIcons ? 'Clear All' : 'Clear';
+  clearBtn.disabled = state.ui.allIcons ? !iconLayers.some((l) => l.svg) : !ic.svg;
   document.getElementById('iconCentre').disabled = state.ui.allIcons || !ic.svg;
-  document.getElementById('openIconPicker').disabled = state.ui.allIcons;
-  document.getElementById('iconUploadSidebar').disabled = state.ui.allIcons;
+  const iconSrc = state.ui.allIcons ? null
+    : ic.name === 'status-dot' ? 'iconAddDot'
+    : ic.name && ic.name.indexOf('upload:') === 0 ? 'iconUploadSidebar'
+    : ic.svg ? 'openIconPicker' : null;
+  for (const id of ['openIconPicker', 'iconUploadSidebar', 'iconAddDot']) {
+    const el = document.getElementById(id);
+    el.disabled = state.ui.allIcons;
+    el.classList.toggle('active', id === iconSrc);
+  }
   document.getElementById('exportPng').disabled = false;
   document.getElementById('exportZip').disabled = buttonCount() <= 1;
 

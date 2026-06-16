@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://bskapps.com; connect-src 'self' https://api.iconify.design; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="bm-version" content="101">
+<meta name="bm-version" content="102">
 <title>BSK Button Maker - Free Companion, Stream Deck and REAPER Button Designer</title>
 <meta name="description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars. Icon library, presets, button sets, PNG, Companion page and REAPER toolbar export.">
 <meta property="og:title" content="BSK Button Maker">
@@ -41,7 +41,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=101">
+<link rel="stylesheet" href="css/style.css?v=102">
 </head>
 <body>
 <header class="app-header">
@@ -98,10 +98,10 @@
       <summary><svg class="card-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z"/></svg><span class="card-title">Icon<span class="card-sep">/</span>Image</span></summary>
       <div class="section-body">
         <div class="layer-chips" id="iconLayerChips"></div>
-        <div class="row">
-          <button class="btn" id="openIconPicker">Choose Icon</button>
-          <button class="btn" id="iconUploadSidebar">Upload Image</button>
-          <button class="btn ghost" id="iconAddDot" title="Add a status dot you can colour and place">Status Dot</button>
+        <div class="seg" id="iconSource">
+          <button id="openIconPicker" title="Choose an icon from the library">Icon</button>
+          <button id="iconUploadSidebar" title="Upload your own image">Image</button>
+          <button id="iconAddDot" title="Add a status dot you can colour and place">Status dot</button>
         </div>
         <div class="row">
           <button class="btn ghost" id="clearIcon">Clear</button>
@@ -372,7 +372,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair or Cockos. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=101"></script>
-<script type="module" src="js/app.js?v=101"></script>
+<script src="vendor/jszip.min.js?v=102"></script>
+<script type="module" src="js/app.js?v=102"></script>
 </body>
 </html>

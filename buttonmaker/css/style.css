@@ -351,6 +351,19 @@ body {
 
 .layer-chips button.chip-action { border-style: dashed; }
 
+.chip-x {
+  margin-left: 6px;
+  padding: 0 3px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.12s;
+  cursor: pointer;
+}
+.layer-chips button:hover .chip-x { opacity: 0.6; }
+.layer-chips button .chip-x:hover { opacity: 1; color: var(--text); background: rgba(255, 255, 255, 0.14); }
+
+.seg button:disabled { opacity: 0.4; cursor: default; }
+
 .check { display: flex; align-items: center; gap: 8px; }
 
 .check input { accent-color: var(--brand); }
@@ -570,6 +583,8 @@ body {
 .series-item:active { cursor: grabbing; }
 
 .series-item.selected { border-color: var(--brand); }
+.series-item.sel-multi { border-color: rgba(111, 163, 217, 0.65); }
+.series-item.sel-all { border-color: rgba(111, 163, 217, 0.28); }
 
 .series-item.selected .series-num { color: var(--text); }
 

@@ -1,12 +1,12 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=101';
-import { renderDesign } from './renderer.js?v=101';
-import { seriesVariants, numberSet } from './series.js?v=101';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=101';
-import { initIconPicker } from './icons.js?v=101';
-import { initPresets, normalizeDesign } from './presets.js?v=101';
-import { initExport } from './export.js?v=101';
-import { initEffects, updateEffectControls } from './effects.js?v=101';
-import { initColorPopover } from './colorpicker.js?v=101';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=102';
+import { renderDesign } from './renderer.js?v=102';
+import { seriesVariants, numberSet } from './series.js?v=102';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=102';
+import { initIconPicker } from './icons.js?v=102';
+import { initPresets, normalizeDesign } from './presets.js?v=102';
+import { initExport } from './export.js?v=102';
+import { initEffects, updateEffectControls } from './effects.js?v=102';
+import { initColorPopover } from './colorpicker.js?v=102';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -72,7 +72,11 @@ async function renderOnce() {
     variants.forEach((v, idx) => {
       const item = document.createElement('div');
       item.className = 'series-item';
-      item.classList.toggle('selected', isList && state.ui.selectedItems.includes(idx));
+      const sel = state.ui.selectedItems;
+      const isSel = sel.includes(idx);
+      item.classList.toggle('selected', isSel && sel.length === 1);
+      item.classList.toggle('sel-multi', isSel && sel.length > 1);
+      item.classList.toggle('sel-all', sel.length === 0);
       item.draggable = true;
       item.title = 'Click to style it alone, Cmd-click to grab several, drag onto another to reorder, or onto the big preview to make it your single button.';
       item.addEventListener('click', (e) => {
