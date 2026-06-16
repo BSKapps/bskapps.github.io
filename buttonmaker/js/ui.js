@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=104';
-import { triggerIconUpload } from './icons.js?v=104';
-import { seriesVariants, numberSet } from './series.js?v=104';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=105';
+import { triggerIconUpload } from './icons.js?v=105';
+import { seriesVariants, numberSet } from './series.js?v=105';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -110,7 +110,7 @@ export function selectAllListItems() {
 
 export function addListItem() {
   if (state.series.mode !== 'list' || state.series.items.length >= 64) return;
-  state.series.items.push({ label: '', color: '' });
+  state.series.items.push({ label: '', color: '', design: defaultDesign() });
   selectListItem(state.series.items.length - 1);
 }
 

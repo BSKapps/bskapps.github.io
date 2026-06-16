@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v105 - 2026-06-16
+- The Add (+) tile in a set now drops a clean blank button to start fresh, instead of inheriting the set's look. Dragging a button onto + still copies it.
+
 ## v104 - 2026-06-16
 - An on-state's text now follows its source button when you rename it, so changing a label only needs doing once. It only follows while they match: give the on-state its own different text and the link lets go, so your override is never overwritten. The look stays independent, as before.
 
