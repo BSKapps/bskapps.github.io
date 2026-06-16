@@ -2,6 +2,15 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v100 - 2026-06-16
+- Softened the REAPER toolbar hover and pressed states to match REAPER's own icons. The old states washed the button out (a red REC turned pink on press); the hover is now barely there and the pressed state is a gentle lift, closer to how REAPER draws its default toolbar buttons.
+- Added a "Centre guides" checkbox under the preview. Tick it to overlay a centre crosshair on the button so you can line up an icon and text by eye. The guide is a preview-only overlay and never appears in any export.
+- New Centre button in the Icon/Image card. Some library icons are drawn slightly off-centre inside their own artwork (the record REC icon is one), which shows up most when you size them right up. Centre snaps the visible artwork to the true middle of the button, at any size. Existing designs are untouched until you click it.
+- Rearranged the Icon/Image buttons: Choose icon, Upload image and Status dot now share the top row; Clear and Centre sit underneath.
+- Fixed fonts and weights not always taking effect on first change. The preview now waits for the web font to finish loading before it draws, so a font or weight change shows correctly straight away instead of needing a second nudge.
+- The little x on saved-preset tiles in the picker now sits centred in its circle, matching the x on set buttons (it used a different style that never got the v94 centring nudge).
+- Tidied button labels to Title Case for consistency: Choose Icon, Upload Image, Status Dot, Choose Buttons & Sets, Start Fresh, Save to My Presets, Back Up, Edit All, One Button, Custom Set, Number Them, Add Set, Delete Layer, Companion Page, REAPER Icons.
+
 ## v98 - 2026-06-15
 - Added a Content-Security-Policy so the browser only runs the page's own scripts and only talks to the icon library and font host. Internal hardening, no change to how the tool works.
 - Moved the page version from an inline script into a meta tag, so the script policy can stay strict without needing to allow an inline script.

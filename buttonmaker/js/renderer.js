@@ -1,4 +1,4 @@
-import { invertHex } from './color.js?v=98';
+import { invertHex } from './color.js?v=100';
 
 const imageCache = new Map();
 const CACHE_MAX = 80;
@@ -28,6 +28,45 @@ function svgToDataUrl(svg, color) {
     .replaceAll('currentColor', color)
     .replace('<svg', '<svg color="' + color + '"');
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(colored);
+}
+
+const boundsCache = new Map();
+
+function contentCentre(img, key) {
+  if (boundsCache.has(key)) return boundsCache.get(key);
+  let res = null;
+  try {
+    const iw = img.width || img.naturalWidth || 64;
+    const ih = img.height || img.naturalHeight || 64;
+    const scale = 64 / Math.max(iw, ih);
+    const w = Math.max(1, Math.round(iw * scale));
+    const h = Math.max(1, Math.round(ih * scale));
+    const c = document.createElement('canvas');
+    c.width = w;
+    c.height = h;
+    const cx = c.getContext('2d', { willReadFrequently: true });
+    cx.drawImage(img, 0, 0, w, h);
+    const data = cx.getImageData(0, 0, w, h).data;
+    let minX = w;
+    let minY = h;
+    let maxX = -1;
+    let maxY = -1;
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        if (data[(y * w + x) * 4 + 3] > 12) {
+          if (x < minX) minX = x;
+          if (x > maxX) maxX = x;
+          if (y < minY) minY = y;
+          if (y > maxY) maxY = y;
+        }
+      }
+    }
+    if (maxX >= minX && maxY >= minY) {
+      res = { cx: (minX + maxX + 1) / 2 / w, cy: (minY + maxY + 1) / 2 / h };
+    }
+  } catch (e) {}
+  boundsCache.set(key, res);
+  return res;
 }
 
 function roundedPath(ctx, x, y, w, h, r) {
@@ -150,8 +189,15 @@ export async function renderDesign(canvas, design, opts = {}) {
       const iaoff = Math.max(0, Math.min(40, Math.round(50 - icon.size / 2)));
       const iax = iah === 'left' ? -iaoff : iah === 'right' ? iaoff : 0;
       const iay = iav === 'top' ? -iaoff : iav === 'bottom' ? iaoff : 0;
-      const x = size / 2 - w / 2 + ((iax + (icon.x || 0)) / 100) * size;
-      const y = size / 2 - h / 2 + ((iay + (icon.y || 0)) / 100) * size;
+      let x = size / 2 - w / 2 + ((iax + (icon.x || 0)) / 100) * size;
+      let y = size / 2 - h / 2 + ((iay + (icon.y || 0)) / 100) * size;
+      if (icon.contentCenter) {
+        const cc = contentCentre(img, src);
+        if (cc) {
+          x -= (cc.cx - 0.5) * w;
+          y -= (cc.cy - 0.5) * h;
+        }
+      }
       ctx.globalAlpha = (icon.opacity === undefined ? 100 : icon.opacity) / 100;
       const rot = ((icon.rotation || 0) * Math.PI) / 180;
       if (rot || icon.reverse) {
@@ -171,6 +217,9 @@ export async function renderDesign(canvas, design, opts = {}) {
   if (opts.bakeText !== false) {
     for (const text of design.texts || []) {
       if (!text.value) continue;
+      try {
+        await document.fonts.load(text.weight + ' 16px "' + text.font + '"', text.value);
+      } catch (e) {}
       ctx.globalAlpha = (text.opacity === undefined ? 100 : text.opacity) / 100;
       ctx.fillStyle = text.invert ? invertHex(text.color) : text.color;
       ctx.font = text.weight + ' ' + text.size * u + 'px "' + text.font + '", sans-serif';

@@ -1,8 +1,8 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=98';
-import { renderDesign } from './renderer.js?v=98';
-import { numberSet, variantsFor } from './series.js?v=98';
-import { releaseSelection } from './ui.js?v=98';
-import { newId } from './effects.js?v=98';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=100';
+import { renderDesign } from './renderer.js?v=100';
+import { numberSet, variantsFor } from './series.js?v=100';
+import { releaseSelection } from './ui.js?v=100';
+import { newId } from './effects.js?v=100';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -823,7 +823,7 @@ function pickerGroup(preset, isUser) {
   if (preset.series && variants.length > 1) {
     const addSet = document.createElement('button');
     addSet.className = 'btn ghost small picker-addset';
-    addSet.textContent = 'Add set';
+    addSet.textContent = 'Add Set';
     addSet.title = 'Add all ' + variants.length + ' buttons to your set';
     addSet.addEventListener('click', () => addSetToCurrent(preset));
     head.appendChild(addSet);

@@ -1,11 +1,11 @@
-import { state, primarySelection, defaultTextLayer, buttonCount } from './state.js?v=98';
-import { renderToDataUrl, renderDesign } from './renderer.js?v=98';
-import { seriesVariants, safeFileName } from './series.js?v=98';
-import { downloadBlob } from './presets.js?v=98';
-import { buildCompanionPage } from './companion.js?v=98';
+import { state, primarySelection, defaultTextLayer, buttonCount } from './state.js?v=100';
+import { renderToDataUrl, renderDesign } from './renderer.js?v=100';
+import { seriesVariants, safeFileName } from './series.js?v=100';
+import { downloadBlob } from './presets.js?v=100';
+import { buildCompanionPage } from './companion.js?v=100';
 
 const SS = 4;
-const STATE_LIFT = [0, 0.12, 0.22];
+const STATE_LIFT = [0, 0.05, 0.12];
 const REAPER_SIZES = [
   { dir: '', cell: 30 },
   { dir: '150/', cell: 45 },

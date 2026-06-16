@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://bskapps.com; connect-src 'self' https://api.iconify.design; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="bm-version" content="98">
+<meta name="bm-version" content="100">
 <title>BSK Button Maker - Free Companion, Stream Deck and REAPER Button Designer</title>
 <meta name="description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars. Icon library, presets, button sets, PNG, Companion page and REAPER toolbar export.">
 <meta property="og:title" content="BSK Button Maker">
@@ -41,7 +41,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=98">
+<link rel="stylesheet" href="css/style.css?v=100">
 </head>
 <body>
 <header class="app-header">
@@ -99,12 +99,13 @@
       <div class="section-body">
         <div class="layer-chips" id="iconLayerChips"></div>
         <div class="row">
-          <button class="btn" id="openIconPicker">Choose icon</button>
-          <button class="btn" id="iconUploadSidebar">Upload image</button>
+          <button class="btn" id="openIconPicker">Choose Icon</button>
+          <button class="btn" id="iconUploadSidebar">Upload Image</button>
+          <button class="btn ghost" id="iconAddDot" title="Add a status dot you can colour and place">Status Dot</button>
         </div>
         <div class="row">
           <button class="btn ghost" id="clearIcon">Clear</button>
-          <button class="btn ghost" id="iconAddDot" title="Add a status dot you can colour and place">Status dot</button>
+          <button class="btn ghost" id="iconCentre" title="Centre the artwork in the button">Centre</button>
         </div>
         <div class="row"><label>Size</label><input type="range" id="iconSize" min="10" max="150" value="52" data-default="52"><input type="number" class="val" id="iconSizeVal" value="52"></div>
         <div class="row"><label>Colour</label><input type="color" id="iconColor" value="#ffffff" data-label="Image colour"></div>
@@ -203,40 +204,44 @@
   <section class="stage">
     <div class="preset-strip-wrap">
       <div class="pick-row">
-        <button class="btn" id="openPickerBtn">Choose buttons &amp; sets</button>
-        <button class="btn ghost" id="resetDesignStep" title="Clear everything and start with a blank button">Start fresh</button>
+        <button class="btn" id="openPickerBtn">Choose Buttons &amp; Sets</button>
+        <button class="btn ghost" id="resetDesignStep" title="Clear everything and start with a blank button">Start Fresh</button>
       </div>
       <div class="preset-actions">
         <input type="text" id="presetName" placeholder="Name this design" autocomplete="off">
-        <button class="btn" id="presetSave">Save to my presets</button>
-        <button class="btn ghost" id="presetExport" title="Save all your presets to a file to back up or share">Back up</button>
+        <button class="btn" id="presetSave">Save to My Presets</button>
+        <button class="btn ghost" id="presetExport" title="Save all your presets to a file to back up or share">Back Up</button>
         <button class="btn ghost" id="presetImportBtn" title="Load presets from a backup file">Restore</button>
         <input type="file" id="presetImportFile" accept=".json" class="hidden">
       </div>
     </div>
     <div class="preview-wrap">
-      <canvas id="preview" width="288" height="288"></canvas>
+      <div class="preview-frame">
+        <canvas id="preview" width="288" height="288"></canvas>
+        <div class="preview-guides hidden" id="previewGuides" aria-hidden="true"></div>
+      </div>
+      <label class="guide-toggle"><input type="checkbox" id="centreGuides"> Centre guides</label>
     </div>
     <div id="seriesPreview" class="series-preview"></div>
     <div class="edit-banner idle" id="editBanner">
       <span id="editBannerLabel"></span>
-      <button class="btn ghost small hidden" id="editAllBtn" title="Go back to editing the whole set">Edit all</button>
+      <button class="btn ghost small hidden" id="editAllBtn" title="Go back to editing the whole set">Edit All</button>
     </div>
     <details class="section set-card" open>
       <summary>Make a set</summary>
       <div class="section-body">
         <p class="hint">Optional. Turn one design into a whole row of matching buttons.</p>
         <div class="seg" id="seriesMode">
-          <button data-val="off" class="active">One button</button>
-          <button data-val="list">Custom set</button>
+          <button data-val="off" class="active">One Button</button>
+          <button data-val="list">Custom Set</button>
         </div>
         <div id="seriesListRows" class="set-tools reserved">
           <div class="row number-range">
-            <button class="btn" id="seriesNumberBtn">Number them</button>
+            <button class="btn" id="seriesNumberBtn">Number Them</button>
             <label>From</label><input type="number" id="seriesFrom" value="1" min="0" max="999" step="any">
             <label>To</label><input type="number" id="seriesTo" value="4" min="0" max="999" step="any">
           </div>
-          <p class="hint">"Number them" fills the set from your current design, so "PC" becomes PC 1, PC 2... and cue numbers like 1.1 to 1.5 work too.</p>
+          <p class="hint">"Number Them" fills the set from your current design, so "PC" becomes PC 1, PC 2... and cue numbers like 1.1 to 1.5 work too.</p>
         </div>
       </div>
     </details>
@@ -259,8 +264,8 @@
         <div class="row download-row">
           <button class="btn primary" id="exportPng">PNG</button>
           <button class="btn primary" id="exportZip">Set as ZIP</button>
-          <button class="btn" id="exportCompanion">Companion page</button>
-          <button class="btn" id="exportReaper">REAPER icons</button>
+          <button class="btn" id="exportCompanion">Companion Page</button>
+          <button class="btn" id="exportReaper">REAPER Icons</button>
         </div>
         <p class="hint" id="exportSummary"></p>
         <div class="row">
@@ -277,11 +282,11 @@
     <details class="section help-card">
       <summary>Help</summary>
       <div class="section-body">
-        <p class="hint"><b>One button:</b> Pick a starting point, then set background, image, text and shape. Download the PNG and drop it into a button's image box in Companion.</p>
-        <p class="hint"><b>Presets:</b> Click "Choose buttons &amp; sets" to open the picker. Click a button to add it, or "Add set" for a whole row. Your own presets sit at the top, marked (user) - double-click a name to rename, x to delete, and adding one brings its name back so you can edit it and Save over it. "Start fresh" clears everything back to a blank button.</p>
-        <p class="hint"><b>Make a set:</b> Add buttons from the picker, or switch to Custom set under "Make a set &amp; on states" and use "Number them" to fill the set with a numbered range (PC 1, PC 2... or cue numbers like 1.1 to 1.5). The set shows under the preview.</p>
+        <p class="hint"><b>One Button:</b> Pick a starting point, then set background, image, text and shape. Download the PNG and drop it into a button's image box in Companion.</p>
+        <p class="hint"><b>Presets:</b> Click "Choose Buttons &amp; Sets" to open the picker. Click a button to add it, or "Add Set" for a whole row. Your own presets sit at the top, marked (user) - double-click a name to rename, x to delete, and adding one brings its name back so you can edit it and Save over it. "Start Fresh" clears everything back to a blank button.</p>
+        <p class="hint"><b>Make a set:</b> Add buttons from the picker, or switch to Custom Set under "Make a set &amp; on states" and use "Number Them" to fill the set with a numbered range (PC 1, PC 2... or cue numbers like 1.1 to 1.5). The set shows under the preview.</p>
         <p class="hint"><b>Duplicate:</b> Click the + tile under the preview to copy your button into a set, or drag any button in a set onto the + tile to duplicate it. The picker also adds buttons from any preset into your set.</p>
-        <p class="hint"><b>Edit one, some or all:</b> With a set, changes apply to every button by default. Click one to style it alone, Cmd-click or Shift-click to grab a few. Click empty space, or "Edit all", to go back to editing everything.</p>
+        <p class="hint"><b>Edit one, some or all:</b> With a set, changes apply to every button by default. Click one to style it alone, Cmd-click or Shift-click to grab a few. Click empty space, or "Edit All", to go back to editing everything.</p>
         <p class="hint"><b>Reorder and reuse:</b> Drag a button onto another to reorder, or onto the big preview to make it your single button.</p>
         <p class="hint"><b>Half-point sizes:</b> The Size boxes for text and image take half points - type a value like 32.5 for finer control at larger sizes. The sliders still move a point at a time.</p>
         <p class="hint"><b>PNG size:</b> 72 px is the exact size of a Companion or Stream Deck key, so it is the smallest file. 144 px suits high-res decks and retina screens. 288 px is sharpest and scales down cleanly to any key, which is why it is the default.</p>
@@ -354,8 +359,8 @@
 <div class="modal hidden" id="presetPickerModal">
   <div class="modal-box">
     <div class="modal-head">
-      <button class="btn ghost small" id="resetDesign" title="Clear everything and start with a blank button">Start fresh</button>
-      <span class="modal-title">Choose buttons &amp; sets</span>
+      <button class="btn ghost small" id="resetDesign" title="Clear everything and start with a blank button">Start Fresh</button>
+      <span class="modal-title">Choose Buttons &amp; Sets</span>
       <button class="btn ghost" id="presetPickerClose">Close</button>
     </div>
     <div class="preset-picker-list" id="presetPickerList"></div>
@@ -367,7 +372,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair or Cockos. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=98"></script>
-<script type="module" src="js/app.js?v=98"></script>
+<script src="vendor/jszip.min.js?v=100"></script>
+<script type="module" src="js/app.js?v=100"></script>
 </body>
 </html>

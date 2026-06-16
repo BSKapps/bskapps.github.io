@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=98';
-import { triggerIconUpload } from './icons.js?v=98';
-import { seriesVariants, numberSet } from './series.js?v=98';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=100';
+import { triggerIconUpload } from './icons.js?v=100';
+import { seriesVariants, numberSet } from './series.js?v=100';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -399,6 +399,23 @@ export function initUI() {
     emit();
   });
 
+  document.getElementById('iconCentre').addEventListener('click', () => {
+    applyEdit((d) => {
+      for (const ic of iconLayersOf(d)) {
+        if (!ic.svg) continue;
+        ic.contentCenter = true;
+        ic.align = 'center:center';
+        ic.x = 0;
+        ic.y = 0;
+      }
+    });
+    emit();
+  });
+
+  document.getElementById('centreGuides').addEventListener('change', (e) => {
+    document.getElementById('previewGuides').classList.toggle('hidden', !e.target.checked);
+  });
+
   document.getElementById('bgInvert').addEventListener('change', (e) => {
     applyEdit((d) => (d.bg.invert = e.target.checked));
     emit();
@@ -567,7 +584,7 @@ export function renderTextLayerChips() {
   if (!state.ui.allText && (texts.length > 1 || (activeT && activeT.value))) {
     const del = document.createElement('button');
     del.className = 'chip-action';
-    del.textContent = 'Delete layer';
+    del.textContent = 'Delete Layer';
     del.addEventListener('click', () => {
       applyEdit((d) => {
         if (d.texts.length > 1 && state.ui.activeText < d.texts.length) d.texts.splice(state.ui.activeText, 1);
@@ -629,7 +646,7 @@ export function renderIconLayerChips() {
   if (icons.length > 1 && !state.ui.allIcons) {
     const del = document.createElement('button');
     del.className = 'chip-action';
-    del.textContent = 'Delete layer';
+    del.textContent = 'Delete Layer';
     del.addEventListener('click', () => {
       applyEdit((d) => {
         if (d.icons.length > 1 && state.ui.activeIcon < d.icons.length) d.icons.splice(state.ui.activeIcon, 1);
@@ -715,6 +732,7 @@ export function syncInputsFromState() {
   setVal('seriesTo', state.series.to);
 
   document.getElementById('clearIcon').disabled = state.ui.allIcons || !ic.svg;
+  document.getElementById('iconCentre').disabled = state.ui.allIcons || !ic.svg;
   document.getElementById('openIconPicker').disabled = state.ui.allIcons;
   document.getElementById('iconUploadSidebar').disabled = state.ui.allIcons;
   document.getElementById('exportPng').disabled = false;
