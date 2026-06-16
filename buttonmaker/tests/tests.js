@@ -1,12 +1,12 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer } from '../js/state.js?v=105';
-import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=105';
-import { buildCompanionPage } from '../js/companion.js?v=105';
-import { renderToDataUrl } from '../js/renderer.js?v=105';
-import { selectListItem, releaseSelection, removeListItem } from '../js/ui.js?v=105';
-import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=105';
-import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=105';
-import { invertHex, mixHex } from '../js/color.js?v=105';
-import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=105';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer } from '../js/state.js?v=106';
+import { seriesVariants, safeFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=106';
+import { buildCompanionPage } from '../js/companion.js?v=106';
+import { renderToDataUrl } from '../js/renderer.js?v=106';
+import { selectListItem, releaseSelection, removeListItem } from '../js/ui.js?v=106';
+import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=106';
+import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=106';
+import { invertHex, mixHex } from '../js/color.js?v=106';
+import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=106';
 
 const results = [];
 

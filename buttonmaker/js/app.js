@@ -1,12 +1,12 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=105';
-import { renderDesign } from './renderer.js?v=105';
-import { seriesVariants, numberSet } from './series.js?v=105';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=105';
-import { initIconPicker } from './icons.js?v=105';
-import { initPresets, normalizeDesign } from './presets.js?v=105';
-import { initExport } from './export.js?v=105';
-import { initEffects, updateEffectControls } from './effects.js?v=105';
-import { initColorPopover } from './colorpicker.js?v=105';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=106';
+import { renderDesign } from './renderer.js?v=106';
+import { seriesVariants, numberSet } from './series.js?v=106';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=106';
+import { initIconPicker } from './icons.js?v=106';
+import { initPresets, normalizeDesign } from './presets.js?v=106';
+import { initExport } from './export.js?v=106';
+import { initEffects, updateEffectControls } from './effects.js?v=106';
+import { initColorPopover } from './colorpicker.js?v=106';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -183,20 +183,68 @@ async function renderOnce() {
   }
 
   if (state.series.mode === 'off') {
+    const item = document.createElement('div');
+    item.className = 'series-item selected';
+    item.draggable = true;
+    item.title = 'Drag onto + to copy this button.';
+    const c = document.createElement('canvas');
+    c.width = 144;
+    c.height = 144;
+    renderDesign(c, state.design, { bakeText: true });
+    item.appendChild(c);
+    const caption = document.createElement('div');
+    caption.className = 'series-caption';
+    const num = document.createElement('span');
+    num.className = 'series-num';
+    num.textContent = '1';
+    caption.appendChild(num);
+    item.appendChild(caption);
+    item.addEventListener('dragstart', (e) => {
+      singleDragging = true;
+      e.dataTransfer.effectAllowed = 'copy';
+      e.dataTransfer.setData('text/plain', 'single');
+    });
+    item.addEventListener('dragend', () => {
+      singleDragging = false;
+    });
+    seriesWrap.appendChild(item);
+
     const wrap = document.createElement('div');
     wrap.className = 'series-add-tile';
     const add = document.createElement('button');
     add.className = 'series-add';
     add.textContent = '+';
-    add.title = 'Click to duplicate this button into an editable set.';
+    add.title = 'Add a new blank button. Drop button 1 here to copy it instead.';
     add.addEventListener('click', () => {
+      releaseSelection();
+      state.series.items = [{ label: '', color: '' }, { label: '', color: '', design: defaultDesign() }];
+      state.series.mode = 'list';
+      selectListItem(1);
+    });
+    add.addEventListener('dragenter', (e) => {
+      if (!singleDragging) return;
+      e.preventDefault();
+      add.classList.add('drop-target');
+    });
+    add.addEventListener('dragover', (e) => {
+      if (!singleDragging) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'copy';
+      add.classList.add('drop-target');
+    });
+    add.addEventListener('dragleave', () => add.classList.remove('drop-target'));
+    add.addEventListener('drop', (e) => {
+      e.preventDefault();
+      add.classList.remove('drop-target');
+      if (!singleDragging) return;
+      singleDragging = false;
       releaseSelection();
       state.series.items = [{ label: '', color: '' }, { label: '', color: '' }];
       state.series.mode = 'list';
       selectListItem(1);
     });
     const cap = document.createElement('span');
-    cap.textContent = 'Duplicate';
+    cap.textContent = 'Add';
     wrap.appendChild(add);
     wrap.appendChild(cap);
     seriesWrap.appendChild(wrap);
@@ -204,6 +252,7 @@ async function renderOnce() {
 }
 
 let gridDragIndex = null;
+let singleDragging = false;
 
 function reorderSet(from, to) {
   const items = state.series.items;
