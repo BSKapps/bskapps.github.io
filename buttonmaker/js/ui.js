@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=103';
-import { triggerIconUpload } from './icons.js?v=103';
-import { seriesVariants, numberSet } from './series.js?v=103';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=104';
+import { triggerIconUpload } from './icons.js?v=104';
+import { seriesVariants, numberSet } from './series.js?v=104';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -156,6 +156,24 @@ function syncSelectedLabels() {
     if (!item || !item.design) continue;
     const t = item.design.texts.find((l) => l.value);
     item.label = t ? t.value.split('\n')[0] : '';
+  }
+}
+
+function syncOnStateText(newVal) {
+  if (state.series.mode !== 'list') return;
+  const items = state.series.items;
+  const li = state.ui.activeText;
+  for (const idx of state.ui.selectedItems) {
+    const src = items[idx];
+    if (!src || !src.id || !src.design) continue;
+    const onState = items.find((it) => it && it.onStateOf === src.id);
+    if (!onState || !onState.design) continue;
+    const srcLayer = src.design.texts[li];
+    const onLayer = onState.design.texts[li];
+    if (!srcLayer || !onLayer || onLayer.value !== srcLayer.value) continue;
+    onLayer.value = newVal;
+    const t = onState.design.texts.find((l) => l.value);
+    onState.label = t ? t.value.split('\n')[0] : '';
   }
 }
 
@@ -446,6 +464,7 @@ export function initUI() {
   document.getElementById('textValue').addEventListener('input', (e) => {
     if (state.ui.allText) return;
     if (state.series.mode === 'list' && !state.ui.selectedItems.length) return;
+    syncOnStateText(e.target.value);
     applyEdit((d) => (textOf(d).value = e.target.value));
     syncSelectedLabels();
     emit();

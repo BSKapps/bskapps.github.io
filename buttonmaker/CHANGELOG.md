@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v104 - 2026-06-16
+- An on-state's text now follows its source button when you rename it, so changing a label only needs doing once. It only follows while they match: give the on-state its own different text and the link lets go, so your override is never overwritten. The look stays independent, as before.
+
 ## v103 - 2026-06-16
 - Set selection borders: editing all now uses the same border as a multi-select (dropped the extra-faint all border). Single pick keeps its stronger border.
 
