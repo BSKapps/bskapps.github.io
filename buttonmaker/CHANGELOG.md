@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v101 - 2026-06-16
+- Centre guides now remembers whether it is on. Reloading the page used to drop the crosshair while leaving the checkbox ticked; the setting is saved, so the checkbox and the lines always match and the crosshair stays on if you left it on.
+
 ## v100 - 2026-06-16
 - Softened the REAPER toolbar hover and pressed states to match REAPER's own icons. The old states washed the button out (a red REC turned pink on press); the hover is now barely there and the pressed state is a gentle lift, closer to how REAPER draws its default toolbar buttons.
 - Added a "Centre guides" checkbox under the preview. Tick it to overlay a centre crosshair on the button so you can line up an icon and text by eye. The guide is a preview-only overlay and never appears in any export.

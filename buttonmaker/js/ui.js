@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=100';
-import { triggerIconUpload } from './icons.js?v=100';
-import { seriesVariants, numberSet } from './series.js?v=100';
+import { state, emit, deepClone, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=101';
+import { triggerIconUpload } from './icons.js?v=101';
+import { seriesVariants, numberSet } from './series.js?v=101';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -412,8 +412,14 @@ export function initUI() {
     emit();
   });
 
-  document.getElementById('centreGuides').addEventListener('change', (e) => {
-    document.getElementById('previewGuides').classList.toggle('hidden', !e.target.checked);
+  const guidesCb = document.getElementById('centreGuides');
+  const guidesEl = document.getElementById('previewGuides');
+  const applyGuides = () => guidesEl.classList.toggle('hidden', !guidesCb.checked);
+  try { guidesCb.checked = localStorage.getItem('cbm-centre-guides') === '1'; } catch (e) {}
+  applyGuides();
+  guidesCb.addEventListener('change', () => {
+    try { localStorage.setItem('cbm-centre-guides', guidesCb.checked ? '1' : '0'); } catch (e) {}
+    applyGuides();
   });
 
   document.getElementById('bgInvert').addEventListener('change', (e) => {
