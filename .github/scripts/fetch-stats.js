@@ -21,6 +21,7 @@ function requestRaw(options) {
             res.on('end', function() { resolve({ status: res.statusCode, headers: res.headers, buffer: Buffer.concat(chunks) }); });
         });
         req.on('error', reject);
+        req.setTimeout(20000, function() { req.destroy(new Error('request timeout')); });
         req.end();
     });
 }
@@ -221,6 +222,7 @@ function request(options, body) {
             });
         });
         req.on('error', reject);
+        req.setTimeout(20000, function() { req.destroy(new Error('request timeout')); });
         if (body) req.write(body);
         req.end();
     });
