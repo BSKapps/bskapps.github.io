@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://bskapps.com; connect-src 'self' https://api.iconify.design; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="bm-version" content="110">
+<meta name="bm-version" content="111">
 <title>BSK Button Maker - Free Companion, Stream Deck and REAPER Button Designer</title>
 <meta name="description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars. Icon library, presets, button sets, PNG, Companion page and REAPER toolbar export.">
 <meta property="og:title" content="BSK Button Maker">
@@ -41,7 +41,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=110">
+<link rel="stylesheet" href="css/style.css?v=111">
 </head>
 <body>
 <header class="app-header">
@@ -201,6 +201,7 @@
         </div></div>
         <div class="row"><label>Border colour</label><input type="color" id="shapeBorderColor" value="#ffffff" data-label="Border colour"></div>
         <div class="row"><label>Corners</label><input type="range" id="shapeRadius" min="0" max="35" value="0" data-default="0"><input type="number" class="val" id="shapeRadiusVal" value="0"></div>
+        <div class="row check"><label for="shapeSquircle">Squircle</label><input type="checkbox" id="shapeSquircle" title="Clip to an Apple-style squircle with transparent corners - ideal for 1024 px app icons"></div>
         <div class="row"><label>Rotate</label><input type="range" id="shapeRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="shapeRotateVal" value="0"></div>
         <div class="row"><label>Zoom</label><input type="range" id="shapeZoom" min="25" max="200" value="100" data-default="100"><input type="number" class="val" id="shapeZoomVal" value="100"></div>
       </div>
@@ -281,6 +282,7 @@
             <option value="72">72 px</option>
             <option value="144">144 px</option>
             <option value="288" selected>288 px</option>
+            <option value="1024">1024 px (app icon)</option>
           </select>
         </div>
         <p class="hint">288 px is a safe default. See Help for which size to pick, plus the REAPER and Companion page notes.</p>
@@ -297,6 +299,7 @@
         <p class="hint"><b>Reorder and reuse:</b> Drag a button onto another to reorder, or onto the big preview to make it your single button.</p>
         <p class="hint"><b>Half-point sizes:</b> The Size boxes for text and image take half points - type a value like 32.5 for finer control at larger sizes. The sliders still move a point at a time.</p>
         <p class="hint"><b>PNG size:</b> 72 px is the exact size of a Companion or Stream Deck key, so it is the smallest file. 144 px suits high-res decks and retina screens. 288 px is sharpest and scales down cleanly to any key, which is why it is the default.</p>
+        <p class="hint"><b>App icons:</b> Pick 1024 px for a full-size app icon, and tick Squircle in the Border/Shape card to clip the button to an Apple-style rounded shape with transparent corners. The preview shows the exact shape that exports.</p>
         <p class="hint"><b>File names:</b> a PNG is named after its text, or its icon name if there is no text, otherwise button-1. To name an icon-only button, type the name and drop its text opacity to zero - invisible on the button, used as the file name.</p>
         <p class="hint"><b>Export for REAPER:</b> In the Download card, switch to REAPER to get toolbar icon strips (normal, hover and active in one PNG) as a ZIP that mirrors REAPER's toolbar_icons folder, with the 150 and 200 hi-DPI copies. Linked on states become a matching name_on strip, so you assign the base icon and REAPER finds the on state. Unzip it there, restart REAPER, and assign each icon in the toolbar editor.</p>
         <p class="hint"><b>On states:</b> In the "Make a set &amp; on states" card, the On states presets make a button's on or active look. Pick Tint, Highlight, Invert or Dot and it adds a real, editable on state button to your set, linked to its button - then edit it with the cards on the left. Highlight lifts dark buttons brighter and deepens light ones, so it reads as active on any colour. REAPER export pairs it as name_on, no renaming. Each design card also has its own Invert tick next to its colour, to flip just that part. Tint and Highlight change solid and gradient backgrounds; Invert and Dot work on any background, including images.</p>
@@ -380,7 +383,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair or Cockos. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=110"></script>
-<script type="module" src="js/app.js?v=110"></script>
+<script src="vendor/jszip.min.js?v=111"></script>
+<script type="module" src="js/app.js?v=111"></script>
 </body>
 </html>

@@ -2,6 +2,10 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v111 - 2026-06-18
+- New 1024 px export size for full-resolution app icons, alongside 72 / 144 / 288.
+- New Squircle checkbox in the Border/Shape card: clips the button to an Apple-style rounded shape with transparent corners, for app icons. The preview shows the exact shape that exports. When on, it takes over from the Corners slider, and a full border follows the squircle edge.
+
 ## v110 - 2026-06-16
 - The delete x on each layer chip now sits further right, away from the chip's label, so it is harder to hit by accident when selecting a layer.
 

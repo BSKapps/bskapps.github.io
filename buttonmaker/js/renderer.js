@@ -1,4 +1,4 @@
-import { invertHex } from './color.js?v=110';
+import { invertHex } from './color.js?v=111';
 
 const imageCache = new Map();
 const CACHE_MAX = 80;
@@ -79,6 +79,22 @@ function roundedPath(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
+function squirclePath(ctx, cx, cy, rx, ry) {
+  const n = 5;
+  const steps = 256;
+  ctx.beginPath();
+  for (let i = 0; i <= steps; i++) {
+    const t = (i / steps) * Math.PI * 2;
+    const ct = Math.cos(t);
+    const st = Math.sin(t);
+    const x = cx + Math.sign(ct) * Math.pow(Math.abs(ct), 2 / n) * rx;
+    const y = cy + Math.sign(st) * Math.pow(Math.abs(st), 2 / n) * ry;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+}
+
 export async function renderDesign(canvas, design, opts = {}) {
   const size = canvas.width;
   const u = size / 72;
@@ -87,7 +103,10 @@ export async function renderDesign(canvas, design, opts = {}) {
   ctx.save();
 
   const radius = (design.shape.radius / 100) * size;
-  if (radius > 0) {
+  if (design.shape.squircle) {
+    squirclePath(ctx, size / 2, size / 2, size / 2, size / 2);
+    ctx.clip();
+  } else if (radius > 0) {
     roundedPath(ctx, 0, 0, size, size, radius);
     ctx.clip();
   }
@@ -303,7 +322,10 @@ export async function renderDesign(canvas, design, opts = {}) {
     const allEdges = e.top && e.bottom && e.left && e.right;
     ctx.strokeStyle = design.shape.borderColor;
     ctx.lineWidth = bw;
-    if (allEdges && radius > 0) {
+    if (allEdges && design.shape.squircle) {
+      squirclePath(ctx, size / 2, size / 2, (size - bw) / 2, (size - bw) / 2);
+      ctx.stroke();
+    } else if (allEdges && radius > 0) {
       roundedPath(ctx, bw / 2, bw / 2, size - bw, size - bw, Math.max(0, radius - bw / 2));
       ctx.stroke();
     } else if (allEdges) {

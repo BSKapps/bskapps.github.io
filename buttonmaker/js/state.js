@@ -1,4 +1,4 @@
-export const APP_VERSION = '110';
+export const APP_VERSION = '111';
 
 export function defaultTextLayer() {
   return {
@@ -68,7 +68,8 @@ export function defaultDesign() {
       borderColor: '#ffffff',
       edges: { top: true, bottom: true, left: true, right: true },
       rotation: 0,
-      zoom: 100
+      zoom: 100,
+      squircle: false
     }
   };
 }

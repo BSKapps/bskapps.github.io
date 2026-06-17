@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=110';
-import { triggerIconUpload } from './icons.js?v=110';
-import { seriesVariants, numberSet } from './series.js?v=110';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=111';
+import { triggerIconUpload } from './icons.js?v=111';
+import { seriesVariants, numberSet } from './series.js?v=111';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -465,6 +465,10 @@ export function initUI() {
       emit();
     });
   }
+  document.getElementById('shapeSquircle').addEventListener('change', (e) => {
+    applyEdit((d) => (d.shape.squircle = e.target.checked));
+    emit();
+  });
 
   bindSeg('iconAlign', (v) => applyEdit((d) => {
     for (const ic of iconLayersOf(d)) ic.align = v;
@@ -762,6 +766,7 @@ export function syncInputsFromState() {
   for (const edge of ['top', 'bottom', 'left', 'right']) {
     document.getElementById('edge' + edge[0].toUpperCase() + edge.slice(1)).checked = edges[edge] !== false;
   }
+  document.getElementById('shapeSquircle').checked = !!d.shape.squircle;
   setRange('shapeRotate', d.shape.rotation || 0, 'shapeRotateVal');
   setRange('shapeZoom', d.shape.zoom === undefined ? 100 : d.shape.zoom, 'shapeZoomVal');
 
