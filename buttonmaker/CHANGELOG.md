@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v112 - 2026-06-18
+- Wording: tagline, the PNG size hint and the page title/description now mention app icons. Footer non-affiliation line adds Apple. No functional change.
+
 ## v111 - 2026-06-18
 - New 1024 px export size for full-resolution app icons, alongside 72 / 144 / 288.
 - New Squircle checkbox in the Border/Shape card: clips the button to an Apple-style rounded shape with transparent corners, for app icons. The preview shows the exact shape that exports. When on, it takes over from the Corners slider, and a full border follows the squircle edge.
