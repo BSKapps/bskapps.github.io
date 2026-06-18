@@ -98,9 +98,9 @@
       "features": [
         "Spotter panel - drag apps in and EWP auto-arranges them instantly",
         "Lift and Drop - raise your layout or clear your desktop in one click",
-        "Emergency stop - closes EWP instantly when you need out",
         "6 layout modes - fullscreen, halves, big left, big right, and 4-up quad",
         "Save presets and recall your exact setup instantly",
+        "Launch at Login - EWP opens a saved preset's apps and snaps them into place when you log in",
         "Lock presets to a specific screen or apply them anywhere",
         "Multiple monitor support - configure each screen independently",
         "Lives in the menu bar - out of your way until you need it"
