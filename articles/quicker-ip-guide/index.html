@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quicker IP user guide - BSK Apps</title>
+    <meta name="description" content="A how-to guide for Quicker IP: setting a static IP, DNS per adapter, presets, network locations, LAN and range scanning, Join Subnet, speed test, Wi-Fi and Dante checks on a Mac.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/quicker-ip-guide">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Quicker IP user guide">
+    <meta property="og:description" content="What each feature does and how to use it: IP modes, DNS, presets, locations, scanning, speed test, Wi-Fi and Dante checks.">
+    <meta property="og:image" content="https://bskapps.com/images/quickip-icon.png">
+    <link rel="stylesheet" href="/css/site.css?v=20260611">
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>Quicker IP user guide</h1>
+            <p class="date">Updated for version 2.4</p>
+
+            <p>Quicker IP is a menu bar app. Everything starts from its icon at the top right of the screen: click it to open the menu, where each network adapter is listed with its current address and status. This guide runs through what each part does and how to use it.</p>
+
+            <h2>The menu bar icon</h2>
+            <p>The icon can show one of three things, set in Settings under Menu Bar: the IP address, the Wi-Fi name, or live download and upload speed. A small status dot can sit on the icon (Settings, Menu Bar, Colour Status Icon). The dot colours are:</p>
+            <ul>
+                <li>Cyan - this adapter holds the default route</li>
+                <li>Green - connected with an address</li>
+                <li>Yellow - a self-assigned address (no DHCP reply)</li>
+                <li>Orange - up but no IP</li>
+                <li>Grey - inactive</li>
+                <li>Red - IPv4 is switched off on the adapter</li>
+            </ul>
+
+            <h2>Reading an adapter</h2>
+            <p>Each adapter is a header you can expand by clicking it. Active adapters open on first launch; the app remembers your expand and collapse choices after that. Expand an adapter and click More Info to see the full detail:</p>
+            <ul>
+                <li>IP, subnet and gateway (click any to copy when Click to Copy is on)</li>
+                <li>DNS servers in use - servers marked "(auto)" in grey came from DHCP, others were set by hand</li>
+                <li>Wi-Fi signal, band, channel and link rate on wireless adapters</li>
+                <li>Live traffic in and out</li>
+                <li>Link speed and duplex - half duplex is shown in red</li>
+                <li>MTU - shown in red if below 1500</li>
+                <li>MAC address</li>
+                <li>A subnet overlap warning if two adapters share a range</li>
+            </ul>
+            <p>Link speed, duplex, MTU and the overlap warning are the quick Dante readiness checks: you want a full-duplex gigabit link at MTU 1500 with no overlapping subnets.</p>
+
+            <h2>Setting an IP address</h2>
+            <p>The first time you change a network setting, macOS asks for your password once. After that, changes apply silently. Expand an adapter to reach these:</p>
+            <ul>
+                <li><strong>DHCP</strong> - automatic address from the network.</li>
+                <li><strong>DHCP Reserved</strong> - keeps your current address but takes subnet and gateway automatically. Click it, enter the address to hold, then Apply.</li>
+                <li><strong>Static IP</strong> - enter IP, subnet mask and gateway, then Apply. The subnet defaults to 255.255.255.0 and the gateway is optional.</li>
+                <li><strong>IPv4: Off</strong> - turns IPv4 off on the adapter. You can ask the app to confirm first in Settings, Alerts.</li>
+                <li><strong>Renew DHCP</strong> - forces a fresh lease. You get a notice telling you whether the address changed.</li>
+                <li><strong>Restore</strong> - returns the adapter to the mode it had before the last change.</li>
+            </ul>
+
+            <h2>DNS per adapter</h2>
+            <p>You can set DNS on each adapter on its own, separate from the IP mode. Expand the adapter and open the DNS row. The choices are:</p>
+            <ul>
+                <li>Automatic - use the DNS servers DHCP hands out</li>
+                <li>Cloudflare - 1.1.1.1 and 1.0.0.1</li>
+                <li>Google - 8.8.8.8 and 8.8.4.4</li>
+                <li>Quad9 - 9.9.9.9 and 149.112.112.112</li>
+                <li>Custom - enter up to three servers in priority order, then Apply</li>
+            </ul>
+            <p>The first DNS change on an existing install asks for your password once to extend permissions, then applies silently after that.</p>
+
+            <h2>Presets</h2>
+            <p>A preset stores an adapter's mode, IP, subnet and gateway so you can reapply it in one click.</p>
+            <ul>
+                <li><strong>Save</strong> - expand the adapter, click Save as Preset, name it. Saving while on DHCP creates a Reserved preset holding your current address.</li>
+                <li><strong>Apply</strong> - open the Presets submenu and click a preset. A green tick marks the one currently active.</li>
+                <li><strong>Edit</strong> - Edit Presets (in the Presets flyout, or Settings, General) lets you rename, change the IP, subnet and gateway, or delete a preset.</li>
+                <li><strong>Restore</strong> - after applying a preset, a Restore item returns the adapter to its earlier settings.</li>
+            </ul>
+
+            <h2>Network locations</h2>
+            <p>A location is a full set of network settings you can switch between, for example one for the studio and one for home.</p>
+            <ul>
+                <li><strong>Create Location</strong> - name it, and tick "Copy all services from [current location]" if you want to start from your current setup. Duplicate names are rejected.</li>
+                <li><strong>Switch</strong> - open Network Locations and click one. Change notifications are held back for fifteen seconds so the switch does not spam alerts.</li>
+                <li><strong>Edit Locations</strong> - rename or delete a location. Renaming keeps all its services and settings.</li>
+                <li><strong>Service Order</strong> - drag services to set their priority, and rename or delete a service. The order syncs to the system when you close the panel.</li>
+            </ul>
+
+            <h2>Scanning the network</h2>
+            <p>Quicker IP can list every device that responds on the network.</p>
+            <ul>
+                <li><strong>LAN Scan</strong> - expand an adapter and click LAN Scan. It sweeps the local network and reads the ARP table, and adds hostnames and service names over mDNS at the same time. Networks up to 1024 addresses are swept in full; on larger networks it sweeps your local /24 and uses ARP and mDNS for the rest. A live count shows progress.</li>
+                <li><strong>Range Scan</strong> - enter a start and end address to scan a custom range, up to 4096 addresses.</li>
+                <li><strong>Ping</strong> - enter an address or hostname for a quick latency and packet loss check. The ping goes out through the adapter you clicked, not just the default route.</li>
+            </ul>
+            <p>Results open in a panel with columns for IP, MAC, vendor, hostname, Bonjour service and how the device was found. Click an IP or MAC to copy it. Export to CSV saves the full list. Devices found on a different subnet show with an orange address.</p>
+
+            <h3>Join Subnet</h3>
+            <p>When a scan finds a device on a different subnet (shown in orange), right-click it and choose Join. Quicker IP finds a free address in that device's subnet, applies it to your adapter, and saves your previous settings. Use Restore in the Presets menu to switch back. You can have the app confirm first in Settings, Alerts.</p>
+
+            <h2>Speed test</h2>
+            <p>Click Speed Test in the menu. It measures download, upload, ping and responsiveness against Apple's network, and takes about twenty seconds. Progress shows in the menu title and you can cancel mid-test. Results stay until you clear them; if a test fails, the app tells you and keeps your last result rather than wiping it.</p>
+
+            <h2>System info panel</h2>
+            <p>Turn on Show Info Panel in Settings, Info Panel, for a small floating panel of system readings: CPU, memory, disk, battery, uptime, gateway latency, DNS response time and Wi-Fi signal. Each reading has its own toggle, and the panel refreshes every ten seconds.</p>
+
+            <h2>Wi-Fi</h2>
+            <ul>
+                <li><strong>Power</strong> - turn Wi-Fi on or off from the adapter header, no password needed.</li>
+                <li><strong>Network name</strong> - turn on Location Access (SSID) in Settings, General, to show the Wi-Fi name. macOS asks for location permission the first time.</li>
+                <li><strong>Signal</strong> - a three-arc indicator shows strength, coloured from green for strong down to red for weak.</li>
+            </ul>
+
+            <h2>Settings reference</h2>
+            <ul>
+                <li><strong>General</strong> - Public IP display, Click to Copy, Run at Login, Allow Network Changes (Admin), Location Access (SSID), Edit Visible Services, Edit Presets, Check for Updates and Manage License.</li>
+                <li><strong>Menu Bar</strong> - Colour Status Icon, and the IP Address / Wi-Fi Name / Live Speed display choice.</li>
+                <li><strong>Info Panel</strong> - the master Show Info Panel toggle and a switch for each reading.</li>
+                <li><strong>Alerts</strong> - IP change notifications, auto pop-ups for speed test and scan results, and the confirm prompts for IPv4 Off, Delete and Join Subnet.</li>
+            </ul>
+            <p>Edit Visible Services lets you hide adapters you never touch. If a change would hide every service the app beeps and undoes it, so the menu can never end up empty.</p>
+
+            <h2>Licence and activation</h2>
+            <p>Quicker IP Pro is a one-time purchase with two activations per licence key. On first launch, paste your key to activate. To move the licence to another Mac, open Manage License in Settings and deactivate, which frees an activation. The app revalidates occasionally; a network error never removes your licence, only an explicit cancellation does.</p>
+
+            <h2>Pro and Lite</h2>
+            <p>This guide covers Quicker IP Pro. The free Lite version on the Mac App Store shows your adapters, addresses and MAC, click to copy, status dots and run at login, but does not change network settings, scan, run a speed test, or manage DNS, presets and locations.</p>
+
+            <div class="article-cta">
+                <h3>Quicker IP</h3>
+                <p>A menu bar network toolkit for Mac: static IPs, DNS, presets, locations, a fast scanner, speed test and Dante checks.</p>
+                <a class="cta-link" href="/quickerip">Quicker IP &rarr;</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>

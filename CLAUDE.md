@@ -21,7 +21,7 @@
 
 ```
 bskapps.github.io/
-├── index.html              # Homepage - nav, hero, 2-col product grid (QIP, LA, FP, TT, EWP, Go Games), Resources + Articles links
+├── index.html              # Homepage - nav, hero, 2-col product grid (QIP, LA, FP, TT, Go Games), Resources + Articles links
 ├── css/site.css            # THE shared stylesheet - all pages link it, all theme tokens live here
 ├── _data/content.json      # App names, subtitles, taglines, prices, versions, DESCRIPTIONS, FEATURES - edited via /admin
 ├── CNAME / favicon.png / robots.txt / sitemap.xml / ads.txt
@@ -29,7 +29,6 @@ bskapps.github.io/
 ├── quickerip/              # Product page (video + gallery + Lite vs Pro table + features + detail sections)
 ├── labassistant/           # Product page (video + gallery + Mint + Processing Modules sections)
 ├── fetchpuppy/             # Product page (video + gallery + features + disclaimer)
-├── ewp/                    # Product page (gallery + features)
 ├── targettrace/            # Product page (video + gallery + features)
 ├── gogames/                # 4 game cards (Solitaire, Sudoku, Minesweeper, Battle Boats) + screenshots
 ├── tools/                  # Free Tools hub (renamed from resources/ June 2026, URLs moved)
@@ -51,16 +50,15 @@ bskapps.github.io/
 2. **Lab Assistant** - QLab workspace automation. LemonSqueezy, $14.99 USD
 3. **Fetch Puppy** - Media downloader. LemonSqueezy, $14.99 USD
 4. **Target Trace** - Smaart/REW target curve editor. LemonSqueezy, $8.99 USD
-5. **EWP** - Elevated Work Platform, window layout snapper. LemonSqueezy, $4.99 USD
-6. **Go Games** - Solitaire, Sudoku, Minesweeper, Battle Boats. iOS + Mac, free on App Store, $1.99 IAP unlock
+5. **Go Games** - Solitaire, Sudoku, Minesweeper, Battle Boats. iOS + Mac, free on App Store, $1.99 IAP unlock
 
-MultiViewPort is DEAD (never worked) - see `.claude/rules/hidden-products.md`.
+EWP was pulled from the site June 2026 (project shelved). MultiViewPort is DEAD (never worked) - see `.claude/rules/hidden-products.md`.
 
 ## Content lives in _data/content.json (IMPORTANT)
 
 Per app: name, subtitle, tagline (homepage tile), price, macos, version, released, plus:
 - `description` - the product page intro paragraph (all 5 product pages)
-- `features` - the product page Features list (QIP, FP, EWP, TT; LA's structured sections stay in HTML)
+- `features` - the product page Features list (QIP, FP, TT; LA's structured sections stay in HTML)
 
 Homepage tiles and product pages render these via Liquid. The /admin Content tab edits this file through the GitHub API and commits to main. Never hardcode taglines, descriptions, or feature lists in page HTML - edit content.json.
 
@@ -76,7 +74,6 @@ Lab Assistant's Mint / Processing Modules sections, QIP's detail subsections (IP
 - /quickerip has a Lite vs Pro comparison table (`.compare-table`)
 - Buy buttons have aria-labels (e.g. `aria-label="Buy Quicker IP Pro for $19.99 USD"`)
 - LemonSqueezy store: bskapps.lemonsqueezy.com
-- EWP homepage tile carries "App launch support coming in the next update" (`.tile-note`) - remove when it ships
 
 ## Galleries and lightbox (product pages)
 

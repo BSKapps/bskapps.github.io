@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Puppy user guide - BSK Apps</title>
+    <meta name="description" content="A how-to guide for Fetch Puppy: the download modes, choosing audio and video formats, the queue, output folders, browser cookies, the download engine and settings.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/fetch-puppy-guide">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Fetch Puppy user guide">
+    <meta property="og:description" content="What each part does and how to use it: modes, formats, the download queue, output folders, cookies and settings.">
+    <meta property="og:image" content="https://bskapps.com/images/fetchpuppy-icon.png">
+    <link rel="stylesheet" href="/css/site.css?v=20260611">
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>Fetch Puppy user guide</h1>
+            <p class="date">Updated for version 2.1.2</p>
+
+            <p>Fetch Puppy downloads and converts media on a Mac. You pick a mode in the sidebar, paste or drag a link, choose a format, and it queues the download. This guide covers what each part does and how to use it. For personal and research use only; downloading copyrighted material without authorisation may break the law, and you are responsible for the content you fetch.</p>
+
+            <h2>The modes</h2>
+            <p>The sidebar has six modes. In each, paste a link into the field (or drag one in from your browser or the source app) and click <strong>Fetch</strong>.</p>
+            <ul>
+                <li><strong>Spotify</strong> - playlists, albums and tracks. Public links work as-is; private playlists need your own Spotify API credentials (see Settings).</li>
+                <li><strong>Apple Music</strong> - playlists, albums and songs, no account needed.</li>
+                <li><strong>YouTube</strong> - videos, shorts and playlists. If a link is both a video and a playlist, Fetch Puppy asks whether you want just the video or the whole playlist.</li>
+                <li><strong>Social Media</strong> - TikTok, Instagram, X, Facebook, Reddit, Vimeo, Twitch, Dailymotion, Threads and Snapchat. These need browser cookies (see Settings).</li>
+                <li><strong>CSV File</strong> - drop a two-column Artist, Title CSV (or click Choose File); each row is matched and downloaded.</li>
+                <li><strong>Search</strong> - type a title, get the top matches with thumbnails, preview in the app, then download.</li>
+            </ul>
+            <p>You can drag links onto the app window, and onto the menu bar icon, to start a download without switching modes first.</p>
+
+            <h2>Audio and video formats</h2>
+            <p>Each mode has its own <strong>Audio</strong> / <strong>Video</strong> switch and remembers your choice. Audio formats are MP3 320 kbps (default), AAC 256 kbps, WAV, AIFF and FLAC. Video formats are MP4 (best available quality) or MOV (H.264 plus AAC, the more compatible option).</p>
+
+            <h2>The download queue</h2>
+            <p>Click <strong>Downloads</strong> in the sidebar to watch progress. One job runs at a time; others wait, shown as colour-coded tabs (blue running, orange queued, green done, red failed, grey cancelled). Each job shows its tracks with per-track status and the format used, a progress bar, and counts for total, done, failed and remaining.</p>
+            <ul>
+                <li><strong>Cancel</strong> a running or queued job from its header, or right-click its tab.</li>
+                <li><strong>Retry Failed</strong> or <strong>Retry All</strong> appear after a job finishes.</li>
+                <li>Right-click a track to <strong>Skip</strong> it or remove it from the list.</li>
+                <li><strong>Open Folder</strong> jumps to the files in Finder.</li>
+            </ul>
+
+            <h2>Where files go</h2>
+            <p>Downloads land in <strong>~/Downloads/Fetch Puppy Downloads/</strong> by default; change the base folder in Settings. Singles collect into a folder per source (for example "Spotify Tracks"); albums and playlists get their own named folder. Two options in Settings apply to playlists and albums: <strong>Number tracks</strong> prepends "01 - ", "02 - " to filenames, and <strong>Export track list</strong> saves a CSV of the track list alongside the files.</p>
+
+            <h2>The download engine</h2>
+            <p>Fetch Puppy uses yt-dlp and ffmpeg under the hood. ffmpeg is bundled; yt-dlp installs itself on first launch and Settings shows its version with an Install or Update button. If a newer yt-dlp is out, the app offers to update it on launch, which keeps downloads working as sites change.</p>
+
+            <h2>Browser cookies</h2>
+            <p>YouTube and the social platforms need cookies from a signed-in browser to download reliably. Fetch Puppy reads them automatically; no manual export. It tries Firefox first, then Chrome, Brave and Edge. Safari is not supported because macOS keeps its cookies sealed off. Settings shows which browser is in use. With Chrome, Brave or Edge, choose "Always Allow" at the keychain prompt so it does not ask again.</p>
+
+            <h2>Settings</h2>
+            <ul>
+                <li><strong>App updates</strong> - manual check and an auto-check toggle.</li>
+                <li><strong>Download engine</strong> - yt-dlp status and update, ffmpeg bundled.</li>
+                <li><strong>Licence</strong> - activate or deactivate (see below).</li>
+                <li><strong>Spotify API credentials</strong> - optional Client ID and Secret for private playlists and more reliable metadata; stored in your keychain, never sent to BSK.</li>
+                <li><strong>YouTube browser cookies</strong> - which browser to read, with setup notes.</li>
+                <li><strong>General</strong> - show the welcome page, minimise to the menu bar when closed, notify when downloads complete, and Copy Diagnostics for support.</li>
+                <li><strong>Download options</strong> - output folder, number tracks, export track list.</li>
+                <li><strong>Download history</strong> - past downloads, with a clear button.</li>
+            </ul>
+
+            <h2>Menu bar</h2>
+            <p>Turn on <strong>Minimise to menu bar</strong> and closing the window keeps Fetch Puppy running behind a puppy icon in the menu bar. A green dot appears on the icon when a download finishes, and clears when you bring the app to the front. You can drop links onto the icon to start a download.</p>
+
+            <h2>Licence and activation</h2>
+            <p>Fetch Puppy is a one-time purchase with two activations. On first launch, paste your licence key to activate. To move it to another Mac, deactivate in Settings, which frees an activation. The app revalidates occasionally; a network error never locks you out, only an explicit cancellation does.</p>
+
+            <div class="article-cta">
+                <h3>Fetch Puppy</h3>
+                <p>A media downloader for Mac: paste a link, pick a format, and let the queue do the rest.</p>
+                <a class="cta-link" href="/fetchpuppy">Fetch Puppy &rarr;</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>

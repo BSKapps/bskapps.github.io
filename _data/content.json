@@ -87,26 +87,6 @@
       ],
       "description": "Search YouTube and save without the ads. Drop in a Spotify or Apple Music playlist and Fetch Puppy finds every track - or every music video - automatically. Grabs video from TikTok, Instagram, X, Facebook, Reddit, and more, and converts audio to any format with full metadata and artwork."
     },
-    "ewp": {
-      "name": "EWP",
-      "subtitle": "Elevated Work Platform",
-      "tagline": "Set up your screens once. Snap into any layout instantly.",
-      "price": "$4.99 USD",
-      "macos": "macOS 14.0+",
-      "version": "v1.1.1",
-      "released": "19 June 2026",
-      "features": [
-        "Spotter panel - drag apps in and EWP auto-arranges them instantly",
-        "Lift and Drop - raise your layout or clear your desktop in one click",
-        "6 layout modes - fullscreen, halves, big left, big right, and 4-up quad",
-        "Save presets and recall your exact setup instantly",
-        "Launch at Login - EWP opens a saved preset's apps and snaps them into place when you log in",
-        "Lock presets to a specific screen or apply them anywhere",
-        "Multiple monitor support - configure each screen independently",
-        "Lives in the menu bar - out of your way until you need it"
-      ],
-      "description": "Select a screen, pick a layout, assign your apps - EWP arranges everything automatically. Drop clears your desktop when you need a clean screen."
-    },
     "gogames": {
       "name": "Go Games",
       "subtitle": "Classic puzzle games for iPad and Mac",
