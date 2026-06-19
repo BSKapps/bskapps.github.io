@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=112';
-import { triggerIconUpload } from './icons.js?v=112';
-import { seriesVariants, numberSet } from './series.js?v=112';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=113';
+import { triggerIconUpload } from './icons.js?v=113';
+import { seriesVariants, numberSet } from './series.js?v=113';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -243,6 +243,8 @@ const FONT_WEIGHTS = {
   'Montserrat': ['400', '600', '700', '800'],
   'Roboto Condensed': ['400', '700'],
   'JetBrains Mono': ['400', '700', '800'],
+  'Archivo Black': ['400'],
+  'Nunito': ['400', '600', '700', '800'],
   'Arial': ['400', '700'],
   'Helvetica Neue': ['400', '700'],
   'Georgia': ['400', '700']

@@ -1,10 +1,10 @@
-export const APP_VERSION = '112';
+export const APP_VERSION = '113';
 
 export function defaultTextLayer() {
   return {
     value: '',
-    font: 'Inter',
-    weight: '600',
+    font: 'Arial',
+    weight: '700',
     size: 11,
     color: '#ffffff',
     opacity: 100,
