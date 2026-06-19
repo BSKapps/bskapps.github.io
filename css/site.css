@@ -133,7 +133,7 @@ iframe[src*="lemonsqueezy.com"] {
 .hero p { color: var(--text-muted); font-size: 1rem; margin-top: 8px; }
 
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.grid > .app-card:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 8px); }
+.grid > .app-card:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 8px); margin-top: 24px; }
 
 .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 .tile-mini { padding: 16px 16px 14px; }
@@ -432,7 +432,7 @@ footer a:hover { color: var(--heading); }
     .nav-links { gap: 16px; }
     .hero h1 { font-size: 1.6rem; }
     .grid { grid-template-columns: 1fr; }
-    .grid > .app-card:last-child:nth-child(odd) { width: auto; justify-self: stretch; }
+    .grid > .app-card:last-child:nth-child(odd) { width: auto; justify-self: stretch; margin-top: 0; }
     .tools-grid { grid-template-columns: 1fr; }
     .game-card { flex-direction: column; align-items: center; text-align: center; }
     .game-icon { width: 64px; height: 64px; }
