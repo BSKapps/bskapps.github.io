@@ -26,7 +26,7 @@ bskapps.github.io/
 ├── _data/content.json      # App names, subtitles, taglines, prices, versions, DESCRIPTIONS, FEATURES - edited via /admin
 ├── CNAME / favicon.png / robots.txt / sitemap.xml / ads.txt
 ├── images/                 # App icons and logos
-├── quickerip/              # Product page (video + gallery + Lite vs Pro table + features + detail sections)
+├── quickerip/              # Product page (video + gallery + slim Lite vs Pro table + features + Full guide link)
 ├── labassistant/           # Product page (video + gallery + Mint + Processing Modules sections)
 ├── fetchpuppy/             # Product page (video + gallery + features + disclaimer)
 ├── targettrace/            # Product page (video + gallery + features)
@@ -62,7 +62,7 @@ Per app: name, subtitle, tagline (homepage tile), price, macos, version, release
 
 Homepage tiles and product pages render these via Liquid. The /admin Content tab edits this file through the GitHub API and commits to main. Never hardcode taglines, descriptions, or feature lists in page HTML - edit content.json.
 
-Lab Assistant's Mint / Processing Modules sections, QIP's detail subsections (IP Configuration, Presets, Speed Test, Network Scanner, Dante, Wi-Fi) and the Lite vs Pro table are hardcoded HTML by design.
+Lab Assistant's Mint / Processing Modules sections and QIP's Lite vs Pro table are hardcoded HTML by design. QIP's old detail subsections (IP Configuration, Presets, Speed Test, Network Scanner, Dante, Wi-Fi) and Status Dots legend were removed June 2026 - that detail now lives in the Quicker IP user guide, linked from the page.
 
 ## Payments
 
@@ -113,6 +113,13 @@ Do NOT add an Articles link to the footer - articles are reached via the homepag
 
 - NO ads anywhere. AdSense was removed May 2026 after rejection - do not re-add. ads.txt remains for verification only.
 
+## Analytics
+
+- Cloudflare Web Analytics (cookieless RUM, auto-injected at the edge, no snippet in the repo, no consent banner) is the ONE allowed form of analytics. It is privacy-first: no cookies, no third-party ad network, no cross-site tracking.
+- The hourly Action `.github/scripts/fetch-stats.js` queries it via GraphQL (`rumPageloadEventsAdaptiveGroups`): site totals, per-page visits (grouped by `requestPath`), and Button Maker in-house ad click-throughs (pageviews where `refererPath` is `/buttonmaker/`). These feed `stats.json` -> `/admin` Analytics tab (Page Views by Page + Button Maker Ad Clicks tables).
+- The Button Maker page CSP allows `static.cloudflareinsights.com` (script-src) and `cloudflareinsights.com` (connect-src) so its own visits are counted; every other page is counted automatically.
+- STILL banned: ad networks, cookie-based tracking, consent-banner trackers, and any third-party analytics JS (Google Analytics, etc.). Cookieless Cloudflare RUM only.
+
 ## Contact
 
 - Support email: support@bskapps.com (Cloudflare Email Routing → Gmail)
@@ -123,6 +130,6 @@ Do NOT add an Articles link to the footer - articles are reached via the homepag
 - Run `git push` unless explicitly asked
 - Change the theme, colours, fonts, or layout unless asked (see .claude/rules/design.md)
 - Add external CSS frameworks or JavaScript (lemon.js is the one exception)
-- Add analytics, tracking, or ads
+- Add ads, cookie-based tracking, or third-party analytics scripts (cookieless Cloudflare RUM is allowed - see Analytics)
 - Link to or mention MultiViewPort
 - Add emojis to code or output unless asked

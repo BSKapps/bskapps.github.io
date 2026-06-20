@@ -277,6 +277,28 @@
         .stat-box.revenue .stat-value-secondary { font-size: 1.1rem; font-weight: 700; color: #5FBE8A; margin-top: 2px; }
         .stat-sublabel { font-size: 0.65rem; color: #A2A2A8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 10px; margin-bottom: 2px; }
 
+        .data-table-wrap { background: #45454A; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; overflow: hidden; margin-bottom: 16px; }
+        .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .data-table th { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: #A2A2A8; font-weight: 600; padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.12); }
+        .data-table td { padding: 9px 16px; color: #E4E4E7; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table th.num, .data-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+        .data-table .muted { color: #8A8A90; font-size: 0.78rem; }
+
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 16px; }
+        .product-card { background: #45454A; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 16px 18px; }
+        .pc-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+        .pc-head img { width: 28px; height: 28px; border-radius: 6px; }
+        .pc-name { font-size: 0.95rem; font-weight: 700; color: #fff; }
+        .pc-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+        .pc-label { font-size: 0.6rem; color: #A2A2A8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+        .pc-num { font-size: 1.1rem; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
+        .pc-num.money { color: #E8C667; }
+        .pc-num.conv { color: #5FBE8A; }
+        .pc-sources { font-size: 0.78rem; color: #A9A9AF; border-top: 1px solid rgba(255,255,255,0.10); padding-top: 10px; }
+        .pc-sources .pcs-label { font-size: 0.6rem; color: #8A8A90; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+        .pc-sources b { color: #E4E4E7; font-weight: 700; }
+
         .analytics-row {
             display: flex;
             gap: 16px;
@@ -492,6 +514,12 @@
                 <div class="stat-sub">Cloudflare</div>
             </div>
             <div class="stat-box">
+                <div class="stat-label">Button Maker</div>
+                <div class="stat-sublabel" id="sublabel-bm">--</div>
+                <div class="stat-value" id="stat-bm">--</div>
+                <div class="stat-sub">Page visits</div>
+            </div>
+            <div class="stat-box">
                 <div class="stat-label">Orders</div>
                 <div class="stat-sublabel" id="sublabel-orders">--</div>
                 <div class="stat-value" id="stat-orders">--</div>
@@ -518,6 +546,25 @@
                 <div class="stat-value" id="stat-conversion">--</div>
                 <div class="stat-sub">visits to sales</div>
             </div>
+        </div>
+
+        <div class="section-title">By Product</div>
+        <div id="product-cards" class="product-grid"></div>
+
+        <div class="section-title">Page Views by Page</div>
+        <div class="data-table-wrap">
+            <table class="data-table">
+                <thead><tr><th>Page</th><th>Path</th><th class="num">Visits</th><th class="num">Views</th></tr></thead>
+                <tbody id="pages-tbody"><tr><td colspan="4" class="muted">--</td></tr></tbody>
+            </table>
+        </div>
+
+        <div class="section-title">Button Maker Ad Clicks</div>
+        <div class="data-table-wrap">
+            <table class="data-table">
+                <thead><tr><th>Destination</th><th>Path</th><th class="num">Clicks</th></tr></thead>
+                <tbody id="inhouse-tbody"><tr><td colspan="3" class="muted">--</td></tr></tbody>
+            </table>
         </div>
 
         <div class="api-setup" id="api-setup">
@@ -1141,6 +1188,33 @@ function displayStats() {
         document.getElementById('stat-visits').textContent = cf ? cf.error : '--';
     }
 
+    document.getElementById('sublabel-bm').textContent = rangeLabel;
+    const pages = stats.pages && stats.pages[key];
+    const pagesTbody = document.getElementById('pages-tbody');
+    if (Array.isArray(pages)) {
+        pagesTbody.innerHTML = pages.length ? pages.map(function(p) {
+            return '<tr><td>' + esc(pageLabel(p.path)) + '</td><td class="muted">' + esc(p.path) + '</td><td class="num">' + (p.visits || 0).toLocaleString() + '</td><td class="num">' + (p.pageviews || 0).toLocaleString() + '</td></tr>';
+        }).join('') : '<tr><td colspan="4" class="muted">No data yet</td></tr>';
+        const bm = pages.find(function(p) { return p.path === '/buttonmaker/'; });
+        document.getElementById('stat-bm').textContent = bm ? (bm.visits || 0).toLocaleString() : '0';
+    } else {
+        pagesTbody.innerHTML = '<tr><td colspan="4" class="muted">' + (pages && pages.error ? esc(pages.error) : '--') + '</td></tr>';
+        document.getElementById('stat-bm').textContent = '--';
+    }
+
+    const inhouse = stats.inhouse && stats.inhouse[key];
+    const inhouseTbody = document.getElementById('inhouse-tbody');
+    if (inhouse && !inhouse.error) {
+        const rows = Object.keys(inhouse).map(function(p) { return { path: p, clicks: inhouse[p] }; }).sort(function(a, b) { return b.clicks - a.clicks; });
+        inhouseTbody.innerHTML = rows.length ? rows.map(function(r) {
+            return '<tr><td>' + esc(pageLabel(r.path)) + '</td><td class="muted">' + esc(r.path) + '</td><td class="num">' + r.clicks.toLocaleString() + '</td></tr>';
+        }).join('') : '<tr><td colspan="3" class="muted">No clicks yet</td></tr>';
+    } else {
+        inhouseTbody.innerHTML = '<tr><td colspan="3" class="muted">' + (inhouse && inhouse.error ? esc(inhouse.error) : '--') + '</td></tr>';
+    }
+
+    renderProductCards(stats, key, audRate);
+
     const ls = stats.lemonsqueezy && stats.lemonsqueezy[key];
     if (ls && !ls.error) {
         let lsRevenue;
@@ -1349,6 +1423,107 @@ function ghFetch(method, path, body, tok) {
     };
     if (body) opts.body = JSON.stringify(body);
     return fetch('https://api.github.com/' + path, opts);
+}
+
+const PAGE_LABELS = {
+    '/': 'Home',
+    '/quickerip/': 'Quicker IP',
+    '/labassistant/': 'Lab Assistant',
+    '/fetchpuppy/': 'Fetch Puppy',
+    '/targettrace/': 'Target Trace',
+    '/gogames/': 'Go Games',
+    '/buttonmaker/': 'Button Maker',
+    '/tools/': 'Free Tools',
+    '/tools/companion/': 'BSK Spotify for Companion',
+    '/tools/reaper/': 'REAPER Lua Scripts',
+    '/articles/': 'Articles',
+    '/about/': 'About',
+    '/contact/': 'Contact',
+    '/privacy/': 'Privacy',
+    '/terms/': 'Terms',
+    '/refund/': 'Refund Policy'
+};
+
+function pageLabel(p) {
+    if (PAGE_LABELS[p]) return PAGE_LABELS[p];
+    const noSlash = p && p.length > 1 && p.slice(-1) === '/' ? p.slice(0, -1) + '/' : p;
+    return PAGE_LABELS[noSlash] || p;
+}
+
+function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+}
+
+const PRODUCTS = [
+    { label: 'Quicker IP', path: '/quickerip/', icon: 'quickip-icon.png', lsMatch: 'quicker ip' },
+    { label: 'Lab Assistant', path: '/labassistant/', icon: 'labassistant-icon.png', lsMatch: 'lab assistant' },
+    { label: 'Fetch Puppy', path: '/fetchpuppy/', icon: 'fetchpuppy-icon.png', lsMatch: 'fetch puppy' },
+    { label: 'Target Trace', path: '/targettrace/', icon: 'targettrace-icon.png', lsMatch: 'target trace' }
+];
+
+const SOURCE_LABELS = {
+    'google.com': 'Google', 'www.google.com': 'Google', 'bing.com': 'Bing', 'duckduckgo.com': 'DuckDuckGo',
+    'reddit.com': 'Reddit', 'www.reddit.com': 'Reddit', 'old.reddit.com': 'Reddit',
+    't.co': 'Twitter/X', 'x.com': 'Twitter/X', 'facebook.com': 'Facebook', 'm.facebook.com': 'Facebook',
+    'github.com': 'GitHub', 'news.ycombinator.com': 'Hacker News'
+};
+
+function sourceLabel(host) {
+    if (SOURCE_LABELS[host]) return SOURCE_LABELS[host];
+    return host.replace(/^www\./, '');
+}
+
+function buildSourceLine(srcArr, bmClicks) {
+    const items = [];
+    let internalTotal = 0;
+    (srcArr || []).forEach(function(s) {
+        const host = s.host || '';
+        if (host === 'bskapps.com' || host === 'www.bskapps.com') { internalTotal += s.count; return; }
+        items.push({ label: host === '' ? 'Direct' : sourceLabel(host), count: s.count });
+    });
+    if (bmClicks > 0) items.push({ label: 'Button Maker', count: bmClicks });
+    const otherInternal = Math.max(0, internalTotal - bmClicks);
+    if (otherInternal > 0) items.push({ label: 'Other internal', count: otherInternal });
+    items.sort(function(a, b) { return b.count - a.count; });
+    const line = items.slice(0, 4).map(function(i) { return esc(i.label) + ' <b>' + i.count.toLocaleString() + '</b>'; }).join(' &middot; ');
+    return line || '<span class="muted">No data yet</span>';
+}
+
+function renderProductCards(stats, key, audRate) {
+    const container = document.getElementById('product-cards');
+    if (!container) return;
+    const pages = stats.pages && stats.pages[key];
+    const pagesArr = Array.isArray(pages) ? pages : [];
+    const sources = (stats.sources && stats.sources[key]) || {};
+    const inhouse = (stats.inhouse && stats.inhouse[key]) || {};
+    const ls = (stats.lemonsqueezy && stats.lemonsqueezy[key]) || {};
+    const lsByProduct = ls.by_product || {};
+    container.innerHTML = PRODUCTS.map(function(p) {
+        const page = pagesArr.find(function(x) { return x.path === p.path; });
+        const visits = page ? (page.visits || 0) : 0;
+        let orders = 0, gross = 0;
+        Object.keys(lsByProduct).forEach(function(name) {
+            if (name.toLowerCase().indexOf(p.lsMatch) !== -1) {
+                orders += lsByProduct[name].orders || 0;
+                gross += lsByProduct[name].gross_usd || 0;
+            }
+        });
+        if (currentCurrency === 'AUD') gross = gross * audRate;
+        const conv = visits > 0 ? (orders / visits * 100).toFixed(1) + '%' : '--';
+        const sline = buildSourceLine(sources[p.path], inhouse[p.path] || 0);
+        return '<div class="product-card">'
+            + '<div class="pc-head"><img src="/images/' + p.icon + '" alt=""><span class="pc-name">' + esc(p.label) + '</span></div>'
+            + '<div class="pc-stats">'
+            + '<div><div class="pc-label">Visits</div><div class="pc-num">' + visits.toLocaleString() + '</div></div>'
+            + '<div><div class="pc-label">Orders</div><div class="pc-num">' + orders.toLocaleString() + '</div></div>'
+            + '<div><div class="pc-label">Rev</div><div class="pc-num money">$' + Math.round(gross).toLocaleString() + '</div></div>'
+            + '<div><div class="pc-label">Conv</div><div class="pc-num conv">' + conv + '</div></div>'
+            + '</div>'
+            + '<div class="pc-sources"><span class="pcs-label">Where from</span>' + sline + '</div>'
+            + '</div>';
+    }).join('');
 }
 
 function getPath(obj, path) {

@@ -13,6 +13,9 @@ const APPLE_ISSUER_ID = process.env.APPLE_ISSUER_ID;
 const APPLE_VENDOR_NUMBER = process.env.APPLE_VENDOR_NUMBER;
 const APPLE_PRIVATE_KEY = process.env.APPLE_PRIVATE_KEY;
 
+const BUTTONMAKER_PATH = '/buttonmaker/';
+const SOURCE_PATHS = ['/quickerip/', '/labassistant/', '/fetchpuppy/', '/targettrace/', '/buttonmaker/', '/gogames/'];
+
 function requestRaw(options) {
     return new Promise(function(resolve, reject) {
         const req = https.request(options, function(res) {
@@ -251,6 +254,93 @@ async function fetchCF(days) {
     return { visits, pageviews };
 }
 
+async function fetchCFPages(days) {
+    const end = new Date().toISOString().split('T')[0];
+    const start = new Date(Date.now() - days * 86400000).toISOString().split('T')[0];
+    const query = `{ viewer { accounts(filter: {accountTag: "${CF_ACCOUNT}"}) { rumPageloadEventsAdaptiveGroups(filter: {AND: [{date_geq: "${start}"}, {date_leq: "${end}"}]} limit: 1000) { count sum { visits } dimensions { requestPath } } } } }`;
+    const body = JSON.stringify({ query });
+    const res = await request({
+        hostname: 'api.cloudflare.com',
+        path: '/client/v4/graphql',
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + CF_TOKEN,
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(body)
+        }
+    }, body);
+
+    if (res.body.errors) throw new Error(res.body.errors[0].message);
+    const groups = res.body.data.viewer.accounts[0].rumPageloadEventsAdaptiveGroups;
+    return groups
+        .map(function(g) { return { path: g.dimensions.requestPath, pageviews: g.count, visits: g.sum.visits || 0 }; })
+        .sort(function(a, b) { return b.pageviews - a.pageviews; })
+        .slice(0, 50);
+}
+
+async function fetchCFInhouse(days) {
+    const end = new Date().toISOString().split('T')[0];
+    const start = new Date(Date.now() - days * 86400000).toISOString().split('T')[0];
+    const query = `{ viewer { accounts(filter: {accountTag: "${CF_ACCOUNT}"}) { rumPageloadEventsAdaptiveGroups(filter: {AND: [{date_geq: "${start}"}, {date_leq: "${end}"}, {refererPath: "${BUTTONMAKER_PATH}"}]} limit: 1000) { count sum { visits } dimensions { requestPath } } } } }`;
+    const body = JSON.stringify({ query });
+    const res = await request({
+        hostname: 'api.cloudflare.com',
+        path: '/client/v4/graphql',
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + CF_TOKEN,
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(body)
+        }
+    }, body);
+
+    if (res.body.errors) throw new Error(res.body.errors[0].message);
+    const groups = res.body.data.viewer.accounts[0].rumPageloadEventsAdaptiveGroups;
+    const clicks = {};
+    groups.forEach(function(g) {
+        const dest = g.dimensions.requestPath;
+        if (dest === BUTTONMAKER_PATH) return;
+        clicks[dest] = (clicks[dest] || 0) + g.count;
+    });
+    return clicks;
+}
+
+async function fetchCFSources(days) {
+    const end = new Date().toISOString().split('T')[0];
+    const start = new Date(Date.now() - days * 86400000).toISOString().split('T')[0];
+    const query = `{ viewer { accounts(filter: {accountTag: "${CF_ACCOUNT}"}) { rumPageloadEventsAdaptiveGroups(filter: {AND: [{date_geq: "${start}"}, {date_leq: "${end}"}]} limit: 5000) { count dimensions { requestPath refererHost } } } } }`;
+    const body = JSON.stringify({ query });
+    const res = await request({
+        hostname: 'api.cloudflare.com',
+        path: '/client/v4/graphql',
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + CF_TOKEN,
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(body)
+        }
+    }, body);
+
+    if (res.body.errors) throw new Error(res.body.errors[0].message);
+    const groups = res.body.data.viewer.accounts[0].rumPageloadEventsAdaptiveGroups;
+    const byPath = {};
+    groups.forEach(function(g) {
+        const path = g.dimensions.requestPath;
+        if (SOURCE_PATHS.indexOf(path) === -1) return;
+        const host = g.dimensions.refererHost || '';
+        if (!byPath[path]) byPath[path] = {};
+        byPath[path][host] = (byPath[path][host] || 0) + g.count;
+    });
+    const out = {};
+    Object.keys(byPath).forEach(function(path) {
+        out[path] = Object.keys(byPath[path])
+            .map(function(host) { return { host: host, count: byPath[path][host] }; })
+            .sort(function(a, b) { return b.count - a.count; })
+            .slice(0, 8);
+    });
+    return out;
+}
+
 async function fetchLS(days) {
     const res = await request({
         hostname: 'api.lemonsqueezy.com',
@@ -272,7 +362,20 @@ async function fetchLS(days) {
     const net_revenue_usd = recent.reduce(function(a, o) {
         return a + ((o.attributes.total_usd - (o.attributes.tax_usd || 0)) / 100);
     }, 0);
-    return { orders, revenue: Math.round(revenue * 100) / 100, net_revenue_usd: Math.round(net_revenue_usd * 100) / 100 };
+    const by_product = {};
+    recent.forEach(function(o) {
+        const item = o.attributes.first_order_item || {};
+        const name = item.product_name || 'Unknown';
+        if (!by_product[name]) by_product[name] = { orders: 0, gross_usd: 0, net_usd: 0 };
+        by_product[name].orders += 1;
+        by_product[name].gross_usd += (o.attributes.total_usd || 0) / 100;
+        by_product[name].net_usd += ((o.attributes.total_usd || 0) - (o.attributes.tax_usd || 0)) / 100;
+    });
+    Object.keys(by_product).forEach(function(name) {
+        by_product[name].gross_usd = Math.round(by_product[name].gross_usd * 100) / 100;
+        by_product[name].net_usd = Math.round(by_product[name].net_usd * 100) / 100;
+    });
+    return { orders, revenue: Math.round(revenue * 100) / 100, net_revenue_usd: Math.round(net_revenue_usd * 100) / 100, by_product };
 }
 
 async function getGoogleAccessToken() {
@@ -338,7 +441,7 @@ function fyDays() {
 }
 
 async function main() {
-    const stats = { updated: new Date().toISOString(), cloudflare: {}, lemonsqueezy: {}, adsense: {}, apple: {} };
+    const stats = { updated: new Date().toISOString(), cloudflare: {}, pages: {}, inhouse: {}, sources: {}, lemonsqueezy: {}, adsense: {}, apple: {} };
 
     let googleToken = null;
     let adSenseAccount = null;
@@ -368,6 +471,24 @@ async function main() {
             } catch (e) {
                 console.error('CF ' + key + ' error:', e.message);
                 stats.cloudflare[key] = { error: e.message };
+            }
+            try {
+                stats.pages[key] = await fetchCFPages(cfDays);
+            } catch (e) {
+                console.error('CF pages ' + key + ' error:', e.message);
+                stats.pages[key] = { error: e.message };
+            }
+            try {
+                stats.inhouse[key] = await fetchCFInhouse(cfDays);
+            } catch (e) {
+                console.error('CF inhouse ' + key + ' error:', e.message);
+                stats.inhouse[key] = { error: e.message };
+            }
+            try {
+                stats.sources[key] = await fetchCFSources(cfDays);
+            } catch (e) {
+                console.error('CF sources ' + key + ' error:', e.message);
+                stats.sources[key] = { error: e.message };
             }
         }
         if (LS_KEY) {
