@@ -341,23 +341,37 @@ async function fetchCFSources(days) {
     return out;
 }
 
-async function fetchLS(days) {
-    const res = await request({
-        hostname: 'api.lemonsqueezy.com',
-        path: '/v1/orders?page[size]=100',
-        method: 'GET',
-        headers: {
-            'Authorization': 'Bearer ' + LS_KEY,
-            'Accept': 'application/vnd.api+json'
-        }
-    });
+async function fetchAllOrders() {
+    const orders = [];
+    let page = 1;
+    const maxPages = 100;
+    while (page <= maxPages) {
+        const res = await request({
+            hostname: 'api.lemonsqueezy.com',
+            path: '/v1/orders?page[size]=100&page[number]=' + page,
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + LS_KEY,
+                'Accept': 'application/vnd.api+json'
+            }
+        });
+        if (res.status !== 200) throw new Error('LS API error: ' + res.status);
+        const data = res.body.data || [];
+        orders.push.apply(orders, data);
+        const lastPage = res.body.meta && res.body.meta.page && res.body.meta.page.lastPage;
+        if (lastPage ? page >= lastPage : data.length < 100) break;
+        page++;
+    }
+    if (page > maxPages) console.error('LS pagination hit max ' + maxPages + ' pages; orders may be truncated');
+    return orders;
+}
 
-    if (res.status !== 200) throw new Error('LS API error: ' + res.status);
+function computeLS(orders, days) {
     const cutoff = new Date(Date.now() - days * 86400000);
-    const recent = res.body.data.filter(function(o) {
+    const recent = orders.filter(function(o) {
         return new Date(o.attributes.created_at) >= cutoff && o.attributes.status === 'paid';
     });
-    const orders = recent.length;
+    const ordersCount = recent.length;
     const revenue = recent.reduce(function(a, o) { return a + (o.attributes.total / 100); }, 0);
     const net_revenue_usd = recent.reduce(function(a, o) {
         return a + ((o.attributes.total_usd - (o.attributes.tax_usd || 0)) / 100);
@@ -375,7 +389,7 @@ async function fetchLS(days) {
         by_product[name].gross_usd = Math.round(by_product[name].gross_usd * 100) / 100;
         by_product[name].net_usd = Math.round(by_product[name].net_usd * 100) / 100;
     });
-    return { orders, revenue: Math.round(revenue * 100) / 100, net_revenue_usd: Math.round(net_revenue_usd * 100) / 100, by_product };
+    return { orders: ordersCount, revenue: Math.round(revenue * 100) / 100, net_revenue_usd: Math.round(net_revenue_usd * 100) / 100, by_product };
 }
 
 async function getGoogleAccessToken() {
@@ -463,6 +477,18 @@ async function main() {
         { days: 90, key: '90d' },
         { days: fyD, key: 'fy' }
     ];
+
+    let lsOrders = null, lsError = null;
+    if (LS_KEY) {
+        try {
+            lsOrders = await fetchAllOrders();
+            console.log('LS orders fetched:', lsOrders.length);
+        } catch (e) {
+            console.error('LS fetch error:', e.message);
+            lsError = e.message;
+        }
+    }
+
     for (const { days, key } of ranges) {
         if (CF_TOKEN) {
             const cfDays = Math.min(days, 90);
@@ -492,11 +518,10 @@ async function main() {
             }
         }
         if (LS_KEY) {
-            try {
-                stats.lemonsqueezy[key] = await fetchLS(days);
-            } catch (e) {
-                console.error('LS ' + key + ' error:', e.message);
-                stats.lemonsqueezy[key] = { error: e.message };
+            if (lsError) {
+                stats.lemonsqueezy[key] = { error: lsError };
+            } else {
+                stats.lemonsqueezy[key] = computeLS(lsOrders, days);
             }
         }
         if (googleToken && adSenseAccount) {
