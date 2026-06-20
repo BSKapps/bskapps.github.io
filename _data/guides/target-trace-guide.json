@@ -30,7 +30,7 @@
         "**Add** - double-click an empty spot on the canvas.",
         "**Move** - drag a point. Frequency moves on a log scale, level in dB.",
         "**Select** - click a point; Cmd-click to add more; Shift-click to select a range; Cmd-A for all.",
-        "**Delete** - select and press Delete, or use the buttons in the Control Points panel. Clear All empties the curve.",
+        "**Delete** - select and press Delete, or use the buttons in the Control Points panel. **Clear Curve** in the toolbar empties the whole curve.",
         "**Type a value** - with one point selected, set its exact Freq and Level in the panel. With several selected, set them all to one Level."
       ] },
       { "type": "paragraph", "text": "Nudge selected points with Option-arrows (left/right by a semitone, up/down by 0.5 dB). Ctrl-click snaps a point to the cursor. A Hide toggle in the Control Points panel hides the dots without changing the curve." }
@@ -66,14 +66,14 @@
     { "id": "presets", "title": "Presets", "blocks": [
       { "type": "paragraph", "text": "**New from Preset** (P) offers Flat, Tilt, 9 dB Haystack, 15 dB Haystack and X-Curve (Cinema). Tilt has adjustable tilt amount and pivot frequency, and both Tilt and Flat can add an optional sub bump. Applying a preset replaces the current curve, names it \"My Curve\" and can be undone." }
     ] },
-    { "id": "simplify", "title": "Simplify", "blocks": [
-      { "type": "paragraph", "text": "When a curve has more than ten points, a **Simplify Points** section appears. Pick an octave band and a frequency range and it re-samples the curve onto that grid to tidy it up. **Restore** brings the original points back." }
+    { "id": "point-spacing", "title": "Point spacing", "blocks": [
+      { "type": "paragraph", "text": "The **Point Spacing** section in the properties panel evens out how points are spread across the curve. Pick an octave band (1, 1/3, 1/6 or 1/12) and a frequency range, then **Apply** to re-sample the curve onto that grid - a finer band adds points, a coarser one reduces them. **Restore** brings the original points back." }
     ] },
     { "id": "saving-and-exporting", "title": "Saving and exporting", "blocks": [
       { "type": "paragraph", "text": "Press Cmd-S to save. The dialog offers two formats: **Smaart (.crv)** keeps all the metadata (colour, type, tolerance, smoothing band) and the points; **REW House Curve (.txt)** writes just the frequency and dB columns for use in REW. Saving into your Smaart TargetCurves folder updates the library automatically. REW .txt files are an export only and cannot be loaded back in." }
     ] },
     { "id": "undo-and-shortcuts", "title": "Undo and shortcuts", "blocks": [
-      { "type": "paragraph", "text": "Cmd-Z undoes any edit, including loads and preset applies; text edits bundle into one undo per field. Handy keys: D draw, T/S modes, V split, P presets, Cmd-A select all, Delete to remove, Option-arrows to nudge a point, Cmd-up/down to shift the whole curve. The Help menu has a full Keyboard Shortcuts reference." }
+      { "type": "paragraph", "text": "Cmd-Z undoes any edit, including loads and preset applies, and Cmd-Shift-Z redoes the last undone edit; text edits bundle into one undo per field. Handy keys: D draw, T/S modes, V split, P presets, Cmd-A select all, Delete to remove, Option-arrows to nudge a point, Cmd-up/down to shift the whole curve. The Help menu has a full Keyboard Shortcuts reference." }
     ] },
     { "id": "licence-and-activation", "title": "Licence and activation", "blocks": [
       { "type": "paragraph", "text": "Target Trace is a one-time purchase with two activations. Enter your licence key on first launch. Manage or move the licence from the app menu. Check for Updates and Email Support - which copies a diagnostics report and opens an email to support - are in the same menu." }
