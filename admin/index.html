@@ -1460,10 +1460,10 @@ function esc(s) {
 }
 
 const PRODUCTS = [
-    { label: 'Quicker IP', path: '/quickerip/', icon: 'quickip-icon.png', lsMatch: 'quicker ip' },
-    { label: 'Lab Assistant', path: '/labassistant/', icon: 'labassistant-icon.png', lsMatch: 'lab assistant' },
-    { label: 'Fetch Puppy', path: '/fetchpuppy/', icon: 'fetchpuppy-icon.png', lsMatch: 'fetch puppy' },
-    { label: 'Target Trace', path: '/targettrace/', icon: 'targettrace-icon.png', lsMatch: 'target trace' }
+    { label: 'Quicker IP', path: '/quickerip/', icon: 'quickip-icon.png', lsMatch: ['quicker ip', 'quickip'] },
+    { label: 'Lab Assistant', path: '/labassistant/', icon: 'labassistant-icon.png', lsMatch: ['lab assistant'] },
+    { label: 'Fetch Puppy', path: '/fetchpuppy/', icon: 'fetchpuppy-icon.png', lsMatch: ['fetch puppy'] },
+    { label: 'Target Trace', path: '/targettrace/', icon: 'targettrace-icon.png', lsMatch: ['target trace'] }
 ];
 
 const SOURCE_LABELS = {
@@ -1508,7 +1508,8 @@ function renderProductCards(stats, key, audRate) {
         const visits = page ? (page.visits || 0) : 0;
         let orders = 0, gross = 0;
         Object.keys(lsByProduct).forEach(function(name) {
-            if (name.toLowerCase().indexOf(p.lsMatch) !== -1) {
+            const ln = name.toLowerCase();
+            if (p.lsMatch.some(function(m) { return ln.indexOf(m) !== -1; })) {
                 orders += lsByProduct[name].orders || 0;
                 gross += lsByProduct[name].gross_usd || 0;
             }
