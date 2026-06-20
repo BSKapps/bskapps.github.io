@@ -1192,7 +1192,8 @@ function displayStats() {
     const pages = stats.pages && stats.pages[key];
     const pagesTbody = document.getElementById('pages-tbody');
     if (Array.isArray(pages)) {
-        pagesTbody.innerHTML = pages.length ? pages.map(function(p) {
+        const visiblePages = pages.filter(function(p) { return !IGNORE_PATHS[p.path]; });
+        pagesTbody.innerHTML = visiblePages.length ? visiblePages.map(function(p) {
             return '<tr><td>' + esc(pageLabel(p.path)) + '</td><td class="muted">' + esc(p.path) + '</td><td class="num">' + (p.visits || 0).toLocaleString() + '</td><td class="num">' + (p.pageviews || 0).toLocaleString() + '</td></tr>';
         }).join('') : '<tr><td colspan="4" class="muted">No data yet</td></tr>';
         const bm = pages.find(function(p) { return p.path === '/buttonmaker/'; });
@@ -1443,6 +1444,8 @@ const PAGE_LABELS = {
     '/terms/': 'Terms',
     '/refund/': 'Refund Policy'
 };
+
+const IGNORE_PATHS = { '/quickip/': true };
 
 function pageLabel(p) {
     if (PAGE_LABELS[p]) return PAGE_LABELS[p];
