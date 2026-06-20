@@ -551,6 +551,14 @@
         <div class="section-title">By Product</div>
         <div id="product-cards" class="product-grid"></div>
 
+        <div class="section-title">Top Countries</div>
+        <div class="data-table-wrap">
+            <table class="data-table">
+                <thead><tr><th>Country</th><th class="num">Visits</th><th class="num">Views</th></tr></thead>
+                <tbody id="countries-tbody"><tr><td colspan="3" class="muted">--</td></tr></tbody>
+            </table>
+        </div>
+
         <div class="section-title">Page Views by Page</div>
         <div class="data-table-wrap">
             <table class="data-table">
@@ -1216,6 +1224,16 @@ function displayStats() {
 
     renderProductCards(stats, key, audRate);
 
+    const countries = stats.countries && stats.countries[key];
+    const countriesTbody = document.getElementById('countries-tbody');
+    if (Array.isArray(countries)) {
+        countriesTbody.innerHTML = countries.length ? countries.map(function(c) {
+            return '<tr><td>' + esc(countryLabel(c.country)) + '</td><td class="num">' + (c.visits || 0).toLocaleString() + '</td><td class="num">' + (c.pageviews || 0).toLocaleString() + '</td></tr>';
+        }).join('') : '<tr><td colspan="3" class="muted">No data yet</td></tr>';
+    } else {
+        countriesTbody.innerHTML = '<tr><td colspan="3" class="muted">' + (countries && countries.error ? esc(countries.error) : '--') + '</td></tr>';
+    }
+
     const ls = stats.lemonsqueezy && stats.lemonsqueezy[key];
     if (ls && !ls.error) {
         let lsRevenue;
@@ -1442,10 +1460,38 @@ const PAGE_LABELS = {
     '/contact/': 'Contact',
     '/privacy/': 'Privacy',
     '/terms/': 'Terms',
-    '/refund/': 'Refund Policy'
+    '/refund/': 'Refund Policy',
+    '/articles/buttonmaker-guide/': 'Button Maker: Guide',
+    '/articles/companion-macos-network/': 'Companion: macOS network',
+    '/articles/companion-module-setup/': 'Companion: Module setup',
+    '/articles/spotify-companion-guide/': 'Companion: Guide',
+    '/articles/qlab-script-cues-spotify/': 'Companion: QLab script cues',
+    '/articles/dante-mac-network-readiness/': 'Quicker IP: Dante readiness',
+    '/articles/find-devices-on-network/': 'Quicker IP: Find devices',
+    '/articles/mac-routing-table/': 'Quicker IP: Mac routing table',
+    '/articles/static-ips-av-networks/': 'Quicker IP: Static IPs',
+    '/articles/quicker-ip-guide/': 'Quicker IP: Guide',
+    '/articles/lab-assistant-guide/': 'Lab Assistant: Guide',
+    '/articles/qlab-workspace-habits/': 'Lab Assistant: QLab workspace habits',
+    '/articles/fetch-puppy-guide/': 'Fetch Puppy: Guide',
+    '/articles/target-trace-guide/': 'Target Trace: Guide',
+    '/articles/reaper-lua-cue-workflows/': 'REAPER: Lua cue workflows'
 };
 
-const IGNORE_PATHS = { '/quickip/': true };
+const IGNORE_PATHS = { '/quickip/': true, '/admin/': true };
+
+const COUNTRY_NAMES = {
+    US: 'United States', AU: 'Australia', GB: 'United Kingdom', CA: 'Canada', NZ: 'New Zealand',
+    DE: 'Germany', FR: 'France', NL: 'Netherlands', IE: 'Ireland', SE: 'Sweden', NO: 'Norway',
+    ES: 'Spain', IT: 'Italy', BR: 'Brazil', IN: 'India', JP: 'Japan', SG: 'Singapore',
+    MX: 'Mexico', PL: 'Poland', CH: 'Switzerland', AT: 'Austria', BE: 'Belgium', DK: 'Denmark',
+    FI: 'Finland', PT: 'Portugal', ZA: 'South Africa'
+};
+
+function countryLabel(c) {
+    if (!c) return 'Unknown';
+    return COUNTRY_NAMES[c] || c;
+}
 
 function pageLabel(p) {
     if (PAGE_LABELS[p]) return PAGE_LABELS[p];

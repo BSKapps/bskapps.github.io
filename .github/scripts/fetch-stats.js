@@ -341,6 +341,30 @@ async function fetchCFSources(days) {
     return out;
 }
 
+async function fetchCFCountries(days) {
+    const end = new Date().toISOString().split('T')[0];
+    const start = new Date(Date.now() - days * 86400000).toISOString().split('T')[0];
+    const query = `{ viewer { accounts(filter: {accountTag: "${CF_ACCOUNT}"}) { rumPageloadEventsAdaptiveGroups(filter: {AND: [{date_geq: "${start}"}, {date_leq: "${end}"}]} limit: 300) { count sum { visits } dimensions { countryName } } } } }`;
+    const body = JSON.stringify({ query });
+    const res = await request({
+        hostname: 'api.cloudflare.com',
+        path: '/client/v4/graphql',
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + CF_TOKEN,
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(body)
+        }
+    }, body);
+
+    if (res.body.errors) throw new Error(res.body.errors[0].message);
+    const groups = res.body.data.viewer.accounts[0].rumPageloadEventsAdaptiveGroups;
+    return groups
+        .map(function(g) { return { country: g.dimensions.countryName, pageviews: g.count, visits: g.sum.visits || 0 }; })
+        .sort(function(a, b) { return b.visits - a.visits || b.pageviews - a.pageviews; })
+        .slice(0, 12);
+}
+
 async function fetchAllOrders() {
     const orders = [];
     let page = 1;
@@ -455,7 +479,7 @@ function fyDays() {
 }
 
 async function main() {
-    const stats = { updated: new Date().toISOString(), cloudflare: {}, pages: {}, inhouse: {}, sources: {}, lemonsqueezy: {}, adsense: {}, apple: {} };
+    const stats = { updated: new Date().toISOString(), cloudflare: {}, pages: {}, inhouse: {}, sources: {}, countries: {}, lemonsqueezy: {}, adsense: {}, apple: {} };
 
     let googleToken = null;
     let adSenseAccount = null;
@@ -515,6 +539,12 @@ async function main() {
             } catch (e) {
                 console.error('CF sources ' + key + ' error:', e.message);
                 stats.sources[key] = { error: e.message };
+            }
+            try {
+                stats.countries[key] = await fetchCFCountries(cfDays);
+            } catch (e) {
+                console.error('CF countries ' + key + ' error:', e.message);
+                stats.countries[key] = { error: e.message };
             }
         }
         if (LS_KEY) {
