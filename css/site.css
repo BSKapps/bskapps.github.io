@@ -432,7 +432,7 @@ footer a:hover { color: var(--heading); }
     .nav-links { gap: 16px; }
     .hero h1 { font-size: 1.6rem; }
     .grid { grid-template-columns: 1fr; }
-    .grid > .app-card:last-child:nth-child(odd) { width: auto; justify-self: stretch; margin-top: 0; }
+    .grid > .app-card:last-child:nth-child(odd) { width: auto; justify-self: stretch; margin-top: 10px; }
     .tools-grid { grid-template-columns: 1fr; }
     .game-card { flex-direction: column; align-items: center; text-align: center; }
     .game-icon { width: 64px; height: 64px; }

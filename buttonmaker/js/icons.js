@@ -1,4 +1,4 @@
-import { state, emit, editTargets } from './state.js?v=113';
+import { state, emit, editTargets } from './state.js?v=114';
 
 const API = 'https://api.iconify.design';
 

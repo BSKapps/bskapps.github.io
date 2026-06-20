@@ -31,7 +31,7 @@
     },
     "labassistant": {
       "name": "Lab Assistant",
-      "subtitle": "QLab workspace automation for macOS",
+      "subtitle": "Auto Set QLab",
       "tagline": "Auto levels, auto top and tail, mono and multi-output routing - and Mint cleans up audio and video cues in place.",
       "price": "$14.99 USD",
       "macos": "macOS 14.0+",
