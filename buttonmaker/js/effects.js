@@ -1,7 +1,7 @@
-import { state, emit, deepClone, dotLayer } from './state.js?v=114';
-import { seriesVariants } from './series.js?v=114';
-import { mixHex, isLightColor } from './color.js?v=114';
-import { releaseSelection, selectListItem } from './ui.js?v=114';
+import { state, emit, deepClone, dotLayer } from './state.js?v=115';
+import { seriesVariants } from './series.js?v=115';
+import { mixHex, isLightColor } from './color.js?v=115';
+import { releaseSelection, selectListItem } from './ui.js?v=115';
 
 export const EFFECT_DEFAULTS = {
   tint: { type: 'tint', color: '#1f9d3a', strength: 40, elements: { bg: true, icon: true, text: true } },

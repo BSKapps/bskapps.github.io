@@ -982,6 +982,13 @@ body {
   color: var(--heading);
 }
 
+.bsk-tile-sub {
+  margin: 2px 0 0;
+  font-size: 0.88rem;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
 .bsk-tile-line {
   margin: 14px 0 16px;
   font-size: 0.95rem;
