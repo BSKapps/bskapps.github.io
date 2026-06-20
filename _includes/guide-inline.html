@@ -1,0 +1,6 @@
+{%- assign parts = include.text | split: "**" -%}
+{%- for part in parts -%}
+{%- assign clean = part | replace: "&", "&amp;" | replace: "<", "&lt;" | replace: ">", "&gt;" -%}
+{%- assign odd = forloop.index0 | modulo: 2 -%}
+{%- if odd == 1 -%}<strong>{{ clean }}</strong>{%- else -%}{{ clean }}{%- endif -%}
+{%- endfor -%}

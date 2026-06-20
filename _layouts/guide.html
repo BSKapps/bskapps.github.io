@@ -1,0 +1,61 @@
+{%- assign g = site.data.guides[page.guide] -%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ g.web.pageTitle }}</title>
+    <meta name="description" content="{{ g.web.description }}">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="{{ g.web.canonical }}">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{ g.web.ogTitle }}">
+    <meta property="og:description" content="{{ g.web.ogDescription }}">
+    <meta property="og:image" content="{{ g.web.ogImage }}">
+    <link rel="stylesheet" href="/css/site.css?v=20260611">
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>{{ g.web.h1 }}</h1>
+            <p class="date">{{ g.web.dateLine }}</p>
+{%- for block in g.intro %}{%- unless block.web == false %}
+
+            <p>{%- include guide-inline.html text=block.text -%}</p>
+{%- endunless -%}{%- endfor -%}
+{%- for section in g.sections %}{%- unless section.web == false %}
+
+            <h2>{{ section.title }}</h2>
+{%- for block in section.blocks %}{%- unless block.web == false %}
+{%- if block.type == "paragraph" %}
+            <p>{%- include guide-inline.html text=block.text -%}</p>
+{%- elsif block.type == "bullets" %}
+            <ul>
+{%- for item in block.items %}
+                <li>{%- include guide-inline.html text=item -%}</li>
+{%- endfor %}
+            </ul>
+{%- elsif block.type == "image" %}
+            <figure><img src="{{ block.src }}" alt="{{ block.alt }}">{% if block.caption %}<figcaption>{{ block.caption }}</figcaption>{% endif %}</figure>
+{%- elsif block.type == "video" %}
+            <figure><video src="{{ block.src }}"{% if block.poster %} poster="{{ block.poster }}"{% endif %} controls></video>{% if block.caption %}<figcaption>{{ block.caption }}</figcaption>{% endif %}</figure>
+{%- endif -%}
+{%- endunless -%}{%- endfor -%}
+{%- endunless -%}{%- endfor %}
+
+            <div class="article-cta">
+                <h3>{{ g.cta.title }}</h3>
+                <p>{{ g.cta.text }}</p>
+                <a class="cta-link" href="{{ g.cta.href }}">{{ g.cta.linkText }} &rarr;</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>
