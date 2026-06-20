@@ -399,6 +399,14 @@
         }
         .section-title:first-child { margin-top: 0; }
 
+        .collapse-section { margin-top: 24px; }
+        .collapse-section summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .collapse-section summary::-webkit-details-marker { display: none; }
+        .collapse-section summary .section-title { margin: 0; }
+        .collapse-section summary .chev { color: #8A8A90; font-size: 0.7rem; transition: transform 0.15s; }
+        .collapse-section[open] summary .chev { transform: rotate(90deg); }
+        .collapse-section .data-table-wrap { margin-top: 10px; }
+
         /* ARTICLES */
         .article-row {
             display: flex;
@@ -551,29 +559,35 @@
         <div class="section-title">By Product</div>
         <div id="product-cards" class="product-grid"></div>
 
-        <div class="section-title">Top Countries</div>
-        <div class="data-table-wrap">
-            <table class="data-table">
-                <thead><tr><th>Country</th><th class="num">Visits</th><th class="num">Views</th></tr></thead>
-                <tbody id="countries-tbody"><tr><td colspan="3" class="muted">--</td></tr></tbody>
-            </table>
-        </div>
+        <details class="collapse-section" data-key="countries" open>
+            <summary><span class="chev">&#9656;</span><span class="section-title">Top Countries</span></summary>
+            <div class="data-table-wrap">
+                <table class="data-table">
+                    <thead><tr><th>Country</th><th class="num">Visits</th><th class="num">Views</th></tr></thead>
+                    <tbody id="countries-tbody"><tr><td colspan="3" class="muted">--</td></tr></tbody>
+                </table>
+            </div>
+        </details>
 
-        <div class="section-title">Page Views by Page</div>
-        <div class="data-table-wrap">
-            <table class="data-table">
-                <thead><tr><th>Page</th><th>Path</th><th class="num">Visits</th><th class="num">Views</th></tr></thead>
-                <tbody id="pages-tbody"><tr><td colspan="4" class="muted">--</td></tr></tbody>
-            </table>
-        </div>
+        <details class="collapse-section" data-key="pages" open>
+            <summary><span class="chev">&#9656;</span><span class="section-title">Page Views by Page</span></summary>
+            <div class="data-table-wrap">
+                <table class="data-table">
+                    <thead><tr><th>Page</th><th>Path</th><th class="num">Visits</th><th class="num">Views</th></tr></thead>
+                    <tbody id="pages-tbody"><tr><td colspan="4" class="muted">--</td></tr></tbody>
+                </table>
+            </div>
+        </details>
 
-        <div class="section-title">Button Maker Ad Clicks</div>
-        <div class="data-table-wrap">
-            <table class="data-table">
-                <thead><tr><th>Destination</th><th>Path</th><th class="num">Clicks</th></tr></thead>
-                <tbody id="inhouse-tbody"><tr><td colspan="3" class="muted">--</td></tr></tbody>
-            </table>
-        </div>
+        <details class="collapse-section" data-key="inhouse" open>
+            <summary><span class="chev">&#9656;</span><span class="section-title">Button Maker Ad Clicks</span></summary>
+            <div class="data-table-wrap">
+                <table class="data-table">
+                    <thead><tr><th>Destination</th><th>Path</th><th class="num">Clicks</th></tr></thead>
+                    <tbody id="inhouse-tbody"><tr><td colspan="3" class="muted">--</td></tr></tbody>
+                </table>
+            </div>
+        </details>
 
         <div class="api-setup" id="api-setup">
             <div class="api-setup-toggle" onclick="toggleApiSetup()">
@@ -1587,8 +1601,21 @@ function setPath(obj, path, val) {
     cur[parts[parts.length - 1]] = val;
 }
 
+function initCollapsibles() {
+    document.querySelectorAll('.collapse-section').forEach(function(d) {
+        const storeKey = 'bsk_collapse_' + d.getAttribute('data-key');
+        const saved = localStorage.getItem(storeKey);
+        if (saved === 'closed') d.removeAttribute('open');
+        else if (saved === 'open') d.setAttribute('open', '');
+        d.addEventListener('toggle', function() {
+            localStorage.setItem(storeKey, d.open ? 'open' : 'closed');
+        });
+    });
+}
+
 // Start
 init();
+initCollapsibles();
 </script>
 </body>
 </html>
