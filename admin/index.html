@@ -1228,10 +1228,12 @@ function displayStats() {
     const inhouse = stats.inhouse && stats.inhouse[key];
     const inhouseTbody = document.getElementById('inhouse-tbody');
     if (inhouse && !inhouse.error) {
-        const rows = Object.keys(inhouse).map(function(p) { return { path: p, clicks: inhouse[p] }; }).sort(function(a, b) { return b.clicks - a.clicks; });
-        inhouseTbody.innerHTML = rows.length ? rows.map(function(r) {
+        const paths = INHOUSE_ADS.slice();
+        Object.keys(inhouse).forEach(function(p) { if (paths.indexOf(p) === -1) paths.push(p); });
+        const rows = paths.map(function(p) { return { path: p, clicks: inhouse[p] || 0 }; }).sort(function(a, b) { return b.clicks - a.clicks; });
+        inhouseTbody.innerHTML = rows.map(function(r) {
             return '<tr><td>' + esc(pageLabel(r.path)) + '</td><td class="muted">' + esc(r.path) + '</td><td class="num">' + r.clicks.toLocaleString() + '</td></tr>';
-        }).join('') : '<tr><td colspan="3" class="muted">No clicks yet</td></tr>';
+        }).join('');
     } else {
         inhouseTbody.innerHTML = '<tr><td colspan="3" class="muted">' + (inhouse && inhouse.error ? esc(inhouse.error) : '--') + '</td></tr>';
     }
@@ -1525,6 +1527,8 @@ const PRODUCTS = [
     { label: 'Fetch Puppy', path: '/fetchpuppy/', icon: 'fetchpuppy-icon.png', lsMatch: ['fetch puppy'] },
     { label: 'Target Trace', path: '/targettrace/', icon: 'targettrace-icon.png', lsMatch: ['target trace'] }
 ];
+
+const INHOUSE_ADS = ['/tools/companion/', '/tools/reaper/', '/quickerip/', '/labassistant/', '/targettrace/', '/fetchpuppy/', '/'];
 
 const SOURCE_LABELS = {
     'google.com': 'Google', 'www.google.com': 'Google', 'bing.com': 'Bing', 'duckduckgo.com': 'DuckDuckGo',
