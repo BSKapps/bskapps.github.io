@@ -1538,6 +1538,15 @@ function sourceLabel(host) {
     return host.replace(/^www\./, '');
 }
 
+const SOURCE_ORDER = ['Google', 'Bing', 'DuckDuckGo', 'Direct', 'Reddit', 'Facebook', 'Twitter/X', 'GitHub', 'Hacker News'];
+
+function sourceRank(label) {
+    if (label === 'Button Maker') return 1000;
+    if (label === 'Other internal') return 1001;
+    const i = SOURCE_ORDER.indexOf(label);
+    return i === -1 ? 900 : i;
+}
+
 function buildSourceLine(srcArr, bmClicks) {
     const items = [];
     let internalTotal = 0;
@@ -1550,7 +1559,9 @@ function buildSourceLine(srcArr, bmClicks) {
     const otherInternal = Math.max(0, internalTotal - bmClicks);
     if (otherInternal > 0) items.push({ label: 'Other internal', count: otherInternal });
     items.sort(function(a, b) { return b.count - a.count; });
-    const line = items.slice(0, 4).map(function(i) { return esc(i.label) + ' <b>' + i.count.toLocaleString() + '</b>'; }).join(' &middot; ');
+    const top = items.slice(0, 4);
+    top.sort(function(a, b) { return sourceRank(a.label) - sourceRank(b.label) || b.count - a.count; });
+    const line = top.map(function(i) { return esc(i.label) + ' <b>' + i.count.toLocaleString() + '</b>'; }).join(' &middot; ');
     return line || '<span class="muted">No data yet</span>';
 }
 
