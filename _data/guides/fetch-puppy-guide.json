@@ -62,12 +62,12 @@
     ] },
     { "id": "settings", "title": "Settings", "blocks": [
       { "type": "bullets", "items": [
-        "**Download options** - output folder, number tracks, export track list, and universal format selection.",
+        "**Download options** - output folder, number tracks, export track list, universal format selection, and notify when downloads complete.",
         "**App Updates** - manual check and an auto-check toggle.",
         "**Download Engine** - yt-dlp status and update; ffmpeg is bundled.",
         "**Spotify API Credentials** - optional Client ID and Secret for private playlists and more reliable metadata; stored locally on your Mac (the secret in your keychain), never sent to BSK.",
         "**YouTube Browser Cookies** - which browser to read, with setup notes.",
-        "**General** - show the welcome page, minimise to the menu bar when closed, and notify when downloads complete.",
+        "**General** - show the welcome page, and minimise to the menu bar when closed.",
         "**Tips & Shortcuts** - a quick reference for drag-and-drop.",
         "**Download History** - past downloads, with a clear button.",
         "**Support** - Email Support copies a diagnostics report and opens an email to support.",
