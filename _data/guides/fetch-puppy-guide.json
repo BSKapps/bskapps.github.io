@@ -66,7 +66,7 @@
         "**Download options** - output folder, number tracks, export track list, universal format selection, and notify when downloads complete.",
         "**App Updates** - manual check and an auto-check toggle.",
         "**Download Engine** - check for and apply download engine updates.",
-        "**Spotify API Credentials** - optional Client ID and Secret for private playlists and more reliable metadata; stored locally on your Mac (the secret in your keychain), never sent to BSK.",
+        "**Spotify API Credentials** - optional Client ID and Secret for private playlists and more reliable metadata; stored locally on your Mac (the secret in your keychain), never sent to BSK. For your own private or liked playlists, also add your Spotify account email under User Management in your Spotify developer app, otherwise Spotify denies the login.",
         "**YouTube Browser Cookies** - which browser to read, with setup notes.",
         "**General** - show the welcome page, and minimise to the menu bar when closed.",
         "**Tips & Shortcuts** - a quick reference for drag-and-drop.",
