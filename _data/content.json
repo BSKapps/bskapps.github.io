@@ -43,7 +43,6 @@
       "version": "v1.2",
       "released": "22 June 2026",
       "features": [
-        "Drag-and-drop control point editing with multi-select",
         "Freehand draw mode with pencil cursor",
         "Preset starting shapes - tilt, haystack, X-curve, and more",
         "Point Spacing - re-space a curve onto a 1/1, 1/3, 1/6 or 1/12 octave grid",
@@ -51,13 +50,11 @@
         "Convert any curve between TF and RTA and back, with no data loss",
         "Split View - see your curve in both modes side by side",
         "Z / A / C weighting filter for RTA view (IEC 61672)",
-        "Non-destructive smoothing (1, 1/3, 1/6, 1/12 octave)",
         "Curve library with TF / RTA filter and drag-to-reorder (syncs Smaart's index)",
         "Overlay curves to compare - each at its own Smaart offset and tolerance band, with Match type filter",
-        "X and Y axis zoom with scroll, pinch, and keyboard",
         "Save directly to Smaart TargetCurves folder",
-        "Drag a .crv file into Target Trace to open it",
-        "Export as REW house curve"
+        "Export as REW house curve",
+        "Keyboard shortcuts - D for draw, V for Split View, T / S to switch curve type"
       ],
       "description": "Build target curves from presets, draw them freehand, or import and reshape your own measurements. Target Trace gives you a visual editor for Smaart .crv files with drag-and-drop control points, tolerance bands, and one-click export back to Smaart or REW."
     },
