@@ -38,7 +38,7 @@
     ] },
     { "id": "audio-and-video-formats", "title": "Audio and video formats", "blocks": [
       { "type": "paragraph", "text": "Each mode has its own **Audio** / **Video** switch and remembers your choice. Audio formats are MP3 320 kbps (default), AAC 256 kbps, WAV, AIFF and FLAC. Video formats are MP4 (best available quality) or MOV (H.264 plus AAC, the more compatible option)." },
-      { "type": "paragraph", "text": "Setting Spotify, Apple Music or CSV to **Video** downloads the matching music video from YouTube. Prefer one setting everywhere? Turn on **Universal format selection** in Settings under Download options, and the Audio/Video choice and format you pick in any tab applies to all of them at once; turn it off and each mode keeps its own setting again." }
+      { "type": "paragraph", "text": "Setting Spotify, Apple Music or CSV to **Video** downloads the matching music video instead of the audio. Prefer one setting everywhere? Turn on **Universal format selection** in Settings under Download options, and the Audio/Video choice and format you pick in any tab applies to all of them at once; turn it off and each mode keeps its own setting again." }
     ] },
     { "id": "the-download-queue", "title": "The download queue", "blocks": [
       { "type": "paragraph", "text": "Click **Downloads** in the sidebar to watch progress. One job runs at a time; others wait, shown as colour-coded tabs (blue running, orange queued, green done, red failed, grey cancelled). Each job shows its tracks with per-track status and the format used, a progress bar, and counts for total, done, failed and remaining." },
@@ -54,17 +54,17 @@
       { "type": "paragraph", "text": "Two Settings options apply to playlists and albums: **Number tracks** prepends a two-digit number (01, 02, and so on) to filenames, and **Export track list** saves a CSV of the track list alongside the files." }
     ] },
     { "id": "the-download-engine", "title": "The download engine", "blocks": [
-      { "type": "paragraph", "text": "Fetch Puppy uses yt-dlp and ffmpeg under the hood, both bundled in the app, so nothing installs on first launch. Settings shows the yt-dlp version with a Check for Updates button that updates only when a newer version is available. If a newer yt-dlp is out, the app offers to update it on launch." }
+      { "type": "paragraph", "text": "Everything Fetch Puppy needs to download and convert is built in, so there is nothing to install. If downloads ever stop working, open Settings and use Check for Updates under Download Engine to refresh it; the app also offers an update on launch when one is available." }
     ] },
     { "id": "browser-cookies", "title": "Browser cookies", "blocks": [
-      { "type": "paragraph", "text": "YouTube and the social platforms need cookies from a signed-in browser to download reliably; Video mode in the Spotify, Apple Music and CSV tabs needs them too, since those search YouTube for the video." },
+      { "type": "paragraph", "text": "YouTube and the social platforms need cookies from a signed-in browser to download reliably; Video mode in the Spotify, Apple Music and CSV tabs needs them too." },
       { "type": "paragraph", "text": "Fetch Puppy reads them automatically - no manual export. It tries Firefox first, then Chrome, Brave and Edge. Safari is not supported because macOS keeps its cookies sealed off. Settings shows which browser is in use; with Chrome, Brave or Edge, choose \"Always Allow\" at the keychain prompt so it does not ask again." }
     ] },
     { "id": "settings", "title": "Settings", "blocks": [
       { "type": "bullets", "items": [
         "**Download options** - output folder, number tracks, export track list, universal format selection, and notify when downloads complete.",
         "**App Updates** - manual check and an auto-check toggle.",
-        "**Download Engine** - yt-dlp status and update; ffmpeg is bundled.",
+        "**Download Engine** - check for and apply download engine updates.",
         "**Spotify API Credentials** - optional Client ID and Secret for private playlists and more reliable metadata; stored locally on your Mac (the secret in your keychain), never sent to BSK.",
         "**YouTube Browser Cookies** - which browser to read, with setup notes.",
         "**General** - show the welcome page, and minimise to the menu bar when closed.",
