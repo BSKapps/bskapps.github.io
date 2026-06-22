@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Fetch Puppy user guide - BSK Apps",
     "h1": "Fetch Puppy user guide",
-    "dateLine": "Updated for version 2.2",
+    "dateLine": "Updated for version 2.3",
     "description": "A how-to guide for Fetch Puppy: the download modes, choosing audio and video formats, the queue, output folders, browser cookies, the download engine and settings.",
     "canonical": "https://bskapps.com/articles/fetch-puppy-guide",
     "ogTitle": "Fetch Puppy user guide",
@@ -30,21 +30,22 @@
         "**YouTube** - videos, shorts and playlists. If a link is both a video and a playlist, Fetch Puppy asks whether you want just the video or the whole playlist.",
         "**Social Media** - TikTok, Instagram, X, Facebook, Reddit, Vimeo, Twitch, Dailymotion, Threads and Snapchat. These need browser cookies (see Settings).",
         "**CSV File** - drop a two-column Artist, Title CSV (or click Choose File); each row is matched and downloaded.",
-        "**Search** - type a title, get the top matches with thumbnails, preview in the app, then download."
+        "**Search** - type a title, get the top matches with thumbnails, then preview any match right in the app (ad-free, full-length playback with fullscreen) before you download. Previewed results stay highlighted so you can find your way back to the one you want."
       ] }
     ] },
     { "id": "drag-and-drop", "title": "Drag and drop", "blocks": [
       { "type": "paragraph", "text": "You can drag links onto the app window, or onto the menu bar icon, to start a download without switching modes first. Dropping several links at once downloads them together when they are all Spotify tracks; otherwise the first link is used. A CSV file can be dropped anywhere in the window or onto the menu bar icon too." }
     ] },
     { "id": "audio-and-video-formats", "title": "Audio and video formats", "blocks": [
-      { "type": "paragraph", "text": "Each mode has its own **Audio** / **Video** switch and remembers your choice. Audio formats are MP3 320 kbps (default), AAC 256 kbps, WAV, AIFF and FLAC. Video formats are MP4 (best available quality) or MOV (H.264 plus AAC, the more compatible option)." }
+      { "type": "paragraph", "text": "Each mode has its own **Audio** / **Video** switch and remembers your choice. Audio formats are MP3 320 kbps (default), AAC 256 kbps, WAV, AIFF and FLAC. Video formats are MP4 (best available quality) or MOV (H.264 plus AAC, the more compatible option)." },
+      { "type": "paragraph", "text": "Setting Spotify, Apple Music or CSV to **Video** downloads the matching music video from YouTube. Prefer one setting everywhere? Turn on **Use one format for every service** in Settings under Download options, and the Audio/Video choice and format you pick in any tab applies to all of them at once; turn it off and each mode keeps its own setting again." }
     ] },
     { "id": "the-download-queue", "title": "The download queue", "blocks": [
       { "type": "paragraph", "text": "Click **Downloads** in the sidebar to watch progress. One job runs at a time; others wait, shown as colour-coded tabs (blue running, orange queued, green done, red failed, grey cancelled). Each job shows its tracks with per-track status and the format used, a progress bar, and counts for total, done, failed and remaining." },
       { "type": "bullets", "items": [
         "**Cancel** a running or queued job from its header, or right-click its tab to cancel and remove it.",
-        "**Retry Failed** or **Retry All** appear after a job finishes.",
-        "Right-click a track to **Skip** it or remove it from the list.",
+        "**Retry** or **Retry Failed (N)** appear after a job finishes if there is anything to retry.",
+        "Right-click a track to remove it from the list.",
         "**Open Folder** jumps to the files in Finder."
       ] }
     ] },
@@ -61,7 +62,7 @@
     ] },
     { "id": "settings", "title": "Settings", "blocks": [
       { "type": "bullets", "items": [
-        "**Download options** - output folder, number tracks, export track list.",
+        "**Download options** - output folder, number tracks, export track list, and use one format for every service.",
         "**App Updates** - manual check and an auto-check toggle.",
         "**Download Engine** - yt-dlp status and update; ffmpeg is bundled.",
         "**Spotify API Credentials** - optional Client ID and Secret for private playlists and more reliable metadata; stored locally on your Mac (the secret in your keychain), never sent to BSK.",
