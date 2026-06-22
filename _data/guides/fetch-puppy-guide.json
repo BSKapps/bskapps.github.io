@@ -38,7 +38,7 @@
     ] },
     { "id": "audio-and-video-formats", "title": "Audio and video formats", "blocks": [
       { "type": "paragraph", "text": "Each mode has its own **Audio** / **Video** switch and remembers your choice. Audio formats are MP3 320 kbps (default), AAC 256 kbps, WAV, AIFF and FLAC. Video formats are MP4 (best available quality) or MOV (H.264 plus AAC, the more compatible option)." },
-      { "type": "paragraph", "text": "Setting Spotify, Apple Music or CSV to **Video** downloads the matching music video from YouTube. Prefer one setting everywhere? Turn on **Use one format for every service** in Settings under Download options, and the Audio/Video choice and format you pick in any tab applies to all of them at once; turn it off and each mode keeps its own setting again." }
+      { "type": "paragraph", "text": "Setting Spotify, Apple Music or CSV to **Video** downloads the matching music video from YouTube. Prefer one setting everywhere? Turn on **Universal format selection** in Settings under Download options, and the Audio/Video choice and format you pick in any tab applies to all of them at once; turn it off and each mode keeps its own setting again." }
     ] },
     { "id": "the-download-queue", "title": "The download queue", "blocks": [
       { "type": "paragraph", "text": "Click **Downloads** in the sidebar to watch progress. One job runs at a time; others wait, shown as colour-coded tabs (blue running, orange queued, green done, red failed, grey cancelled). Each job shows its tracks with per-track status and the format used, a progress bar, and counts for total, done, failed and remaining." },
@@ -62,7 +62,7 @@
     ] },
     { "id": "settings", "title": "Settings", "blocks": [
       { "type": "bullets", "items": [
-        "**Download options** - output folder, number tracks, export track list, and use one format for every service.",
+        "**Download options** - output folder, number tracks, export track list, and universal format selection.",
         "**App Updates** - manual check and an auto-check toggle.",
         "**Download Engine** - yt-dlp status and update; ffmpeg is bundled.",
         "**Spotify API Credentials** - optional Client ID and Secret for private playlists and more reliable metadata; stored locally on your Mac (the secret in your keychain), never sent to BSK.",
