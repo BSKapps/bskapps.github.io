@@ -6,11 +6,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quicker IP - Network Toolkit for macOS</title>
-    <meta name="description" content="Check and change your IP address from the macOS menu bar. IP presets, network scanner, speed test, Dante readiness, and Wi-Fi diagnostics. Built for AV and pro audio networks.">
+    <meta name="description" content="Check and change your IP address from the macOS menu bar. IP presets, network scanner, speed test, Dante monitoring, and Wi-Fi diagnostics. Built for AV and pro audio networks.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="apple-touch-icon" href="/images/favicon-180.png">
     <meta property="og:title" content="Quicker IP - Network Toolkit for macOS">
-    <meta property="og:description" content="Check and change your IP address from the macOS menu bar. IP presets, network scanner, speed test, and Dante readiness for AV networks.">
+    <meta property="og:description" content="Check and change your IP address from the macOS menu bar. IP presets, network scanner, speed test, and Dante monitoring for AV networks.">
     <meta property="og:image" content="https://bskapps.com/images/quickip-icon.png">
     <meta property="og:url" content="https://bskapps.com/quickerip">
     <meta property="og:type" content="website">
@@ -24,7 +24,7 @@
         "name": "Quicker IP",
         "operatingSystem": "macOS",
         "applicationCategory": "UtilitiesApplication",
-        "description": "Check your IP address, switch network configurations, scan devices, test speed, and verify Dante readiness from the macOS menu bar. Built for AV professionals and pro audio networks.",
+        "description": "Check your IP address, switch network configurations, scan devices, test speed, and monitor Dante from the macOS menu bar. Built for AV professionals and pro audio networks.",
         "offers": {
             "@type": "Offer",
             "price": "19.99",
@@ -97,18 +97,10 @@
                 </thead>
                 <tbody>
                     <tr><td>Menu bar IP display</td><td class="check">Yes</td><td class="check">Yes</td></tr>
-                    <tr><td>All network adapters</td><td class="check">Yes</td><td class="check">Yes</td></tr>
-                    <tr><td>Status dots</td><td class="check">Yes</td><td class="check">Yes</td></tr>
                     <tr><td>Click to copy IP / MAC</td><td class="check">Yes</td><td class="check">Yes</td></tr>
-                    <tr><td>IP change notifications</td><td class="check">Yes</td><td class="check">Yes</td></tr>
-                    <tr><td>Run at Login</td><td class="check">Yes</td><td class="check">Yes</td></tr>
-                    <tr><td>System Info Panel</td><td class="check">Yes</td><td class="no">-</td></tr>
-                    <tr><td>SSID + Wi-Fi details</td><td class="check">Yes</td><td class="no">-</td></tr>
-                    <tr><td>Live speed display</td><td class="check">Yes</td><td class="no">-</td></tr>
                     <tr><td>IP configuration (DHCP / Static / Presets)</td><td class="check">Yes</td><td class="no">-</td></tr>
+                    <tr><td>Network scanner + Join Subnet</td><td class="check">Yes</td><td class="no">-</td></tr>
                     <tr><td>Speed test</td><td class="check">Yes</td><td class="no">-</td></tr>
-                    <tr><td>Network scanner</td><td class="check">Yes</td><td class="no">-</td></tr>
-                    <tr><td>Dante and pro audio network readiness</td><td class="check">Yes</td><td class="no">-</td></tr>
                     <tr><td>Network Locations management</td><td class="check">Yes</td><td class="no">-</td></tr>
                 </tbody>
             </table>
@@ -120,68 +112,10 @@
                 {% for feature in site.data.content.apps.quickerip.features %}<li>{{ feature }}</li>
                 {% endfor %}
             </ul>
-        </div>
-
-        <div class="section">
-            <h2>Status Dots</h2>
-            <div class="status-dots">
-                <span class="dot-item"><span class="dot cyan"></span> Default route</span>
-                <span class="dot-item"><span class="dot green"></span> Connected</span>
-                <span class="dot-item"><span class="dot yellow"></span> Self-assigned</span>
-                <span class="dot-item"><span class="dot orange"></span> No IP</span>
-                <span class="dot-item"><span class="dot grey"></span> Inactive</span>
-                <span class="dot-item"><span class="dot red"></span> IPv4 Off</span>
-                <span class="dot-item"><span style="color: #ff3b30;">&#9888;</span> Subnet overlap</span>
-            </div>
-        </div>
-
-        <div class="section">
-            <h3>IP Configuration</h3>
-            <ul class="features">
-                <li>Switch between DHCP, DHCP Reserved, Static, and IPv4 Off</li>
-                <li>IP conflict and subnet overlap detection - checks both local adapters and network with visual warnings and notifications</li>
-                <li>DHCP Reserved mode locks your IP while keeping auto subnet and gateway</li>
-                <li>One-time password authentication for IP changes - works silently after that, even across restarts. Touch ID prompt for saving Locations.</li>
-            </ul>
-
-            <h3>Presets</h3>
-            <ul class="features">
-                <li>Save full IP configs (mode, IP, subnet, gateway) and re-apply with one click</li>
-                <li>Global presets - any preset works on any adapter</li>
-                <li>Visual indicators show which presets are active</li>
-            </ul>
-
-            <h3>Speed Test</h3>
-            <ul class="features">
-                <li>Built-in speed test using macOS networkQuality</li>
-                <li>Download, upload, ping, and responsiveness (RPM)</li>
-                <li>Live elapsed time in the menu while running</li>
-            </ul>
-
-            <h3>Network Scanner</h3>
-            <ul class="features">
-                <li>Full /24 subnet scan - see every device on your network</li>
-                <li>Custom range scan for narrower or wider sweeps</li>
-                <li>Single host ping with min/avg/max/loss stats</li>
-                <li>Shows IP, MAC, vendor, hostname for each device</li>
-                <li>Export results to CSV</li>
-            </ul>
-
-            <h3>Dante and Pro Audio Network Readiness</h3>
-            <ul class="features">
-                <li>MTU check - flags adapters below the 1500 byte minimum required for reliable Dante audio networking</li>
-                <li>Link speed detection - confirms gigabit or better for Dante and high channel count networks</li>
-                <li>Full/half duplex detection - colour-coded to flag half-duplex connections</li>
-                <li>Subnet overlap warnings - flags conflicting adapter configurations in red</li>
-            </ul>
-
-            <h3>Wi-Fi Details</h3>
-            <ul class="features">
-                <li>SSID display in menu bar and adapter section</li>
-                <li>Band, channel, signal strength, noise, Tx rate</li>
-                <li>PHY mode, security type, BSSID</li>
-                <li>Colour-coded signal quality indicators</li>
-            </ul>
+            <a class="more-link" href="/articles/quicker-ip-guide/">
+                <strong>Full Quicker IP guide</strong>
+                <span>What every feature does and how to use it - IP modes, DNS, presets, locations, scanning, speed test and Dante checks.</span>
+            </a>
         </div>
 
         <footer>

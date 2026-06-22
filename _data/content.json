@@ -18,11 +18,11 @@
         "Powerful LAN scanner - see every device, one-click Join to hop onto another subnet",
         "Built-in speed test",
         "Advanced connection diagnostics - bufferbloat (loaded latency) and a live packet-loss monitor",
-        "Dante readiness - MTU, link speed, duplex and subnet-overlap checks",
+        "Dante monitoring - MTU, link speed, duplex and subnet-overlap checks",
         "Full Wi-Fi details and live per-adapter speed",
         "Click to copy any IP, subnet, gateway or MAC"
       ],
-      "description": "Everything you need to know about your network, one click away. Switch IP configs, run a speed test, scan the LAN, and check Dante readiness - without opening a terminal. Built for AV techs and IT professionals."
+      "description": "Everything you need to know about your network, one click away. Switch IP configs, run a speed test, scan the LAN, and check Dante packet loss - without opening a terminal. Built for AV techs and IT professionals."
     },
     "labassistant": {
       "name": "Lab Assistant",
@@ -32,7 +32,7 @@
       "macos": "macOS 14.0+",
       "version": "v2.3",
       "released": "30 May 2026",
-      "description": "Select your QLab cues, enable the modules you need, and hit Run All. Levels are auto-set to your LUFS target, mono routing and crosspoint outputs are configured, silence is trimmed, and cues are numbered and colour-coded, in seconds. And when a cue needs more than a fader move, Mint converts, cleans, and edits the audio without leaving Lab Assistant. Built for QLab 5, licensed and free."
+      "description": "Select your QLab cues and hit Run All. Levels are auto-set to your LUFS target, mono routing and crosspoint outputs are configured, silence is trimmed, and cues are numbered and colour-coded, in seconds. Built for QLab 5, licensed and free."
     },
     "targettrace": {
       "name": "Target Trace",
@@ -56,7 +56,7 @@
         "Export as REW house curve",
         "Keyboard shortcuts - D for draw, V for Split View, T / S to switch curve type"
       ],
-      "description": "Build target curves from presets, draw them freehand, or import and reshape your own measurements. Target Trace gives you a visual editor for Smaart .crv files with drag-and-drop control points, tolerance bands, and one-click export back to Smaart or REW."
+      "description": "Build target curves from presets, draw them freehand, or import and reshape your own measurements. Target Trace gives you a visual editor for Smaart .crv files with full control. Use target overlays, tolerance bands, weighting. With one-click export back to Smaart or REW."
     },
     "fetchpuppy": {
       "name": "Fetch Puppy",
@@ -75,7 +75,7 @@
         "Audio conversion to multiple formats with full metadata and artwork",
         "Multi-source search with smart quality scoring"
       ],
-      "description": "Search YouTube and save without the ads. Drop in a Spotify or Apple Music playlist and Fetch Puppy finds every track - or every music video - automatically. Grabs video from TikTok, Instagram, X, Facebook, Reddit, and more, and converts audio to any format with full metadata and artwork."
+      "description": "Search YouTube and save without the ads. Drop in a Spotify or Apple Music playlist and Fetch Puppy finds every track or music video automatically. Grabs video from TikTok, Instagram, X, Facebook, Reddit, and more, and converts to multiple formats."
     },
     "gogames": {
       "name": "Go Games",
