@@ -51,7 +51,7 @@
     ] },
     { "id": "where-files-go", "title": "Where files go", "blocks": [
       { "type": "paragraph", "text": "Downloads land in **~/Downloads/Fetch Puppy Downloads/** by default; change the base folder in Settings. Singles collect into a folder per source (for example \"Spotify Tracks\"); albums and playlists get their own named folder." },
-      { "type": "paragraph", "text": "Two Settings options apply to playlists and albums: **Number tracks** prepends \"01 - \", \"02 - \" to filenames, and **Export track list** saves a CSV of the track list alongside the files." }
+      { "type": "paragraph", "text": "Two Settings options apply to playlists and albums: **Number tracks** prepends a two-digit number (01, 02, and so on) to filenames, and **Export track list** saves a CSV of the track list alongside the files." }
     ] },
     { "id": "the-download-engine", "title": "The download engine", "blocks": [
       { "type": "paragraph", "text": "Fetch Puppy uses yt-dlp and ffmpeg under the hood, both bundled in the app, so nothing installs on first launch. Settings shows the yt-dlp version with a Check for Updates button that updates only when a newer version is available. If a newer yt-dlp is out, the app offers to update it on launch." }
