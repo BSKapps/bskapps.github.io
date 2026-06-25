@@ -35,7 +35,7 @@
             </ul>
 
             <h2>Reading an adapter</h2>
-            <p>Each adapter is a header you can expand by clicking it. Active adapters open on first launch; the app remembers your expand and collapse choices after that. Expand an adapter and click More Info to see the full detail:</p>
+            <p>Each adapter is a header you can expand by clicking it. Active adapters open on first launch; the app remembers your expand and collapse choices after that. Hold Option and click any adapter to collapse or expand them all at once. Expand an adapter and click More Info to see the full detail:</p>
             <ul>
                 <li>IP, subnet and gateway (click any to copy when Click to Copy is on)</li>
                 <li>DNS servers in use - servers marked "(auto)" in grey came from DHCP, others were set by hand</li>
@@ -91,14 +91,18 @@
             <h2>Scanning the network</h2>
             <p>Quicker IP can list every device that responds on the network.</p>
             <ul>
-                <li><strong>LAN Scan</strong> - expand an adapter and click LAN Scan. It sweeps the local network and reads the ARP table, and adds hostnames and service names over mDNS at the same time. Networks up to 1024 addresses are swept in full; on larger networks it sweeps your local /24 and uses ARP and mDNS for the rest. A live count shows progress.</li>
+                <li><strong>LAN Scan</strong> - expand an adapter and click LAN Scan. It sweeps the local network and reads the ARP table, and adds device names and protocols over mDNS at the same time. Networks up to 1024 addresses are swept in full; on larger networks it sweeps your local /24 and uses ARP and mDNS for the rest. The scan is scoped to the adapter you run it from, so it lists what is actually on that wire, including devices on a different subnet or on link-local (self-assigned 169.254.x.x) addresses sharing the same switch. A live count shows progress.</li>
                 <li><strong>Range Scan</strong> - enter a start and end address to scan a custom range, up to 4096 addresses.</li>
-                <li><strong>Ping</strong> - enter an address or hostname for a quick latency and packet loss check. The ping goes out through the adapter you clicked, not just the default route.</li>
+                <li><strong>Ping</strong> - enter an address or hostname for a quick latency and packet loss check. The ping goes out through the adapter you clicked, not just the default route, and when you ping an IP it shows the device's name beside it if one can be resolved.</li>
             </ul>
-            <p>Results open in a panel with columns for IP, MAC, vendor, hostname, service and how the device was found. Click an IP to copy it, or right-click a row for Copy MAC. Export to CSV saves the full list. Devices found on a different subnet show with an orange address.</p>
+            <p>Results open in a panel with columns for IP, MAC, vendor, name and type. The name is the device's friendly Bonjour name, with its model where it advertises one; devices that do not advertise over Bonjour, such as phones, tablets and routers, are named from their network (DHCP) hostname instead. Hover a row to see the full technical hostname. The vendor is read from the MAC address and is blank for devices using a private, randomised MAC: many phones, tablets and watches rotate their address for privacy, so it matches no manufacturer (the name usually identifies them anyway). The type is the network protocol it speaks, such as Dante, NDI, AirPlay or printer, rather than a raw service string. Click an IP to copy it, or right-click a row for Copy MAC. Export to CSV saves the full list, including the raw hostname and service. Devices found on a different subnet show with an orange address.</p>
 
             <h3>Join Subnet</h3>
             <p>When a scan finds a device on a different subnet (shown in orange), right-click it and choose Join Subnet. Quicker IP finds a free address in that device's subnet, applies it to your adapter, and saves your previous settings. Use Restore in the Presets menu to switch back. You can have the app confirm first in Settings, Alerts.</p>
+
+            <h3>Pro audio networks and Dante</h3>
+            <p>Dante and similar gear announce themselves over standard mDNS, so they show up in a scan run on the adapter they are wired to. Dante devices default to DHCP and fall back to a self-assigned link-local address (169.254.x.x) when no DHCP server is present, so a typical rig is a mix: most devices link-local, the odd one left on a static address, or the reverse. Quicker IP lists them all and flags the odd one out in orange, so you can spot a misconfigured unit and use Join Subnet to hop onto it and sort it out. Unlike some control software, which hides a device stranded on the wrong subnet, the scan still shows it.</p>
+            <p><strong>A note on IGMP snooping.</strong> If Dante devices appear and then vanish, or never show up at all, the usual cause is IGMP snooping enabled on the switch without an IGMP querier. Snooping then prunes the multicast that discovery (mDNS) and clocking rely on, and devices drop off. On small or single-switch networks it is often best left off; it helps only on larger networks carrying heavy multicast audio, and then only with a querier configured.</p>
 
             <h3>Packet Loss</h3>
             <p>Packet Loss sits next to Ping in the scan area and is a monitor that runs until you stop it, for keeping an eye on one path over time. Pick a target (it defaults to the gateway) and Quicker IP pings it continuously, bound to the adapter you opened it from, so the test stays on that adapter rather than the default route. A live window shows:</p>
