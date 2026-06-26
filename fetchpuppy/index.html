@@ -147,6 +147,7 @@ function updateCounter() {
     document.getElementById('gallery-counter').textContent = idx + ' of ' + figs.length;
 }
 document.getElementById('gallery').addEventListener('scroll', updateCounter);
+window.addEventListener('load', updateCounter);
 const g = document.getElementById('gallery');
 let isDown = false, startX, scrollLeft;
 g.addEventListener('mousedown', e => { isDown = true; g.style.cursor = 'grabbing'; startX = e.pageX - g.offsetLeft; scrollLeft = g.scrollLeft; });
