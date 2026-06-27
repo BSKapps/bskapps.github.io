@@ -47,6 +47,7 @@
                 <li>A subnet overlap warning if two adapters share a range</li>
             </ul>
             <p>Link speed, duplex, MTU and the overlap warning are the Dante monitoring checks: a full-duplex gigabit link at MTU 1500 with no overlapping subnets.</p>
+            <p>Quicker IP also checks the gateway. If an adapter's gateway is not inside its own subnet, the gateway line turns red and More Info reads "Gateway: Outside subnet, unreachable", because the adapter cannot reach a gateway off its subnet and traffic to other networks will not get out. An adapter that comes up this way raises a one-time Gateway Unreachable alert, and applying a static IP with an off-subnet gateway asks you to confirm first.</p>
 
             <h2>Setting an IP address</h2>
             <p>The first time you change a network setting, macOS asks for your password once. After that, changes apply silently. Hover an adapter's name to open its settings flyout, where you reach these:</p>
@@ -134,7 +135,7 @@
                 <li><strong>Info Panel</strong> - the master Show Info Panel toggle and a switch for each reading.</li>
                 <li><strong>Alerts</strong> - IP change notifications, auto pop-ups for speed test and scan results, and the confirm prompts for IPv4 Off, Delete and Join Subnet.</li>
             </ul>
-            <p>Edit Visible Services lets you hide adapters you never touch. If a change would hide every service, the app beeps and reverts it. It also holds Show Inactive Services. Left on (the default), a disconnected adapter stays in the menu greyed-out so you can still pre-set it - apply a preset or a static IP ready for when it reconnects. Turned off, an unplugged adapter vanishes until it is plugged back in, so switch it on if you need to configure one that is not currently connected.</p>
+            <p>Edit Visible Services lets you hide adapters you never touch. If a change would hide every service, the app beeps and reverts it. It also holds Show Inactive Services. Left on (the default), a disconnected adapter stays in the menu greyed-out so you can still pre-set it - apply a preset or a static IP ready for when it reconnects. Turned off, an unplugged adapter vanishes until it is plugged back in, so switch it on if you need to configure one that is not currently connected. Whenever inactive adapters are hidden, a Show N Hidden Adapters row appears at the foot of the menu as a one-click shortcut to bring them back.</p>
 
             <h2>Licence and activation</h2>
             <p>Quicker IP Pro is a one-time purchase with two activations per licence key. On first launch, paste your key to activate. To move the licence to another Mac, open Manage License in Settings and deactivate, which frees an activation. The app revalidates occasionally; a network error never removes your licence, only an explicit revocation (cancelled, expired, disabled or inactive) does.</p>
