@@ -29,9 +29,9 @@
                 <li>Blue - this adapter holds the default route</li>
                 <li>Green - connected with an address</li>
                 <li>Yellow - a self-assigned address (no DHCP reply)</li>
-                <li>Red - up but no IP (connected, no network yet)</li>
+                <li>Orange - IPv4 off but still live over IPv6 (running on IPv6)</li>
+                <li>Red - no working IP (connected but no address, or IPv4 off with no IPv6)</li>
                 <li>Grey - inactive</li>
-                <li>Orange - IPv4 is switched off on the adapter (the link and IPv6 stay up)</li>
             </ul>
 
             <h2>Reading an adapter</h2>
@@ -54,7 +54,7 @@
                 <li><strong>DHCP</strong> - automatic address from the network.</li>
                 <li><strong>DHCP Reserved</strong> - keeps your current address but takes subnet and gateway automatically. Click it, enter the address to hold, then Apply.</li>
                 <li><strong>Static IP</strong> - enter IP, subnet mask and gateway, then Apply. The subnet defaults to 255.255.255.0 and the gateway is optional.</li>
-                <li><strong>IPv4: Off</strong> - switches IPv4 off on this adapter while leaving the link and IPv6 up, so it stays connected but takes no part in IPv4. Use it to keep an adapter on the network (internet over IPv6, AirPlay, Wi-Fi location) while removing it from IPv4 routing - handy in multi-adapter and AV/Dante rigs where you want one interface to own IPv4 - or to stop self-assigned 169.254 addresses and IPv4 subnet or gateway clashes. It does not stop traffic; IPv6 keeps working. You can ask the app to confirm first in Settings, Alerts.</li>
+                <li><strong>IPv4: Off</strong> - switches IPv4 off on this adapter while leaving the link and IPv6 up, so it stays connected but takes no part in IPv4. Use it to keep an adapter on the network (internet over IPv6, AirPlay, Wi-Fi location) while removing it from IPv4 routing - handy in multi-adapter and AV/Dante rigs where you want one interface to own IPv4 - or to stop self-assigned 169.254 addresses and IPv4 subnet or gateway clashes. It does not stop traffic; IPv6 keeps working. The adapter's status dot turns orange to show it is still live over IPv6, or red if there is no IPv6 either, so you can tell at a glance whether anything is still getting through. You can ask the app to confirm first in Settings, Alerts.</li>
                 <li><strong>Renew DHCP</strong> - forces a fresh lease. You get a notice telling you whether the address changed.</li>
                 <li><strong>Restore</strong> - after turning IPv4 off or applying a preset, returns the adapter to its previous settings.</li>
             </ul>
