@@ -27,7 +27,7 @@
             <p>Open your workspace in QLab, then open Lab Assistant. The sidebar shows a status dot, green for connected, red for no QLab, with the workspace name in the toolbar. Click <strong>Open QLab</strong> if it is not running. Lab Assistant follows the cues you select in QLab and keeps in step as you change the selection.</p>
 
             <h2>Selecting cues</h2>
-            <p>Select the cues you want in QLab, or click <strong>Select All</strong> to grab every audio and video cue in the current cue list. The filter dropdown narrows this to All, Audio, Video, or Audio and Video. The sidebar shows how many cues (and groups) are selected.</p>
+            <p>Select the cues you want in QLab, or click <strong>Select All</strong> to grab every audio and video cue in the current cue list. Select All also follows a Select All you do in QLab itself: the button reads <strong>All Selected</strong> and clears again when you deselect a cue. The filter dropdown narrows this to All, Audio, Video, or Audio+Video. The sidebar shows how many cues (and groups) are selected.</p>
 
             <h2>Running modules</h2>
             <p>Each module has an on/off toggle and its own <strong>Run</strong> button, so you can run one job on its own. <strong>Run All</strong> runs every enabled module in sequence across the selected cues. If you don't want a module's job, just leave its sidebar switch off; <strong>Run All</strong> runs only the switched-on modules and skips the rest. A progress bar and elapsed time show during a run, and you can cancel at any point. You can have Lab Assistant confirm before a run in Settings. Destructive modes (the reset and clear options below) reset to safe settings when the app restarts.</p>
@@ -45,7 +45,7 @@
 
             <h2>Routing</h2>
             <p>Two modes, chosen with the picker at the top of the module.</p>
-            <p><strong>Mono / Stereo fold</strong> sends cues to a chosen output pair (1/2, 3/4, 5/6, 7/8): "Mono to Dual Mono" feeds a mono cue to both outputs, "All Cues to Dual Mono" sums stereo to mono and sends it to both, and "Reset Routing" restores channel 1 to output 1 and channel 2 to output 2.</p>
+            <p><strong>Mono / Stereo fold</strong> sends cues to a chosen output pair (1/2 up to 63/64): "Mono to Dual Mono" feeds a mono cue to both outputs, "All Cues to Dual Mono" sums stereo to mono and sends it to both, and "Reset Routing" restores channel 1 to output 1 and channel 2 to output 2.</p>
             <p><strong>Multi-output routing</strong> sends cues to any output or pair. Sending to a pair keeps stereo cues left/right and plays mono cues out both outputs; sending to a single output sums everything to that one output (stereo summed to mono at -6 dB). It can also sort automatically by name: turn on <strong>Auto-Sort by Name</strong> and Lab Assistant classifies cues into Music, VOG and FX categories by keywords in the cue name or notes, then routes each to its own output pair. You can edit the keywords and the output pairs, and rename the categories. After a run, hover a result row to re-route and re-colour a cue directly from Results.</p>
 
             <h2>Top and Tail</h2>
@@ -90,8 +90,11 @@
             <h2>Results</h2>
             <p>The Results view lists every processed cue with a pass, warning or error icon, a per-module breakdown, and a summary with counts and total run time. A cue with a missing output device still gets its levels and trim, with a warning; only a cue whose media file is missing is skipped. Filter chips show All, Errors, Warnings, and each routing destination. Turn on Save CSV Report in Settings to write a CSV of each run to a folder you choose.</p>
 
+            <h2>Presets</h2>
+            <p>Save your whole setup as a named preset and switch between setups from the <strong>Preset</strong> menu in the toolbar. A preset captures the module layout, levels, routing, categories, colours, numbering, notes and Mint settings. A built-in <strong>Defaults</strong> preset resets everything; <strong>Manage Presets</strong> renames or deletes one. Device settings like Max Outputs and the Mint preview device stay put when you switch.</p>
+
             <h2>Settings and licence</h2>
-            <p>Open Settings from the gear in the top-right toolbar. It holds updates (with auto-check), your licence (activate or deactivate), which modules are visible, the welcome screen, the confirm-before-processing and completion-summary toggles, and an option to minimise to the menu bar. An Email Support button copies a diagnostics report and opens an email to support. Lab Assistant is a one-time purchase with two activations.</p>
+            <p>Open Settings from the gear in the top-right toolbar. It holds updates (with auto-check), your licence (activate or deactivate), which modules are visible, the maximum number of outputs routing offers (<strong>Max Outputs</strong>, default 8, which keeps the routing menus matched to your device), the welcome screen, the confirm-before-processing and completion-summary toggles, and an option to minimise to the menu bar. An Email Support button copies a diagnostics report and opens an email to support. Lab Assistant is a one-time purchase with two activations.</p>
 
             <div class="article-cta">
                 <h3>Lab Assistant</h3>
