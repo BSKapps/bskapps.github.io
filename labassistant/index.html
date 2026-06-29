@@ -6,11 +6,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab Assistant - QLab Workspace Automation for macOS</title>
-    <meta name="description" content="QLab companion app for macOS. Auto set QLab levels with LUFS targets, mono routing, silence trimming, audio file conversion, BPM detection, and cue numbering. Automates show prep for corporate events, awards nights, and live playback.">
+    <meta name="description" content="QLab companion app for macOS. Auto set QLab levels with LUFS targets, mono routing, silence trimming, audio and video file conversion, BPM detection, and cue numbering. Automates show prep for corporate events, awards nights, and live playback.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="apple-touch-icon" href="/images/favicon-180.png">
     <meta property="og:title" content="Lab Assistant - QLab Workspace Automation for macOS">
-    <meta property="og:description" content="QLab companion app for macOS. Auto level setting, mono routing, audio conversion, and cue automation for shows and events.">
+    <meta property="og:description" content="QLab companion app for macOS. Auto level setting, mono routing, audio and video conversion, and cue automation for shows and events.">
     <meta property="og:image" content="https://bskapps.com/images/labassistant-icon.png">
     <meta property="og:url" content="https://bskapps.com/labassistant">
     <meta property="og:type" content="website">
@@ -24,7 +24,7 @@
         "name": "Lab Assistant",
         "operatingSystem": "macOS",
         "applicationCategory": "MultimediaApplication",
-        "description": "QLab workspace automation for macOS. Auto level setting with LUFS targets, mono routing and crosspoint configuration, audio file conversion, silence trimming, BPM and key detection, cue numbering, and colour coding. Built for corporate events, awards nights, and live audio playback.",
+        "description": "QLab workspace automation for macOS. Auto level setting with LUFS targets, mono routing and crosspoint configuration, audio and video file conversion, silence trimming, BPM and key detection, cue numbering, and colour coding. Built for corporate events, awards nights, and live audio playback.",
         "offers": {
             "@type": "Offer",
             "price": "14.99",
@@ -67,8 +67,8 @@
         <div class="gallery-wrap">
             <button class="gallery-arrow" onclick="scrollGallery(-1)">&#8249;</button>
             <div class="screenshot-scroll" id="gallery">
-                <figure><img src="images/LA mint.png" alt="Mint audio processing"><figcaption>Mint - Audio Processing</figcaption></figure>
-                <figure><img src="images/LA mint eq.png" alt="Mint 7-band EQ"><figcaption>Mint -7-Band EQ</figcaption></figure>
+                <figure><img src="images/LA mint.png" alt="Mint processing"><figcaption>Mint - Processing</figcaption></figure>
+                <figure><img src="images/LA mint eq.png" alt="Mint 7-band EQ"><figcaption>Mint - 7-Band EQ</figcaption></figure>
                 <figure><img src="images/LA Levels.png" alt="Levels module"><figcaption>Levels</figcaption></figure>
                 <figure><img src="images/LA Top nand Tail.png" alt="Top and Tail module"><figcaption>Top & Tail</figcaption></figure>
                 <figure><img src="images/LA Cue Numbering.png" alt="Cue Numbering module"><figcaption>Cue Numbering</figcaption></figure>
@@ -80,19 +80,21 @@
         <div id="gallery-counter" class="gallery-counter">1 of 7</div>
 
         <div class="section">
-            <h2>Mint Audio Converter &amp; Editor</h2>
-            <p class="lead">Built into Lab Assistant. Select cues in your QLab workspace and Mint converts, cleans, and edits the underlying audio. The results drop straight back into QLab.</p>
+            <h2>Mint Audio &amp; Video Converter &amp; Editor</h2>
+            <p class="lead">Built into Lab Assistant. Select cues in your QLab workspace and Mint converts, cleans, and edits the audio and video behind them. The results drop straight back into QLab.</p>
             <ul class="features">
-                <li>Convert - read WAV, AIFF, MP3, AAC, FLAC, OGG, and M4A; export WAV, AIFF, MP3, AAC, or FLAC at sample rates up to 96 kHz and 16, 24, or 32-bit float</li>
-                <li>Video cues - convert the container, keep the video and process its audio track, or pull the audio out entirely; reads MP4, MOV, MKV, AVI, and WebM</li>
+                <li>Convert audio - read WAV, AIFF, MP3, AAC, FLAC, OGG, and M4A; export WAV, AIFF, MP3, AAC, or FLAC at sample rates up to 96 kHz and 16, 24, or 32-bit float</li>
+                <li>Convert video - export MP4 or MOV with H.264 or HEVC and set resolution and frame rate, or keep the picture untouched and just process its audio; reads MP4, MOV, MKV, AVI, and WebM</li>
+                <li>Extract audio - pull the soundtrack out of a video cue into a clean audio file</li>
                 <li>Edit and clean - 7-band EQ, LUFS normalisation, noise removal, fade in/out, trim, and gain, baked into the file (QLab crosspoints remain the non-destructive option)</li>
-                <li>Preview - audition changes through any output device, with adjustable preview length and a dedicated fade preview before you commit</li>
+                <li>Preview - audition changes through any output device with adjustable length and a fade preview, and see the start and end frames when you trim a video, before you commit</li>
                 <li>Batch - process your whole cue selection in one pass</li>
             </ul>
         </div>
 
         <div class="section">
             <h2>Processing Modules</h2>
+            <p class="lead">Switch on the jobs you want and hit Run All to process the whole selection in one pass, now around four times faster on large shows. Each module also has its own Run button.</p>
             <ul class="features">
                 <li>Levels - measure integrated LUFS and set QLab fader levels to normalise audio. Four broadcast targets (-24, -23, -18, -14 LUFS), optional -10 dB offset, and reset mode</li>
                 <li>Mono Routing - set mono cues to dual mono, sum stereo to dual mono, or reset routing to defaults</li>
