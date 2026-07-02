@@ -47,14 +47,14 @@
       { "type": "paragraph", "text": "**Multi-output routing** sends cues to any output or pair. Sending to a pair keeps stereo cues left/right and plays mono cues out both outputs; sending to a single output sums everything to that one output (stereo summed to mono at -6 dB). It can also sort automatically by name: turn on **Auto-Sort by Name** and Lab Assistant classifies cues into Music, VOG and FX categories by keywords in the cue name or notes, then routes each to its own output pair. You can edit the keywords and the output pairs, and rename the categories. After a run, hover a result row to re-route and re-colour a cue directly from Results." }
     ] },
     { "id": "top-and-tail", "title": "Top and Tail", "blocks": [
-      { "type": "paragraph", "text": "Trims silence from the start and end of each cue using QLab's start and end times, so playback starts and ends without dead air. Set the **start pad** (default 50 ms) and **end pad** (default 400 ms) to leave a little silence either side. It respects start and end points you have set by hand. The **Reset Start and End Points** mode clears the trim back to the full file." }
+      { "type": "paragraph", "text": "Trims silence from the start and end of each audio cue using QLab's start and end times (audio cues only - video cues are skipped), so playback starts and ends without dead air. Set the **start pad** (default 50 ms) and **end pad** (default 400 ms) to leave a little silence either side. It respects start and end points you have set by hand. The **Reset Start and End Points** mode clears the trim back to the full file." }
     ] },
     { "id": "numbering", "title": "Numbering", "blocks": [
       { "type": "paragraph", "text": "Four modes:" },
       { "type": "bullets", "items": [
         "**Add Missing Cue Numbers** - numbers only the cues that have none, leaving existing numbers alone.",
         "**Renumber Sequentially** - clears and renumbers 1, 2, 3, with an optional prefix (for example Q1, Q2), a custom start and a custom increment.",
-        "**Renumber with Group Sub-Numbers** - groups get 1, 2, 3, and their children get 1.01, 1.02, and so on.",
+        "**Renumber with Group Sub-Numbers** - groups get 1, 2, 3, and their children get 1.01, 1.02, and so on, with the same optional prefix and start number.",
         "**Clear All Cue Numbers** - removes numbers without reassigning."
       ] }
     ] },
@@ -68,7 +68,7 @@
       { "type": "paragraph", "text": "**Apply Colours** colour-codes cues by type (stereo, mono, looped, for audio and video), by category (VOG, FX), and by status (warning, error, group), using a colour map you can edit and reset. You can also colour control cues (Fade, MIDI, Script and more); left as None they stay uncoloured. Drag a swatch onto a type to reassign it. **Clear All Colours** removes colours, groups included." }
     ] },
     { "id": "musical-intelligence", "title": "Musical Intelligence", "blocks": [
-      { "type": "paragraph", "text": "Detects each cue's tempo and key, and can reorder cues for smoother transitions. Two independent choices. Under **Detect**, tick **BPM**, **Key**, or both; the values show in Results and can be written to cue notes. Under **Reorder cues**, choose **Don't reorder** (just detect), **By BPM** (sort by tempo), **By Key** (order by Camelot-wheel compatibility), or **BPM + Key** (group by compatible key, then sort by tempo within each group). Picking a reorder automatically ticks the detection it needs. It does not reorder a selection that spans different groups." }
+      { "type": "paragraph", "text": "Detects each cue's tempo and key, and can reorder cues for smoother transitions. Two independent choices. Under **Detect**, tick **BPM**, **Key**, or both; the values show in Results and can be written to cue notes. Under **Reorder cues**, choose **Don't reorder** (just detect), **By BPM** (sort by tempo), **By Key** (order by Camelot-wheel compatibility), or **BPM + Key** (group by compatible key, then sort by tempo within each group). Picking a reorder automatically ticks the detection it needs and unticks the one it doesn't - re-tick it if you also want that value in the notes. It does not reorder a selection that spans different groups." }
     ] },
     { "id": "notes", "title": "Notes", "blocks": [
       { "type": "paragraph", "text": "Write module results into each cue's notes during a run (Levels, Routing, Top and Tail, Musical), with Write All and Write None controls. You can clear notes from a single module, clear just Lab Assistant's own notes while keeping yours, or clear all notes." }
