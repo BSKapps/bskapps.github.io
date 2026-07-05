@@ -6,7 +6,7 @@
     "h1": "Lab Assistant user guide",
     "dateLine": "Updated for version 2.3",
     "description": "A how-to guide for Lab Assistant: connecting to QLab, the processing modules (Levels, Routing, Top and Tail, Numbering, Fade and Stop, Colour, Notes), Mint, and Run All.",
-    "canonical": "https://bskapps.com/articles/lab-assistant-guide",
+    "canonical": "https://bskapps.com/articles/lab-assistant-guide/",
     "ogTitle": "Lab Assistant user guide",
     "ogDescription": "What each module does and how to use it: levels, routing, trimming, numbering, fades, colours, notes, Mint and Run All.",
     "ogImage": "https://bskapps.com/images/labassistant-icon.png"

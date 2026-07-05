@@ -6,7 +6,7 @@
     "h1": "Target Trace user guide",
     "dateLine": "Updated for version 1.2",
     "description": "A how-to guide for Target Trace: drawing and editing target curves, TF and Spectrum modes, smoothing and weighting, the Smaart library, presets, and exporting .crv and REW files.",
-    "canonical": "https://bskapps.com/articles/target-trace-guide",
+    "canonical": "https://bskapps.com/articles/target-trace-guide/",
     "ogTitle": "Target Trace user guide",
     "ogDescription": "What each tool does and how to use it: control points, the pencil, modes, properties, the Smaart library, presets and export.",
     "ogImage": "https://bskapps.com/images/targettrace-icon.png"
