@@ -1,8 +1,8 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=117';
-import { renderDesign } from './renderer.js?v=117';
-import { numberSet, variantsFor } from './series.js?v=117';
-import { releaseSelection } from './ui.js?v=117';
-import { newId } from './effects.js?v=117';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=118';
+import { renderDesign } from './renderer.js?v=118';
+import { numberSet, variantsFor } from './series.js?v=118';
+import { releaseSelection } from './ui.js?v=118';
+import { newId } from './effects.js?v=118';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -799,6 +799,10 @@ function pickerGroup(preset, isUser) {
       const next = (prompt('Rename preset', preset.name) || '').trim();
       if (!next) return;
       const list = loadUserPresets();
+      if (list.some((p, i) => i !== preset.userIndex && p.name.toLowerCase() === next.toLowerCase())) {
+        alert('You already have a preset called "' + next + '". Pick a different name.');
+        return;
+      }
       list[preset.userIndex].name = next;
       saveUserPresets(list);
       renderPresetList();
@@ -814,6 +818,7 @@ function pickerGroup(preset, isUser) {
     del.setAttribute('aria-label', 'Delete preset ' + preset.name);
     del.tabIndex = 0;
     const deletePreset = () => {
+      if (!confirm('Delete your preset "' + preset.name + '"? This cannot be undone.')) return;
       const list = loadUserPresets();
       list.splice(preset.userIndex, 1);
       saveUserPresets(list);

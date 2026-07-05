@@ -268,6 +268,8 @@ body {
 
 .seg button.active { background: var(--brand); color: #16181c; font-weight: 600; }
 
+.seg button.flash { background: var(--brand); color: #16181c; }
+
 .seg button:active { transform: scale(0.96); }
 
 .btn {
@@ -554,6 +556,31 @@ body {
 }
 
 .series-add:hover, .series-add.drop-target { border-color: var(--brand); color: var(--brand); }
+
+.undo-row { display: none; gap: 8px; }
+
+.series-move {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  background: var(--card-hover);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.85rem;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+}
+
+.series-move-left { left: -8px; }
+.series-move-right { right: -8px; }
+.series-move:disabled { opacity: 0.35; cursor: default; }
 
 .series-add-tile { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 4px; }
 .series-add-tile .series-add { margin: 0; align-self: center; }
@@ -936,4 +963,6 @@ body {
   .preset-actions { flex-wrap: wrap; }
   .preset-actions input[type="text"] { flex: 1 1 100%; }
   .app-header { flex-direction: column; gap: 4px; position: static; }
+  .undo-row { display: flex; }
+  .series-move { display: flex; }
 }

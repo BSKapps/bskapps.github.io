@@ -2,6 +2,12 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v118 - 2026-07-05
+- On states buttons (Tint / Highlight / Invert / Dot) now flash briefly when clicked instead of staying highlighted - they are one-shot actions, not a mode.
+- Deleting a user preset now asks for confirmation (it is permanent and not covered by undo).
+- Renaming a preset checks for an existing name, so a rename can no longer create a duplicate that Save could never update.
+- Phones: Undo / Redo buttons under the preview, and the selected button in a set gets < / > arrows to reorder by tap (drag still works on desktop; desktop layout and behaviour unchanged).
+
 ## v117 - 2026-07-05
 - Undo now sticks after a reload: undo/redo saves the session, and a restored design no longer rewrites a typed backslash-n into a real line break.
 - If the browser's storage is full, the app now warns once instead of silently losing the session (large background images are the usual cause).

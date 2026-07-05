@@ -1,12 +1,12 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=117';
-import { renderDesign } from './renderer.js?v=117';
-import { seriesVariants, numberSet } from './series.js?v=117';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=117';
-import { initIconPicker } from './icons.js?v=117';
-import { initPresets, normalizeDesign } from './presets.js?v=117';
-import { initExport } from './export.js?v=117';
-import { initEffects, updateEffectControls } from './effects.js?v=117';
-import { initColorPopover } from './colorpicker.js?v=117';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=118';
+import { renderDesign } from './renderer.js?v=118';
+import { seriesVariants, numberSet } from './series.js?v=118';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=118';
+import { initIconPicker } from './icons.js?v=118';
+import { initPresets, normalizeDesign } from './presets.js?v=118';
+import { initExport } from './export.js?v=118';
+import { initEffects, updateEffectControls } from './effects.js?v=118';
+import { initColorPopover } from './colorpicker.js?v=118';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -117,6 +117,24 @@ async function renderOnce() {
         removeListItem(idx);
       });
       item.appendChild(del);
+
+      if (isSel && sel.length === 1) {
+        const mkMove = (delta, glyph, label) => {
+          const b = document.createElement('button');
+          b.className = 'series-move ' + (delta < 0 ? 'series-move-left' : 'series-move-right');
+          b.textContent = glyph;
+          b.title = label;
+          b.setAttribute('aria-label', label);
+          b.disabled = idx + delta < 0 || idx + delta >= state.series.items.length;
+          b.addEventListener('click', (e) => {
+            e.stopPropagation();
+            reorderSet(idx, idx + delta);
+          });
+          return b;
+        };
+        item.appendChild(mkMove(-1, '<', 'Move this button earlier in the set'));
+        item.appendChild(mkMove(1, '>', 'Move this button later in the set'));
+      }
 
       item.addEventListener('dragstart', (e) => {
         gridDragIndex = idx;
@@ -365,6 +383,7 @@ function pushHistory() {
     redoStack.length = 0;
   }
   saveSession(s);
+  updateUndoButtons();
 }
 
 function applyHistory(s) {
@@ -378,6 +397,25 @@ function applyHistory(s) {
   emit();
   applyingUndo = false;
   saveSession(s);
+  updateUndoButtons();
+}
+
+function doUndo() {
+  if (undoStack.length < 2) return;
+  redoStack.push(undoStack.pop());
+  applyHistory(undoStack[undoStack.length - 1]);
+}
+
+function doRedo() {
+  if (!redoStack.length) return;
+  const s = redoStack.pop();
+  undoStack.push(s);
+  applyHistory(s);
+}
+
+function updateUndoButtons() {
+  document.getElementById('undoBtn').disabled = undoStack.length < 2;
+  document.getElementById('redoBtn').disabled = !redoStack.length;
 }
 
 document.addEventListener('keydown', (e) => {
@@ -388,14 +426,11 @@ document.addEventListener('keydown', (e) => {
   if (key === 'z' && !e.shiftKey) {
     if (undoStack.length < 2) return;
     e.preventDefault();
-    redoStack.push(undoStack.pop());
-    applyHistory(undoStack[undoStack.length - 1]);
+    doUndo();
   } else if ((key === 'z' && e.shiftKey) || (key === 'y' && e.ctrlKey && !e.metaKey)) {
     if (!redoStack.length) return;
     e.preventDefault();
-    const s = redoStack.pop();
-    undoStack.push(s);
-    applyHistory(s);
+    doRedo();
   } else if (key === 'a') {
     if (state.series.mode !== 'list' || !state.series.items.length) return;
     e.preventDefault();
@@ -447,6 +482,8 @@ function startFresh() {
 }
 document.getElementById('resetDesign').addEventListener('click', startFresh);
 document.getElementById('resetDesignStep').addEventListener('click', startFresh);
+document.getElementById('undoBtn').addEventListener('click', doUndo);
+document.getElementById('redoBtn').addEventListener('click', doRedo);
 
 restoreSession();
 

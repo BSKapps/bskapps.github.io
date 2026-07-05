@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://bskapps.com; connect-src 'self' https://api.iconify.design https://cloudflareinsights.com; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="bm-version" content="117">
+<meta name="bm-version" content="118">
 <title>BSK Button Maker - Free Companion, Stream Deck, REAPER and App Icon Designer</title>
 <meta name="description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars, plus app icons. Icon library, presets, button sets, PNG, Companion page and REAPER toolbar export.">
 <meta property="og:title" content="BSK Button Maker">
@@ -41,7 +41,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&family=Archivo+Black&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=117">
+<link rel="stylesheet" href="css/style.css?v=118">
 </head>
 <body>
 <header class="app-header">
@@ -231,6 +231,10 @@
         <div class="preview-guides hidden" id="previewGuides" aria-hidden="true"></div>
       </div>
       <label class="guide-toggle"><input type="checkbox" id="centreGuides"> Centre guides</label>
+      <div class="undo-row">
+        <button class="btn ghost small" id="undoBtn" disabled>Undo</button>
+        <button class="btn ghost small" id="redoBtn" disabled>Redo</button>
+      </div>
     </div>
     <div id="seriesPreview" class="series-preview"></div>
     <div class="edit-banner idle" id="editBanner">
@@ -416,7 +420,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair, Cockos or Apple. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=117"></script>
-<script type="module" src="js/app.js?v=117"></script>
+<script src="vendor/jszip.min.js?v=118"></script>
+<script type="module" src="js/app.js?v=118"></script>
 </body>
 </html>

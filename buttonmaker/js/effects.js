@@ -1,7 +1,7 @@
-import { state, emit, deepClone, dotLayer } from './state.js?v=117';
-import { seriesVariants } from './series.js?v=117';
-import { mixHex, isLightColor } from './color.js?v=117';
-import { releaseSelection, selectListItem } from './ui.js?v=117';
+import { state, emit, deepClone, dotLayer } from './state.js?v=118';
+import { seriesVariants } from './series.js?v=118';
+import { mixHex, isLightColor } from './color.js?v=118';
+import { releaseSelection, selectListItem } from './ui.js?v=118';
 
 export const EFFECT_DEFAULTS = {
   tint: { type: 'tint', color: '#1f9d3a', strength: 40, elements: { bg: true, icon: true, text: true } },
@@ -133,8 +133,8 @@ export function initEffects() {
   const seg = document.getElementById('effectType');
   seg.querySelectorAll('button').forEach((btn) => {
     btn.addEventListener('click', () => {
-      seg.querySelectorAll('button').forEach((b) => b.classList.remove('active'));
-      btn.classList.add('active');
+      btn.classList.add('flash');
+      setTimeout(() => btn.classList.remove('flash'), 350);
       makeOnState(EFFECT_DEFAULTS[btn.dataset.val]);
     });
   });
