@@ -2,6 +2,11 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v119 - 2026-07-05
+- All four Download buttons are now primary blue - Companion Page and REAPER Icons no longer look secondary or inactive next to PNG and Set as ZIP.
+- On states highlight is now truthful: the preset you applied stays lit, and the light clears the moment you edit that on state with the cards (or delete/undo it) - so it never shows stale history. Replaces the v118 brief flash.
+- Phones: reorder a set by touch - hold a button for a moment to pick it up, drag onto another and release. Replaces the v118 < / > arrows (gone; they cluttered the tiles). Tap-to-select and scrolling are unaffected; desktop drag unchanged.
+
 ## v118 - 2026-07-05
 - On states buttons (Tint / Highlight / Invert / Dot) now flash briefly when clicked instead of staying highlighted - they are one-shot actions, not a mode.
 - Deleting a user preset now asks for confirmation (it is permanent and not covered by undo).

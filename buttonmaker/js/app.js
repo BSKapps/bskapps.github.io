@@ -1,12 +1,12 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=118';
-import { renderDesign } from './renderer.js?v=118';
-import { seriesVariants, numberSet } from './series.js?v=118';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=118';
-import { initIconPicker } from './icons.js?v=118';
-import { initPresets, normalizeDesign } from './presets.js?v=118';
-import { initExport } from './export.js?v=118';
-import { initEffects, updateEffectControls } from './effects.js?v=118';
-import { initColorPopover } from './colorpicker.js?v=118';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=119';
+import { renderDesign } from './renderer.js?v=119';
+import { seriesVariants, numberSet } from './series.js?v=119';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=119';
+import { initIconPicker } from './icons.js?v=119';
+import { initPresets, normalizeDesign } from './presets.js?v=119';
+import { initExport } from './export.js?v=119';
+import { initEffects, updateEffectControls } from './effects.js?v=119';
+import { initColorPopover } from './colorpicker.js?v=119';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -118,23 +118,7 @@ async function renderOnce() {
       });
       item.appendChild(del);
 
-      if (isSel && sel.length === 1) {
-        const mkMove = (delta, glyph, label) => {
-          const b = document.createElement('button');
-          b.className = 'series-move ' + (delta < 0 ? 'series-move-left' : 'series-move-right');
-          b.textContent = glyph;
-          b.title = label;
-          b.setAttribute('aria-label', label);
-          b.disabled = idx + delta < 0 || idx + delta >= state.series.items.length;
-          b.addEventListener('click', (e) => {
-            e.stopPropagation();
-            reorderSet(idx, idx + delta);
-          });
-          return b;
-        };
-        item.appendChild(mkMove(-1, '<', 'Move this button earlier in the set'));
-        item.appendChild(mkMove(1, '>', 'Move this button later in the set'));
-      }
+      attachTouchReorder(item, idx);
 
       item.addEventListener('dragstart', (e) => {
         gridDragIndex = idx;
@@ -271,6 +255,62 @@ async function renderOnce() {
 
 let gridDragIndex = null;
 let singleDragging = false;
+
+function attachTouchReorder(item, idx) {
+  let timer = null;
+  let dragging = false;
+  let startX = 0;
+  let startY = 0;
+  const clearTargets = () => {
+    seriesWrap.querySelectorAll('.series-item.touch-target').forEach((n) => n.classList.remove('touch-target'));
+  };
+  const targetUnder = (touch) => {
+    const el = document.elementFromPoint(touch.clientX, touch.clientY);
+    const hit = el && el.closest('.series-item');
+    return hit && hit !== item && seriesWrap.contains(hit) ? hit : null;
+  };
+  item.addEventListener('touchstart', (e) => {
+    if (state.series.mode !== 'list') return;
+    const t = e.touches[0];
+    startX = t.clientX;
+    startY = t.clientY;
+    dragging = false;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      dragging = true;
+      item.classList.add('touch-dragging');
+    }, 300);
+  }, { passive: true });
+  item.addEventListener('touchmove', (e) => {
+    const t = e.touches[0];
+    if (!dragging) {
+      if (Math.abs(t.clientX - startX) > 8 || Math.abs(t.clientY - startY) > 8) clearTimeout(timer);
+      return;
+    }
+    e.preventDefault();
+    clearTargets();
+    const hit = targetUnder(t);
+    if (hit) hit.classList.add('touch-target');
+  }, { passive: false });
+  const finish = (e) => {
+    clearTimeout(timer);
+    if (!dragging) return;
+    dragging = false;
+    item.classList.remove('touch-dragging');
+    clearTargets();
+    if (e.type === 'touchend') {
+      const hit = targetUnder(e.changedTouches[0]);
+      if (hit) {
+        const tiles = [...seriesWrap.querySelectorAll('.series-item')];
+        const to = tiles.indexOf(hit);
+        if (to >= 0 && to !== idx) reorderSet(idx, to);
+      }
+    }
+    e.preventDefault();
+  };
+  item.addEventListener('touchend', finish, { passive: false });
+  item.addEventListener('touchcancel', finish, { passive: false });
+}
 
 function reorderSet(from, to) {
   const items = state.series.items;

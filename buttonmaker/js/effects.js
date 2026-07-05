@@ -1,7 +1,7 @@
-import { state, emit, deepClone, dotLayer } from './state.js?v=118';
-import { seriesVariants } from './series.js?v=118';
-import { mixHex, isLightColor } from './color.js?v=118';
-import { releaseSelection, selectListItem } from './ui.js?v=118';
+import { state, emit, deepClone, dotLayer } from './state.js?v=119';
+import { seriesVariants } from './series.js?v=119';
+import { mixHex, isLightColor } from './color.js?v=119';
+import { releaseSelection, selectListItem } from './ui.js?v=119';
 
 export const EFFECT_DEFAULTS = {
   tint: { type: 'tint', color: '#1f9d3a', strength: 40, elements: { bg: true, icon: true, text: true } },
@@ -113,9 +113,30 @@ export function makeOnState(effect) {
   if (dropped > 0) {
     alert('Your set is at the 64-button limit, so ' + dropped + ' on state' + (dropped > 1 ? 's' : '') + ' could not be added.');
   }
+  return targets;
+}
+
+let lit = null;
+
+function syncEffectSeg() {
+  const seg = document.getElementById('effectType');
+  if (!seg) return;
+  seg.querySelectorAll('button').forEach((b) => b.classList.toggle('active', !!lit && b.dataset.val === lit.val));
+}
+
+export function noteDesignsEdited(designs) {
+  if (!lit) return;
+  if (lit.targets.some((it) => designs.includes(it.design))) {
+    lit = null;
+    syncEffectSeg();
+  }
 }
 
 export function updateEffectControls() {
+  if (lit && (state.series.mode !== 'list' || !lit.targets.every((it) => state.series.items.includes(it)))) {
+    lit = null;
+  }
+  syncEffectSeg();
   const hint = document.getElementById('effectScopeHint');
   if (!hint) return;
   if (state.series.mode !== 'list') {
@@ -133,9 +154,9 @@ export function initEffects() {
   const seg = document.getElementById('effectType');
   seg.querySelectorAll('button').forEach((btn) => {
     btn.addEventListener('click', () => {
-      btn.classList.add('flash');
-      setTimeout(() => btn.classList.remove('flash'), 350);
-      makeOnState(EFFECT_DEFAULTS[btn.dataset.val]);
+      const targets = makeOnState(EFFECT_DEFAULTS[btn.dataset.val]) || [];
+      lit = targets.length ? { val: btn.dataset.val, targets } : null;
+      syncEffectSeg();
     });
   });
   updateEffectControls();

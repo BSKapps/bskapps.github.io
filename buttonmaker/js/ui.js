@@ -1,6 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=118';
-import { triggerIconUpload } from './icons.js?v=118';
-import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=118';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=119';
+import { triggerIconUpload } from './icons.js?v=119';
+import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=119';
+import { noteDesignsEdited } from './effects.js?v=119';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -178,7 +179,9 @@ function syncOnStateText(newVal) {
 }
 
 function applyEdit(fn) {
-  for (const d of editTargets()) fn(d);
+  const targets = editTargets();
+  for (const d of targets) fn(d);
+  noteDesignsEdited(targets);
 }
 
 function darken(hex, f) {
