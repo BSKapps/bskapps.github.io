@@ -942,4 +942,5 @@ body {
   .preset-actions input[type="text"] { flex: 1 1 100%; }
   .app-header { flex-direction: column; gap: 4px; position: static; }
   .undo-row { display: flex; }
+  .pos-row::after { width: 72px; height: 72px; right: 12px; }
 }

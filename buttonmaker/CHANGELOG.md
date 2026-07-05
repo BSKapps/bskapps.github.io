@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v120 - 2026-07-05
+- Phones: the faint T / image watermark beside the Position grids is smaller and pinned to the right edge, so it no longer bleeds into the grid on narrow screens. Desktop unchanged.
+
 ## v119 - 2026-07-05
 - All four Download buttons are now primary blue - Companion Page and REAPER Icons no longer look secondary or inactive next to PNG and Set as ZIP.
 - On states highlight is now truthful: the preset you applied stays lit, and the light clears the moment you edit that on state with the cards (or delete/undo it) - so it never shows stale history. Replaces the v118 brief flash.
