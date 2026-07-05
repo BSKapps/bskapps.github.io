@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setting consistent QLab levels with LUFS - BSK Apps</title>
+    <meta name="description" content="Why audio cues from different sources play back at wildly different volumes in QLab, and how to level a whole workspace to a LUFS target instead of guessing with faders.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/qlab-lufs-levels/">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Setting consistent QLab levels with LUFS">
+    <meta property="og:description" content="Why audio cues from different sources play back at wildly different volumes in QLab, and how to level a whole workspace to a LUFS target instead of guessing with faders.">
+    <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
+    <link rel="stylesheet" href="/css/site.css?v=20260611">
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>Setting consistent QLab levels with LUFS</h1>
+            <p class="date">5 July 2026</p>
+
+            <p>Every corporate show and awards night has the same audio problem: the walk-in playlist came from one place, the stings came from another, the client supplied their own sizzle-reel audio, and someone exported the walk-up music from a DAW at a completely different level. Drop them all into QLab, hit Go, and the first cue whispers while the second one takes the roof off.</p>
+
+            <p>The usual fix is to sit there in tech scrubbing through every cue, nudging faders by ear. It works, sort of, until a cue you didn't check fires at show level. There's a better reference point.</p>
+
+            <h2>Why peak level doesn't help</h2>
+            <p>Most files you're handed are already peak-normalised - the loudest sample sits at or near 0 dBFS. That tells you almost nothing about how loud the file sounds. A heavily compressed dance track and a dynamic orchestral piece can both peak at 0 dBFS and differ by 15 dB or more in perceived loudness. Matching peaks matches nothing.</p>
+
+            <h2>LUFS measures what your ears hear</h2>
+            <p>LUFS (Loudness Units relative to Full Scale) is the broadcast loudness standard from EBU R128 / ITU BS.1770. Instead of the loudest sample, it measures average perceived loudness over the whole file, weighted for how human hearing responds. Two files at the same integrated LUFS sound about the same volume, regardless of genre, compression, or where they came from.</p>
+            <p>Some reference points:</p>
+            <ul>
+                <li><strong>-23 LUFS</strong> - broadcast delivery standard (EBU R128).</li>
+                <li><strong>-14 LUFS</strong> - roughly where streaming services normalise music playback.</li>
+                <li><strong>-16 to -18 LUFS</strong> - a comfortable working range for show playback, leaving headroom on the desk.</li>
+            </ul>
+            <p>The exact number matters less than everything being at the <em>same</em> number. Once every cue matches, one fader on the console rides the whole show.</p>
+
+            <h2>Levelling cues to a target by hand</h2>
+            <p>The manual workflow:</p>
+            <ul>
+                <li>Measure the integrated LUFS of each file. Most DAWs have a loudness meter, and ffmpeg's loudnorm filter can print a measurement from the command line.</li>
+                <li>Subtract the measurement from your target. A file measuring -21 LUFS with a -17 target needs +4 dB.</li>
+                <li>Type that value into the cue's main level in QLab.</li>
+            </ul>
+            <p>Setting the cue level rather than re-rendering the file keeps the original audio untouched, so there's no generation loss and no re-export if the target changes.</p>
+            <p>This works fine for five cues. For an awards night with sixty walk-ups it's an hour of copy-typing, and it all has to happen again when the running order changes the morning of the show.</p>
+
+            <h2>Doing the whole workspace at once</h2>
+            <p>This is the job <a href="/labassistant">Lab Assistant</a> was built for. Point it at a QLab workspace, pick a LUFS target, and it measures every audio cue and writes the correct level to each one - the file on disk is never modified. A sixty-cue awards night levels in the time it takes to pour a coffee, and re-running it after a late file swap takes one click.</p>
+
+            <h2>Things that still need ears</h2>
+            <p>A LUFS pass gets every cue to the same starting point. It doesn't replace judgement:</p>
+            <ul>
+                <li>Stings and impacts are often <em>meant</em> to be louder than beds. Level everything to target first, then push the stings up a consistent few dB.</li>
+                <li>Speech-under-music beds usually want to sit lower than the music target.</li>
+                <li>Very short files (under a second or so) measure less reliably - give hits and buttons a quick ear check.</li>
+            </ul>
+            <p>The point isn't that a meter mixes the show. It's that the faders start from a known, consistent place instead of sixty different guesses.</p>
+
+            <div class="article-cta">
+                <h3>Level a whole QLab workspace automatically</h3>
+                <p>Lab Assistant measures every audio cue and sets its QLab level to your LUFS target - plus mono routing, silence trimming, file conversion, and cue numbering. Built for show prep.</p>
+                <a class="cta-link" href="/labassistant">Lab Assistant &rarr;</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>

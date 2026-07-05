@@ -126,6 +126,21 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://bskapps.com/articles/qlab-lufs-levels/</loc>
+    <lastmod>2026-07-05</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://bskapps.com/articles/smaart-target-curves/</loc>
+    <lastmod>2026-07-05</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://bskapps.com/articles/rew-house-curve/</loc>
+    <lastmod>2026-07-05</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://bskapps.com/articles/reaper-lua-cue-workflows/</loc>
     <lastmod>2026-04-09</lastmod>
     <priority>0.6</priority>

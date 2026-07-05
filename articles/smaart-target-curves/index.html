@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Target curves in Smaart: what they are and how to use one - BSK Apps</title>
+    <meta name="description" content="Why flat is not the goal when tuning a PA, what a Smaart target curve actually represents, common starting shapes, and how to build one you can reuse across rigs.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/smaart-target-curves/">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Target curves in Smaart: what they are and how to use one">
+    <meta property="og:description" content="Why flat is not the goal when tuning a PA, what a Smaart target curve actually represents, common starting shapes, and how to build one you can reuse across rigs.">
+    <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
+    <link rel="stylesheet" href="/css/site.css?v=20260611">
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>Target curves in Smaart: what they are and how to use one</h1>
+            <p class="date">5 July 2026</p>
+
+            <p>Point a measurement mic at a system, pull up a transfer function in Smaart, and the obvious instinct is to EQ until the trace is flat. Do that to a full-range PA at show level and it will sound thin, harsh, and short on low end. Flat on the analyser is not flat to the ear - which is why system engineers tune to a target curve instead.</p>
+
+            <h2>What a target curve is</h2>
+            <p>A target curve is the frequency response shape you actually want the system to measure at the mic position - a reference trace you overlay on your measurement and EQ towards. Instead of chasing a flat line, you're chasing a deliberate shape that accounts for how people hear music at performance levels in a real room.</p>
+
+            <h2>Why flat sounds wrong</h2>
+            <p>A few reasons flat measurements do not equal flat perception:</p>
+            <ul>
+                <li><strong>Loudness perception.</strong> At high SPL our hearing is relatively more sensitive to mid frequencies. A system that measures flat at 100 dB reads as bright and bass-light compared to the same material at home listening level.</li>
+                <li><strong>Room and distance.</strong> Recordings are mixed on monitors in controlled rooms at moderate level. A PA in a reverberant room at distance behaves nothing like that reference, and high-frequency energy in the room builds differently to low.</li>
+                <li><strong>Expectation.</strong> Decades of live sound, cinema (the X-curve), and studio practice have converged on the same finding: audiences expect a gentle downward tilt with some low-end support.</li>
+            </ul>
+
+            <h2>Common starting shapes</h2>
+            <p>There is no single correct target - it depends on the system, the room, and the genre - but most working curves are variations on the same idea:</p>
+            <ul>
+                <li><strong>A downward tilt</strong> through the mids and highs, commonly in the region of 0.5 to 1 dB per octave overall.</li>
+                <li><strong>A low-frequency shelf</strong>, often somewhere between +3 and +6 dB below roughly 100-200 Hz, more for EDM and pop, less for speech and corporate.</li>
+                <li><strong>A gentle high-frequency roll-off</strong> above 8-10 kHz, partly taste, partly acknowledging air absorption at distance.</li>
+            </ul>
+            <p>Speech-only systems usually want less of everything: a flatter mid band and restrained low end for intelligibility.</p>
+
+            <h2>Using one in Smaart</h2>
+            <p>Smaart lets you load a target curve and display it against your live transfer function trace, so tuning becomes "EQ towards the overlay" rather than remembering a shape in your head. The practical workflow:</p>
+            <ul>
+                <li>Start from a known shape rather than a blank slate - a house curve you like, or a published starting point.</li>
+                <li>Get the system's overall trend to follow the target with broad strokes: crossover alignment and wide EQ first.</li>
+                <li>Resist matching every wiggle. The target is a trend line; narrow dips are usually room interaction that EQ can't fix.</li>
+                <li>Verify with program material you know, then adjust the curve - not just the EQ - if the shape itself is wrong for the room.</li>
+            </ul>
+
+            <h2>Building and editing the curve itself</h2>
+            <p>The awkward part has always been authoring the curve. Text files of frequency and magnitude pairs are easy to export but miserable to design by hand, and a curve you sketched for one rig usually needs reshaping for the next room.</p>
+            <p>That's the gap <a href="/targettrace">Target Trace</a> fills: draw and edit target curves visually on a Mac - drag control points, draw freehand, simplify a trace you've imported - then export directly in Smaart and REW formats. Keep a folder of house curves per system or per genre and adapt them per room instead of starting over.</p>
+
+            <div class="article-cta">
+                <h3>Design target curves visually</h3>
+                <p>Target Trace is a Mac app for building and editing target curves - control points, freehand drawing, trace simplification, and direct export for Smaart and REW.</p>
+                <a class="cta-link" href="/targettrace">Target Trace &rarr;</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>

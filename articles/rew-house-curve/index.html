@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House curves in REW: why flat sounds thin and what to use instead - BSK Apps</title>
+    <meta name="description" content="What a house curve does in REW, why correcting a room to flat usually disappoints, common starting shapes like the Harman curve, and how to make your own.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/rew-house-curve/">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="House curves in REW: why flat sounds thin and what to use instead">
+    <meta property="og:description" content="What a house curve does in REW, why correcting a room to flat usually disappoints, common starting shapes like the Harman curve, and how to make your own.">
+    <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
+    <link rel="stylesheet" href="/css/site.css?v=20260611">
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>House curves in REW: why flat sounds thin and what to use instead</h1>
+            <p class="date">5 July 2026</p>
+
+            <p>REW makes it easy to measure a room, generate EQ filters, and correct the response to flat. It's also the most common way to end up with a system that measures beautifully and sounds worse than before you started - thin, dry, and missing the low end you bought the subwoofer for. The fix is not more EQ. It's telling REW to correct towards the right shape, and that shape is the house curve.</p>
+
+            <h2>What a house curve is</h2>
+            <p>A house curve is the in-room frequency response you actually want at the listening position. When you give REW a house curve, its EQ engine generates filters that steer the measured response towards that shape instead of towards a flat line. Same measurement, same filters engine, different destination.</p>
+
+            <h2>Why flat in-room disappoints</h2>
+            <p>Speakers are designed to measure flat <em>anechoically</em> - on-axis, no room. Put a good flat speaker in a normal room and the steady-state response at the listening position naturally tilts downward: the room reinforces low frequencies and absorbs high ones, and you sit in the combined direct-plus-reflected field. That gentle downward slope is what a well-regarded system measures in-room. Force the in-room response flat with EQ and you've effectively boosted the treble and cut the bass relative to what the speaker was voiced to do.</p>
+
+            <h2>Common starting shapes</h2>
+            <ul>
+                <li><strong>The Harman curve</strong> - from Harman's blind listening research on room corrections: a bass shelf of roughly +4 to +6 dB below about 100-200 Hz and a smooth downward tilt through the highs. Consistently preferred by listeners for music in domestic rooms.</li>
+                <li><strong>A simple tilt</strong> - a straight slope of around -0.5 to -1 dB per octave across the band. Less low-end emphasis than Harman; a common choice for nearfield and studio-adjacent setups.</li>
+                <li><strong>Flat-with-bass-shelf</strong> - leave the mids and highs alone and add only the low shelf. Popular for home theatre where the goal is impact without changing tonal character.</li>
+            </ul>
+            <p>All of these are starting points. Room size, speaker directivity, listening distance, and taste all move the answer.</p>
+
+            <h2>Loading one into REW</h2>
+            <p>REW accepts a house curve as a plain text file of frequency and gain pairs, set in its preferences. Once loaded, the EQ target follows the curve automatically when you generate filters. Practical notes:</p>
+            <ul>
+                <li>REW interpolates between the points you give it, so the file needs enough points to describe the shape smoothly - a handful of points makes angular corners, not a curve.</li>
+                <li>Correct the big trends and the low-frequency room modes; don't chase narrow high-frequency dips, which are usually interference effects that EQ makes worse.</li>
+                <li>Re-listen and iterate on the curve, not just the filters. If everything sounds dull, the tilt is too steep; if it's fatiguing, not steep enough.</li>
+            </ul>
+
+            <h2>Making the curve itself</h2>
+            <p>Hand-writing frequency/gain text files is the weak link - it's hard to visualise what a list of numbers sounds like, and smooth shapes need a lot of points. <a href="/targettrace">Target Trace</a> is a Mac app built for exactly this: draw the curve visually, drag control points until the shape is right, choose the point spacing, and export a REW-ready house curve file (Smaart too). Import a curve you found online, simplify it, reshape it for your room, and keep versions per system.</p>
+
+            <div class="article-cta">
+                <h3>Draw your house curve, don't type it</h3>
+                <p>Target Trace builds REW house curves and Smaart target curves visually - control points, freehand drawing, imported-trace simplification, and clean export files.</p>
+                <a class="cta-link" href="/targettrace">Target Trace &rarr;</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>
