@@ -1,8 +1,8 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=116';
-import { renderDesign } from './renderer.js?v=116';
-import { numberSet, variantsFor } from './series.js?v=116';
-import { releaseSelection } from './ui.js?v=116';
-import { newId } from './effects.js?v=116';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=117';
+import { renderDesign } from './renderer.js?v=117';
+import { numberSet, variantsFor } from './series.js?v=117';
+import { releaseSelection } from './ui.js?v=117';
+import { newId } from './effects.js?v=117';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -601,7 +601,7 @@ export function initPresets() {
   document.getElementById('presetExport').addEventListener('click', () => {
     const presets = loadUserPresets();
     if (!presets.length) {
-      alert('You have no saved presets yet. Click "Save to my presets" first, then back them up.');
+      alert('You have no saved presets yet. Click "Save to My Presets" first, then back them up.');
       return;
     }
     const blob = new Blob(
@@ -810,11 +810,21 @@ function pickerGroup(preset, isUser) {
     del.className = 'strip-del picker-del';
     del.textContent = 'x';
     del.title = 'Delete preset';
-    del.addEventListener('click', () => {
+    del.setAttribute('role', 'button');
+    del.setAttribute('aria-label', 'Delete preset ' + preset.name);
+    del.tabIndex = 0;
+    const deletePreset = () => {
       const list = loadUserPresets();
       list.splice(preset.userIndex, 1);
       saveUserPresets(list);
       renderPresetList();
+    };
+    del.addEventListener('click', deletePreset);
+    del.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        deletePreset();
+      }
     });
     head.appendChild(del);
   }

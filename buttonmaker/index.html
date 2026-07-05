@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://bskapps.com; connect-src 'self' https://api.iconify.design https://cloudflareinsights.com; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="bm-version" content="116">
+<meta name="bm-version" content="117">
 <title>BSK Button Maker - Free Companion, Stream Deck, REAPER and App Icon Designer</title>
 <meta name="description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars, plus app icons. Icon library, presets, button sets, PNG, Companion page and REAPER toolbar export.">
 <meta property="og:title" content="BSK Button Maker">
@@ -40,8 +40,8 @@
 <link rel="icon" type="image/png" href="images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&family=Archivo+Black&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=116">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&family=Archivo+Black&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=117">
 </head>
 <body>
 <header class="app-header">
@@ -64,32 +64,32 @@
           <button data-val="image">Image</button>
         </div>
         <div class="row" id="bgSolidRow">
-          <label>Colour</label>
+          <label for="bgColor">Colour</label>
           <input type="color" id="bgColor" value="#1a2230" data-label="Background">
         </div>
         <div id="bgGradientRows" class="hidden">
-          <div class="row"><label>From</label><input type="color" id="bgColor2a" value="#16324f" data-label="Gradient from"></div>
-          <div class="row"><label>To</label><input type="color" id="bgColor2b" value="#0a0e14" data-label="Gradient to"></div>
-          <div class="row"><label>Angle</label><input type="range" id="bgAngle" min="0" max="360" value="135" data-default="135"><input type="number" class="val" id="bgAngleVal" value="135"></div>
-          <div class="row"><label>Blend</label><input type="range" id="bgBlend" min="0" max="100" value="100" data-default="100"><input type="number" class="val" id="bgBlendVal" value="100"></div>
+          <div class="row"><label for="bgColor2a">From</label><input type="color" id="bgColor2a" value="#16324f" data-label="Gradient from"></div>
+          <div class="row"><label for="bgColor2b">To</label><input type="color" id="bgColor2b" value="#0a0e14" data-label="Gradient to"></div>
+          <div class="row"><label for="bgAngle">Angle</label><input type="range" id="bgAngle" min="0" max="360" value="135" data-default="135"><input type="number" class="val" id="bgAngleVal" value="135"></div>
+          <div class="row"><label for="bgBlend">Blend</label><input type="range" id="bgBlend" min="0" max="100" value="100" data-default="100"><input type="number" class="val" id="bgBlendVal" value="100"></div>
         </div>
-        <div class="row" id="bgOpacityRow"><label>Opacity</label><input type="range" id="bgOpacity" min="0" max="100" value="100" data-default="100"><input type="number" class="val" id="bgOpacityVal" value="100"></div>
+        <div class="row" id="bgOpacityRow"><label for="bgOpacity">Opacity</label><input type="range" id="bgOpacity" min="0" max="100" value="100" data-default="100"><input type="number" class="val" id="bgOpacityVal" value="100"></div>
         <div class="row check" id="bgInvertRow"><label for="bgInvert">Invert</label><input type="checkbox" id="bgInvert"></div>
         <div id="bgImageRows" class="hidden">
           <div class="row">
-            <label>File</label>
+            <label for="bgImageFile">File</label>
             <input type="file" id="bgImageFile" accept="image/*">
           </div>
           <div class="row">
-            <label>Fit</label>
+            <label for="bgImageFit">Fit</label>
             <select id="bgImageFit">
               <option value="cover">Fill</option>
               <option value="contain">Fit</option>
               <option value="stretch">Stretch</option>
             </select>
           </div>
-          <div class="row"><label>Dim</label><input type="range" id="bgImageDim" min="0" max="80" value="0" data-default="0"><input type="number" class="val" id="bgImageDimVal" value="0"></div>
-          <div class="row"><label>Rotate</label><input type="range" id="bgImageRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="bgImageRotateVal" value="0"></div>
+          <div class="row"><label for="bgImageDim">Dim</label><input type="range" id="bgImageDim" min="0" max="80" value="0" data-default="0"><input type="number" class="val" id="bgImageDimVal" value="0"></div>
+          <div class="row"><label for="bgImageRotate">Rotate</label><input type="range" id="bgImageRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="bgImageRotateVal" value="0"></div>
         </div>
       </div>
     </details>
@@ -107,27 +107,27 @@
           <button class="btn ghost" id="clearIcon">Clear</button>
           <button class="btn ghost" id="iconCentre" title="Centre the artwork in the button">Centre</button>
         </div>
-        <div class="row"><label>Size</label><input type="range" id="iconSize" min="10" max="150" value="52" data-default="52"><input type="number" class="val" id="iconSizeVal" value="52"></div>
-        <div class="row"><label>Colour</label><input type="color" id="iconColor" value="#ffffff" data-label="Image colour"></div>
+        <div class="row"><label for="iconSize">Size</label><input type="range" id="iconSize" min="10" max="150" value="52" data-default="52"><input type="number" class="val" id="iconSizeVal" value="52"></div>
+        <div class="row"><label for="iconColor">Colour</label><input type="color" id="iconColor" value="#ffffff" data-label="Image colour"></div>
         <div class="row check"><label for="iconInvert">Invert</label><input type="checkbox" id="iconInvert"></div>
         <div class="row pos-row">
           <label>Position</label>
           <div class="align-grid" id="iconAlign">
-            <button data-val="left:top"></button>
-            <button data-val="center:top"></button>
-            <button data-val="right:top"></button>
-            <button data-val="left:center"></button>
-            <button data-val="center:center"></button>
-            <button data-val="right:center"></button>
-            <button data-val="left:bottom"></button>
-            <button data-val="center:bottom"></button>
-            <button data-val="right:bottom"></button>
+            <button data-val="left:top" aria-label="Top left"></button>
+            <button data-val="center:top" aria-label="Top centre"></button>
+            <button data-val="right:top" aria-label="Top right"></button>
+            <button data-val="left:center" aria-label="Middle left"></button>
+            <button data-val="center:center" aria-label="Centre"></button>
+            <button data-val="right:center" aria-label="Middle right"></button>
+            <button data-val="left:bottom" aria-label="Bottom left"></button>
+            <button data-val="center:bottom" aria-label="Bottom centre"></button>
+            <button data-val="right:bottom" aria-label="Bottom right"></button>
           </div>
         </div>
-        <div class="row"><label>Nudge X</label><input type="range" id="iconX" min="-40" max="40" value="0" data-default="0"><input type="number" class="val" id="iconXVal" value="0"></div>
-        <div class="row"><label>Nudge Y</label><input type="range" id="iconY" min="-40" max="40" value="0" data-default="0"><input type="number" class="val" id="iconYVal" value="0"></div>
-        <div class="row"><label>Opacity</label><input type="range" id="iconOpacity" min="0" max="100" value="100" data-default="100"><input type="number" class="val" id="iconOpacityVal" value="100"></div>
-        <div class="row"><label>Rotate</label><input type="range" id="iconRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="iconRotateVal" value="0"></div>
+        <div class="row"><label for="iconX">Nudge X</label><input type="range" id="iconX" min="-40" max="40" value="0" data-default="0"><input type="number" class="val" id="iconXVal" value="0"></div>
+        <div class="row"><label for="iconY">Nudge Y</label><input type="range" id="iconY" min="-40" max="40" value="0" data-default="0"><input type="number" class="val" id="iconYVal" value="0"></div>
+        <div class="row"><label for="iconOpacity">Opacity</label><input type="range" id="iconOpacity" min="0" max="100" value="100" data-default="100"><input type="number" class="val" id="iconOpacityVal" value="100"></div>
+        <div class="row"><label for="iconRotate">Rotate</label><input type="range" id="iconRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="iconRotateVal" value="0"></div>
         <div class="row check"><label for="iconReverse">Reverse</label><input type="checkbox" id="iconReverse"></div>
       </div>
     </details>
@@ -137,12 +137,12 @@
       <div class="section-body">
         <div class="layer-chips" id="textLayerChips"></div>
         <div class="row">
-          <label>Text</label>
+          <label for="textValue">Text</label>
           <textarea id="textValue" placeholder="PC" autocomplete="off" spellcheck="false"></textarea>
         </div>
         <p class="hint" style="margin-top:2px">Press Enter for a new line.</p>
         <div class="row">
-          <label>Font</label>
+          <label for="textFont">Font</label>
           <select id="textFont">
             <option value="Inter">Inter</option>
             <option value="Oswald">Oswald</option>
@@ -158,7 +158,7 @@
           </select>
         </div>
         <div class="row">
-          <label>Weight</label>
+          <label for="textWeight">Weight</label>
           <select id="textWeight">
             <option value="400">Regular</option>
             <option value="600" selected>Semibold</option>
@@ -166,46 +166,46 @@
             <option value="800">Heavy</option>
           </select>
         </div>
-        <div class="row"><label>Size</label><input type="range" id="textSize" min="6" max="96" value="11" data-default="11"><input type="number" class="val" id="textSizeVal" value="11"></div>
-        <div class="row"><label>Colour</label><input type="color" id="textColor" value="#ffffff" data-label="Text colour"></div>
+        <div class="row"><label for="textSize">Size</label><input type="range" id="textSize" min="6" max="96" value="11" data-default="11"><input type="number" class="val" id="textSizeVal" value="11"></div>
+        <div class="row"><label for="textColor">Colour</label><input type="color" id="textColor" value="#ffffff" data-label="Text colour"></div>
         <div class="row check"><label for="textInvert">Invert</label><input type="checkbox" id="textInvert"></div>
         <div class="row pos-row">
           <label>Position</label>
           <div class="align-grid" id="textAlign">
-            <button data-val="left:top"></button>
-            <button data-val="center:top"></button>
-            <button data-val="right:top"></button>
-            <button data-val="left:center"></button>
-            <button data-val="center:center"></button>
-            <button data-val="right:center"></button>
-            <button data-val="left:bottom"></button>
-            <button data-val="center:bottom" class="active"></button>
-            <button data-val="right:bottom"></button>
+            <button data-val="left:top" aria-label="Top left"></button>
+            <button data-val="center:top" aria-label="Top centre"></button>
+            <button data-val="right:top" aria-label="Top right"></button>
+            <button data-val="left:center" aria-label="Middle left"></button>
+            <button data-val="center:center" aria-label="Centre"></button>
+            <button data-val="right:center" aria-label="Middle right"></button>
+            <button data-val="left:bottom" aria-label="Bottom left"></button>
+            <button data-val="center:bottom" aria-label="Bottom centre" class="active"></button>
+            <button data-val="right:bottom" aria-label="Bottom right"></button>
           </div>
         </div>
-        <div class="row"><label>Nudge X</label><input type="range" id="textX" min="-40" max="40" value="0" data-default="0"><input type="number" class="val" id="textXVal" value="0"></div>
-        <div class="row"><label>Nudge Y</label><input type="range" id="textY" min="-40" max="40" value="0" data-default="0"><input type="number" class="val" id="textYVal" value="0"></div>
-        <div class="row"><label>Opacity</label><input type="range" id="textOpacity" min="0" max="100" value="100" data-default="100"><input type="number" class="val" id="textOpacityVal" value="100"></div>
-        <div class="row"><label>Rotate</label><input type="range" id="textRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="textRotateVal" value="0"></div>
-        <div class="row"><label>Bend</label><input type="range" id="textBend" min="-100" max="100" value="0" data-default="0"><input type="number" class="val" id="textBendVal" value="0"></div>
+        <div class="row"><label for="textX">Nudge X</label><input type="range" id="textX" min="-40" max="40" value="0" data-default="0"><input type="number" class="val" id="textXVal" value="0"></div>
+        <div class="row"><label for="textY">Nudge Y</label><input type="range" id="textY" min="-40" max="40" value="0" data-default="0"><input type="number" class="val" id="textYVal" value="0"></div>
+        <div class="row"><label for="textOpacity">Opacity</label><input type="range" id="textOpacity" min="0" max="100" value="100" data-default="100"><input type="number" class="val" id="textOpacityVal" value="100"></div>
+        <div class="row"><label for="textRotate">Rotate</label><input type="range" id="textRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="textRotateVal" value="0"></div>
+        <div class="row"><label for="textBend">Bend</label><input type="range" id="textBend" min="-100" max="100" value="0" data-default="0"><input type="number" class="val" id="textBendVal" value="0"></div>
       </div>
     </details>
 
     <details class="section card-shape" open>
       <summary><svg class="card-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2,2H8V4H4V8H2V2M16,2H22V8H20V4H16V2M20,16H22V22H16V20H20V16M8,20V22H2V16H4V20H8Z"/></svg><span class="card-title">Border<span class="card-sep">/</span>Shape</span></summary>
       <div class="section-body">
-        <div class="row"><label>Border</label><input type="range" id="shapeBorder" min="0" max="8" value="0" step="0.5" data-default="0"><input type="number" class="val" id="shapeBorderVal" value="0"></div>
+        <div class="row"><label for="shapeBorder">Border</label><input type="range" id="shapeBorder" min="0" max="8" value="0" step="0.5" data-default="0"><input type="number" class="val" id="shapeBorderVal" value="0"></div>
         <div class="row"><label>Border edges</label><div class="edge-toggles">
           <label><input type="checkbox" id="edgeTop" checked> T</label>
           <label><input type="checkbox" id="edgeBottom" checked> B</label>
           <label><input type="checkbox" id="edgeLeft" checked> L</label>
           <label><input type="checkbox" id="edgeRight" checked> R</label>
         </div></div>
-        <div class="row"><label>Border colour</label><input type="color" id="shapeBorderColor" value="#ffffff" data-label="Border colour"></div>
-        <div class="row"><label>Corners</label><input type="range" id="shapeRadius" min="0" max="35" value="0" data-default="0"><input type="number" class="val" id="shapeRadiusVal" value="0"></div>
+        <div class="row"><label for="shapeBorderColor">Border colour</label><input type="color" id="shapeBorderColor" value="#ffffff" data-label="Border colour"></div>
+        <div class="row"><label for="shapeRadius">Corners</label><input type="range" id="shapeRadius" min="0" max="35" value="0" data-default="0"><input type="number" class="val" id="shapeRadiusVal" value="0"></div>
         <div class="row check"><label for="shapeSquircle">Squircle</label><input type="checkbox" id="shapeSquircle" title="Clip to an Apple-style squircle with transparent corners - ideal for 1024 px app icons"></div>
-        <div class="row"><label>Rotate</label><input type="range" id="shapeRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="shapeRotateVal" value="0"></div>
-        <div class="row"><label>Zoom</label><input type="range" id="shapeZoom" min="25" max="200" value="100" data-default="100"><input type="number" class="val" id="shapeZoomVal" value="100"></div>
+        <div class="row"><label for="shapeRotate">Rotate</label><input type="range" id="shapeRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="shapeRotateVal" value="0"></div>
+        <div class="row"><label for="shapeZoom">Zoom</label><input type="range" id="shapeZoom" min="25" max="200" value="100" data-default="100"><input type="number" class="val" id="shapeZoomVal" value="100"></div>
       </div>
     </details>
 
@@ -248,8 +248,8 @@
         <div id="seriesListRows" class="set-tools reserved">
           <div class="row number-range">
             <button class="btn" id="seriesNumberBtn">Number Them</button>
-            <label>From</label><input type="number" id="seriesFrom" value="1" min="0" max="999" step="any">
-            <label>To</label><input type="number" id="seriesTo" value="4" min="0" max="999" step="any">
+            <label for="seriesFrom">From</label><input type="number" id="seriesFrom" value="1" min="0" max="999" step="any">
+            <label for="seriesTo">To</label><input type="number" id="seriesTo" value="4" min="0" max="999" step="any">
           </div>
           <p class="hint">"Number Them" fills the set from your current design, so "PC" becomes PC 1, PC 2... and cue numbers like 1.1 to 1.5 work too.</p>
         </div>
@@ -279,7 +279,7 @@
         </div>
         <p class="hint" id="exportSummary"></p>
         <div class="row">
-          <label>PNG size</label>
+          <label for="exportSize">PNG size</label>
           <select id="exportSize">
             <option value="72">72 px</option>
             <option value="144">144 px</option>
@@ -295,7 +295,7 @@
       <div class="section-body">
         <p class="hint"><b>One Button:</b> Pick a starting point, then set background, image, text and shape. Download the PNG and drop it into a button's image box in Companion.</p>
         <p class="hint"><b>Presets:</b> Click "Choose Buttons &amp; Sets" to open the picker. Click a button to add it, or "Add Set" for a whole row. Your own presets sit at the top, marked (user) - double-click a name to rename, x to delete, and adding one brings its name back so you can edit it and Save over it. "Start Fresh" clears everything back to a blank button.</p>
-        <p class="hint"><b>Make a set:</b> Add buttons from the picker, or switch to Custom Set under "Make a set &amp; on states" and use "Number Them" to fill the set with a numbered range (PC 1, PC 2... or cue numbers like 1.1 to 1.5). The set shows under the preview.</p>
+        <p class="hint"><b>Make a set:</b> Add buttons from the picker, or switch to Custom Set in the "Make a set" card and use "Number Them" to fill the set with a numbered range (PC 1, PC 2... or cue numbers like 1.1 to 1.5). The set shows under the preview.</p>
         <p class="hint"><b>Duplicate:</b> Click the + tile under the preview to copy your button into a set, or drag any button in a set onto the + tile to duplicate it. The picker also adds buttons from any preset into your set.</p>
         <p class="hint"><b>Edit one, some or all:</b> With a set, changes apply to every button by default. Click one to style it alone, Cmd-click or Shift-click to grab a few. Click empty space, or "Edit All", to go back to editing everything.</p>
         <p class="hint"><b>Reorder and reuse:</b> Drag a button onto another to reorder, or onto the big preview to make it your single button.</p>
@@ -303,8 +303,8 @@
         <p class="hint"><b>PNG size:</b> 72 px is the exact size of a Companion or Stream Deck key, so it is the smallest file. 144 px suits high-res decks and retina screens. 288 px is sharpest and scales down cleanly to any key, which is why it is the default.</p>
         <p class="hint"><b>App icons:</b> Pick 1024 px for a full-size app icon, and tick Squircle in the Border/Shape card to clip the button to an Apple-style rounded shape with transparent corners. The preview shows the exact shape that exports.</p>
         <p class="hint"><b>File names:</b> a PNG is named after its text, or its icon name if there is no text, otherwise button-1. To name an icon-only button, type the name and drop its text opacity to zero - invisible on the button, used as the file name.</p>
-        <p class="hint"><b>Export for REAPER:</b> In the Download card, switch to REAPER to get toolbar icon strips (normal, hover and active in one PNG) as a ZIP that mirrors REAPER's toolbar_icons folder, with the 150 and 200 hi-DPI copies. Linked on states become a matching name_on strip, so you assign the base icon and REAPER finds the on state. Unzip it there, restart REAPER, and assign each icon in the toolbar editor.</p>
-        <p class="hint"><b>On states:</b> In the "Make a set &amp; on states" card, the On states presets make a button's on or active look. Pick Tint, Highlight, Invert or Dot and it adds a real, editable on state button to your set, linked to its button - then edit it with the cards on the left. Highlight lifts dark buttons brighter and deepens light ones, so it reads as active on any colour. REAPER export pairs it as name_on, no renaming. Each design card also has its own Invert tick next to its colour, to flip just that part. Tint and Highlight change solid and gradient backgrounds; Invert and Dot work on any background, including images.</p>
+        <p class="hint"><b>Export for REAPER:</b> In the Download card, click "REAPER Icons" to get toolbar icon strips (normal, hover and active in one PNG) as a ZIP that mirrors REAPER's toolbar_icons folder, with the 150 and 200 hi-DPI copies. Linked on states become a matching name_on strip, so you assign the base icon and REAPER finds the on state. Unzip it there, restart REAPER, and assign each icon in the toolbar editor.</p>
+        <p class="hint"><b>On states:</b> In the "On states" card, the presets make a button's on or active look. Pick Tint, Highlight, Invert or Dot and it adds a real, editable on state button to your set, linked to its button - then edit it with the cards on the left. Highlight lifts dark buttons brighter and deepens light ones, so it reads as active on any colour. REAPER export pairs it as name_on, no renaming. Each design card also has its own Invert tick next to its colour, to flip just that part. Tint and Highlight change solid and gradient backgrounds; Invert and Dot work on any background, including images.</p>
         <p class="hint"><b>Shortcuts:</b> Double-click a slider to reset it. Cmd-Z undoes and Cmd-Shift-Z redoes, up to 50 steps back. In a set, Cmd-A selects every button.</p>
       </div>
     </details>
@@ -316,7 +316,7 @@
           <div class="bsk-tile-head">
             <img src="https://bskapps.com/images/quickip-icon.png" alt="Quicker IP" width="58" height="58">
             <div>
-              <h3>Quicker IP</h3>
+              <h2>Quicker IP</h2>
               <p class="bsk-tile-sub">Network Toolkit</p>
             </div>
           </div>
@@ -327,7 +327,7 @@
           <div class="bsk-tile-head">
             <img src="https://bskapps.com/images/labassistant-icon.png" alt="Lab Assistant" width="58" height="58">
             <div>
-              <h3>Lab Assistant</h3>
+              <h2>Lab Assistant</h2>
               <p class="bsk-tile-sub">Auto Set QLab</p>
             </div>
           </div>
@@ -338,7 +338,7 @@
           <div class="bsk-tile-head">
             <img src="https://bskapps.com/images/targettrace-icon.png" alt="Target Trace" width="58" height="58">
             <div>
-              <h3>Target Trace</h3>
+              <h2>Target Trace</h2>
               <p class="bsk-tile-sub">Target curve editor</p>
             </div>
           </div>
@@ -349,7 +349,7 @@
           <div class="bsk-tile-head">
             <img src="https://bskapps.com/images/fetchpuppy-icon.png" alt="Fetch Puppy" width="58" height="58">
             <div>
-              <h3>Fetch Puppy</h3>
+              <h2>Fetch Puppy</h2>
               <p class="bsk-tile-sub">Fetch Music &amp; Video</p>
             </div>
           </div>
@@ -364,7 +364,7 @@
           <div class="bsk-tile-head">
             <img src="https://bskapps.com/images/spotify-module-icon.svg" alt="BSK Spotify for Companion" width="58" height="58">
             <div>
-              <h3>BSK Spotify for Companion</h3>
+              <h2>BSK Spotify for Companion</h2>
               <p class="bsk-tile-sub">Companion module</p>
             </div>
           </div>
@@ -375,7 +375,7 @@
           <div class="bsk-tile-head">
             <img src="https://bskapps.com/images/reaper-scripts-icon.svg" alt="REAPER Lua Scripts" width="58" height="58">
             <div>
-              <h3>REAPER Lua Scripts</h3>
+              <h2>REAPER Lua Scripts</h2>
               <p class="bsk-tile-sub">Toolbar scripts for REAPER</p>
             </div>
           </div>
@@ -416,7 +416,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair, Cockos or Apple. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=116"></script>
-<script type="module" src="js/app.js?v=116"></script>
+<script src="vendor/jszip.min.js?v=117"></script>
+<script type="module" src="js/app.js?v=117"></script>
 </body>
 </html>

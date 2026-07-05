@@ -1,19 +1,19 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=116';
-import { renderDesign } from './renderer.js?v=116';
-import { seriesVariants, numberSet } from './series.js?v=116';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=116';
-import { initIconPicker } from './icons.js?v=116';
-import { initPresets, normalizeDesign } from './presets.js?v=116';
-import { initExport } from './export.js?v=116';
-import { initEffects, updateEffectControls } from './effects.js?v=116';
-import { initColorPopover } from './colorpicker.js?v=116';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=117';
+import { renderDesign } from './renderer.js?v=117';
+import { seriesVariants, numberSet } from './series.js?v=117';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=117';
+import { initIconPicker } from './icons.js?v=117';
+import { initPresets, normalizeDesign } from './presets.js?v=117';
+import { initExport } from './export.js?v=117';
+import { initEffects, updateEffectControls } from './effects.js?v=117';
+import { initColorPopover } from './colorpicker.js?v=117';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
 
-document.querySelector('.stage').addEventListener('click', (e) => {
+document.querySelector('.layout').addEventListener('click', (e) => {
   const t = e.target;
-  if (t === seriesWrap || t.classList.contains('stage') || t.classList.contains('preview-wrap')) {
+  if (t === seriesWrap || t.classList.contains('stage') || t.classList.contains('preview-wrap') || t.classList.contains('layout')) {
     deselectListItem();
   }
 });
@@ -41,7 +41,9 @@ async function renderAll() {
       renderPending = false;
       try {
         await renderOnce();
-      } catch (e) {}
+      } catch (e) {
+        console.warn('Render failed', e);
+      }
     } while (renderPending);
   } finally {
     rendering = false;
@@ -50,8 +52,8 @@ async function renderAll() {
 
 async function renderOnce() {
   const variants = seriesVariants();
-  const sel = primarySelection();
-  const mainVariant = (state.series.mode === 'list' && sel !== null && variants[sel] ? variants[sel] : variants[0])
+  const mainSel = primarySelection();
+  const mainVariant = (state.series.mode === 'list' && mainSel !== null && variants[mainSel] ? variants[mainSel] : variants[0])
     || { design: state.design };
   await renderDesign(preview, mainVariant.design, { bakeText: true });
 
@@ -106,17 +108,15 @@ async function renderOnce() {
       }
       item.appendChild(caption);
 
-      if (isList) {
-        const del = document.createElement('button');
-        del.className = 'series-del';
-        del.textContent = 'x';
-        del.title = 'Remove this button from the set';
-        del.addEventListener('click', (e) => {
-          e.stopPropagation();
-          removeListItem(idx);
-        });
-        item.appendChild(del);
-      }
+      const del = document.createElement('button');
+      del.className = 'series-del';
+      del.textContent = 'x';
+      del.title = 'Remove this button from the set';
+      del.addEventListener('click', (e) => {
+        e.stopPropagation();
+        removeListItem(idx);
+      });
+      item.appendChild(del);
 
       item.addEventListener('dragstart', (e) => {
         gridDragIndex = idx;
@@ -141,7 +141,7 @@ async function renderOnce() {
       seriesWrap.appendChild(item);
     });
 
-    if (isList && state.series.items.length < 64) {
+    if (state.series.items.length < 64) {
       const wrap = document.createElement('div');
       wrap.className = 'series-add-tile';
       const add = document.createElement('button');
@@ -281,10 +281,6 @@ preview.addEventListener('dragover', (e) => {
 });
 preview.addEventListener('dragleave', () => preview.classList.remove('drop-target'));
 preview.addEventListener('drop', (e) => {
-  if (gridDragIndex === null && !isFileDrag(e)) {
-    const fromData = parseInt(e.dataTransfer.getData('text/plain'), 10);
-    if (!Number.isNaN(fromData)) gridDragIndex = fromData;
-  }
   if (gridDragIndex !== null) {
     e.preventDefault();
     const v = seriesVariants()[gridDragIndex];
@@ -347,6 +343,20 @@ function snapshot() {
   return JSON.stringify({ design: state.design, series: seriesForSnapshot() });
 }
 
+let sessionSaveWarned = false;
+
+function saveSession(s) {
+  try {
+    localStorage.setItem(SESSION_KEY, s);
+    sessionSaveWarned = false;
+  } catch (err) {
+    if (!sessionSaveWarned) {
+      sessionSaveWarned = true;
+      alert('Your work could not be saved for next time, browser storage is full. Large background images use a lot of space. Your design still works, but it may not survive a reload.');
+    }
+  }
+}
+
 function pushHistory() {
   const s = snapshot();
   if (undoStack[undoStack.length - 1] !== s) {
@@ -354,9 +364,7 @@ function pushHistory() {
     if (undoStack.length > 50) undoStack.shift();
     redoStack.length = 0;
   }
-  try {
-    localStorage.setItem(SESSION_KEY, s);
-  } catch (err) {}
+  saveSession(s);
 }
 
 function applyHistory(s) {
@@ -369,6 +377,7 @@ function applyHistory(s) {
   releaseSelection();
   emit();
   applyingUndo = false;
+  saveSession(s);
 }
 
 document.addEventListener('keydown', (e) => {
@@ -398,9 +407,6 @@ function restoreSession() {
   try {
     const saved = JSON.parse(localStorage.getItem(SESSION_KEY));
     if (saved && saved.design && Array.isArray(saved.design.texts)) {
-      for (const t of saved.design.texts) {
-        if (t.value) t.value = t.value.replace(/\\n/g, '\n');
-      }
       Object.assign(state.design, normalizeDesign(saved.design));
       const series = saved.series || {};
       if (series.mode === 'numbers') {

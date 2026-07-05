@@ -1,4 +1,4 @@
-export const APP_VERSION = '116';
+export const APP_VERSION = '117';
 
 export function defaultTextLayer() {
   return {
@@ -87,7 +87,7 @@ export function defaultSeries() {
 export const state = {
   design: defaultDesign(),
   series: defaultSeries(),
-  export: { size: 288, mode: 'streamdeck' },
+  export: { size: 288 },
   ui: { activeText: 0, activeIcon: 0, allText: false, allIcons: false, selectedItems: [] }
 };
 

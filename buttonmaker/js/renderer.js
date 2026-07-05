@@ -1,4 +1,4 @@
-import { invertHex } from './color.js?v=116';
+import { invertHex } from './color.js?v=117';
 
 const imageCache = new Map();
 const CACHE_MAX = 80;
@@ -66,6 +66,9 @@ function contentCentre(img, key) {
     }
   } catch (e) {}
   boundsCache.set(key, res);
+  if (boundsCache.size > CACHE_MAX) {
+    boundsCache.delete(boundsCache.keys().next().value);
+  }
   return res;
 }
 
@@ -214,7 +217,8 @@ export async function renderDesign(canvas, design, opts = {}) {
       if (icon.contentCenter) {
         const cc = contentCentre(img, src);
         if (cc) {
-          x -= (cc.cx - 0.5) * w;
+          const ccx = icon.reverse ? 1 - cc.cx : cc.cx;
+          x -= (ccx - 0.5) * w;
           y -= (cc.cy - 0.5) * h;
         }
       }

@@ -1,6 +1,6 @@
-import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=116';
-import { triggerIconUpload } from './icons.js?v=116';
-import { seriesVariants, numberSet } from './series.js?v=116';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=117';
+import { triggerIconUpload } from './icons.js?v=117';
+import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=117';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -552,6 +552,11 @@ export function initUI() {
     releaseSelection();
     convertNumberedToList();
     emit();
+    const total = numberedCount(state.series.from, state.series.to);
+    if (total > 64) {
+      const nums = numberedRange(state.series.from, state.series.to);
+      alert('That range makes ' + total + ' buttons and a set holds 64, so it stops at ' + nums[nums.length - 1] + '.');
+    }
   });
 
   const bindSeriesNum = (id, key) => {
@@ -706,9 +711,19 @@ function chipDeleteX(onDelete) {
   x.className = 'chip-x';
   x.textContent = 'x';
   x.title = 'Delete this layer';
+  x.setAttribute('role', 'button');
+  x.setAttribute('aria-label', 'Delete this layer');
+  x.tabIndex = 0;
   x.addEventListener('click', (e) => {
     e.stopPropagation();
     onDelete();
+  });
+  x.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      e.stopPropagation();
+      onDelete();
+    }
   });
   return x;
 }
@@ -802,7 +817,6 @@ export function syncInputsFromState() {
     el.disabled = state.ui.allIcons;
     el.classList.toggle('active', id === iconSrc);
   }
-  document.getElementById('exportPng').disabled = false;
   document.getElementById('exportZip').disabled = buttonCount() <= 1;
 
   setSeg('iconAlign', ic.align || 'center:center');

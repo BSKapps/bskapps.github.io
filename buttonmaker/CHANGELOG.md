@@ -2,6 +2,18 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v117 - 2026-07-05
+- Undo now sticks after a reload: undo/redo saves the session, and a restored design no longer rewrites a typed backslash-n into a real line break.
+- If the browser's storage is full, the app now warns once instead of silently losing the session (large background images are the usual cause).
+- Centre + Reverse now centres asymmetric icons correctly instead of doubling the offset.
+- REAPER export: linked _on strip names are now collision-checked, so an unlucky button name can no longer overwrite another strip in the ZIP.
+- "Number Them" with a range over 64 buttons now says where the set stops, instead of silently cutting off.
+- Imported preset items with no label no longer render or export as "undefined".
+- Keyboard access: layer and preset delete x buttons work with Enter/Space, the position grids have proper labels for screen readers, and control labels are clickable.
+- Help card copy updated to match the current card names and the REAPER Icons button.
+- Clicking empty space to go back to Edit All now also works on phones.
+- Tidy-up: dead CSS and dead code removed, icon bounds cache capped, test page fixed to load the same module versions as the app (it was loading a stale split graph).
+
 ## v112 - 2026-06-18
 - Wording: tagline, the PNG size hint and the page title/description now mention app icons. Footer non-affiliation line adds Apple. No functional change.
 

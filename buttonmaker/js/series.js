@@ -1,4 +1,4 @@
-import { state, deepClone } from './state.js?v=116';
+import { state, deepClone } from './state.js?v=117';
 
 export function hasToken(design) {
   return design.texts.some((t) => t.value && (t.value.includes('{n}') || t.value.includes('{label}')));
@@ -30,6 +30,12 @@ export function numberedRange(from, to) {
 export function numberStep(from, to) {
   const dp = Math.min(2, Math.max(decimalsOf(from), decimalsOf(to)));
   return Math.pow(10, -dp);
+}
+
+export function numberedCount(from, to) {
+  const dp = Math.min(2, Math.max(decimalsOf(from), decimalsOf(to)));
+  const scale = Math.pow(10, dp);
+  return Math.abs(Math.round(to * scale) - Math.round(from * scale)) + 1;
 }
 
 export function numberSet(design, from, to) {
@@ -109,7 +115,7 @@ function firstText(design) {
 
 function substitute(text, n, label) {
   if (!text) return text;
-  return text.replaceAll('{n}', String(n)).replaceAll('{label}', label);
+  return text.replaceAll('{n}', String(n)).replaceAll('{label}', label || '');
 }
 
 function iconLabel(design) {

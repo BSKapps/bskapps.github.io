@@ -1,8 +1,8 @@
-import { state, primarySelection, defaultTextLayer, buttonCount } from './state.js?v=116';
-import { renderToDataUrl, renderDesign } from './renderer.js?v=116';
-import { seriesVariants, variantFileName } from './series.js?v=116';
-import { downloadBlob } from './presets.js?v=116';
-import { buildCompanionPage } from './companion.js?v=116';
+import { state, primarySelection, defaultTextLayer } from './state.js?v=117';
+import { renderToDataUrl, renderDesign } from './renderer.js?v=117';
+import { seriesVariants, variantFileName } from './series.js?v=117';
+import { downloadBlob } from './presets.js?v=117';
+import { buildCompanionPage } from './companion.js?v=117';
 
 const SS = 4;
 const STATE_LIFT = [0, 0.05, 0.12];
@@ -94,6 +94,15 @@ export function reaperLinks(items) {
   return { skip, onStateFor };
 }
 
+function uniqueStripName(used, base, reserveOn) {
+  let name = base;
+  let k = 2;
+  while (used.has(name) || (reserveOn && used.has(name + '_on'))) name = base + '-' + k++;
+  used.add(name);
+  if (reserveOn) used.add(name + '_on');
+  return name;
+}
+
 export async function buildReaperZip(zip, variants, links) {
   const skip = links && links.skip ? links.skip : new Set();
   const onStateFor = (links && links.onStateFor) || {};
@@ -101,8 +110,8 @@ export async function buildReaperZip(zip, variants, links) {
   for (let i = 0; i < variants.length; i++) {
     if (skip.has(i)) continue;
     const v = variants[i];
-    const name = uniqueName(used, variantFileName(v, i));
     const onIdx = onStateFor[i];
+    const name = uniqueStripName(used, variantFileName(v, i), onIdx !== undefined);
     for (const s of REAPER_SIZES) {
       const base = await buildStrip(v.design, s.cell);
       zip.file('toolbar_icons/' + s.dir + name + '.png', base.toDataURL('image/png').split(',')[1], { base64: true });
@@ -115,17 +124,11 @@ export async function buildReaperZip(zip, variants, links) {
   return zip;
 }
 
-export function updateExportControls() {
-  document.getElementById('exportZip').disabled = buttonCount() <= 1;
-}
-
 export function initExport() {
   document.getElementById('exportPng').addEventListener('click', exportPng);
   document.getElementById('exportZip').addEventListener('click', exportZip);
   document.getElementById('exportCompanion').addEventListener('click', exportCompanion);
   document.getElementById('exportReaper').addEventListener('click', exportReaper);
-
-  updateExportControls();
 }
 
 async function exportPng() {
@@ -170,9 +173,7 @@ async function exportCompanion() {
       png64: png.split(',')[1],
       text: '',
       color: firstLayer.color,
-      bgcolor: v.design.bg.mode === 'solid' ? v.design.bg.color : '#000000',
-      size: firstLayer.size,
-      alignment: firstLayer.align
+      bgcolor: v.design.bg.mode === 'solid' ? v.design.bg.color : '#000000'
     });
   }
   const config = buildCompanionPage(buttons);
