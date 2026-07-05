@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNS on a Mac: how it works and how to set it per adapter - BSK Apps</title>
+    <meta name="description" content="How macOS decides which DNS servers to use with multiple adapters, why a show LAN should have no DNS at all, what Bonjour .local names really are, and how to fix stale lookups.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/mac-dns-for-av/">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="DNS on a Mac: how it works and how to set it per adapter">
+    <meta property="og:description" content="How macOS decides which DNS servers to use with multiple adapters, why a show LAN should have no DNS at all, what Bonjour .local names really are, and how to fix stale lookups.">
+    <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
+    <link rel="stylesheet" href="/css/site.css?v=20260611">
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>DNS on a Mac: how it works and how to set it per adapter</h1>
+            <p class="date">5 July 2026</p>
+
+            <p>DNS is the part of networking everyone treats as magic right up until the internet "stops working" on a machine that is, in fact, connected fine. On a single-adapter Mac it mostly is magic. On a show Mac running Wi-Fi plus a control LAN plus an audio network, DNS is one of the classic ways to break internet access without touching the internet connection - because DNS settings live per interface, but lookups are answered system-wide.</p>
+
+            <h2>Where DNS settings actually live</h2>
+            <p>Each network interface carries its own DNS server list, filled one of two ways:</p>
+            <ul>
+                <li><strong>From DHCP</strong> - the router hands out DNS servers along with the address. This is the default and what you're using on Wi-Fi and home networks.</li>
+                <li><strong>Manually</strong> - servers typed into the interface's DNS tab, which then override anything DHCP offered on that interface.</li>
+            </ul>
+            <p>The catch on a multi-adapter Mac: macOS builds one system-wide resolver configuration from all of those per-interface lists, and the <strong>service order</strong> decides whose DNS wins for general lookups. If your show LAN adapter sits above Wi-Fi in the service order and carries DNS servers that can't reach the internet, every web lookup on the machine dies - while the Wi-Fi is connected and perfectly healthy. This is one of the two classic multi-adapter traps (the other is duplicate gateways, covered in <a href="/articles/static-ips-av-networks">Running multiple network adapters on a Mac</a>).</p>
+
+            <h2>The rule: DNS only where the internet is</h2>
+            <p>Simple and worth making a habit:</p>
+            <ul>
+                <li><strong>Internet-facing interface</strong> (usually Wi-Fi): gets DNS, usually via DHCP. Leave it alone.</li>
+                <li><strong>Show control LAN</strong>: no DNS servers at all. Consoles and media servers are reached by IP address; there's nothing for DNS to resolve there.</li>
+                <li><strong>Audio network</strong> (Dante and friends): nothing. Link-local addressing, no router, no DNS.</li>
+            </ul>
+            <p>An empty DNS list on an isolated network isn't a missing setting - it's the correct setting. A filled-in one is a lookup path to a dead end.</p>
+
+            <h2>When to set DNS manually</h2>
+            <ul>
+                <li><strong>Venue networks with broken or filtered DNS.</strong> The connection works but lookups fail or redirect. Setting a public resolver - 1.1.1.1 (Cloudflare) or 8.8.8.8 (Google) - on that interface routes around the venue's servers.</li>
+                <li><strong>Captive portals, briefly.</strong> Note the reverse case: some venue login pages only resolve through the venue's own DNS, so if the portal won't load, go back to automatic until you're through it.</li>
+                <li><strong>Static-IP setups.</strong> A manually addressed interface gets no DHCP extras, so if that interface is also your internet path, DNS has to be typed in alongside the address.</li>
+            </ul>
+
+            <h2>.local names are not DNS</h2>
+            <p>Names like <code>console.local</code> resolve through Bonjour (mDNS) - multicast on the local subnet, no DNS server involved. That's why a QLab machine can find gear by name on a network with no DNS at all, and why those names stop resolving across subnets: multicast doesn't cross routers by default. If .local names work but real hostnames don't, DNS is your problem; if it's the other way around, look at multicast and subnetting, not DNS.</p>
+
+            <h2>When lookups go stale</h2>
+            <p>macOS caches DNS answers, and after network changes the cache can hold stale entries - the machine keeps resolving a name to an address that's no longer right. The standard reset:</p>
+            <ul>
+                <li><code>sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder</code></li>
+            </ul>
+            <p>Cheap, safe, and the first thing to try when one machine resolves a name wrongly while others are fine.</p>
+
+            <h2>Doing this without System Settings archaeology</h2>
+            <p>Per-interface DNS on macOS means clicking through Settings, Network, adapter, Details, DNS - for every adapter, every venue. <a href="/quickerip">Quicker IP</a> puts it in the menu bar: DNS is set per adapter independently of the IP mode, servers that came from DHCP are marked as automatic so you can tell them from deliberate choices at a glance, and DNS travels with presets - so "Venue Wi-Fi with Cloudflare DNS, control LAN with none" is saved once and applied in a click.</p>
+
+            <div class="article-cta">
+                <h3>Per-adapter DNS in one click</h3>
+                <p>Quicker IP sets DNS per adapter, shows which servers came from DHCP and which were chosen, and saves the lot as presets per venue - along with IP modes, scanning, and Dante checks.</p>
+                <a class="cta-link" href="/quickerip">Quicker IP &rarr;</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>

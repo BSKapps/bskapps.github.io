@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPv6 on a Mac: what it's doing and when to care - BSK Apps</title>
+    <meta name="description" content="What IPv6 is quietly doing on every Mac, why AV networks still run IPv4, whether turning IPv6 off helps, and how an IPv6-only adapter can actually be useful on show rigs.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/ipv6-on-a-mac/">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="IPv6 on a Mac: what it's doing and when to care">
+    <meta property="og:description" content="What IPv6 is quietly doing on every Mac, why AV networks still run IPv4, whether turning IPv6 off helps, and how an IPv6-only adapter can actually be useful on show rigs.">
+    <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
+    <link rel="stylesheet" href="/css/site.css?v=20260611">
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>IPv6 on a Mac: what it's doing and when to care</h1>
+            <p class="date">5 July 2026</p>
+
+            <p>Open the network details on any Mac and alongside the familiar 192.168.x.x address there's a block of hex starting with fe80:: that most people have trained themselves not to see. That's IPv6, it's been on by default for years, and for AV work the practical questions are simple: what is it doing, will it break anything, and is it ever actually useful on a rig?</p>
+
+            <h2>What's already happening without you</h2>
+            <p>Every active interface on a Mac gives itself a <strong>link-local IPv6 address</strong> (the fe80:: one) the moment the link comes up - no DHCP, no router, no configuration. It's the IPv6 equivalent of the 169.254.x.x self-assigned IPv4 address, except it isn't a fallback: it always exists, alongside whatever IPv4 is doing.</p>
+            <p>If the network has an IPv6-capable router, the Mac also picks up a <strong>routable address</strong> automatically (SLAAC - the router advertises the prefix and the Mac builds its own address; no DHCP server involved). Home internet connections and phone hotspots increasingly provide this, so your Mac is often reaching the internet over IPv6 without you ever choosing it.</p>
+            <p>macOS runs both stacks side by side and prefers IPv6 when a destination offers both and it's genuinely reachable ("Happy Eyeballs" races the two and takes the winner, so a broken IPv6 path doesn't hang you).</p>
+
+            <h2>Why your AV network doesn't use it</h2>
+            <p>Essentially all production gear speaks IPv4 only: Dante devices, consoles, media servers, lighting processors, most control software. Discovery protocols, static addressing habits, subnet planning - the whole AV networking culture is IPv4, and the address scarcity that IPv6 solves isn't a problem a 60-device show LAN has. Nothing about that is changing soon. Plan your show networks in IPv4 and treat IPv6 on those interfaces as inert background noise.</p>
+
+            <h2>Should you turn it off?</h2>
+            <p>Mostly: leave it alone. IPv6 runs as a separate stack, it doesn't consume IPv4 addresses, it doesn't interfere with IPv4 subnetting or routing, and Dante traffic neither uses nor notices it. The old advice to disable IPv6 on principle dates from an era of buggier implementations; on a modern Mac it buys you nothing on a show LAN.</p>
+            <p>The exceptions worth knowing:</p>
+            <ul>
+                <li><strong>Networks with broken IPv6.</strong> A venue network that advertises IPv6 but doesn't actually route it can cause slow first-connections as the Mac tries IPv6 before falling back. Happy Eyeballs hides most of it, but if browsing on venue internet feels oddly sticky, setting IPv6 to Link-Local Only on that interface is a legitimate fix.</li>
+                <li><strong>Tightly controlled show networks.</strong> Some networks are locked to known protocols only; a security or network policy may ask for IPv6 off. Fine - it costs nothing there either.</li>
+            </ul>
+            <p>macOS exposes this per interface: Configure IPv6 can be Automatically, Manually, or Link-Local Only (the closest thing to "off" the UI offers - the fe80:: address remains, routable IPv6 stops).</p>
+
+            <h2>Where IPv6 earns its keep on a rig</h2>
+            <p>Here's the genuinely useful trick: because the stacks are independent, an adapter can drop out of IPv4 entirely while staying connected over IPv6. Wi-Fi is the classic case. On show day you want the audio network to own IPv4 routing - but Wi-Fi with IPv4 disabled still delivers internet (on IPv6-capable connections), AirPlay, and location services, without contributing an IPv4 default route that can hijack traffic meant for the rig. You keep the convenience and lose the routing hazard.</p>
+            <p>Doing that from System Settings is a dig through per-interface panes. <a href="/quickerip">Quicker IP</a> makes it a menu-bar click: its IPv4 Off mode switches an adapter out of IPv4 while leaving the link and IPv6 up, and the status dot tells you what's really happening - orange for "live over IPv6", red for "no working IP at all". Restore puts the previous settings back when the show's over.</p>
+
+            <h2>The short version</h2>
+            <ul>
+                <li>IPv6 is already running on every interface; that's normal and harmless.</li>
+                <li>AV gear is IPv4 - plan show networks in IPv4 and ignore IPv6 there.</li>
+                <li>Don't disable it out of habit; do set Link-Local Only on networks with broken IPv6.</li>
+                <li>An IPv4-off, IPv6-only adapter is a tidy way to keep internet and AirPlay without polluting show-network routing.</li>
+            </ul>
+
+            <div class="article-cta">
+                <h3>Per-adapter control from the menu bar</h3>
+                <p>Quicker IP switches adapters between DHCP, static, and IPv4 Off in one click, shows live status per interface, and saves the whole setup as presets per venue.</p>
+                <a class="cta-link" href="/quickerip">Quicker IP &rarr;</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>
