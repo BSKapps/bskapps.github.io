@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A QLab show prep checklist - BSK Apps</title>
+    <meta name="description" content="A working checklist for getting a QLab workspace from a folder of client files to show-ready: formats, levels, routing, numbering, fades, panic times, and backups.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/qlab-show-prep-checklist/">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="A QLab show prep checklist">
+    <meta property="og:description" content="A working checklist for getting a QLab workspace from a folder of client files to show-ready: formats, levels, routing, numbering, fades, panic times, and backups.">
+    <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
+    <link rel="stylesheet" href="/css/site.css?v=20260611">
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>A QLab show prep checklist</h1>
+            <p class="date">5 July 2026</p>
+
+            <p>Every QLab operator has a version of this list in their head. Writing it down means the 11pm load-in version of you doesn't have to remember it. This is the sequence for going from "a folder of files the client sent" to a workspace you'd happily hand to another operator, in the order that avoids redoing work.</p>
+
+            <h2>1. Chase the files early, expect them late</h2>
+            <p>Ask for every asset days before you need it, and ask for the source version - the DAW export, not the phone recording of it. You won't get everything, but whatever arrives early can be fully prepped, leaving show morning for the stragglers only.</p>
+
+            <h2>2. Convert everything to one format first</h2>
+            <p>Before anything goes in the workspace: one format, one sample rate. WAV at the rig's rate (usually 48 kHz) is the standard answer, and it's the step that prevents the whole class of compressed-file surprises - wrong durations, off-target seeks, silent lead-ins. The reasoning and the traps are in <a href="/articles/qlab-audio-formats">Audio file formats for QLab</a>. Converting first also means every later step works on final files, so nothing has to be redone after a swap.</p>
+
+            <h2>3. Check channel counts and routing</h2>
+            <p>Find the mono files and the fake-stereo files before the output patch does. Decide the mono strategy once - which channels, what width - and apply it everywhere. The mono traps are covered in <a href="/articles/qlab-workspace-habits">QLab workspace habits</a>.</p>
+
+            <h2>4. Level the workspace to a target</h2>
+            <p>Get every cue to the same perceived loudness so the desk rides one fader, not sixty. Peak-normalised files are not level-matched files - use a LUFS target, then push stings and impacts up deliberately from that baseline. Full method in <a href="/articles/qlab-lufs-levels">Setting consistent QLab levels with LUFS</a>.</p>
+
+            <h2>5. Trim the dead air</h2>
+            <p>Client files arrive with silence padding both ends. A second of lead-in silence is a second of the presenter standing in dead air after the Go. Trim heads and tails, or set start and end markers, on every cue that fires on a specific moment.</p>
+
+            <h2>6. Number cues so a stranger could follow</h2>
+            <p>Renumber on tens so there's room to insert. Name cues for what they are on stage ("Walk-up - J Smith"), not the filename. The test: could a cover operator run this workspace cold?</p>
+
+            <h2>7. Set fades, continues, and panic times deliberately</h2>
+            <p>Every fade-out should have a duration someone chose. Auto-continues should exist only where a sequence genuinely wants them. Set the panic (Escape) fade time to something that sounds like a choice rather than a cut. Defaults are for rehearsal; a show file has no accidental settings.</p>
+
+            <h2>8. Test on the show system, at level</h2>
+            <p>The workspace that works on your laptop with headphones has proven nothing about the show Mac and the rig. Run every cue through the real output patch at something near show level, and listen to the first and last seconds of each - that's where the problems live.</p>
+
+            <h2>9. Back it up like you mean it</h2>
+            <p>Workspace plus media, bundled, on a drive that isn't the show machine - QLab's "Bundle Workspace" exists for exactly this. Do it again after any late change. The show that loses a machine at 5pm is only saved by the bundle you made at 4.</p>
+
+            <h2>The automatable part</h2>
+            <p>Steps 2 through 7 are mechanical - which is why we built <a href="/labassistant">Lab Assistant</a> to do them in bulk: batch conversion, LUFS levelling, mono routing, silence trimming, renumbering, and consistent fades across a whole workspace, in minutes. That moves your time to the steps that actually need ears and judgement: 8 and 9.</p>
+
+            <div class="article-cta">
+                <h3>Automate the mechanical half of show prep</h3>
+                <p>Lab Assistant runs the conversion, levelling, routing, trimming, and numbering passes across a whole QLab workspace - so tech time goes to listening, not admin.</p>
+                <a class="cta-link" href="/labassistant">Lab Assistant &rarr;</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>

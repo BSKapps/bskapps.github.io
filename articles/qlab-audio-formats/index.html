@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio file formats for QLab: what to use and what to avoid - BSK Apps</title>
+    <meta name="description" content="Which audio formats play back reliably in QLab, why VBR MP3s cause trouble, what sample rate to standardise on, and how to convert a whole show's files in one pass.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/qlab-audio-formats/">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Audio file formats for QLab: what to use and what to avoid">
+    <meta property="og:description" content="Which audio formats play back reliably in QLab, why VBR MP3s cause trouble, what sample rate to standardise on, and how to convert a whole show's files in one pass.">
+    <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
+    <link rel="stylesheet" href="/css/site.css?v=20260611">
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>Audio file formats for QLab: what to use and what to avoid</h1>
+            <p class="date">5 July 2026</p>
+
+            <p>QLab will play almost anything you drop on it - WAV, AIFF, CAF, MP3, AAC, and whatever else macOS knows how to decode. That flexibility is great in the rehearsal room and a trap on show day, because "it plays" and "it plays predictably every single time" are different standards. The files a client emails you were made for convenience, not playback.</p>
+
+            <h2>The safe choice: uncompressed, at the show's sample rate</h2>
+            <p>For anything that matters, use WAV or AIFF:</p>
+            <ul>
+                <li><strong>No decoding surprises.</strong> Uncompressed PCM has nothing to unpack - seeking is sample-accurate, durations are exact, and the CPU cost is trivial.</li>
+                <li><strong>48 kHz</strong> is the usual show standard, matching video and most playback rigs. Whatever your rig runs at, make every file match it - resampling on the fly is work the machine doesn't need to do during a show.</li>
+                <li><strong>16-bit or 24-bit</strong> both fine. 24-bit if the source has it, but nobody has ever lost a show to 16-bit playback.</li>
+            </ul>
+            <p>Disk space stopped being an argument years ago. A three-hour show's worth of stereo WAVs is a few gigabytes on a machine with hundreds free.</p>
+
+            <h2>MP3 and AAC: fine until they aren't</h2>
+            <p>Compressed files mostly work, and for a walk-in playlist nobody will hear the difference. The trouble is behavioural, not sonic:</p>
+            <ul>
+                <li><strong>VBR MP3s are the classic trap.</strong> Variable bitrate files have no fixed relationship between position in the file and position in time, so reported durations can be wrong and seeks land off-target - a slice or a start-time offset in QLab may not hit where you set it. If a cue's waveform doesn't match what you hear, a VBR MP3 is the first suspect. If MP3 is unavoidable, use constant bitrate (CBR).</li>
+                <li><strong>Encoder delay padding.</strong> MP3 and AAC add a short stretch of silence at the front of the file as a by-product of encoding, which matters the moment cues need tight timing against each other.</li>
+            </ul>
+            <p>The habit that avoids all of it: treat compressed files as source material, and convert them to WAV before they go anywhere near the workspace.</p>
+
+            <h2>Mono, stereo, and channel counts</h2>
+            <p>Know what each file actually is before it hits your output patch. A mono file in a workspace patched for stereo pairs behaves differently to a stereo file, and a stereo file with identical channels is mono in disguise taking up two channels of routing. There's more on this trap in <a href="/articles/qlab-workspace-habits">QLab workspace habits from real shows</a>.</p>
+
+            <h2>Convert the whole show in one pass</h2>
+            <p>Converting sixty files by hand - open, export, rename, replace - is exactly the kind of prep chore that eats an afternoon. <a href="/labassistant">Lab Assistant</a> does it in bulk: point it at your files or the workspace, pick the output format and sample rate, and every file comes out consistent. Pair the conversion pass with a <a href="/articles/qlab-lufs-levels">LUFS levelling pass</a> and the whole workspace starts tech from a known state: same format, same rate, same loudness.</p>
+
+            <div class="article-cta">
+                <h3>One pass, every file consistent</h3>
+                <p>Lab Assistant batch-converts audio and video for QLab, levels cues to a LUFS target, trims silence, and tidies numbering - the show-prep chores, automated.</p>
+                <a class="cta-link" href="/labassistant">Lab Assistant &rarr;</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>
