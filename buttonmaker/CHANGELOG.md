@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v121 - 2026-07-05
+- Mobile Position-grid watermark sized up from 72 to 90 px - v120 shrank it more than needed; 90 clears the grid and still reads.
+
 ## v120 - 2026-07-05
 - Phones: the faint T / image watermark beside the Position grids is smaller and pinned to the right edge, so it no longer bleeds into the grid on narrow screens. Desktop unchanged.
 
