@@ -29,6 +29,14 @@
             &nbsp; <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-spotify" target="_blank" rel="noopener">View on GitHub &rarr;</a>
         </div>
 
+        <div class="script-card">
+            <h3>BSK Smaart <span class="badge">Companion</span></h3>
+            <p>Control Rational Acoustics Smaart V9 over the Smaart API. Capture traces without the app in focus, start and stop measurements and delay tracking, drive the signal generator, and toggle target curves and views. On Smaart Suite and the Smaart SPL edition, also read live SPL meters - SPL Fast and Slow in Z, A and C weighting, Leq, LAeq, LCeq, Peak, and exposure - straight onto buttons with Smaart's own threshold colours. Live action feedbacks and per-channel SPL variables included.</p>
+            <p class="note-line"><strong>Live SPL:</strong> while SPL logging is running in Smaart, every calibrated channel streams its meter values to Companion. A one-button SPL Logging Start/Stop action arms it from the surface.</p>
+            <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-smaart/releases/latest" target="_blank" rel="noopener">Download latest release &rarr;</a>
+            &nbsp; <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-smaart" target="_blank" rel="noopener">View on GitHub &rarr;</a>
+        </div>
+
         <h2 class="section-title" style="margin-top: 32px; margin-bottom: 16px;">How to Install a Companion Module Manually</h2>
 
         <div class="script-card setup">
@@ -38,8 +46,8 @@
                 <li>Download <code>bsk-spotify-X.Y.Z.tgz</code> from the <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-spotify/releases/latest" target="_blank" rel="noopener">latest release</a>. Do not extract it.</li>
                 <li>In Companion, click <strong>Modules</strong> in the left sidebar.</li>
                 <li>Click <strong>Import module package</strong> (the orange button) and select the downloaded <code>.tgz</code> file. The Finder window may open in an unexpected location - navigate to your <strong>Downloads</strong> folder if needed.</li>
-                <li>Click <strong>Connections</strong> in the left sidebar, then add a new connection. Search for <code>BSK Spotify</code> and select it.</li>
-                <li>Configure the connection with your Client ID and Client Secret (see the Spotify Developer app section below).</li>
+                <li>Click <strong>Connections</strong> in the left sidebar, then add a new connection. Search for <code>BSK Spotify</code> or <code>BSK Smaart</code> and select it.</li>
+                <li>Configure the connection. BSK Spotify needs a Client ID and Client Secret (see the Spotify Developer app section below). BSK Smaart needs the IP or hostname and port of the computer running Smaart (see the Smaart API section below).</li>
             </ol>
             <p class="note-line" style="margin-top:14px;"><strong>After Companion updates:</strong> in our testing the module survived a version update intact, but we can't guarantee every update will preserve it. If the BSK Spotify connection disappears after an update, re-import the <code>.tgz</code> from the latest release and re-add the connection. Your Client ID, Client Secret, and tokens are kept in Companion's database and are usually preserved.</p>
         </div>
@@ -72,6 +80,18 @@
                 </li>
             </ol>
             <p class="note-line" style="margin-top:14px;"><strong>If Authenticate fails with "INVALID_CLIENT" or similar:</strong> the most common cause is the Redirect URI in your Spotify app does not match <code>http://127.0.0.1:4115/callback</code> exactly. Whitespace, https vs http, or a trailing slash will all break it. Double-check it appears in the Redirect URIs list and re-save the Spotify app if needed.</p>
+        </div>
+
+        <div class="script-card setup">
+            <h3>Smaart API for the BSK Smaart module</h3>
+            <p>The Smaart module talks to Smaart over its built-in API. No account or developer app is needed, you just enable the API in Smaart.</p>
+            <ol class="steps">
+                <li>In Smaart, open <strong>Options &gt; Preferences &gt; API</strong>.</li>
+                <li>Tick <strong>Enabled</strong> and note the <strong>Port</strong> (default <code>26000</code>). Set a password only if you want one.</li>
+                <li>In the Companion connection, enter the IP or hostname of the computer running Smaart (use <code>localhost</code> if Companion and Smaart are on the same machine), the port, and the password if you set one.</li>
+                <li>Live SPL values need SPL logging running in Smaart. Start it there, or put the module's <strong>SPL Logging Start/Stop</strong> action on a button.</li>
+            </ol>
+            <p class="note-line" style="margin-top:14px;">Commands go over the network, so Smaart does not need to be the front application and can even run on a different computer.</p>
         </div>
 
         <footer>

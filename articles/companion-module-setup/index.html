@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Companion module setup for common AV gear - BSK Apps</title>
-    <meta name="description" content="Practical Companion module setup for QLab, REAPER, Spotify, Shure ULXD and Axient, Blackmagic ATEM, Barco Event Controller, vMix, Millumin, and Stage Timer.">
+    <meta name="description" content="Practical Companion module setup for QLab, REAPER, Spotify, Shure ULXD and Axient, Blackmagic ATEM, Barco Event Controller, vMix, Millumin, Smaart, and Stage Timer.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="canonical" href="https://bskapps.com/articles/companion-module-setup/">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Companion module setup for common AV gear">
-    <meta property="og:description" content="Practical Companion module setup for QLab, REAPER, Shure wireless, ATEM, Barco, vMix, Millumin, Spotify, and Stage Timer.">
+    <meta property="og:description" content="Practical Companion module setup for QLab, REAPER, Shure wireless, ATEM, Barco, vMix, Millumin, Spotify, Smaart, and Stage Timer.">
     <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
     <link rel="stylesheet" href="/css/site.css?v=20260611">
 </head>
@@ -62,6 +62,10 @@
             <h2>Spotify</h2>
             <p>The Spotify module connects via the Spotify Web API and requires OAuth authentication and a Spotify Premium account. You register a developer application in Spotify's developer portal, get a client ID and secret, and authorise the connection through Companion's web UI. This sounds involved but is a one-time setup.</p>
             <p>Once connected, actions cover playback control, volume, next/previous track, shuffle and repeat, and switching between playback devices. Feedback shows currently playing track and artist on a button. The practical use case is venue background music: an operator running a pre-show playlist from a Stream Deck without touching the computer running the show stack. Keep Spotify on a Spotify Connect device rather than the main show Mac if possible - having Spotify's audio routing coexist with QLab on the same machine is manageable but adds an audio configuration step.</p>
+
+            <h2>Smaart</h2>
+            <p>Rational Acoustics Smaart V9 exposes a network API, and the BSK Smaart module connects to it over a websocket. Enable the API in Smaart under Options, Preferences, API, note the port (26000 by default), and point the module at the machine's IP and port. No account or licence server is involved. Because control goes over the network, Smaart can run on a separate measurement laptop while Companion drives it from the show position.</p>
+            <p>Actions cover trace capture, starting and stopping measurements, delay tracking, the signal generator, and the display toggles you would otherwise reach for by hotkey, including target curves and view presets. On Smaart Suite and the Smaart SPL edition, the module also reads live SPL meters - SPL Fast and Slow in Z, A and C weighting, Leq, LAeq, LCeq, Peak, and exposure - and puts them on buttons as variables with Smaart's own threshold colours, so a Stream Deck can show the room's level at a glance. SPL is not exposed over the API on Smaart LE or RT. SPL values need SPL logging running in Smaart, which the module can start and stop from a button.</p>
 
             <h2>When a module stays disconnected</h2>
             <p>If a module connects successfully in testing but drops out during the show, the usual causes are the device losing its IP (DHCP lease expired or the device rebooted), a network switch losing power or being unplugged and reconnected, or the Mac's routing table changing when an adapter comes up or goes down. Most modules will reconnect automatically once the device is reachable again, but it is worth knowing which ones do and testing it before the show. For modules that don't auto-reconnect, a Companion button that restarts the module connection is a useful thing to have on a hidden or secondary page.</p>
