@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v122 - 2026-07-07
+- "More from BSK" REAPER tile updated to the new live recording setup: heading, subtitle and blurb now match the tools page.
+
 ## v121 - 2026-07-05
 - Mobile Position-grid watermark sized up from 72 to 90 px - v120 shrank it more than needed; 90 clears the grid and still reads.
 
