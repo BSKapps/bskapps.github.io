@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free REAPER Lua Scripts for Stream Deck - BSK Apps</title>
-    <meta name="description" content="Free REAPER Lua scripts for Stream Deck transport control and hardware patching. Safe play/pause/record and mono autopatch for live recording.">
+    <title>Free REAPER Live Recording Template and Lua Scripts - BSK Apps</title>
+    <meta name="description" content="Free REAPER live recording template: project and track templates patched 1:1 for up to 128 inputs, toolbars, safe record scripts and meter views. Built for live multitrack recording and virtual soundcheck.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="apple-touch-icon" href="/images/favicon-180.png">
-    <meta property="og:title" content="Free REAPER Lua Scripts for Stream Deck and Live Recording">
-    <meta property="og:description" content="Free REAPER Lua scripts for Stream Deck transport control and hardware patching. Safe play, pause, record buttons and 1-to-1 mono autopatch.">
+    <meta property="og:title" content="Free REAPER Live Recording Template and Lua Scripts">
+    <meta property="og:description" content="A complete free REAPER setup for live multitrack recording and virtual soundcheck: templates patched to 128 inputs, toolbars, safe record scripts and meter views.">
     <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
     <meta property="og:url" content="https://bskapps.com/tools/reaper/">
     <meta property="og:type" content="website">
@@ -18,13 +18,22 @@
     {
         "@context": "https://schema.org",
         "@type": "ItemList",
-        "name": "Free REAPER Lua Scripts",
-        "description": "Free REAPER Lua scripts for Stream Deck transport control and hardware patching",
-        "numberOfItems": 6,
+        "name": "Free REAPER Live Recording Template and Lua Scripts",
+        "description": "A free REAPER live recording setup with templates patched to 128 inputs, plus Lua scripts for Stream Deck transport control and hardware patching",
+        "numberOfItems": 7,
         "itemListElement": [
             {
-                "@type": "SoftwareSourceCode",
+                "@type": "SoftwareApplication",
                 "position": 1,
+                "name": "BSK REAPER Live Recording Setup",
+                "description": "Complete free REAPER setup for live multitrack recording and virtual soundcheck: record-ready project template, track templates patched 1:1 for 8 to 128 hardware inputs, toolbars, window sets and scripts.",
+                "operatingSystem": "macOS, Windows, Linux",
+                "applicationCategory": "MultimediaApplication",
+                "isAccessibleForFree": true
+            },
+            {
+                "@type": "SoftwareSourceCode",
+                "position": 2,
                 "name": "BSK Transport: Safe Rec Play",
                 "description": "Starts playback only if stopped or paused. Designed for Stream Deck transport buttons.",
                 "programmingLanguage": "Lua",
@@ -33,7 +42,7 @@
             },
             {
                 "@type": "SoftwareSourceCode",
-                "position": 2,
+                "position": 3,
                 "name": "BSK Transport: Safe Rec Pause",
                 "description": "Pauses if playing, unpauses if paused. Designed for Stream Deck transport buttons.",
                 "programmingLanguage": "Lua",
@@ -42,7 +51,7 @@
             },
             {
                 "@type": "SoftwareSourceCode",
-                "position": 3,
+                "position": 4,
                 "name": "BSK Transport: Safe Rec Record",
                 "description": "Starts recording only if not already recording. Designed for Stream Deck transport buttons.",
                 "programmingLanguage": "Lua",
@@ -51,7 +60,7 @@
             },
             {
                 "@type": "SoftwareSourceCode",
-                "position": 4,
+                "position": 5,
                 "name": "BSK Import: Track Names from CSV or Text",
                 "description": "Imports channel names from a console offline editor export and creates or renames tracks. Works with Allen and Heath, Yamaha, or any plain text file.",
                 "programmingLanguage": "Lua",
@@ -60,7 +69,7 @@
             },
             {
                 "@type": "SoftwareSourceCode",
-                "position": 5,
+                "position": 6,
                 "name": "BSK AutoPatch: HW 1-to-1 Mono",
                 "description": "Patches all tracks 1:1 to mono hardware inputs and outputs for live recording and virtual soundcheck.",
                 "programmingLanguage": "Lua",
@@ -69,7 +78,7 @@
             },
             {
                 "@type": "SoftwareSourceCode",
-                "position": 6,
+                "position": 7,
                 "name": "BSK AutoPatch: HW Teardown",
                 "description": "Removes all hardware sends and restores master send on every track. Undo for AutoPatch.",
                 "programmingLanguage": "Lua",
@@ -83,8 +92,8 @@
 <body>
     <div class="container">
         <a class="back" href="/tools">&larr; Free Tools</a>
-        <h1>REAPER Lua Scripts</h1>
-        <p class="tagline">Designed for live recording and virtual soundcheck.</p>
+        <h1>REAPER Live Recording Template and Lua Scripts</h1>
+        <p class="tagline">A free REAPER setup for live multitrack recording and virtual soundcheck.</p>
 
         <h2 class="section-title">Complete Live Recording Setup</h2>
         <p class="section-desc">The whole BSK live recording rig in one free download.</p>

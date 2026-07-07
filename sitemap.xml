@@ -37,7 +37,7 @@
   </url>
   <url>
     <loc>https://bskapps.com/tools/reaper/</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-07-07</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
@@ -163,6 +163,16 @@
   <url>
     <loc>https://bskapps.com/articles/reaper-lua-cue-workflows/</loc>
     <lastmod>2026-04-09</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://bskapps.com/articles/reaper-live-show-recording/</loc>
+    <lastmod>2026-07-07</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://bskapps.com/articles/reaper-virtual-soundcheck/</loc>
+    <lastmod>2026-07-07</lastmod>
     <priority>0.6</priority>
   </url>
   <url>

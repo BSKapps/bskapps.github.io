@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to record a live show in REAPER - BSK Apps</title>
+    <meta name="description" content="A working method for multitrack live show recording in REAPER: 1-to-1 patching, track names from the console, safe transport, markers per song, and dual-drive redundancy.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/reaper-live-show-recording/">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="How to record a live show in REAPER">
+    <meta property="og:description" content="Multitrack live recording in REAPER: patching, naming, safe transport, markers, and redundancy.">
+    <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
+    <link rel="stylesheet" href="/css/site.css?v=20260611">
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>How to record a live show in REAPER</h1>
+            <p class="date">7 July 2026</p>
+
+            <p>REAPER is close to the perfect live capture machine. It is cheap, light on the CPU, stable for hours at a time, and it does not care whether you hand it 8 inputs or 128. What it does not give you is a workflow. Out of the box it is a blank page, and a blank page at half past seven with doors at eight is a problem. This is the workflow we use, start to finish.</p>
+
+            <h2>Get the inputs into the machine</h2>
+            <p>Your console side is done for you: most desks present every input channel over USB or a Dante/Waves/MADI card as a simple numbered list. Channel 1 on the desk is input 1 on the computer. Keep it that way. Clever routing at either end is something you will be debugging in the dark later.</p>
+            <p>On the REAPER side you want one mono track per hardware input, record armed, input assigned 1-to-1. Do not build this by hand at a gig. Either insert a pre-patched track template sized to the show, or run a script that walks every track and patches it to the matching mono input. A stereo source like overheads is two mono tracks. Mono files are also friendlier afterwards, when you want to hand individual channels to someone else.</p>
+
+            <h2>Name tracks from the console, not by hand</h2>
+            <p>Every console offline editor exports its channel list. dLive, Avantis and SQ export CSV; Yamaha CL, QL and Rivage do too; worst case you type names into a plain text file, one per line. Import that into REAPER with a script and forty-eight tracks are named correctly in one action. Typing names by hand is half an hour of prep and at least one wrong label, and wrong labels on a live recording surface at the worst possible time, usually during the mixdown.</p>
+
+            <h2>Project settings that will not bite you</h2>
+            <ul>
+                <li>48 kHz, 24-bit WAV. Match the console clock rate. Nobody has ever been grateful for a 96 kHz live recording of a pub gig that filled the drive in the second set.</li>
+                <li>Record path on a dedicated drive, not the system disk.</li>
+                <li>Autosave on, and save the project before the downbeat.</li>
+            </ul>
+            <p>Work out disk budget in advance: track count x 3 bytes x sample rate x seconds. 64 tracks at 48 kHz is roughly 33 GB per hour. Double it if you are recording redundantly, which you should be.</p>
+
+            <h2>Make the transport safe</h2>
+            <p>The stock transport will happily let you stop a take with a stray key press. For a show, wrap record, play and pause in safe versions: record only starts if not already recording, pause never fires while a take is rolling, play never interrupts a recording. Put those on a toolbar or a Stream Deck and the worst button press of your life becomes a no-op.</p>
+
+            <h2>Markers per song, not one long blob</h2>
+            <p>Drop a marker every time a song starts. Two hours of continuous multitrack with no markers costs you an evening of scrubbing later. The tidy version is a single action that inserts a named marker as it punches in, and another that stops, saves and re-arms for the next set. Recording straight through the set change costs you nothing but disk.</p>
+
+            <h2>Redundancy</h2>
+            <p>REAPER can record to a primary and secondary path at the same time, so a second cheap SSD gives you a full mirror of every take. Drives fail rarely, but they fail on show nights like everything else. If the console records its own board mix or virtual soundcheck capture, run that too. Nobody has ever regretted a spare copy.</p>
+
+            <h2>The night itself</h2>
+            <p>Line check with meters visible, one screen of meter bridge beats six screens of arrange view. Confirm every channel moves. Arm everything, check the record path one last time, punch in before the walk-in music ends, and then leave it alone. The recording rig is not the place to be creative mid-show.</p>
+
+            <div class="article-cta">
+                <h3>The whole setup, ready to install</h3>
+                <p>Everything in this article - patched track templates up to 128 inputs, name import, safe transport, markers and meter views - is packaged as a free REAPER setup you can install in a few minutes.</p>
+                <a class="cta-link" href="/tools/reaper/">Free REAPER live recording setup &rarr;</a>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+        </footer>
+    </div>
+</body>
+</html>
