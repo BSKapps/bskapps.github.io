@@ -21,39 +21,37 @@
         <h1>Companion Modules</h1>
         <p class="tagline">Open source Bitfocus Companion modules. Free, MIT licensed.</p>
 
+        <p class="section-desc">Two modules for Bitfocus Companion 4+: full Spotify control, and Rational Acoustics Smaart V9 control with live SPL. Both install the same way - import the module package, then follow its short setup below.</p>
+
+        <h2 class="section-title" style="margin-top: 32px; margin-bottom: 16px;">Add a module to Companion</h2>
+
+        <div class="script-card setup">
+            <h3>Import the module package</h3>
+            <p>Companion 4.x imports a module directly from its <code>.tgz</code> file. Use this until the modules are published to the official Companion list. The steps are the same for either module.</p>
+            <ol class="steps">
+                <li>Download the module's <code>.tgz</code> - <code>bsk-spotify-X.Y.Z.tgz</code> or <code>bsk-smaart-X.Y.Z.tgz</code> - from its latest release (links in each module below). Do not extract it.</li>
+                <li>In Companion, click <strong>Modules</strong> in the left sidebar.</li>
+                <li>Click <strong>Import module package</strong> (the orange button) and select the downloaded <code>.tgz</code> file. The Finder window may open in an unexpected location - navigate to your <strong>Downloads</strong> folder if needed.</li>
+                <li>Click <strong>Connections</strong> in the left sidebar, add a new connection, search for <code>BSK Spotify</code> or <code>BSK Smaart</code>, and select it.</li>
+                <li>Configure the connection using the module's setup section below.</li>
+            </ol>
+            <p class="note-line" style="margin-top:14px;"><strong>After Companion updates:</strong> in our testing the modules survived a version update intact, but we can't guarantee every update will preserve them. If a connection disappears after an update, re-import the <code>.tgz</code> from the latest release and re-add the connection. Your saved settings and tokens are kept in Companion's database and are usually preserved.</p>
+        </div>
+
+        <div class="tile-head" style="margin-top: 44px; margin-bottom: 14px;">
+            <img class="tile-icon" src="/images/spotify-module-icon.svg" alt="BSK Spotify for Companion" width="58" height="58">
+            <h2 class="section-title" style="margin: 0;">BSK Spotify</h2>
+        </div>
+
         <div class="script-card">
-            <h3>BSK Spotify <span class="badge">Companion</span></h3>
             <p>Full-featured Spotify Web API controller for Companion. Cue-point playback from a timestamp, named bookmarks, volume fades, album art grids (1x1, 2x2, 3x3), playlist control, 99 ready-made presets, and 30 dynamic variables for track info, timing, and state. Requires a Spotify Premium account and a free Spotify Developer app.</p>
             <p class="note-line"><strong>macOS offline fallback:</strong> if the Web API drops out mid-show, transport actions keep working via AppleScript and the local Spotify app. Auto-recovers when the API returns.</p>
             <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-spotify/releases/latest" target="_blank" rel="noopener">Download latest release &rarr;</a>
             &nbsp; <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-spotify" target="_blank" rel="noopener">View on GitHub &rarr;</a>
         </div>
 
-        <div class="script-card">
-            <h3>BSK Smaart <span class="badge">Companion</span></h3>
-            <p>Control Rational Acoustics Smaart V9 over the Smaart API. Capture traces without the app in focus, start and stop measurements and delay tracking, drive the signal generator, and toggle target curves and views. On Smaart Suite and the Smaart SPL edition, also read live SPL meters - SPL Fast and Slow in Z, A and C weighting, Leq, LAeq, LCeq, Peak, and exposure - straight onto buttons with Smaart's own threshold colours. Live action feedbacks and per-channel SPL variables included.</p>
-            <p class="note-line"><strong>Live SPL:</strong> while SPL logging is running in Smaart, every calibrated channel streams its meter values to Companion. A one-button SPL Logging Start/Stop action arms it from the surface.</p>
-            <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-smaart/releases/latest" target="_blank" rel="noopener">Download latest release &rarr;</a>
-            &nbsp; <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-smaart" target="_blank" rel="noopener">View on GitHub &rarr;</a>
-        </div>
-
-        <h2 class="section-title" style="margin-top: 32px; margin-bottom: 16px;">How to Install a Companion Module Manually</h2>
-
         <div class="script-card setup">
-            <h3>Add the module to Companion</h3>
-            <p>Companion 4.x lets you import a module directly from a <code>.tgz</code> file. Use this until the module is published to the official Companion module list.</p>
-            <ol class="steps">
-                <li>Download <code>bsk-spotify-X.Y.Z.tgz</code> from the <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-spotify/releases/latest" target="_blank" rel="noopener">latest release</a>. Do not extract it.</li>
-                <li>In Companion, click <strong>Modules</strong> in the left sidebar.</li>
-                <li>Click <strong>Import module package</strong> (the orange button) and select the downloaded <code>.tgz</code> file. The Finder window may open in an unexpected location - navigate to your <strong>Downloads</strong> folder if needed.</li>
-                <li>Click <strong>Connections</strong> in the left sidebar, then add a new connection. Search for <code>BSK Spotify</code> or <code>BSK Smaart</code> and select it.</li>
-                <li>Configure the connection. BSK Spotify needs a Client ID and Client Secret (see the Spotify Developer app section below). BSK Smaart needs the IP or hostname and port of the computer running Smaart (see the Smaart API section below).</li>
-            </ol>
-            <p class="note-line" style="margin-top:14px;"><strong>After Companion updates:</strong> in our testing the module survived a version update intact, but we can't guarantee every update will preserve it. If the BSK Spotify connection disappears after an update, re-import the <code>.tgz</code> from the latest release and re-add the connection. Your Client ID, Client Secret, and tokens are kept in Companion's database and are usually preserved.</p>
-        </div>
-
-        <div class="script-card setup">
-            <h3>Spotify Developer app for the BSK Spotify module</h3>
+            <h3>Set up the Spotify Developer app</h3>
             <p>The Spotify module needs a free Spotify Developer app for OAuth. One per Companion install is enough. Your normal Spotify account is fine; you do not need a paid developer subscription.</p>
             <ol class="steps">
                 <li>Go to <a class="download-link" href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">developer.spotify.com/dashboard</a> and sign in with your normal Spotify account.</li>
@@ -82,8 +80,20 @@
             <p class="note-line" style="margin-top:14px;"><strong>If Authenticate fails with "INVALID_CLIENT" or similar:</strong> the most common cause is the Redirect URI in your Spotify app does not match <code>http://127.0.0.1:4115/callback</code> exactly. Whitespace, https vs http, or a trailing slash will all break it. Double-check it appears in the Redirect URIs list and re-save the Spotify app if needed.</p>
         </div>
 
+        <div class="tile-head" style="margin-top: 44px; margin-bottom: 14px;">
+            <img class="tile-icon" src="/images/smaart-module-icon.svg" alt="BSK Smaart for Companion" width="58" height="58">
+            <h2 class="section-title" style="margin: 0;">BSK Smaart</h2>
+        </div>
+
+        <div class="script-card">
+            <p>Control Rational Acoustics Smaart V9 over the Smaart API. Capture traces without the app in focus, start and stop measurements and delay tracking, drive the signal generator, and toggle target curves and views. On Smaart Suite and the Smaart SPL edition, also read live SPL meters - SPL Fast and Slow in Z, A and C weighting, Leq, LAeq, LCeq, Peak, and exposure - straight onto buttons with Smaart's own threshold colours. Live action feedbacks and per-channel SPL variables included.</p>
+            <p class="note-line"><strong>Live SPL:</strong> while SPL logging is running in Smaart, every calibrated channel streams its meter values to Companion. A one-button SPL Logging Start/Stop action arms it from the surface.</p>
+            <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-smaart/releases/latest" target="_blank" rel="noopener">Download latest release &rarr;</a>
+            &nbsp; <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-smaart" target="_blank" rel="noopener">View on GitHub &rarr;</a>
+        </div>
+
         <div class="script-card setup">
-            <h3>Smaart API for the BSK Smaart module</h3>
+            <h3>Enable the Smaart API</h3>
             <p>The Smaart module talks to Smaart over its built-in API. No account or developer app is needed, you just enable the API in Smaart.</p>
             <ol class="steps">
                 <li>In Smaart, open <strong>Options &gt; Preferences &gt; API</strong>.</li>
