@@ -20,7 +20,7 @@
         "@type": "ItemList",
         "name": "Free REAPER Live Recording Template and Lua Scripts",
         "description": "A free REAPER live recording setup with templates patched to 128 inputs, plus Lua scripts for Stream Deck transport control and hardware patching",
-        "numberOfItems": 7,
+        "numberOfItems": 8,
         "itemListElement": [
             {
                 "@type": "SoftwareApplication",
@@ -84,6 +84,15 @@
                 "programmingLanguage": "Lua",
                 "runtimePlatform": "REAPER DAW",
                 "isAccessibleForFree": true
+            },
+            {
+                "@type": "SoftwareSourceCode",
+                "position": 8,
+                "name": "BSK Auto-name: Tracks from Device Inputs",
+                "description": "Names each track from the input label the audio interface reports for its assigned hardware channel. Previews the names and applies them only after you confirm.",
+                "programmingLanguage": "Lua",
+                "runtimePlatform": "REAPER DAW",
+                "isAccessibleForFree": true
             }
         ]
     }
@@ -100,8 +109,18 @@
 
         <div class="script-card">
             <h3>BSK REAPER Live Recording Setup <span class="badge">ZIP</span></h3>
-            <p>A record-ready project template (48kHz WAV), track templates that drop in 8 to 128 tracks pre-named and patched 1:1 to hardware inputs, all six scripts below, the BSK toolbars with icons, and window sets for meter bridge and mixer views. Includes an installer for Mac and Windows and a README with the full steps. Requires REAPER 7 and the free <a class="download-link" href="https://www.sws-extension.org" target="_blank" rel="noopener">SWS Extension</a> for the toolbars.</p>
+            <p>A record-ready project template (48kHz WAV), track templates that drop in 8 to 128 tracks pre-named and patched 1:1 to hardware inputs, all seven scripts below, the BSK toolbars (setup, show, editing, views and automation) with icons, and window sets for meter bridge and mixer views. Includes an installer for Mac and Windows and a README with the full steps. Requires REAPER 7 and the free <a class="download-link" href="https://www.sws-extension.org" target="_blank" rel="noopener">SWS Extension</a> for the toolbars.</p>
             <a class="download-link" href="/tools/scripts/BSK-REAPER-Live-Recording-Setup.zip" download>Download BSK REAPER Live Recording Setup (ZIP)</a>
+            <p style="margin-top: 20px;">Prefer to keep it separate from your main REAPER? The portable version has the same setup already wired into a portable REAPER folder - drop REAPER in and run it, nothing merged into your existing install.</p>
+            <a class="download-link" href="/tools/scripts/BSK-REAPER-Live-Recording-Portable.zip" download>Download BSK REAPER Live Recording Portable (ZIP)</a>
+        </div>
+
+        <div class="screenshot-scroll">
+            <figure><a href="images/reaper-setup-5.jpg" target="_blank" rel="noopener"><img src="images/reaper-setup-5.jpg" alt="BSK REAPER live recording setup: full meter bridge and mixer with named channels" loading="lazy"></a><figcaption>Meter bridge and mixer, channels named and patched</figcaption></figure>
+            <figure><a href="images/reaper-setup-3.jpg" target="_blank" rel="noopener"><img src="images/reaper-setup-3.jpg" alt="BSK REAPER setup: named drum, keys and guitar tracks with the auto patch dialog" loading="lazy"></a><figcaption>Tracks named and patched 1:1 to hardware inputs</figcaption></figure>
+            <figure><a href="images/reaper-setup-4.jpg" target="_blank" rel="noopener"><img src="images/reaper-setup-4.jpg" alt="BSK REAPER setup: track manager listing the named live tracks" loading="lazy"></a><figcaption>Track manager</figcaption></figure>
+            <figure><a href="images/reaper-setup-2.jpg" target="_blank" rel="noopener"><img src="images/reaper-setup-2.jpg" alt="BSK REAPER setup: SWS resources window with 8 to 128 input track templates" loading="lazy"></a><figcaption>Track templates, 8 to 128 inputs</figcaption></figure>
+            <figure><a href="images/reaper-setup-1.jpg" target="_blank" rel="noopener"><img src="images/reaper-setup-1.jpg" alt="BSK REAPER setup: auto name from device inputs dialog" loading="lazy"></a><figcaption>Auto-name tracks from interface input labels</figcaption></figure>
         </div>
 
         <h2 class="section-title" style="margin-top: 40px;">Free REAPER Lua Scripts</h2>
@@ -129,6 +148,12 @@
             <h3>BSK Import: Track Names from CSV or Text <span class="badge lua">Lua</span></h3>
             <p>Imports channel names from a console offline editor export and creates or renames tracks. Detects format automatically - works with Allen &amp; Heath (dLive, Avantis, SQ), Yamaha (CL, QL, Rivage), or any plain text file with one name per line.</p>
             <a class="download-link" href="/tools/scripts/BSK_Import_Track_Names.lua" download>Download BSK_Import_Track_Names.lua</a>
+        </div>
+
+        <div class="script-card">
+            <h3>BSK Auto-name: Tracks from Device Inputs <span class="badge lua">Lua</span></h3>
+            <p>Names each track from the input label your audio interface reports for its assigned hardware channel. Previews the proposed names and only applies them after you confirm. Use the CSV import above if your interface does not pass channel labels through.</p>
+            <a class="download-link" href="/tools/scripts/BSK_AutoName_From_Inputs.lua" download>Download BSK_AutoName_From_Inputs.lua</a>
         </div>
 
         <div class="script-card">
