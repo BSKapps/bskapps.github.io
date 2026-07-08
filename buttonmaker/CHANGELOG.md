@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v123 - 2026-07-08
+- Fix: v122 shipped with mixed module versions, so state.js loaded twice and split the app into two separate states. The sidebar controls stopped reaching the preview, so buttons could not be added and backgrounds and other settings did not change. All asset versions realigned to one release so the app shares a single state again.
+
 ## v122 - 2026-07-07
 - "More from BSK" REAPER tile updated to the new live recording setup: heading, subtitle and blurb now match the tools page.
 
