@@ -31,7 +31,7 @@
       "subtitle": "Auto Set QLab",
       "tagline": "Auto levels, auto top and tail, mono and multi-output routing - and Mint cleans up audio and video cues in place.",
       "price": "$14.99 USD",
-      "macos": "macOS 14.0+",
+      "macos": "macOS 14.6+",
       "version": "v2.3",
       "released": "29 June 2026",
       "description": "Select your QLab cues and hit Run All. Levels are auto-set to your LUFS target, mono routing and crosspoint outputs are configured, silence is trimmed, and cues are numbered and colour-coded, in seconds. Built for QLab 5, licensed and free."
@@ -42,8 +42,8 @@
       "tagline": "Build precise target curves for Smaart or REW - from scratch, your own measurements, or built-in presets.",
       "price": "$8.99 USD",
       "macos": "macOS 14.6+",
-      "version": "v1.2",
-      "released": "22 June 2026",
+      "version": "v1.2.1",
+      "released": "09 July 2026",
       "features": [
         "Freehand draw mode with pencil cursor",
         "Preset starting shapes - tilt, haystack, X-curve, and more",
@@ -65,7 +65,7 @@
       "subtitle": "Fetch Music & Video",
       "tagline": "Find and save music and video - YouTube, Spotify playlists, TikTok, and more.",
       "price": "$14.99 USD",
-      "macos": "macOS 14.0+",
+      "macos": "macOS 14.6+",
       "version": "v2.3",
       "released": "23 June 2026",
       "features": [
