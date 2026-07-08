@@ -115,13 +115,18 @@
             <a class="download-link" href="/tools/scripts/BSK-REAPER-Live-Recording-Portable.zip" download>Download BSK REAPER Live Recording Portable (ZIP)</a>
         </div>
 
-        <div class="screenshot-scroll">
-            <figure><a href="images/reaper-setup-5.jpg" target="_blank" rel="noopener"><img src="images/reaper-setup-5.jpg" alt="BSK REAPER live recording setup: full meter bridge and mixer with named channels" loading="lazy"></a><figcaption>Meter bridge and mixer, channels named and patched</figcaption></figure>
-            <figure><a href="images/reaper-setup-3.jpg" target="_blank" rel="noopener"><img src="images/reaper-setup-3.jpg" alt="BSK REAPER setup: named drum, keys and guitar tracks with the auto patch dialog" loading="lazy"></a><figcaption>Tracks named and patched 1:1 to hardware inputs</figcaption></figure>
-            <figure><a href="images/reaper-setup-4.jpg" target="_blank" rel="noopener"><img src="images/reaper-setup-4.jpg" alt="BSK REAPER setup: track manager listing the named live tracks" loading="lazy"></a><figcaption>Track manager</figcaption></figure>
-            <figure><a href="images/reaper-setup-2.jpg" target="_blank" rel="noopener"><img src="images/reaper-setup-2.jpg" alt="BSK REAPER setup: SWS resources window with 8 to 128 input track templates" loading="lazy"></a><figcaption>Track templates, 8 to 128 inputs</figcaption></figure>
-            <figure><a href="images/reaper-setup-1.jpg" target="_blank" rel="noopener"><img src="images/reaper-setup-1.jpg" alt="BSK REAPER setup: auto name from device inputs dialog" loading="lazy"></a><figcaption>Auto-name tracks from interface input labels</figcaption></figure>
+        <div class="gallery-wrap">
+            <button class="gallery-arrow" onclick="scrollGallery(-1)">&#8249;</button>
+            <div class="screenshot-scroll" id="gallery">
+                <figure><img src="images/reaper-setup-5.jpg" alt="BSK REAPER live recording setup: full meter bridge and mixer with named channels"><figcaption>Meter bridge and mixer, channels named and patched</figcaption></figure>
+                <figure><img src="images/reaper-setup-3.jpg" alt="BSK REAPER setup: named drum, keys and guitar tracks with the auto patch dialog"><figcaption>Tracks named and patched 1:1 to hardware inputs</figcaption></figure>
+                <figure><img src="images/reaper-setup-4.jpg" alt="BSK REAPER setup: track manager listing the named live tracks"><figcaption>Track manager</figcaption></figure>
+                <figure><img src="images/reaper-setup-2.jpg" alt="BSK REAPER setup: SWS resources window with 8 to 128 input track templates"><figcaption>Track templates, 8 to 128 inputs</figcaption></figure>
+                <figure><img src="images/reaper-setup-1.jpg" alt="BSK REAPER setup: auto name from device inputs dialog"><figcaption>Auto-name tracks from interface input labels</figcaption></figure>
+            </div>
+            <button class="gallery-arrow" onclick="scrollGallery(1)">&#8250;</button>
         </div>
+        <div id="gallery-counter" class="gallery-counter">1 of 5</div>
 
         <h2 class="section-title" style="margin-top: 40px;">Free REAPER Lua Scripts</h2>
         <p class="section-desc">Drop these into your REAPER Scripts folder and assign them to actions or toolbar buttons.</p>
@@ -213,5 +218,60 @@
             <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
         </footer>
     </div>
+
+    <div class="lightbox" id="lightbox"><img src="" alt=""></div>
+    <button class="lightbox-arrow prev" id="lb-prev">&#8249;</button>
+    <button class="lightbox-arrow next" id="lb-next">&#8250;</button>
+    <script>
+    let lbImgs = [], lbIdx = 0;
+    const lb = document.getElementById('lightbox');
+    const lbImg = lb.querySelector('img');
+    function lbShow(i) {
+        lbIdx = (i + lbImgs.length) % lbImgs.length;
+        lbImg.src = lbImgs[lbIdx].src;
+        lb.classList.add('active');
+    }
+    document.querySelectorAll('.screenshot-scroll img').forEach((img, i) => {
+        lbImgs.push(img);
+        img.addEventListener('click', (e) => { e.stopPropagation(); lbShow(i); });
+    });
+    lb.addEventListener('click', function() { this.classList.remove('active'); });
+    document.getElementById('lb-prev').addEventListener('click', (e) => { e.stopPropagation(); lbShow(lbIdx - 1); });
+    document.getElementById('lb-next').addEventListener('click', (e) => { e.stopPropagation(); lbShow(lbIdx + 1); });
+    document.addEventListener('keydown', e => {
+        if (!lb.classList.contains('active')) return;
+        if (e.key === 'ArrowLeft') lbShow(lbIdx - 1);
+        if (e.key === 'ArrowRight') lbShow(lbIdx + 1);
+        if (e.key === 'Escape') lb.classList.remove('active');
+    });
+    function scrollGallery(dir) {
+        const g = document.getElementById('gallery');
+        const fig = g.querySelector('figure');
+        const w = fig.offsetWidth + 16;
+        const maxScroll = g.scrollWidth - g.clientWidth;
+        if (dir > 0 && g.scrollLeft >= maxScroll - 4) {
+            g.scrollTo({ left: 0, behavior: 'smooth' });
+        } else if (dir < 0 && g.scrollLeft <= 4) {
+            g.scrollTo({ left: maxScroll, behavior: 'smooth' });
+        } else {
+            g.scrollBy({ left: dir * w, behavior: 'smooth' });
+        }
+    }
+    function updateCounter() {
+        const g = document.getElementById('gallery');
+        const figs = g.querySelectorAll('figure');
+        const w = figs[0].offsetWidth + 16;
+        const idx = Math.round(g.scrollLeft / w) + 1;
+        document.getElementById('gallery-counter').textContent = idx + ' of ' + figs.length;
+    }
+    document.getElementById('gallery').addEventListener('scroll', updateCounter);
+    window.addEventListener('load', updateCounter);
+    const g = document.getElementById('gallery');
+    let isDown = false, startX, scrollLeft;
+    g.addEventListener('mousedown', e => { isDown = true; g.style.cursor = 'grabbing'; startX = e.pageX - g.offsetLeft; scrollLeft = g.scrollLeft; });
+    g.addEventListener('mouseleave', () => { isDown = false; g.style.cursor = 'grab'; });
+    g.addEventListener('mouseup', () => { isDown = false; g.style.cursor = 'grab'; });
+    g.addEventListener('mousemove', e => { if (!isDown) return; e.preventDefault(); const x = e.pageX - g.offsetLeft; g.scrollLeft = scrollLeft - (x - startX); });
+    </script>
 </body>
 </html>
