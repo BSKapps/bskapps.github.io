@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v124 - 2026-07-11
+- Gradient colours are no longer lost when you flick to Solid and back to Gradient. Picking a background colour on Solid still carries into the gradient; an untouched round trip keeps your gradient as it was.
+
 ## v123 - 2026-07-08
 - Fix: v122 shipped with mixed module versions, so state.js loaded twice and split the app into two separate states. The sidebar controls stopped reaching the preview, so buttons could not be added and backgrounds and other settings did not change. All asset versions realigned to one release so the app shares a single state again.
 

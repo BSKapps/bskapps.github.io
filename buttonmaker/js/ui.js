@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=123';
-import { triggerIconUpload } from './icons.js?v=123';
-import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=123';
-import { noteDesignsEdited } from './effects.js?v=123';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=124';
+import { triggerIconUpload } from './icons.js?v=124';
+import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=124';
+import { noteDesignsEdited } from './effects.js?v=124';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -353,21 +353,26 @@ function bindSeg(id, getSet) {
 }
 
 export function initUI() {
+  let bgColorTouched = false;
   bindSeg('bgMode', (v) => {
     applyEdit((d) => {
-      if (v === 'gradient' && d.bg.mode === 'solid') {
+      if (v === 'gradient' && d.bg.mode === 'solid' && bgColorTouched) {
         d.bg.gradFrom = d.bg.color;
         d.bg.gradTo = darken(d.bg.color, 0.45);
       }
       d.bg.mode = v;
     });
+    if (v === 'gradient') bgColorTouched = false;
     document.getElementById('bgSolidRow').classList.toggle('hidden', v !== 'solid');
     document.getElementById('bgGradientRows').classList.toggle('hidden', v !== 'gradient');
     document.getElementById('bgImageRows').classList.toggle('hidden', v !== 'image');
     document.getElementById('bgOpacityRow').classList.toggle('hidden', v === 'image');
     document.getElementById('bgInvertRow').classList.toggle('hidden', v === 'image');
   });
-  bindColor('bgColor', (v) => applyEdit((d) => (d.bg.color = v)));
+  bindColor('bgColor', (v) => {
+    bgColorTouched = true;
+    applyEdit((d) => (d.bg.color = v));
+  });
   bindColor('bgColor2a', (v) => applyEdit((d) => (d.bg.gradFrom = v)));
   bindColor('bgColor2b', (v) => applyEdit((d) => (d.bg.gradTo = v)));
   bindRange('bgAngle', (v) => applyEdit((d) => (d.bg.angle = v)), 'bgAngleVal');
