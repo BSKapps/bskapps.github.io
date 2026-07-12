@@ -10,6 +10,7 @@ declare -a MAP=(
   "target-trace-guide.json:$APPS_ROOT/Target Trace/Target Trace/Resources/target-trace-guide.json"
   "fetch-puppy-guide.json:$APPS_ROOT/Fetch Puppy/Fetch Puppy/Resources/fetch-puppy-guide.json"
   "lab-assistant-guide.json:$APPS_ROOT/Lab Assistant/Lab Assistant/Resources/lab-assistant-guide.json"
+  "stimulus-guide.json:$APPS_ROOT/Stimulus/App/Resources/stimulus-guide.json"
 )
 
 for entry in "${MAP[@]}"; do
