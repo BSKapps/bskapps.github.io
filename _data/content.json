@@ -91,24 +91,24 @@
     "stimulus": {
       "name": "Stimulus",
       "subtitle": "Signal generator",
-      "tagline": "Test signals for live sound - tones, sweeps you can hold and scrub, harmonics, noise and polarity pulses.",
+      "tagline": "The multi-generator test rig for live sound - mix four sources at once, hold and scrub sweeps, and never pop a driver.",
       "price": "$2.99 USD",
       "macos": "macOS 15+ & iOS 18+",
       "version": "v1.0",
       "released": "Coming soon",
       "features": [
-        "Four generators at once - mix a tone against a sweep, or run dual tones",
-        "Sweeps with hold: freeze at any frequency, scrub it like a tone, resume where you left it",
-        "Stepped sweeps - dwell on each 1/3-octave frequency",
+        "Four generators mixed live - a pink bed under a sweep, dual tones, each with its own level, fades, mute, solo, polarity and L/Both/R routing",
+        "Hold and scrub sweeps - freeze right on the ring, drag the held tone along the range, nudge by 1% from the arrow keys",
+        "Sweep return and loop, plus stepped sweeps that dwell on every 1/3-octave band",
+        "Band-limited noise - 1 octave or 1/3 octave around any centre, in six colours including grey and red",
+        "Polarity pulses in three widths - HF click for tweeters, full-range, and a wide sub pulse",
         "Harmonics with subharmonics - f/4 to 5f around a centred fundamental, phase-locked",
-        "Six noise colours - red/brown, pink, white, grey, blue, violet",
-        "Band-limited noise - 1 octave or 1/3 octave around any centre frequency",
-        "Polarity pulses - standard 4 ms or a 20 ms sub pulse",
-        "Per-generator level, fades, mute, solo, polarity flip and L/R routing",
-        "Safety limiter on the master, on by default at -3 dBFS",
-        "Export WAV or AIFF test files - 44.1 to 96 kHz, up to 32-bit float, click-free",
-        "Presets for whole setups, factory sounds included",
-        "Full keyboard transport - play, pause, hold, stop and frequency nudge"
+        "Export the exact mix - WAV or AIFF, 44.1 to 96 kHz up to 32-bit float, clean edge fades",
+        "Click-free by design - every level, pan, polarity and frequency change is ramped, so nothing can pop a PA",
+        "Safe defaults - new generators start at -20 dBFS, the master limiter ceilings at -3, and one tap of DIM ducks 20 dB to talk over the rig",
+        "Your whole rig restores exactly as you left it - no account, no subscription, no network",
+        "Full keyboard transport on Mac - play, pause, hold, stop and frequency nudge",
+        "One purchase covers Mac, iPad and iPhone"
       ]
     }
   }
