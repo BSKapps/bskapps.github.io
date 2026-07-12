@@ -1,0 +1,159 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stimulus - Signal Generator for Mac & iPhone</title>
+    <meta name="description" content="A signal generator for live sound. Tones, sweeps you can hold and scrub, harmonics with subharmonics, six noise colours with band limiting, and polarity pulses - mixed across four generators.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/images/favicon-180.png">
+    <meta property="og:title" content="Stimulus - Signal Generator for Mac & iPhone">
+    <meta property="og:description" content="A signal generator for live sound. Tones, sweeps with hold and scrub, harmonics, noise and polarity pulses - mixed across four generators.">
+    <meta property="og:image" content="https://bskapps.com/images/stimulus-icon.png">
+    <meta property="og:url" content="https://bskapps.com/stimulus/">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://bskapps.com/stimulus/">
+    <link rel="stylesheet" href="/css/site.css?v=20260611">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Stimulus",
+        "operatingSystem": "macOS, iOS",
+        "applicationCategory": "UtilitiesApplication",
+        "description": "A signal generator for live sound: tones, sweeps with hold and scrub, harmonics with subharmonics, noise colours with band limiting, and polarity pulses, mixed across four generators.",
+        "url": "https://bskapps.com/stimulus"
+    }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/">&larr; BSK Apps</a>
+
+        <div class="product-header">
+            <img class="product-icon" src="../images/stimulus-icon.png" alt="Stimulus">
+            <div>
+                <h1>Stimulus</h1>
+                <p class="subtitle">{{ site.data.content.apps.stimulus.subtitle }}</p>
+            </div>
+        </div>
+
+        <p class="meta-line">{{ site.data.content.apps.stimulus.macos }}</p>
+
+        <p class="outcome">{{ site.data.content.apps.stimulus.tagline }}</p>
+
+        <p class="description">Stimulus is the generator half of a system tech's toolkit: steady tones with 1 Hz slider resolution, sweeps you can freeze mid-flight and scrub by ear, harmonic stacks for rattle-hunting, band-limited pink for subs, and a polarity pulse that reads through anything. Up to four generators run together through a small mixer with a safety limiter, and anything you can play, you can export as a clean test file.</p>
+
+        <div class="buy-section">
+            <span class="buy-note">Coming soon to the App Store for Mac and iPhone &middot; {{ site.data.content.apps.stimulus.price }}</span>
+            <!-- On release, replace with the App Store badge:
+            <a href="APP_STORE_URL" aria-label="Download Stimulus on the App Store">
+                <img src="/images/app-store-badge.svg" alt="Download on the App Store" style="height:52px">
+            </a>
+            <span class="version-line">{{ site.data.content.apps.stimulus.version }} &middot; Released {{ site.data.content.apps.stimulus.released }}</span>
+            -->
+        </div>
+
+        <!-- Gallery: drop screenshots into stimulus/images/ with these names -->
+        <div class="gallery-wrap">
+            <button class="gallery-arrow" onclick="scrollGallery(-1)">&#8249;</button>
+            <div class="screenshot-scroll" id="gallery">
+                <figure><img src="images/ss-sweep.png" alt="Sweep with hold and scrub"><figcaption>Sweep - hold at any frequency and scrub it by ear</figcaption></figure>
+                <figure><img src="images/ss-harmonics.png" alt="Harmonics with subharmonics"><figcaption>Harmonics - subharmonics to 5f around a centred fundamental</figcaption></figure>
+                <figure><img src="images/ss-noise.png" alt="Noise colours with band limiting"><figcaption>Six noise colours with octave and 1/3-octave band limiting</figcaption></figure>
+                <figure><img src="images/ss-mixer.png" alt="Four generators mixed"><figcaption>Four generators, per-channel control, safety limiter</figcaption></figure>
+            </div>
+            <button class="gallery-arrow" onclick="scrollGallery(1)">&#8250;</button>
+        </div>
+        <div id="gallery-counter" class="gallery-counter"></div>
+
+        <div class="section">
+            <h2>Features</h2>
+            <ul class="features">
+                {% for feature in site.data.content.apps.stimulus.features %}<li>{{ feature }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <a class="more-link" href="/articles/stimulus-guide/">
+            <strong>Full Stimulus guide</strong>
+            <span>What every generator does and how to use it - tone, sweep, hold and scrub, harmonics, noise, polarity, the mixer, master section and export.</span>
+        </a>
+
+        <div class="section">
+            <h3>Output</h3>
+            <p class="lead">
+                Plays through any output device, and exports WAV or AIFF test files at 44.1, 48 or 96 kHz - 16-bit, 24-bit or 32-bit float.
+            </p>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
+        </footer>
+    </div>
+
+    <div class="lightbox" id="lightbox"><img src="" alt=""></div>
+    <button class="lightbox-arrow prev" id="lb-prev">&#8249;</button>
+    <button class="lightbox-arrow next" id="lb-next">&#8250;</button>
+
+    <script>
+    let lbImgs = [], lbIdx = 0;
+    const lb = document.getElementById('lightbox');
+    const lbImg = lb.querySelector('img');
+    function lbShow(i) {
+        lbIdx = (i + lbImgs.length) % lbImgs.length;
+        lbImg.src = lbImgs[lbIdx].src;
+        lb.classList.add('active');
+    }
+    document.querySelectorAll('.screenshot-scroll img').forEach((img, i) => {
+        lbImgs.push(img);
+        img.addEventListener('click', (e) => { e.stopPropagation(); lbShow(i); });
+    });
+    lb.addEventListener('click', function() { this.classList.remove('active'); });
+    document.getElementById('lb-prev').addEventListener('click', (e) => { e.stopPropagation(); lbShow(lbIdx - 1); });
+    document.getElementById('lb-next').addEventListener('click', (e) => { e.stopPropagation(); lbShow(lbIdx + 1); });
+    document.addEventListener('keydown', e => {
+        if (!lb.classList.contains('active')) return;
+        if (e.key === 'ArrowLeft') lbShow(lbIdx - 1);
+        if (e.key === 'ArrowRight') lbShow(lbIdx + 1);
+        if (e.key === 'Escape') lb.classList.remove('active');
+    });
+    function scrollGallery(dir) {
+        const g = document.getElementById('gallery');
+        if (!g) return;
+        const fig = g.querySelector('figure');
+        const w = fig.offsetWidth + 16;
+        const maxScroll = g.scrollWidth - g.clientWidth;
+        if (dir > 0 && g.scrollLeft >= maxScroll - 4) {
+            g.scrollTo({ left: 0, behavior: 'smooth' });
+        } else if (dir < 0 && g.scrollLeft <= 4) {
+            g.scrollTo({ left: maxScroll, behavior: 'smooth' });
+        } else {
+            g.scrollBy({ left: dir * w, behavior: 'smooth' });
+        }
+    }
+    function updateCounter() {
+        const g = document.getElementById('gallery');
+        const c = document.getElementById('gallery-counter');
+        if (!g || !c) return;
+        const figs = g.querySelectorAll('figure');
+        const w = figs[0].offsetWidth + 16;
+        const idx = Math.round(g.scrollLeft / w) + 1;
+        c.textContent = idx + ' of ' + figs.length;
+    }
+    const g = document.getElementById('gallery');
+    if (g) {
+        g.addEventListener('scroll', updateCounter);
+        let isDown = false, startX, scrollLeft;
+        g.addEventListener('mousedown', e => { isDown = true; g.style.cursor = 'grabbing'; startX = e.pageX - g.offsetLeft; scrollLeft = g.scrollLeft; });
+        g.addEventListener('mouseleave', () => { isDown = false; g.style.cursor = 'grab'; });
+        g.addEventListener('mouseup', () => { isDown = false; g.style.cursor = 'grab'; });
+        g.addEventListener('mousemove', e => { if (!isDown) return; e.preventDefault(); const x = e.pageX - g.offsetLeft; g.scrollLeft = scrollLeft - (x - startX); });
+        updateCounter();
+    }
+    </script>
+</body>
+</html>

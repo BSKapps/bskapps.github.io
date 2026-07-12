@@ -87,6 +87,29 @@
       "macos": "iOS 17+ / macOS 14+",
       "version": "v1.1",
       "released": "15 May 2026"
+    },
+    "stimulus": {
+      "name": "Stimulus",
+      "subtitle": "Signal generator",
+      "tagline": "Test signals for live sound - tones, sweeps you can hold and scrub, harmonics, noise and polarity pulses.",
+      "price": "$2.99 USD",
+      "macos": "macOS 15+ & iOS 18+",
+      "version": "v1.0",
+      "released": "Coming soon",
+      "features": [
+        "Four generators at once - mix a tone against a sweep, or run dual tones",
+        "Sweeps with hold: freeze at any frequency, scrub it like a tone, resume where you left it",
+        "Stepped sweeps - dwell on each 1/3-octave frequency",
+        "Harmonics with subharmonics - f/4 to 5f around a centred fundamental, phase-locked",
+        "Six noise colours - red/brown, pink, white, grey, blue, violet",
+        "Band-limited noise - 1 octave or 1/3 octave around any centre frequency",
+        "Polarity pulses - standard 4 ms or a 20 ms sub pulse",
+        "Per-generator level, fades, mute, solo, polarity flip and L/R routing",
+        "Safety limiter on the master, on by default at -3 dBFS",
+        "Export WAV or AIFF test files - 44.1 to 96 kHz, up to 32-bit float, click-free",
+        "Presets for whole setups, factory sounds included",
+        "Full keyboard transport - play, pause, hold, stop and frequency nudge"
+      ]
     }
   }
 }
