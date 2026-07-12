@@ -45,6 +45,10 @@
         {
           "type": "paragraph",
           "text": "Type a frequency or use the slider. The **Min** and **Max** fields set the slider's range: narrow them (say 400 to 500) and the full slider travel covers just that span, giving 1 Hz precision when you need it. The full range is 10 Hz to 22 kHz, always clamped to what your output device can actually reproduce."
+        },
+        {
+          "type": "paragraph",
+          "text": "Null and cancellation tests: two tones at the same frequency with one polarity flipped cancel exactly when their phases are aligned. Phases align at Play, so set your frequencies first and then press **Play**. If you move a frequency while running, that generator's phase drifts relative to the others (the price of click-free frequency glides) - tap **Play** again to restart from the top and re-align."
         }
       ]
     },
