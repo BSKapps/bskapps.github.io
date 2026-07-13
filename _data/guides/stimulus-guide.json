@@ -30,7 +30,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "The editor shows one generator at a time; the rack on the right holds them all. Click a strip to edit it, press **Add** to spawn another (up to four), and the cross on a strip removes it. Each strip has its own level fader plus **M** (mute), **S** (solo) and the polarity flip."
+          "text": "The editor shows one generator at a time; the rack on the right holds them all. Click a strip to edit it, press **+ Add generator** to spawn another (up to four), and the cross on a strip removes it. Each strip has its own level fader plus **M** (mute), **S** (solo) and the polarity flip."
         },
         {
           "type": "paragraph",
@@ -114,7 +114,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "A positive-going pulse at a set interval for polarity checks. **FULL** is the standard 4 ms pulse; **SUB** stretches it to 20 ms so it reads clearly through subwoofers. The first movement is always positive - if your tester or ears say otherwise, something in the chain is flipped."
+          "text": "A positive-going pulse at a set interval for polarity checks. **CLICK** is a short 0.5 ms tick for checking tweeters and HF sections; **FULL** is the standard 4 ms pulse; **SUB** stretches it to 20 ms so it reads clearly through subwoofers. The first movement is always positive - if your tester or ears say otherwise, something in the chain is flipped."
         }
       ]
     },
@@ -128,17 +128,21 @@
         },
         {
           "type": "paragraph",
+          "text": "**DIM** ducks the output 20 dB so you can talk over the rig - tap it again, grab the master fader or type a level to restore. Behind the master strip\u0027s three-dot button are master fade in/out times and an auto-stop timer that ends playback after a set duration; with **Repeat** on it cycles play and stop until you stop it."
+        },
+        {
+          "type": "paragraph",
           "text": "New generators always start at -20 dBFS. Nothing in Stimulus ever defaults to full scale."
         }
       ]
     },
     {
-      "id": "presets",
-      "title": "Presets",
+      "id": "saved-state",
+      "title": "Saved state",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "The Presets menu recalls factory setups (1 kHz tone, pink noise, full-range sweep, sub sweep, sub drop) and saves your own - a preset captures every generator plus the master section."
+          "text": "Stimulus reopens as you left it: every generator, the mix and the master section are saved when you stop playback or quit, and restored at launch."
         }
       ]
     },
