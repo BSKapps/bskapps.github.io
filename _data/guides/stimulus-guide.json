@@ -5,22 +5,22 @@
     "pageTitle": "Stimulus user guide - BSK Apps",
     "h1": "Stimulus user guide",
     "dateLine": "Updated for version 1.0",
-    "description": "A how-to guide for Stimulus: tones, sweeps with hold and scrub, harmonics with subharmonics, noise colours and band limiting, polarity pulses, mixing up to four generators, and exporting test files.",
+    "description": "A how-to guide for Stimulus: tones, sweeps with hold and scrub, harmonics, noise with band limiting, GLITS and polarity pops, analyzer-matched measurement signals, mixing four generators, and exporting test files.",
     "canonical": "https://bskapps.com/articles/stimulus-guide/",
     "ogTitle": "Stimulus user guide",
-    "ogDescription": "What each generator does and how to use it: tone, sweep, harmonics, noise, polarity, the mixer, master section and export.",
+    "ogDescription": "What each generator does and how to use it: tone, sweep, harmonics, noise, Identify, Measure, the rack, master section and export.",
     "ogImage": "https://bskapps.com/images/stimulus-icon.png"
   },
   "cta": {
     "title": "Stimulus",
-    "text": "A signal generator for live sound: tones, sweeps, harmonics, noise and polarity pulses, mixed across four generators.",
-    "href": "/stimulus",
+    "text": "A four-generator test signal rack for live sound: tones, sweeps, harmonics, noise, GLITS and polarity pops, plus period-matched measurement signals.",
+    "href": "/stimulus/",
     "linkText": "Stimulus"
   },
   "intro": [
     {
       "type": "paragraph",
-      "text": "Stimulus generates test signals for PA tuning and audio work: steady tones, sweeps you can hold and scrub, harmonic stacks, six noise colours with band limiting, and polarity pulses. Up to four generators run at once through a small mixer with a safety limiter on the output."
+      "text": "Stimulus generates test signals for PA tuning and audio work: steady tones, sweeps you can hold and scrub, harmonic stacks, three noise colours with band limiting, identification tones (GLITS and polarity Pop), and measurement excitation for a transfer-function analyzer. Up to four generators run at once through a small mixer with a safety limiter on the output."
     }
   ],
   "sections": [
@@ -30,7 +30,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "The editor shows one generator at a time; the rack on the right holds them all. Click a strip to edit it, press **+ Add generator** to spawn another (up to four), and the cross on a strip removes it. Each strip has its own level fader plus **M** (mute), **S** (solo) and the polarity flip."
+          "text": "The editor shows one generator at a time; the rack on the right holds them all. Click a strip to edit it, press **+ Add generator** to spawn another (up to four), and the cross on a strip removes it. Each strip has its own level fader plus **M** (mute), **S** (solo) and the polarity flip. The reset control by the generator label defaults the current mode's own settings without touching the mix."
         },
         {
           "type": "paragraph",
@@ -72,15 +72,15 @@
     },
     {
       "id": "hold-pause",
-      "title": "Hold, pause and scrub",
+      "title": "Hold and scrub",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "While a sweep runs, **HOLD** freezes it at the frequency on screen and keeps it sounding as a steady tone. A bright thumb appears on the range slider - drag it (or use the arrow keys) to move the held tone anywhere in the sweep range. Resume continues the sweep from wherever you left it."
+          "text": "While a sweep runs, **HOLD** freezes it at the frequency on screen and keeps it sounding as a steady tone. A bright thumb appears on the range slider - drag it (or use the arrow keys) to move the held tone anywhere in the sweep range. Hold again resumes the sweep from wherever you left it."
         },
         {
           "type": "paragraph",
-          "text": "**Pause** freezes the position and silences the audio; pause again to resume in place. **Play** always restarts from the top, even out of hold or pause - tap it repeatedly to retrigger a sweep."
+          "text": "**Play** always restarts from the top, even out of hold - tap it repeatedly to retrigger a sweep."
         }
       ]
     },
@@ -100,7 +100,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Six colours, ordered by slope: **Red/Brown** (-6 dB per octave), **Pink** (-3), **White** (flat), **Grey** (perceptually flat), **Blue** (+3) and **Violet** (+6). Pink is the usual choice for PA work; red/brown is the same signal Smaart calls red."
+          "text": "Three colours, ordered by slope: **Red/Brown** (-6 dB per octave), **Pink** (-3) and **White** (flat). Pink is the usual choice for PA work; red/brown is the same signal Smaart calls red. White is flat per hertz, the reference for FFT work."
         },
         {
           "type": "paragraph",
@@ -109,12 +109,38 @@
       ]
     },
     {
-      "id": "polarity",
-      "title": "Polarity",
+      "id": "identify",
+      "title": "Identify",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "A positive-going pulse at a set interval for polarity checks. **CLICK** is a short 0.5 ms tick for checking tweeters and HF sections; **FULL** is the standard 4 ms pulse; **SUB** stretches it to 20 ms so it reads clearly through subwoofers. The first movement is always positive - if your tester or ears say otherwise, something in the chain is flipped."
+          "text": "Two by-ear checks for what is plugged where. **GLITS** is a stereo left/right identification tone: 1 kHz on both channels, the left dropping out once each cycle and the right twice. One break is left, two is right, so a swapped or dead channel is obvious. It always feeds both channels; set the level to -18 dBFS for the EBU reference."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Pop** is a positive-going pulse at a set interval for polarity checks. **CLICK** is a short 0.5 ms tick for tweeters and HF sections; **FULL** is the standard 4 ms pulse; **SUB** stretches it to 20 ms so it reads through subwoofers. The first movement is always positive - if your tester or ears say otherwise, something in the chain is flipped."
+        }
+      ]
+    },
+    {
+      "id": "measure",
+      "title": "Measure",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Measurement excitation for a transfer-function analyzer such as Smaart. Choose a signal and an FFT frame size - 32K, 64K or 128K - to match your analyzer. Each signal is built to be periodic at that frame and looped, so the analyzer averages it to high coherence without spectral leakage. Signal and frame size lock while playing; stop to change them."
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "**Pink** - periodic pink noise for transfer function and RTA, equal energy per octave.",
+            "**Random** - flat-spectrum pseudorandom noise, periodic at the frame.",
+            "**Sweep** - a cycle-synchronised log sweep, 20 Hz to 20 kHz, for impulse response and transfer function."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Export writes exactly one frame at the output device's sample rate, with no end fades and an embedded loop point, so the file loops seamlessly in your analyzer. The sample rate is shown in the sidebar - keep it matched to whatever is capturing the measurement."
         }
       ]
     },
@@ -128,7 +154,7 @@
         },
         {
           "type": "paragraph",
-          "text": "**DIM** ducks the output 20 dB so you can talk over the rig - tap it again, grab the master fader or type a level to restore. Behind the master strip\u0027s three-dot button are master fade in/out times and an auto-stop timer that ends playback after a set duration; with **Repeat** on it cycles play and stop until you stop it."
+          "text": "**DIM** ducks the output 20 dB so you can talk over the rig - tap it again, grab the master fader or type a level to restore. Behind the master strip's three-dot button are master fade in/out times and an auto-stop timer that ends playback after a set duration; with **Repeat** on it cycles play and stop until you stop it."
         },
         {
           "type": "paragraph",
@@ -152,7 +178,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Export renders the current setup to a WAV or AIFF file - 44.1, 48 or 96 kHz at 16, 24 or 32-bit float - for any length you set, named after what it contains. Files start and end with a 10 ms fade so they never click, and renders are deterministic: the same setup produces the same file every time."
+          "text": "Export renders the current setup to a WAV or AIFF file - 44.1, 48 or 96 kHz at 16, 24 or 32-bit float - for any length you set, named after what it contains. Files start and end with a 10 ms fade so they never click, and renders are deterministic: the same setup produces the same file every time. A Measure generator instead exports exactly one FFT frame at the device sample rate, with no fades and an embedded loop point, so it runs on repeat in an analyzer."
         }
       ]
     },
@@ -166,8 +192,7 @@
           "type": "bullets",
           "items": [
             "**Return** - play, or restart from the top while running",
-            "**Space** - pause / resume in place",
-            "**Option-Space** - hold / release",
+            "**Space** - hold / release a running sweep",
             "**Escape** - stop all generators",
             "**Left/Right arrows** - nudge the frequency (or scrub a held sweep) by 1%; add **Shift** for 10%"
           ]

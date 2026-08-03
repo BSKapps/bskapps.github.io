@@ -5,12 +5,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stimulus - Signal Generator for Mac & iPhone</title>
-    <meta name="description" content="A signal generator for live sound. Tones, sweeps you can hold and scrub, harmonics with subharmonics, six noise colours with band limiting, and polarity pulses - mixed across four generators.">
+    <title>Stimulus - Test Signal Generator for Mac & iPad</title>
+    <meta name="description" content="A four-generator test signal rack for live sound: tones, sweeps, harmonics, noise, GLITS and polarity pops, plus measurement signals period-matched to your analyzer's FFT frame.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="apple-touch-icon" href="/images/favicon-180.png">
-    <meta property="og:title" content="Stimulus - Signal Generator for Mac & iPhone">
-    <meta property="og:description" content="A signal generator for live sound. Tones, sweeps with hold and scrub, harmonics, noise and polarity pulses - mixed across four generators.">
+    <meta property="og:title" content="Stimulus - Test Signal Generator for Mac & iPad">
+    <meta property="og:description" content="A four-generator test signal rack for live sound: tones, sweeps, harmonics, noise, GLITS and polarity pops, plus period-matched measurement signals.">
     <meta property="og:image" content="https://bskapps.com/images/stimulus-icon.png">
     <meta property="og:url" content="https://bskapps.com/stimulus/">
     <meta property="og:type" content="website">
@@ -21,10 +21,15 @@
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
         "name": "Stimulus",
-        "operatingSystem": "macOS, iOS",
+        "operatingSystem": "macOS, iPadOS",
         "applicationCategory": "UtilitiesApplication",
-        "description": "A signal generator for live sound: tones, sweeps with hold and scrub, harmonics with subharmonics, noise colours with band limiting, and polarity pulses, mixed across four generators.",
-        "url": "https://bskapps.com/stimulus"
+        "description": "A four-generator test signal rack for live sound: tones, sweeps, harmonics, noise, GLITS and polarity pops, plus measurement signals period-matched to the analyzer FFT frame.",
+        "url": "https://bskapps.com/stimulus/",
+        "offers": {
+            "@type": "Offer",
+            "price": "4.99",
+            "priceCurrency": "USD"
+        }
     }
     </script>
 </head>
@@ -44,26 +49,25 @@
 
         <p class="outcome">{{ site.data.content.apps.stimulus.tagline }}</p>
 
-        <p class="description">Stimulus is the generator half of a system tech's toolkit: steady tones with 1 Hz slider resolution, sweeps you can freeze mid-flight and scrub by ear, harmonic stacks for rattle-hunting, band-limited pink for subs, and a polarity pulse that reads through anything. Up to four generators run together through a small mixer with a safety limiter, and anything you can play, you can export as a clean test file.</p>
+        <p class="description">{{ site.data.content.apps.stimulus.description }}</p>
 
         <div class="buy-section">
-            <span class="buy-note">Coming soon to the App Store for Mac and iPhone &middot; {{ site.data.content.apps.stimulus.price }}</span>
-            <!-- On release, replace with the App Store badge:
-            <a href="APP_STORE_URL" aria-label="Download Stimulus on the App Store">
-                <img src="/images/app-store-badge.svg" alt="Download on the App Store" style="height:52px">
+            <a href="https://apps.apple.com/app/id6792156906" aria-label="Download Stimulus on the App Store" style="text-decoration:none;">
+                <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store" style="height:52px;">
             </a>
-            <span class="version-line">{{ site.data.content.apps.stimulus.version }} &middot; Released {{ site.data.content.apps.stimulus.released }}</span>
-            -->
+            <span class="version-line">{{ site.data.content.apps.stimulus.version }} &middot; Released {{ site.data.content.apps.stimulus.released }} &middot; {{ site.data.content.apps.stimulus.price }}</span>
+            <span class="buy-note">One purchase covers Mac and iPad. May be tax deductible for AV professionals.</span>
         </div>
 
         <!-- Gallery: drop screenshots into stimulus/images/ with these names -->
         <div class="gallery-wrap">
             <button class="gallery-arrow" onclick="scrollGallery(-1)">&#8249;</button>
             <div class="screenshot-scroll" id="gallery">
-                <figure><img src="images/ss-sweep.png" alt="Sweep with hold and scrub"><figcaption>Sweep - hold at any frequency and scrub it by ear</figcaption></figure>
-                <figure><img src="images/ss-harmonics.png" alt="Harmonics with subharmonics"><figcaption>Harmonics - subharmonics to 5f around a centred fundamental</figcaption></figure>
-                <figure><img src="images/ss-noise.png" alt="Noise colours with band limiting"><figcaption>Six noise colours with octave and 1/3-octave band limiting</figcaption></figure>
-                <figure><img src="images/ss-mixer.png" alt="Four generators mixed"><figcaption>Four generators, per-channel control, safety limiter</figcaption></figure>
+                <figure><img src="images/ss-sweep.png" alt="Sweep held mid-flight at 301 Hz"><figcaption>Sweep - hold at any frequency and scrub the held tone by ear</figcaption></figure>
+                <figure><img src="images/ss-rack.png" alt="Two generators running together"><figcaption>Run generators together - each with its own level, routing, mute and solo</figcaption></figure>
+                <figure><img src="images/ss-glits.png" alt="GLITS stereo identification tone"><figcaption>Identify - GLITS for left and right checks, and polarity pops</figcaption></figure>
+                <figure><img src="images/ss-harmonics.png" alt="Harmonic partials on faders"><figcaption>Harmonics - a fundamental with seven partials from f/4 to 5f</figcaption></figure>
+                <figure><img src="images/ss-export.png" alt="Master section and export settings"><figcaption>Master limiter, dim, fades, auto-stop and WAV or AIFF export</figcaption></figure>
             </div>
             <button class="gallery-arrow" onclick="scrollGallery(1)">&#8250;</button>
         </div>
@@ -79,7 +83,7 @@
 
         <a class="more-link" href="/articles/stimulus-guide/">
             <strong>Full Stimulus guide</strong>
-            <span>What every generator does and how to use it - tone, sweep, hold and scrub, harmonics, noise, polarity, the mixer, master section and export.</span>
+            <span>What every generator does and how to use it - tone, sweep, hold and scrub, harmonics, noise, Identify, Measure, the rack, master section and export.</span>
         </a>
 
         <div class="section">
