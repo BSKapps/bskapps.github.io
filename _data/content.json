@@ -10,18 +10,19 @@
       "tagline": "Fast IP switching with presets, adapter management, system stats, speed test - and a powerful LAN scanner.",
       "price": "$18.99 USD",
       "macos": "macOS 14.6+",
-      "version": "v2.5",
-      "released": "29 July 2026",
+      "version": "v2.6",
+      "released": "3 August 2026",
       "features": [
         "Fast IP switching - DHCP, static or DHCP-reserved in one click",
-        "Save and load IP presets for any device",
+        "Save, reorder and load IP presets for any device",
         "Set DNS per adapter - Cloudflare, Google, Quad9 or custom servers",
         "Turn IPv4 off per adapter to keep it live over IPv6 - clean IPv4 separation for multi-NIC and Dante rigs",
         "Powerful LAN scanner - see every device, one-click Join to hop onto another subnet",
         "Built-in speed test",
         "Advanced connection diagnostics - bufferbloat (loaded latency) and a live packet-loss monitor",
-        "Dante monitoring - MTU, link speed, duplex and subnet-overlap checks",
+        "AV network checks - IGMP querier presence, PTP audio clock and grandmaster, link speed, duplex, MTU and subnet-overlap warnings",
         "Full Wi-Fi details and live per-adapter speed",
+        "Per-adapter error counters you can clear, so only new faults show",
         "Click to copy any IP, subnet, gateway or MAC"
       ],
       "description": "Everything you need to know about your network, one click away. Switch IP configs, run a speed test, scan the LAN, and check Dante packet loss - without opening a terminal. Built for AV techs and IT professionals."
