@@ -113,6 +113,7 @@
                 <li>A rolling RTT timeline with dropped packets marked on it</li>
             </ul>
             <p>A clean run reads clearly as a healthy path. The severity is worked out from the pattern, so the odd isolated drop is ignored while runs of consecutive losses, sustained loss or latency spikes are flagged. Export to CSV (timestamp, RTT and drop for every ping) so a fault can be lined up with the exact moment it happened. It works on any adapter, including pro audio networks such as Dante, as an early warning on network health.</p>
+            <p>On Wi-Fi you will usually see latency spikes on a regular beat, often every ten to twenty seconds, with no lost packets at all. That is the radio briefly leaving your channel to look at the other networks around it, and every Mac does it. Spikes that keep time like a metronome are the radio doing its housekeeping; a real fault is irregular, and normally loses packets as well as delaying them. This is also why a wired connection is the fair test of a network path, and why audio networks are run on cable.</p>
 
             <h2>Speed test</h2>
             <p>Click Speed Test in the menu. It measures download, upload, ping and jitter against Cloudflare's network, and takes about twenty seconds. Progress shows in the menu title and you can cancel mid-test. Results stay until you clear them; if a test fails, the app shows an alert and keeps your last result.</p>
