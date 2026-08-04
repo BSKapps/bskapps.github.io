@@ -1,5 +1,5 @@
-import { state, emit, onChange, deepClone } from './state.js?v=133';
-import { renderDesign } from './renderer.js?v=133';
+import { state, emit, onChange, deepClone } from './state.js?v=134';
+import { renderDesign } from './renderer.js?v=134';
 
 const LOOKS = [
   { name: 'Graphite', bg: { mode: 'solid', color: '#1d1d22' }, text: { color: '#ffffff', font: 'Inter', weight: '700' }, icon: '#ffffff', border: { width: 0, color: '#000000' } },

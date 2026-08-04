@@ -2,6 +2,14 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v134 - 2026-08-04
+- On states: pick a colour for your on state. White, amber, green or red now sets the colour used by Tint, Dot and the new Colour treatment, so a red tint or an amber dot is finally possible. Highlight and Invert have no colour of their own, so the swatches grey out for those.
+- Colour: a new on state that swaps the whole background and puts the text and icons in black or white, whichever reads on it.
+- The Looks card has gone. It was eight background swatches that also rewrote your font behind your back.
+- Fixed your set being destroyed when you switched to One Button. Switching back now brings it straight back.
+- Number Them no longer looks like it is already switched on, and its help text now hides with the rest of the card's help.
+- Colour and Invert share a line in the Icon and Text cards, so there is less to scroll past.
+
 ## v133 - 2026-08-04
 - Looks: a new card with eight one-click house styles. A look recolours the current button and every button in its set - background, text, icons, border - without touching names, icons or layout. Live previews show each look applied to your own design.
 

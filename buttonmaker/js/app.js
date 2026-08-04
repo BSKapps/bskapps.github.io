@@ -1,13 +1,12 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=133';
-import { renderDesign } from './renderer.js?v=133';
-import { seriesVariants, numberSet } from './series.js?v=133';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=133';
-import { initIconPicker } from './icons.js?v=133';
-import { initPresets, normalizeDesign } from './presets.js?v=133';
-import { initExport } from './export.js?v=133';
-import { initEffects, updateEffectControls } from './effects.js?v=133';
-import { initColorPopover } from './colorpicker.js?v=133';
-import { initLooks } from './looks.js?v=133';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, stashSetItems, clearSetItems, editTargets, primarySelection } from './state.js?v=134';
+import { renderDesign } from './renderer.js?v=134';
+import { seriesVariants, numberSet } from './series.js?v=134';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=134';
+import { initIconPicker } from './icons.js?v=134';
+import { initPresets, normalizeDesign } from './presets.js?v=134';
+import { initExport } from './export.js?v=134';
+import { initEffects, updateEffectControls } from './effects.js?v=134';
+import { initColorPopover } from './colorpicker.js?v=134';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -350,6 +349,7 @@ preview.addEventListener('drop', (e) => {
     state.ui.activeText = 0;
     state.ui.activeIcon = 0;
     releaseSelection();
+    stashSetItems(state.series.items);
     Object.assign(state.series, defaultSeries());
     emit();
     return;
@@ -517,6 +517,7 @@ if (bmVersion && bmVersion !== APP_VERSION) {
 }
 
 function startFresh() {
+  clearSetItems();
   Object.assign(state.design, defaultDesign());
   Object.assign(state.series, defaultSeries());
   state.ui.activeText = 0;
@@ -537,7 +538,6 @@ initPresets();
 initExport();
 initEffects();
 initColorPopover();
-initLooks();
 
 onChange(() => {
   renderTextLayerChips();

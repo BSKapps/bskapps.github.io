@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=133';
-import { triggerIconUpload } from './icons.js?v=133';
-import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=133';
-import { noteDesignsEdited } from './effects.js?v=133';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, stashSetItems, takeSetItems, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=134';
+import { triggerIconUpload } from './icons.js?v=134';
+import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=134';
+import { noteDesignsEdited } from './effects.js?v=134';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -545,11 +545,13 @@ export function initUI() {
         if (chosen) Object.assign(state.design, deepClone(chosen.design));
         state.ui.activeText = 0;
         state.ui.activeIcon = 0;
+        stashSetItems(state.series.items);
         Object.assign(state.series, defaultSeries());
       } else {
         releaseSelection();
         if (!state.series.items.length) {
-          state.series.items = [{ label: '', color: '' }, { label: '', color: '' }];
+          const held = takeSetItems();
+          state.series.items = held && held.length ? held : [{ label: '', color: '' }, { label: '', color: '' }];
         }
         state.series.mode = 'list';
       }

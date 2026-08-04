@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://bskapps.com; connect-src 'self' https://api.iconify.design https://cloudflareinsights.com; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="bm-version" content="133">
+<meta name="bm-version" content="134">
 <title>BSK Button Maker - Free Companion, Stream Deck, REAPER and App Icon Designer</title>
 <meta name="description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars, plus app icons. Icon library, presets, button sets, PNG, Companion page and REAPER toolbar export.">
 <meta property="og:title" content="BSK Button Maker">
@@ -41,7 +41,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&family=Archivo+Black&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=133">
+<link rel="stylesheet" href="css/style.css?v=134">
 </head>
 <body>
 <header class="app-header">
@@ -108,8 +108,7 @@
           <button class="btn ghost" id="iconCentre" title="Centre the artwork in the button">Centre</button>
         </div>
         <div class="row"><label for="iconSize">Size</label><input type="range" id="iconSize" min="10" max="150" value="52" data-default="52"><input type="number" class="val" id="iconSizeVal" value="52"></div>
-        <div class="row"><label for="iconColor">Colour</label><input type="color" id="iconColor" value="#ffffff" data-label="Image colour"></div>
-        <div class="row check"><label for="iconInvert">Invert</label><input type="checkbox" id="iconInvert"></div>
+        <div class="row"><label for="iconColor">Colour</label><input type="color" id="iconColor" value="#ffffff" data-label="Image colour"><label class="inline-check" for="iconInvert">Invert</label><input type="checkbox" id="iconInvert"></div>
         <div class="row pos-row">
           <label>Position</label>
           <div class="align-grid" id="iconAlign">
@@ -167,8 +166,7 @@
           </select>
         </div>
         <div class="row"><label for="textSize">Size</label><input type="range" id="textSize" min="6" max="96" value="11" data-default="11"><input type="number" class="val" id="textSizeVal" value="11"></div>
-        <div class="row"><label for="textColor">Colour</label><input type="color" id="textColor" value="#ffffff" data-label="Text colour"></div>
-        <div class="row check"><label for="textInvert">Invert</label><input type="checkbox" id="textInvert"></div>
+        <div class="row"><label for="textColor">Colour</label><input type="color" id="textColor" value="#ffffff" data-label="Text colour"><label class="inline-check" for="textInvert">Invert</label><input type="checkbox" id="textInvert"></div>
         <div class="row"><label for="textOutline">Outline</label><input type="range" id="textOutline" min="0" max="6" step="0.5" value="0" data-default="0"><input type="number" class="val" id="textOutlineVal" value="0"></div>
         <div class="row"><label for="textOutlineColor">Outline colour</label><input type="color" id="textOutlineColor" value="#000000" data-label="Text outline colour"></div>
         <div class="row pos-row">
@@ -263,13 +261,6 @@
         </div>
       </div>
     </details>
-    <details class="section looks-card hints-hidden" open>
-      <summary>Looks<button type="button" class="help-toggle" aria-label="Show help for this card" title="Show help">?</button></summary>
-      <div class="section-body">
-        <p class="hint">One-click house styles. A look recolours this button - and every button in the set - without touching names, icons or layout.</p>
-        <div class="looks-grid" id="lookChips"></div>
-      </div>
-    </details>
     <details class="section onstate-card hints-hidden" open>
       <summary>On states<button type="button" class="help-toggle" aria-label="Show help for this card" title="Show help">?</button></summary>
       <div class="section-body">
@@ -279,7 +270,10 @@
           <button data-val="highlight">Highlight</button>
           <button data-val="invert">Invert</button>
           <button data-val="dot">Dot</button>
+          <button data-val="colour">Colour</button>
         </div>
+        <div class="on-colours" id="effectColours"></div>
+        <p class="hint">The swatch sets the colour for Tint, Dot and Colour. Highlight and Invert have no colour of their own, so the swatches grey out for those. Colour swaps the whole background and puts the text and icons in black or white, whichever reads on it.</p>
         <p class="hint" id="effectScopeHint"></p>
       </div>
     </details>
@@ -316,7 +310,6 @@
           <img src="https://bskapps.com/images/labassistant-icon.png" alt="" width="40" height="40">
           <span class="promo-text"><b>Lab Assistant</b>Auto levels, auto top and tail, and routing for a whole QLab workspace.</span>
         </a>
-        <p class="hint">Mac apps for live production, made by the same person as this tool.</p>
       </div>
     </details>
     <details class="section help-card">
@@ -341,28 +334,6 @@
     <section class="more-bsk">
       <p class="group-label">BSK apps for live production</p>
       <div class="bsk-grid">
-        <a class="bsk-tile" href="https://bskapps.com/quickerip/">
-          <div class="bsk-tile-head">
-            <img src="https://bskapps.com/images/quickip-icon.png" alt="Quicker IP" width="58" height="58">
-            <div>
-              <h2>Quicker IP</h2>
-              <p class="bsk-tile-sub">Network Toolkit</p>
-            </div>
-          </div>
-          <p class="bsk-tile-line">Fast IP switching with presets, adapter management, system stats, speed test - and a powerful LAN scanner.</p>
-          <span class="bsk-tile-meta">Mac</span>
-        </a>
-        <a class="bsk-tile" href="https://bskapps.com/labassistant/">
-          <div class="bsk-tile-head">
-            <img src="https://bskapps.com/images/labassistant-icon.png" alt="Lab Assistant" width="58" height="58">
-            <div>
-              <h2>Lab Assistant</h2>
-              <p class="bsk-tile-sub">Auto Set QLab</p>
-            </div>
-          </div>
-          <p class="bsk-tile-line">Auto levels, auto top and tail, mono and multi-output routing - and Mint cleans up audio and video cues in place.</p>
-          <span class="bsk-tile-meta">Mac</span>
-        </a>
         <a class="bsk-tile" href="https://bskapps.com/targettrace/">
           <div class="bsk-tile-head">
             <img src="https://bskapps.com/images/targettrace-icon.png" alt="Target Trace" width="58" height="58">
@@ -446,7 +417,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair, Cockos or Apple. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=133"></script>
-<script type="module" src="js/app.js?v=133"></script>
+<script src="vendor/jszip.min.js?v=134"></script>
+<script type="module" src="js/app.js?v=134"></script>
 </body>
 </html>
