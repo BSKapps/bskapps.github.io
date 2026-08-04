@@ -97,7 +97,7 @@
       "price": "$4.99 USD",
       "macos": "macOS 15+ & iPadOS 18+",
       "version": "v1.0",
-      "released": "July 2026",
+      "released": "24 July 2026",
       "features": [
         "Measure - pseudorandom pink noise period-matched to your analyzer's FFT frame (32K, 64K or 128K) and a cycle-synchronised log sweep. Both loop seamlessly, and export writes exactly one frame for analyzer playback",
         "Tone - sine from 10 Hz to 22 kHz with a log slider, typed entry, and keyboard nudge in 1 percent steps, 10 percent with Shift",
