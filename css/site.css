@@ -132,7 +132,7 @@ iframe[src*="lemonsqueezy.com"] {
 .hero { text-align: center; margin-bottom: 48px; }
 .hero h1 { font-size: 2rem; }
 .hero p { color: var(--text-muted); font-size: 1rem; margin-top: 8px; }
-.hero-note { font-size: 0.74rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin-top: 16px; }
+.hero-note { font-size: 0.85rem; color: var(--text-faint); margin-top: 14px; }
 
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .grid > .app-card:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 8px); margin-top: 24px; }
