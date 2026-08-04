@@ -21,12 +21,12 @@
 
 ```
 bskapps.github.io/
-├── index.html              # Homepage - nav, hero, 2-col product grid (QIP, LA, FP, TT, Go Games), Resources + Articles links
+├── index.html              # Homepage - nav, hero, 2-col product grid (QIP, TT, LA, FP) with screenshot + price line per tile, Free Tools grid, flat 'Also from BSK' links (Stimulus, Articles, Go Games)
 ├── css/site.css            # THE shared stylesheet - all pages link it, all theme tokens live here
 ├── _data/content.json      # App names, subtitles, taglines, prices, versions, DESCRIPTIONS, FEATURES - edited via /admin
 ├── CNAME / favicon.png / robots.txt / sitemap.xml / ads.txt
 ├── images/                 # App icons and logos
-├── quickerip/              # Product page (video + gallery + slim Lite vs Pro table + features + Full guide link)
+├── quickerip/              # Product page (hero image + 6 alternating .fblock feature blocks + Lite vs Pro table + features + guide link + closing buy row). No carousel - unlike the other product pages
 ├── labassistant/           # Product page (video + gallery + Mint + Processing Modules sections)
 ├── fetchpuppy/             # Product page (video + gallery + features + disclaimer)
 ├── targettrace/            # Product page (video + gallery + features)
@@ -46,10 +46,10 @@ bskapps.github.io/
 
 ## Products (homepage grid order)
 
-1. **Quicker IP** - Network toolkit. Lite (App Store, free) + Pro (LemonSqueezy, $19.99 USD)
+1. **Quicker IP** - Network toolkit. Lite (App Store, free) + Pro (LemonSqueezy, $18.99 USD)
 2. **Lab Assistant** - QLab workspace automation. LemonSqueezy, $14.99 USD
 3. **Fetch Puppy** - Media downloader. LemonSqueezy, $14.99 USD
-4. **Target Trace** - Smaart/REW target curve editor. LemonSqueezy, $8.99 USD
+4. **Target Trace** - Smaart/REW target curve editor. LemonSqueezy, $12.99 USD
 5. **Go Games** - Solitaire, Sudoku, Minesweeper, Battle Boats. iOS + Mac, free on App Store, $1.99 IAP unlock
 
 EWP was pulled from the site June 2026 (project shelved). MultiViewPort is DEAD (never worked) - see `.claude/rules/hidden-products.md`.
@@ -68,11 +68,11 @@ Lab Assistant's Mint / Processing Modules sections and QIP's Lite vs Pro table a
 
 - Payments via LemonSqueezy (overlay checkout: lemon.js + `lemonsqueezy-button` class)
 - Checkout URL params: `?dark=1&desc=0&media=0`
-- Buy buttons: flat green `--accent` (#3E8E5F), `.buy-btn.large` on product pages; green `.buy-link` text links on homepage tiles
+- Buy buttons: flat green `--accent` (#3E8E5F), `.buy-btn.large` on product pages. Homepage tiles have NO buy button - a muted `.tile-price` line and a blue `View ->` instead, so the tile reads as a door not an offer
 - Buy notes: "One-time purchase · 2 activations" + version line; QIP and FP add "May be tax deductible for AV professionals."
 - Quicker IP Lite: free on Mac App Store (id6761874418). Badge + plain small-caps "Lite · Free version on App Store" note next to the Pro buy button (`.appstore-col`, `.lite-note`)
 - /quickerip has a Lite vs Pro comparison table (`.compare-table`)
-- Buy buttons have aria-labels (e.g. `aria-label="Buy Quicker IP Pro for $19.99 USD"`)
+- Buy buttons have aria-labels (e.g. `aria-label="Buy Quicker IP Pro for $18.99 USD"`)
 - LemonSqueezy store: bskapps.lemonsqueezy.com
 
 ## Galleries and lightbox (product pages)
@@ -82,7 +82,17 @@ Lab Assistant's Mint / Processing Modules sections and QIP's Lite vs Pro table a
 
 ## Homepage tile wrappers (IMPORTANT)
 
-Tiles containing a buy `<a>` use `<div class="app-card" onclick="window.location='...'">` - NOT `<a href>` - because nesting `<a>` inside `<a>` is invalid HTML and browsers auto-close the outer anchor, breaking the layout. Inner links call `event.stopPropagation()`. Tiles without inner links (Resources hub) may use `<a class="app-card">`.
+Tiles are `<a class="app-card" href="...">` wrapping a `.tile`. This is only safe because the tiles contain NO inner links - the buy buttons were removed August 2026. If you ever put a link back inside a tile you must revert to the old `<div class="app-card" onclick>` pattern, because nesting `<a>` inside `<a>` is invalid HTML and browsers auto-close the outer anchor, breaking the layout.
+
+Each tile: `.tile-shot` screenshot (152px, object-fit cover, negative margins to bleed to the card edge), `.tile-head` icon + name + subtitle, `.tile-line` tagline, then `.tile-foot` with `.tile-price` (price + small meta line) and `.tile-view`.
+
+## Contrast
+
+`--text-on-card` (#C6C6CC) is for muted text sitting on a `--card` background. `--text-muted` (#A9A9AF) fails AA at 3.76:1 on cards - it is only for text on `--bg`. Use `--text-on-card` inside `.tile`, `.game-card` and `.article-cta`.
+
+## Link previews (Open Graph)
+
+Every page has a 1200x630 `images/og-*.png` card plus `og:image:width`/`height`. `og:title` is the SELLING line and is deliberately different from `<title>`, which stays keyword-shaped for Google. Cards are generated from HTML, not hand-drawn - regenerate rather than editing the PNGs. After changing any OG tag, re-scrape the URL in Facebook's Sharing Debugger or the old preview persists.
 
 ## Footer
 

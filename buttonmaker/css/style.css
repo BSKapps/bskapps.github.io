@@ -436,7 +436,7 @@ body {
 
 .preset-actions .btn { width: auto; margin: 0; padding: 7px 12px; font-size: 0.85rem; }
 
-.set-card, .onstate-card, .download-card { width: min(860px, 100%); margin-bottom: 0; }
+.set-card, .onstate-card, .download-card, .promo-card { width: min(860px, 100%); margin-bottom: 0; }
 
 .set-tools.reserved { visibility: hidden; }
 
@@ -968,8 +968,9 @@ body {
   .set-card { order: 4; width: calc(100% - 24px); margin: 0 12px 12px; }
   .onstate-card { order: 4; width: calc(100% - 24px); margin: 0 12px 12px; }
   .download-card { order: 4; width: calc(100% - 24px); margin: 0 12px 12px; }
-  .help-card { order: 5; width: calc(100% - 24px); margin: 0 12px 24px; }
-  .more-bsk { order: 6; width: calc(100% - 24px); margin: 0 12px 24px; }
+  .promo-card { order: 5; width: calc(100% - 24px); margin: 0 12px 12px; }
+  .help-card { order: 6; width: calc(100% - 24px); margin: 0 12px 24px; }
+  .more-bsk { order: 7; width: calc(100% - 24px); margin: 0 12px 24px; }
   .more-bsk .bsk-grid { grid-template-columns: 1fr; }
   .preset-actions { flex-wrap: wrap; }
   .preset-actions input[type="text"] { flex: 1 1 100%; }
