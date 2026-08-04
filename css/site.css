@@ -1,7 +1,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-    --bg: #222226;
+    --bg: #1B1B1F;
     --card: #343B4A;
     --card-hover: #3B4251;
     --border: rgba(255,255,255,0.12);
@@ -134,10 +134,10 @@ iframe[src*="lemonsqueezy.com"] {
 .hero p { color: var(--text-muted); font-size: 1rem; margin-top: 8px; }
 .hero-note { font-size: 0.85rem; color: var(--text-faint); margin-top: 14px; }
 
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 20px; row-gap: 34px; }
 .grid > .app-card:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 8px); margin-top: 24px; }
 
-.tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 18px; row-gap: 24px; }
 .tile-mini { padding: 16px 16px 14px; }
 .tile-mini .tile-head { gap: 10px; }
 .tile-mini .tile-icon { width: 40px; height: 40px; border-radius: 9px; }
@@ -147,11 +147,11 @@ iframe[src*="lemonsqueezy.com"] {
 
 .tile {
     background: var(--card);
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-strong);
     border-radius: 10px;
     padding: 22px;
     height: 100%;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    box-shadow: 0 3px 12px rgba(0,0,0,0.38);
     transition: background 0.15s, border-color 0.15s;
     display: flex;
     flex-direction: column;
