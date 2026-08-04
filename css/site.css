@@ -9,6 +9,7 @@
     --text: #E4E4E7;
     --text-muted: #A9A9AF;
     --text-faint: #8A8A90;
+    --text-on-card: #C6C6CC;
     --heading: #E3E3E6;
     --accent: #3E8E5F;
     --accent-hover: #469C6A;
@@ -131,6 +132,7 @@ iframe[src*="lemonsqueezy.com"] {
 .hero { text-align: center; margin-bottom: 48px; }
 .hero h1 { font-size: 2rem; }
 .hero p { color: var(--text-muted); font-size: 1rem; margin-top: 8px; }
+.hero-note { font-size: 0.74rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin-top: 16px; }
 
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .grid > .app-card:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 8px); margin-top: 24px; }
@@ -155,16 +157,31 @@ iframe[src*="lemonsqueezy.com"] {
     flex-direction: column;
 }
 .app-card:hover .tile { background: var(--card-hover); border-color: var(--border-strong); }
+.tile-shot {
+    display: block;
+    width: calc(100% + 44px);
+    height: 152px;
+    object-fit: cover;
+    object-position: top center;
+    background: #1b1b1f;
+    margin: -22px -22px 18px;
+    border-bottom: 1px solid var(--border);
+    border-radius: 9px 9px 0 0;
+}
 .tile-head { display: flex; align-items: center; gap: 14px; }
 .tile-icon { width: 58px; height: 58px; border-radius: 13px; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.45)); }
 .tile h2 { font-size: 1.2rem; color: var(--heading); }
-.tile .subtitle { color: var(--text-muted); font-size: 0.88rem; margin-top: 2px; }
+.tile .subtitle { color: var(--text-on-card); font-size: 0.88rem; margin-top: 2px; }
+.tile-price { font-size: 0.95rem; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.tile-price small { display: block; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-on-card); margin-top: 3px; }
+.tile-view { color: var(--brand); font-size: 0.9rem; font-weight: 600; white-space: nowrap; }
+.app-card:hover .tile-view { color: var(--brand-bright); }
 .tile-line { color: var(--text); font-size: 0.95rem; font-weight: 600; line-height: 1.4; margin: 14px 0 16px; }
 .tile-foot { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: auto; }
 .buy-link { color: #5FBE8A; font-size: 0.92rem; font-weight: 700; text-decoration: none; }
 a.buy-link:hover { color: #76D2A0; }
-.tile-meta { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); }
-.tile-note { display: inline-block; color: var(--text-muted); font-size: 0.8rem; text-decoration: none; margin-top: 8px; }
+.tile-meta { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-on-card); }
+.tile-note { display: inline-block; color: var(--text-on-card); font-size: 0.8rem; text-decoration: none; margin-top: 8px; }
 .tile-note:hover { color: var(--heading); }
 
 .fan { display: flex; align-items: center; gap: 4px; }

@@ -35,6 +35,7 @@
             <a class="nav-brand" href="/"><img src="images/bsk-logo-small.png" alt="BSK Apps" width="32" height="32">BSK Apps</a>
             <div class="nav-links">
                 <a href="tools/">Tools</a>
+                <a href="articles/">Articles</a>
                 <a href="contact/">Contact</a>
             </div>
         </nav>
@@ -42,13 +43,15 @@
         <div class="hero">
             <h1>Utilities for AV Professionals</h1>
             <p>Mac and web apps for live production - networking, automation, media, and measurement.</p>
+            <p class="hero-note">Native Mac apps - one-time purchase - 2 activations</p>
         </div>
 
         <div class="grid">
-            <div class="app-card" onclick="window.location='quickerip/'" style="cursor:pointer">
+            <a class="app-card" href="quickerip/">
             <div class="tile">
+                <img class="tile-shot" src="quickerip/images/tile-quickerip.png" alt="Quicker IP menu bar panel" loading="lazy">
                 <div class="tile-head">
-                    <img class="tile-icon" src="images/quickip-icon.png" alt="Quicker IP" width="58" height="58">
+                    <img class="tile-icon" src="images/quickip-icon.png" alt="" width="58" height="58">
                     <div>
                         <h2>Quicker IP</h2>
                         <p class="subtitle">{{ site.data.content.apps.quickerip.subtitle }}</p>
@@ -56,51 +59,17 @@
                 </div>
                 <p class="tile-line">{{ site.data.content.apps.quickerip.tagline }}</p>
                 <div class="tile-foot">
-                    <a href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0" class="buy-link lemonsqueezy-button" aria-label="Buy Quicker IP Pro for {{ site.data.content.apps.quickerip.price }}" onclick="event.stopPropagation()">Buy - {{ site.data.content.apps.quickerip.price }}</a>
-                    <span class="tile-meta">{{ site.data.content.apps.quickerip.macos }}</span>
+                    <span class="tile-price">{{ site.data.content.apps.quickerip.price }}<small>Free Lite on the App Store</small></span>
+                    <span class="tile-view">View &rarr;</span>
                 </div>
-                <a class="tile-note" href="https://apps.apple.com/us/app/quicker-ip-lite/id6761874418" onclick="event.stopPropagation()">Free Lite version on the App Store</a>
             </div>
-            </div>
+            </a>
 
-            <div class="app-card" onclick="window.location='labassistant/'" style="cursor:pointer">
+            <a class="app-card" href="targettrace/">
             <div class="tile">
+                <img class="tile-shot" src="targettrace/images/ss-editor.png" alt="Target Trace curve editor" loading="lazy">
                 <div class="tile-head">
-                    <img class="tile-icon" src="images/labassistant-icon.png" alt="Lab Assistant" width="58" height="58">
-                    <div>
-                        <h2>Lab Assistant</h2>
-                        <p class="subtitle">{{ site.data.content.apps.labassistant.subtitle }}</p>
-                    </div>
-                </div>
-                <p class="tile-line">{{ site.data.content.apps.labassistant.tagline }}</p>
-                <div class="tile-foot">
-                    <a href="https://bskapps.lemonsqueezy.com/checkout/buy/efb96677-ac6d-43c1-8697-e465e62d1d00?dark=1&desc=0&media=0" class="buy-link lemonsqueezy-button" aria-label="Buy Lab Assistant for {{ site.data.content.apps.labassistant.price }}" onclick="event.stopPropagation()">Buy - {{ site.data.content.apps.labassistant.price }}</a>
-                    <span class="tile-meta">{{ site.data.content.apps.labassistant.macos }}</span>
-                </div>
-            </div>
-            </div>
-
-            <div class="app-card" onclick="window.location='fetchpuppy/'" style="cursor:pointer">
-            <div class="tile">
-                <div class="tile-head">
-                    <img class="tile-icon" src="images/fetchpuppy-icon.png" alt="Fetch Puppy" width="58" height="58">
-                    <div>
-                        <h2>Fetch Puppy</h2>
-                        <p class="subtitle">{{ site.data.content.apps.fetchpuppy.subtitle }}</p>
-                    </div>
-                </div>
-                <p class="tile-line">{{ site.data.content.apps.fetchpuppy.tagline }}</p>
-                <div class="tile-foot">
-                    <a href="https://bskapps.lemonsqueezy.com/checkout/buy/99a45e24-5f0c-4ef7-86a9-be1cf7c555af?dark=1&media=0&desc=0" class="buy-link lemonsqueezy-button" aria-label="Buy Fetch Puppy for {{ site.data.content.apps.fetchpuppy.price }}" onclick="event.stopPropagation()">Buy - {{ site.data.content.apps.fetchpuppy.price }}</a>
-                    <span class="tile-meta">{{ site.data.content.apps.fetchpuppy.macos }}</span>
-                </div>
-            </div>
-            </div>
-
-            <div class="app-card" onclick="window.location='targettrace/'" style="cursor:pointer">
-            <div class="tile">
-                <div class="tile-head">
-                    <img class="tile-icon" src="images/targettrace-icon.png" alt="Target Trace" width="58" height="58">
+                    <img class="tile-icon" src="images/targettrace-icon.png" alt="" width="58" height="58">
                     <div>
                         <h2>Target Trace</h2>
                         <p class="subtitle">{{ site.data.content.apps.targettrace.subtitle }}</p>
@@ -108,52 +77,47 @@
                 </div>
                 <p class="tile-line">{{ site.data.content.apps.targettrace.tagline }}</p>
                 <div class="tile-foot">
-                    <a href="https://bskapps.lemonsqueezy.com/checkout/buy/2d6a5745-536e-4e65-9953-ad34ad59fdb7?dark=1&media=0&desc=0" class="buy-link lemonsqueezy-button" aria-label="Buy Target Trace for {{ site.data.content.apps.targettrace.price }}" onclick="event.stopPropagation()">Buy - {{ site.data.content.apps.targettrace.price }}</a>
-                    <span class="tile-meta">{{ site.data.content.apps.targettrace.macos }}</span>
+                    <span class="tile-price">{{ site.data.content.apps.targettrace.price }}<small>{{ site.data.content.apps.targettrace.macos }}</small></span>
+                    <span class="tile-view">View &rarr;</span>
                 </div>
             </div>
-            </div>
+            </a>
 
-            <div class="app-card" onclick="window.location='stimulus/'" style="cursor:pointer">
+            <a class="app-card" href="labassistant/">
             <div class="tile">
+                <img class="tile-shot" src="labassistant/images/la-levels.png" alt="Lab Assistant levels pass in QLab" loading="lazy">
                 <div class="tile-head">
-                    <img class="tile-icon" src="images/stimulus-icon.png" alt="Stimulus" width="58" height="58">
+                    <img class="tile-icon" src="images/labassistant-icon.png" alt="" width="58" height="58">
                     <div>
-                        <h2>Stimulus</h2>
-                        <p class="subtitle">{{ site.data.content.apps.stimulus.subtitle }}</p>
+                        <h2>Lab Assistant</h2>
+                        <p class="subtitle">{{ site.data.content.apps.labassistant.subtitle }}</p>
                     </div>
                 </div>
-                <p class="tile-line">{{ site.data.content.apps.stimulus.tagline }}</p>
+                <p class="tile-line">{{ site.data.content.apps.labassistant.tagline }}</p>
                 <div class="tile-foot">
-                    <a href="https://apps.apple.com/app/id6792156906" class="buy-link" aria-label="Buy Stimulus for {{ site.data.content.apps.stimulus.price }} on the App Store" onclick="event.stopPropagation()">Buy - {{ site.data.content.apps.stimulus.price }}</a>
-                    <span class="tile-meta">{{ site.data.content.apps.stimulus.macos }}</span>
+                    <span class="tile-price">{{ site.data.content.apps.labassistant.price }}<small>{{ site.data.content.apps.labassistant.macos }}</small></span>
+                    <span class="tile-view">View &rarr;</span>
                 </div>
-                <span class="tile-note">App Store - one purchase covers Mac and iPad</span>
             </div>
-            </div>
+            </a>
 
-            <div class="app-card" onclick="window.location='gogames/'" style="cursor:pointer">
+            <a class="app-card" href="fetchpuppy/">
             <div class="tile">
+                <img class="tile-shot" src="fetchpuppy/images/2-search-preview.png" alt="Fetch Puppy search and preview" loading="lazy">
                 <div class="tile-head">
-                    <div class="fan">
-                        <img src="gogames/images/gosolitaire-icon.png" alt="Go Solitaire">
-                        <img src="gogames/images/gosudoku-icon.png" alt="Go Sudoku">
-                        <img src="gogames/images/gominesweeper-icon.png" alt="Go Minesweeper">
-                        <img src="gogames/images/gobattleboats-icon.png" alt="Go Battle Boats">
-                    </div>
+                    <img class="tile-icon" src="images/fetchpuppy-icon.png" alt="" width="58" height="58">
                     <div>
-                        <h2>Go Games</h2>
-                        <p class="subtitle">{{ site.data.content.apps.gogames.subtitle }}</p>
+                        <h2>Fetch Puppy</h2>
+                        <p class="subtitle">{{ site.data.content.apps.fetchpuppy.subtitle }}</p>
                     </div>
                 </div>
-                <p class="tile-line">{{ site.data.content.apps.gogames.tagline }}</p>
+                <p class="tile-line">{{ site.data.content.apps.fetchpuppy.tagline }}</p>
                 <div class="tile-foot">
-                    <span class="buy-link">Free on the App Store</span>
-                    <span class="tile-meta">{{ site.data.content.apps.gogames.macos }}</span>
+                    <span class="tile-price">{{ site.data.content.apps.fetchpuppy.price }}<small>{{ site.data.content.apps.fetchpuppy.macos }}</small></span>
+                    <span class="tile-view">View &rarr;</span>
                 </div>
-                <span class="tile-note">Ad-free. Free to play - one $1.99 unlock opens every level and theme.</span>
             </div>
-            </div>
+            </a>
         </div>
 
         <div class="section-head">Free Tools</div>
@@ -197,10 +161,19 @@
             </a>
         </div>
 
+        <div class="section-head">Also from BSK</div>
         <div class="more">
+            <a class="more-link" href="stimulus/">
+                <strong>Stimulus - test signals for Mac and iPad</strong>
+                <span>Sweeps, pink noise, GLITS and harmonics. {{ site.data.content.apps.stimulus.price }} on the App Store, one purchase covers both.</span>
+            </a>
             <a class="more-link" href="articles/">
                 <strong>Articles</strong>
                 <span>Practical guides for AV work on a Mac - Networking, QLab, REAPER Lua, and more.</span>
+            </a>
+            <a class="more-link" href="gogames/">
+                <strong>Go Games</strong>
+                <span>Solitaire, Sudoku, Minesweeper and Battle Boats. Ad-free, free on the App Store for iPhone and Mac.</span>
             </a>
         </div>
 
