@@ -2,6 +2,18 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v135 - 2026-08-04
+- The sidebar is now tabbed: Background, Icon and Text. One card at a time, so on a normal screen there is no sidebar scrolling at all.
+- Make a set and On state moved to a pinned dock at the bottom of the sidebar, next to the button strip they affect. Both are gone from the middle of the page.
+- One Button / Custom Set is gone. A single button is just a set of one, and it grows the moment you number it, add one, or give it an on state.
+- On state starts collapsed with a one-line explainer, so it prompts instead of puzzling.
+- Buttons & Sets is now a proper library card, with naming, saving, back up, restore and share link inside it. Start Fresh is a small button off to the side.
+- Download now sits directly under the button strip.
+- Shape's Rotate and Zoom are now Rotate button and Zoom contents, because one turns the whole face and the other only scales the artwork.
+- Icon and Image are now Icon library and Upload image.
+- Invert, Squircle and Reverse now sit on the row of the control they change, instead of taking a line each.
+- Fixed being asked to replace your set when there was only one button and nothing to lose.
+
 ## v134 - 2026-08-04
 - On states: pick a colour for your on state. White, amber, green or red now sets the colour used by Tint, Dot and the new Colour treatment, so a red tint or an amber dot is finally possible. Highlight and Invert have no colour of their own, so the swatches grey out for those.
 - Colour: a new on state that swaps the whole background and puts the text and icons in black or white, whichever reads on it.

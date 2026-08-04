@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://bskapps.com; connect-src 'self' https://api.iconify.design https://cloudflareinsights.com; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="bm-version" content="134">
+<meta name="bm-version" content="135">
 <title>BSK Button Maker - Free Companion, Stream Deck, REAPER and App Icon Designer</title>
 <meta name="description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars, plus app icons. Icon library, presets, button sets, PNG, Companion page and REAPER toolbar export.">
 <meta property="og:title" content="BSK Button Maker">
@@ -41,7 +41,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&family=Archivo+Black&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=134">
+<link rel="stylesheet" href="css/style.css?v=135">
 </head>
 <body>
 <header class="app-header">
@@ -55,6 +55,14 @@
 <main class="layout">
   <aside class="panel" id="controls">
 
+    <div class="seg" id="panelTabs">
+      <button type="button" data-tab="bg" class="active">Background</button>
+      <button type="button" data-tab="icon">Icon</button>
+      <button type="button" data-tab="text">Text</button>
+    </div>
+
+    <div class="tab-area">
+
     <details class="section card-bg" open>
       <summary><svg class="card-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.5,12A1.5,1.5 0 0,1 16,10.5A1.5,1.5 0 0,1 17.5,9A1.5,1.5 0 0,1 19,10.5A1.5,1.5 0 0,1 17.5,12M14.5,8A1.5,1.5 0 0,1 13,6.5A1.5,1.5 0 0,1 14.5,5A1.5,1.5 0 0,1 16,6.5A1.5,1.5 0 0,1 14.5,8M9.5,8A1.5,1.5 0 0,1 8,6.5A1.5,1.5 0 0,1 9.5,5A1.5,1.5 0 0,1 11,6.5A1.5,1.5 0 0,1 9.5,8M6.5,12A1.5,1.5 0 0,1 5,10.5A1.5,1.5 0 0,1 6.5,9A1.5,1.5 0 0,1 8,10.5A1.5,1.5 0 0,1 6.5,12M12,3A9,9 0 0,0 3,12A9,9 0 0,0 12,21A1.5,1.5 0 0,0 13.5,19.5C13.5,19.11 13.35,18.76 13.11,18.5C12.88,18.23 12.73,17.88 12.73,17.5A1.5,1.5 0 0,1 14.23,16H16A5,5 0 0,0 21,11C21,6.58 16.97,3 12,3Z"/></svg>Background</summary>
       <div class="section-body">
@@ -63,18 +71,18 @@
           <button data-val="gradient">Gradient</button>
           <button data-val="image">Image</button>
         </div>
-        <div class="row" id="bgSolidRow">
+        <div class="row merged-row" id="bgSolidRow">
           <label for="bgColor">Colour</label>
           <input type="color" id="bgColor" value="#1a2230" data-label="Background">
+          <label class="inline-check" for="bgInvert">Invert</label><input type="checkbox" id="bgInvert">
         </div>
         <div id="bgGradientRows" class="hidden">
           <div class="row"><label for="bgColor2a">From</label><input type="color" id="bgColor2a" value="#16324f" data-label="Gradient from"></div>
-          <div class="row"><label for="bgColor2b">To</label><input type="color" id="bgColor2b" value="#0a0e14" data-label="Gradient to"></div>
+          <div class="row merged-row" id="bgGradToRow"><label for="bgColor2b">To</label><input type="color" id="bgColor2b" value="#0a0e14" data-label="Gradient to"></div>
           <div class="row"><label for="bgAngle">Angle</label><input type="range" id="bgAngle" min="0" max="360" value="135" data-default="135"><input type="number" class="val" id="bgAngleVal" value="135"></div>
           <div class="row"><label for="bgBlend">Blend</label><input type="range" id="bgBlend" min="0" max="100" value="100" data-default="100"><input type="number" class="val" id="bgBlendVal" value="100"></div>
         </div>
         <div class="row" id="bgOpacityRow"><label for="bgOpacity">Opacity</label><input type="range" id="bgOpacity" min="0" max="100" value="100" data-default="100"><input type="number" class="val" id="bgOpacityVal" value="100"></div>
-        <div class="row check" id="bgInvertRow"><label for="bgInvert">Invert</label><input type="checkbox" id="bgInvert"></div>
         <div id="bgImageRows" class="hidden">
           <div class="row">
             <label for="bgImageFile">File</label>
@@ -94,13 +102,29 @@
       </div>
     </details>
 
+    <details class="section card-shape" open>
+      <summary><svg class="card-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2,2H8V4H4V8H2V2M16,2H22V8H20V4H16V2M20,16H22V22H16V20H20V16M8,20V22H2V16H4V20H8Z"/></svg><span class="card-title">Border<span class="card-sep">/</span>Shape</span></summary>
+      <div class="section-body">
+        <div class="row merged-row"><label for="shapeBorder">Border</label><input type="range" id="shapeBorder" min="0" max="8" value="0" step="0.5" data-default="0"><input type="number" class="val" id="shapeBorderVal" value="0"><input type="color" id="shapeBorderColor" value="#ffffff" data-label="Border colour" aria-label="Border colour" title="Border colour"></div>
+        <div class="row"><label>Border edges</label><div class="edge-toggles">
+          <label><input type="checkbox" id="edgeTop" checked> T</label>
+          <label><input type="checkbox" id="edgeBottom" checked> B</label>
+          <label><input type="checkbox" id="edgeLeft" checked> L</label>
+          <label><input type="checkbox" id="edgeRight" checked> R</label>
+        </div></div>
+        <div class="row merged-row"><label for="shapeRadius">Corners</label><input type="range" id="shapeRadius" min="0" max="35" value="0" data-default="0"><input type="number" class="val" id="shapeRadiusVal" value="0"><label class="inline-check" for="shapeSquircle">Squircle</label><input type="checkbox" id="shapeSquircle" title="Clip to an Apple-style squircle with transparent corners - ideal for 1024 px app icons"></div>
+        <div class="row"><label for="shapeRotate">Rotate button</label><input type="range" id="shapeRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="shapeRotateVal" value="0"></div>
+        <div class="row"><label for="shapeZoom">Zoom contents</label><input type="range" id="shapeZoom" min="25" max="200" value="100" data-default="100"><input type="number" class="val" id="shapeZoomVal" value="100"></div>
+      </div>
+    </details>
+
     <details class="section card-image" open>
       <summary><svg class="card-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z"/></svg><span class="card-title">Icon<span class="card-sep">/</span>Image</span></summary>
       <div class="section-body">
         <div class="layer-chips" id="iconLayerChips"></div>
         <div class="seg" id="iconSource">
-          <button id="openIconPicker" title="Choose an icon from the library">Icon</button>
-          <button id="iconUploadSidebar" title="Upload your own image">Image</button>
+          <button id="openIconPicker" title="Choose an icon from the built-in library">Icon library</button>
+          <button id="iconUploadSidebar" title="Upload your own image file">Upload image</button>
           <button id="iconAddDot" title="Add a status dot you can colour and place">Status dot</button>
         </div>
         <div class="row">
@@ -126,8 +150,7 @@
         <div class="row"><label for="iconX">Nudge X</label><input type="range" id="iconX" min="-40" max="40" value="0" data-default="0"><input type="number" class="val" id="iconXVal" value="0"></div>
         <div class="row"><label for="iconY">Nudge Y</label><input type="range" id="iconY" min="-40" max="40" value="0" data-default="0"><input type="number" class="val" id="iconYVal" value="0"></div>
         <div class="row"><label for="iconOpacity">Opacity</label><input type="range" id="iconOpacity" min="0" max="100" value="100" data-default="100"><input type="number" class="val" id="iconOpacityVal" value="100"></div>
-        <div class="row"><label for="iconRotate">Rotate</label><input type="range" id="iconRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="iconRotateVal" value="0"></div>
-        <div class="row check"><label for="iconReverse">Reverse</label><input type="checkbox" id="iconReverse"></div>
+        <div class="row merged-row"><label for="iconRotate">Rotate</label><input type="range" id="iconRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="iconRotateVal" value="0"><label class="inline-check" for="iconReverse">Reverse</label><input type="checkbox" id="iconReverse"></div>
       </div>
     </details>
 
@@ -139,8 +162,7 @@
           <label for="textValue">Text</label>
           <textarea id="textValue" placeholder="PC" autocomplete="off" spellcheck="false"></textarea>
         </div>
-        <p class="hint" style="margin-top:2px">Press Enter for a new line.</p>
-        <div class="row">
+        <div class="row merged-row">
           <label for="textFont">Font</label>
           <select id="textFont">
             <option value="Inter">Inter</option>
@@ -155,9 +177,7 @@
             <option value="Helvetica Neue">Helvetica Neue</option>
             <option value="Georgia">Georgia</option>
           </select>
-        </div>
-        <div class="row">
-          <label for="textWeight">Weight</label>
+          <label class="inline-check" for="textWeight">Weight</label>
           <select id="textWeight">
             <option value="400">Regular</option>
             <option value="600" selected>Semibold</option>
@@ -167,8 +187,7 @@
         </div>
         <div class="row"><label for="textSize">Size</label><input type="range" id="textSize" min="6" max="96" value="11" data-default="11"><input type="number" class="val" id="textSizeVal" value="11"></div>
         <div class="row"><label for="textColor">Colour</label><input type="color" id="textColor" value="#ffffff" data-label="Text colour"><label class="inline-check" for="textInvert">Invert</label><input type="checkbox" id="textInvert"></div>
-        <div class="row"><label for="textOutline">Outline</label><input type="range" id="textOutline" min="0" max="6" step="0.5" value="0" data-default="0"><input type="number" class="val" id="textOutlineVal" value="0"></div>
-        <div class="row"><label for="textOutlineColor">Outline colour</label><input type="color" id="textOutlineColor" value="#000000" data-label="Text outline colour"></div>
+        <div class="row merged-row"><label for="textOutline">Outline</label><input type="range" id="textOutline" min="0" max="6" step="0.5" value="0" data-default="0"><input type="number" class="val" id="textOutlineVal" value="0"><input type="color" id="textOutlineColor" value="#000000" data-label="Text outline colour" aria-label="Outline colour" title="Outline colour"></div>
         <div class="row pos-row">
           <label>Position</label>
           <div class="align-grid" id="textAlign">
@@ -191,39 +210,47 @@
       </div>
     </details>
 
-    <details class="section card-shape" open>
-      <summary><svg class="card-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2,2H8V4H4V8H2V2M16,2H22V8H20V4H16V2M20,16H22V22H16V20H20V16M8,20V22H2V16H4V20H8Z"/></svg><span class="card-title">Border<span class="card-sep">/</span>Shape</span></summary>
-      <div class="section-body">
-        <div class="row"><label for="shapeBorder">Border</label><input type="range" id="shapeBorder" min="0" max="8" value="0" step="0.5" data-default="0"><input type="number" class="val" id="shapeBorderVal" value="0"></div>
-        <div class="row"><label>Border edges</label><div class="edge-toggles">
-          <label><input type="checkbox" id="edgeTop" checked> T</label>
-          <label><input type="checkbox" id="edgeBottom" checked> B</label>
-          <label><input type="checkbox" id="edgeLeft" checked> L</label>
-          <label><input type="checkbox" id="edgeRight" checked> R</label>
-        </div></div>
-        <div class="row"><label for="shapeBorderColor">Border colour</label><input type="color" id="shapeBorderColor" value="#ffffff" data-label="Border colour"></div>
-        <div class="row"><label for="shapeRadius">Corners</label><input type="range" id="shapeRadius" min="0" max="35" value="0" data-default="0"><input type="number" class="val" id="shapeRadiusVal" value="0"></div>
-        <div class="row check"><label for="shapeSquircle">Squircle</label><input type="checkbox" id="shapeSquircle" title="Clip to an Apple-style squircle with transparent corners - ideal for 1024 px app icons"></div>
-        <div class="row"><label for="shapeRotate">Rotate</label><input type="range" id="shapeRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="shapeRotateVal" value="0"></div>
-        <div class="row"><label for="shapeZoom">Zoom</label><input type="range" id="shapeZoom" min="25" max="200" value="100" data-default="100"><input type="number" class="val" id="shapeZoomVal" value="100"></div>
+    </div>
+
+    <div class="set-bench">
+      <div class="row number-range">
+        <button class="btn" id="seriesNumberBtn" title="Turns this button into a numbered row - PC becomes PC 1, PC 2... Cue numbers like 1.1 to 1.5 work too.">Make a numbered set</button>
+        <input type="number" id="seriesFrom" value="1" min="0" max="999" step="any" aria-label="Number from" title="Start number">
+        <label for="seriesTo">to</label><input type="number" id="seriesTo" value="4" min="0" max="999" step="any" title="End number">
       </div>
-    </details>
+      <details class="bench-fold" id="onStateFold">
+        <summary><span class="bench-label">On state</span><span class="bench-sub">The look a button flips to when it is on</span></summary>
+        <div class="seg" id="effectType">
+          <button data-val="tint">Tint</button>
+          <button data-val="highlight">Highlight</button>
+          <button data-val="invert">Invert</button>
+          <button data-val="dot">Dot</button>
+          <button data-val="colour">Colour</button>
+        </div>
+        <div class="on-colours" id="effectColours"></div>
+      </details>
+    </div>
 
   </aside>
 
   <section class="stage">
     <div class="preset-strip-wrap">
-      <div class="pick-row">
-        <button class="btn" id="openPickerBtn">Choose Buttons &amp; Sets</button>
-        <button class="btn ghost" id="resetDesignStep" title="Clear everything and start with a blank button">Start Fresh</button>
+      <div class="library-card">
+        <button class="library-open" id="openPickerBtn">
+          <span class="library-title">Buttons &amp; Sets Library</span>
+          <span class="library-sub">Ready-made buttons and whole sets, plus every design you save</span>
+        </button>
+        <div class="preset-actions">
+          <input type="text" id="presetName" placeholder="Name this design" autocomplete="off">
+          <button class="btn" id="presetSave">Save to My Presets</button>
+          <button class="btn ghost" id="presetExport" title="Save all your presets to a file to back up or share">Back Up</button>
+          <button class="btn ghost" id="presetImportBtn" title="Load presets from a backup file">Restore</button>
+          <button class="btn ghost" id="shareLink" title="Copy a link that opens this design and set">Share Link</button>
+          <input type="file" id="presetImportFile" accept=".json" class="hidden">
+        </div>
       </div>
-      <div class="preset-actions">
-        <input type="text" id="presetName" placeholder="Name this design" autocomplete="off">
-        <button class="btn" id="presetSave">Save to My Presets</button>
-        <button class="btn ghost" id="presetExport" title="Save all your presets to a file to back up or share">Back Up</button>
-        <button class="btn ghost" id="presetImportBtn" title="Load presets from a backup file">Restore</button>
-        <button class="btn ghost" id="shareLink" title="Copy a link that opens this design and set">Share Link</button>
-        <input type="file" id="presetImportFile" accept=".json" class="hidden">
+      <div class="fresh-row">
+        <button class="btn ghost small" id="resetDesignStep" title="Clear everything and start with a blank button">Start Fresh</button>
       </div>
     </div>
     <canvas id="miniPreview" width="144" height="144" aria-hidden="true"></canvas>
@@ -239,44 +266,11 @@
       </div>
     </div>
     <div id="seriesPreview" class="series-preview"></div>
+    <p class="hint" id="effectScopeHint"></p>
     <div class="edit-banner idle" id="editBanner">
       <span id="editBannerLabel"></span>
       <button class="btn ghost small hidden" id="editAllBtn" title="Go back to editing the whole set">Edit All</button>
     </div>
-    <details class="section set-card hints-hidden" open>
-      <summary>Make a set<button type="button" class="help-toggle" aria-label="Show help for this card" title="Show help">?</button></summary>
-      <div class="section-body">
-        <p class="hint">Optional. Turn one design into a whole row of matching buttons.</p>
-        <div class="seg" id="seriesMode">
-          <button data-val="off" class="active">One Button</button>
-          <button data-val="list">Custom Set</button>
-        </div>
-        <div id="seriesListRows" class="set-tools reserved">
-          <div class="row number-range">
-            <button class="btn" id="seriesNumberBtn">Number Them</button>
-            <label for="seriesFrom">From</label><input type="number" id="seriesFrom" value="1" min="0" max="999" step="any">
-            <label for="seriesTo">To</label><input type="number" id="seriesTo" value="4" min="0" max="999" step="any">
-          </div>
-          <p class="hint">"Number Them" fills the set from your current design, so "PC" becomes PC 1, PC 2... and cue numbers like 1.1 to 1.5 work too.</p>
-        </div>
-      </div>
-    </details>
-    <details class="section onstate-card hints-hidden" open>
-      <summary>On states<button type="button" class="help-toggle" aria-label="Show help for this card" title="Show help">?</button></summary>
-      <div class="section-body">
-        <p class="hint">Pick a preset for a toggle's on or active look. It adds a linked, editable on state button (one per button) shown in the preview - then tweak it with the cards on the left. REAPER exports a linked on state as name_on.</p>
-        <div class="seg" id="effectType">
-          <button data-val="tint">Tint</button>
-          <button data-val="highlight">Highlight</button>
-          <button data-val="invert">Invert</button>
-          <button data-val="dot">Dot</button>
-          <button data-val="colour">Colour</button>
-        </div>
-        <div class="on-colours" id="effectColours"></div>
-        <p class="hint">The swatch sets the colour for Tint, Dot and Colour. Highlight and Invert have no colour of their own, so the swatches grey out for those. Colour swaps the whole background and puts the text and icons in black or white, whichever reads on it.</p>
-        <p class="hint" id="effectScopeHint"></p>
-      </div>
-    </details>
     <details class="section download-card hints-hidden" open>
       <summary>Download<button type="button" class="help-toggle" aria-label="Show help for this card" title="Show help">?</button></summary>
       <div class="section-body">
@@ -417,7 +411,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair, Cockos or Apple. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=134"></script>
-<script type="module" src="js/app.js?v=134"></script>
+<script src="vendor/jszip.min.js?v=135"></script>
+<script type="module" src="js/app.js?v=135"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-export const APP_VERSION = '134';
+export const APP_VERSION = '135';
 
 export function defaultTextLayer() {
   return {
@@ -84,22 +84,6 @@ export function defaultSeries() {
     items: [],
     colorTarget: 'bg'
   };
-}
-
-let setStash = null;
-
-export function stashSetItems(items) {
-  setStash = items && items.length ? deepClone(items) : null;
-}
-
-export function takeSetItems() {
-  const held = setStash;
-  setStash = null;
-  return held;
-}
-
-export function clearSetItems() {
-  setStash = null;
 }
 
 export const state = {

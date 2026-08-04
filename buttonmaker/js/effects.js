@@ -1,7 +1,7 @@
-import { state, emit, deepClone, dotLayer } from './state.js?v=134';
-import { seriesVariants } from './series.js?v=134';
-import { mixHex, isLightColor } from './color.js?v=134';
-import { releaseSelection, selectListItem } from './ui.js?v=134';
+import { state, emit, deepClone, dotLayer } from './state.js?v=135';
+import { seriesVariants } from './series.js?v=135';
+import { mixHex, isLightColor } from './color.js?v=135';
+import { releaseSelection, selectListItem } from './ui.js?v=135';
 
 export const EFFECT_DEFAULTS = {
   tint: { type: 'tint', color: '#1f9d3a', strength: 40, elements: { bg: true, icon: true, text: true } },
@@ -191,6 +191,8 @@ function effectFor(val) {
 }
 
 function runEffect(val) {
+  const fold = document.getElementById('onStateFold');
+  if (fold) fold.open = true;
   const targets = makeOnState(effectFor(val)) || [];
   lit = targets.length ? { val, targets } : null;
   syncEffectSeg();

@@ -1,10 +1,32 @@
-import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, stashSetItems, takeSetItems, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=134';
-import { triggerIconUpload } from './icons.js?v=134';
-import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=134';
-import { noteDesignsEdited } from './effects.js?v=134';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, editTarget, editTargets, buttonCount } from './state.js?v=135';
+import { triggerIconUpload } from './icons.js?v=135';
+import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=135';
+import { noteDesignsEdited } from './effects.js?v=135';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
+
+const PANEL_TABS = { bg: ['card-bg', 'card-shape'], icon: ['card-image'], text: ['card-text'] };
+
+function showPanelTab(key) {
+  for (const [tab, cards] of Object.entries(PANEL_TABS)) {
+    for (const cls of cards) {
+      const card = document.querySelector('.' + cls);
+      if (card) card.classList.toggle('tab-hidden', tab !== key);
+    }
+  }
+  document.querySelectorAll('#panelTabs button').forEach((b) => b.classList.toggle('active', b.dataset.tab === key));
+}
+
+function placeBgInvert(mode) {
+  const label = document.querySelector('label[for="bgInvert"]');
+  const input = document.getElementById('bgInvert');
+  if (!label || !input) return;
+  const host = document.getElementById(mode === 'gradient' ? 'bgGradToRow' : 'bgSolidRow');
+  if (!host || input.parentElement === host) return;
+  host.appendChild(label);
+  host.appendChild(input);
+}
 
 function clampSeriesNum(n) {
   return Math.max(0, Math.min(999, Math.round(n * 100) / 100));
@@ -367,7 +389,7 @@ export function initUI() {
     document.getElementById('bgGradientRows').classList.toggle('hidden', v !== 'gradient');
     document.getElementById('bgImageRows').classList.toggle('hidden', v !== 'image');
     document.getElementById('bgOpacityRow').classList.toggle('hidden', v === 'image');
-    document.getElementById('bgInvertRow').classList.toggle('hidden', v === 'image');
+    placeBgInvert(v);
   });
   bindColor('bgColor', (v) => {
     bgColorTouched = true;
@@ -533,38 +555,20 @@ export function initUI() {
   bindRange('shapeRotate', (v) => applyEdit((d) => (d.shape.rotation = v)), 'shapeRotateVal');
   bindRange('shapeZoom', (v) => applyEdit((d) => (d.shape.zoom = v)), 'shapeZoomVal');
 
-  bindSeg('seriesMode', (v) => {
-    const prev = state.series.mode;
-    if (v !== prev) {
-      if (v === 'off') {
-        const variants = seriesVariants();
-        const sel = primarySelection();
-        const idx = prev === 'list' && sel !== null && variants[sel] ? sel : 0;
-        const chosen = variants[idx];
-        releaseSelection();
-        if (chosen) Object.assign(state.design, deepClone(chosen.design));
-        state.ui.activeText = 0;
-        state.ui.activeIcon = 0;
-        stashSetItems(state.series.items);
-        Object.assign(state.series, defaultSeries());
-      } else {
-        releaseSelection();
-        if (!state.series.items.length) {
-          const held = takeSetItems();
-          state.series.items = held && held.length ? held : [{ label: '', color: '' }, { label: '', color: '' }];
-        }
-        state.series.mode = 'list';
-      }
-    }
+  document.querySelectorAll('#panelTabs button').forEach((btn) => {
+    btn.addEventListener('click', () => showPanelTab(btn.dataset.tab));
   });
+  showPanelTab('bg');
 
   document.getElementById('editAllBtn').addEventListener('click', deselectListItem);
 
   document.getElementById('seriesNumberBtn').addEventListener('click', () => {
     document.getElementById('seriesFrom').dispatchEvent(new Event('change'));
     document.getElementById('seriesTo').dispatchEvent(new Event('change'));
-    const hasContent = state.series.items.some((it) => it.design || (it.label && it.label.trim()));
-    if (hasContent && !confirm('Replace the ' + state.series.items.length + ' buttons in your set with a numbered set?')) return;
+    const items = state.series.items;
+    const atRisk = items.length > 1 || items.some((it) => it.design);
+    const noun = items.length === 1 ? ' button' : ' buttons';
+    if (atRisk && !confirm('Replace the ' + items.length + noun + ' in your set with a numbered set?')) return;
     releaseSelection();
     convertNumberedToList();
     emit();
@@ -810,14 +814,10 @@ export function syncInputsFromState() {
   document.getElementById('bgGradientRows').classList.toggle('hidden', d.bg.mode !== 'gradient');
   document.getElementById('bgImageRows').classList.toggle('hidden', d.bg.mode !== 'image');
   document.getElementById('bgOpacityRow').classList.toggle('hidden', d.bg.mode === 'image');
-  document.getElementById('bgInvertRow').classList.toggle('hidden', d.bg.mode === 'image');
+  placeBgInvert(d.bg.mode);
   document.getElementById('bgInvert').checked = !!d.bg.invert;
   setSeg('textAlign', t.align);
 
-  setSeg('seriesMode', state.series.mode);
-  const lockNumber = state.series.items.some((it) => it.design);
-  const showNumber = state.series.mode === 'list' && !lockNumber;
-  document.getElementById('seriesListRows').classList.toggle('reserved', !showNumber);
   setVal('seriesFrom', state.series.from);
   setVal('seriesTo', state.series.to);
 
