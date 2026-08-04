@@ -1,4 +1,4 @@
-import { invertHex } from './color.js?v=129';
+import { invertHex } from './color.js?v=130';
 
 const imageCache = new Map();
 const CACHE_MAX = 80;
@@ -246,6 +246,12 @@ export async function renderDesign(canvas, design, opts = {}) {
       } catch (e) {}
       ctx.globalAlpha = (text.opacity === undefined ? 100 : text.opacity) / 100;
       ctx.fillStyle = text.invert ? invertHex(text.color) : text.color;
+      const ow = (text.outline || 0) * u;
+      if (ow) {
+        ctx.strokeStyle = text.invert ? invertHex(text.outlineColor || '#000000') : (text.outlineColor || '#000000');
+        ctx.lineWidth = ow * 2;
+        ctx.lineJoin = 'round';
+      }
       ctx.font = text.weight + ' ' + text.size * u + 'px "' + text.font + '", sans-serif';
       const [h, v] = text.align.split(':');
       ctx.textAlign = h === 'left' ? 'left' : h === 'right' ? 'right' : 'center';
@@ -299,7 +305,7 @@ export async function renderDesign(canvas, design, opts = {}) {
         const lineW = ctx.measureText(line).width;
         const ax = (h === 'left' ? pad + lineW / 2 : h === 'right' ? size - pad - lineW / 2 : size / 2) + ox;
         const ay = (v === 'top' ? pad + (text.size * u) / 2 : v === 'bottom' ? size - pad - (text.size * u) / 2 : size / 2) + oy;
-        drawArcText(ctx, line, bend, ax, ay);
+        drawArcText(ctx, line, bend, ax, ay, ow);
       } else {
         lines.forEach((line, i) => {
           let dx = 0;
@@ -309,6 +315,7 @@ export async function renderDesign(canvas, design, opts = {}) {
               dx = (m.actualBoundingBoxLeft - m.actualBoundingBoxRight) / 2;
             }
           }
+          if (ow) ctx.strokeText(line, x + dx + ox, startY + i * lineHeight + oy);
           ctx.fillText(line, x + dx + ox, startY + i * lineHeight + oy);
         });
       }
@@ -348,7 +355,7 @@ export async function renderDesign(canvas, design, opts = {}) {
   ctx.restore();
 }
 
-function drawArcText(ctx, line, bend, ax, ay) {
+function drawArcText(ctx, line, bend, ax, ay, ow) {
   const chars = [...line];
   const W = ctx.measureText(line).width;
   if (!W) return;
@@ -368,6 +375,7 @@ function drawArcText(ctx, line, bend, ax, ay) {
     ctx.save();
     ctx.rotate(phi);
     ctx.translate(0, -sign * R);
+    if (ow) ctx.strokeText(ch, 0, 0);
     ctx.fillText(ch, 0, 0);
     ctx.restore();
     acc += cw;

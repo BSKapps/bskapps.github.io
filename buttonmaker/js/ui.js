@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=129';
-import { triggerIconUpload } from './icons.js?v=129';
-import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=129';
-import { noteDesignsEdited } from './effects.js?v=129';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, defaultSeries, editTarget, editTargets, primarySelection, buttonCount } from './state.js?v=130';
+import { triggerIconUpload } from './icons.js?v=130';
+import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=130';
+import { noteDesignsEdited } from './effects.js?v=130';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -508,6 +508,12 @@ export function initUI() {
   bindColor('textColor', (v) => applyEdit((d) => {
     for (const t of textLayersOf(d)) t.color = v;
   }));
+  bindRange('textOutline', (v) => applyEdit((d) => {
+    for (const t of textLayersOf(d)) t.outline = v;
+  }), 'textOutlineVal', 0.5);
+  bindColor('textOutlineColor', (v) => applyEdit((d) => {
+    for (const t of textLayersOf(d)) t.outlineColor = v;
+  }));
   bindRange('textOpacity', (v) => applyEdit((d) => {
     for (const t of textLayersOf(d)) t.opacity = v;
   }), 'textOpacityVal');
@@ -779,6 +785,8 @@ export function syncInputsFromState() {
   setRange('textSize', t.size, 'textSizeVal');
   setVal('textColor', t.color);
   document.getElementById('textInvert').checked = !!t.invert;
+  setRange('textOutline', t.outline || 0, 'textOutlineVal');
+  setVal('textOutlineColor', t.outlineColor || '#000000');
   setRange('textOpacity', t.opacity === undefined ? 100 : t.opacity, 'textOpacityVal');
   setRange('textX', t.x || 0, 'textXVal');
   setRange('textY', t.y || 0, 'textYVal');

@@ -2,6 +2,13 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v130 - 2026-08-04
+- Text outline: new Outline width and colour controls on the Text card. The stroke sits behind the fill, works with bend and rotation, and bakes into every export.
+- Fixed the bm-version meta tag left at 128 since v129, which made every visit take one unnecessary refresh.
+
+## v129 - 2026-08-04
+- Background card chequer pattern softened.
+
 ## v124 - 2026-07-11
 - Gradient colours are no longer lost when you flick to Solid and back to Gradient. Picking a background colour on Solid still carries into the gradient; an untouched round trip keeps your gradient as it was.
 

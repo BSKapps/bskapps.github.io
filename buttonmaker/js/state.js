@@ -1,4 +1,4 @@
-export const APP_VERSION = '129';
+export const APP_VERSION = '130';
 
 export function defaultTextLayer() {
   return {
@@ -13,7 +13,9 @@ export function defaultTextLayer() {
     y: 0,
     rotation: 0,
     bend: 0,
-    invert: false
+    invert: false,
+    outline: 0,
+    outlineColor: '#000000'
   };
 }
 
