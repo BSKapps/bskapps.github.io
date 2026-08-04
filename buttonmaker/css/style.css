@@ -389,9 +389,7 @@ body {
 }
 
 .pick-row { display: flex; gap: 8px; }
-.pick-row .btn { margin: 0; width: auto; }
-.pick-row #openPickerBtn { flex: 1; }
-.pick-row #resetDesignStep { flex: 0 0 auto; }
+.pick-row .btn { margin: 0; width: auto; flex: 1 1 0; }
 
 .strip-del {
   position: absolute;
@@ -977,4 +975,42 @@ body {
   .app-header { flex-direction: column; gap: 4px; position: static; }
   .undo-row { display: flex; }
   .pos-row::after { width: 90px; height: 90px; right: 12px; }
+}
+
+.help-toggle {
+  margin-left: 8px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: none;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  flex: none;
+}
+.help-toggle:hover { color: var(--text); border-color: var(--text-muted); }
+.section:not(.hints-hidden) .help-toggle { background: var(--brand); border-color: var(--brand); color: #fff; }
+.section.hints-hidden .section-body > .hint:not(#exportSummary):not(#effectScopeHint) { display: none; }
+
+.download-row select { flex: 0 0 auto; margin: 0; }
+
+#miniPreview {
+  display: none;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 40;
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+}
+@media (max-width: 820px) {
+  #miniPreview.visible { display: block; }
 }

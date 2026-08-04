@@ -1,12 +1,12 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=130';
-import { renderDesign } from './renderer.js?v=130';
-import { seriesVariants, numberSet } from './series.js?v=130';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=130';
-import { initIconPicker } from './icons.js?v=130';
-import { initPresets, normalizeDesign } from './presets.js?v=130';
-import { initExport } from './export.js?v=130';
-import { initEffects, updateEffectControls } from './effects.js?v=130';
-import { initColorPopover } from './colorpicker.js?v=130';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=131';
+import { renderDesign } from './renderer.js?v=131';
+import { seriesVariants, numberSet } from './series.js?v=131';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=131';
+import { initIconPicker } from './icons.js?v=131';
+import { initPresets, normalizeDesign } from './presets.js?v=131';
+import { initExport } from './export.js?v=131';
+import { initEffects, updateEffectControls } from './effects.js?v=131';
+import { initColorPopover } from './colorpicker.js?v=131';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -549,3 +549,39 @@ onChange(() => {
 document.fonts.ready.then(() => emit());
 emit();
 pushHistory();
+
+for (const btn of document.querySelectorAll('.help-toggle')) {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const card = btn.closest('.section');
+    card.classList.toggle('hints-hidden');
+    if (!card.open) card.open = true;
+  });
+}
+
+const miniPreview = document.getElementById('miniPreview');
+const mainPreviewWrap = document.querySelector('.preview-wrap');
+if (miniPreview && mainPreviewWrap && 'IntersectionObserver' in window) {
+  const mctx = miniPreview.getContext('2d');
+  const srcCanvas = document.getElementById('preview');
+  let miniRaf = null;
+  function miniCopy() {
+    if (window.innerWidth > 820) {
+      miniPreview.classList.remove('visible');
+      miniRaf = null;
+      return;
+    }
+    mctx.clearRect(0, 0, miniPreview.width, miniPreview.height);
+    mctx.drawImage(srcCanvas, 0, 0, miniPreview.width, miniPreview.height);
+    miniRaf = miniPreview.classList.contains('visible') ? requestAnimationFrame(miniCopy) : null;
+  }
+  new IntersectionObserver((entries) => {
+    const away = !entries[0].isIntersecting && window.innerWidth <= 820;
+    miniPreview.classList.toggle('visible', away);
+    if (away && miniRaf === null) miniRaf = requestAnimationFrame(miniCopy);
+  }).observe(mainPreviewWrap);
+  miniPreview.addEventListener('click', () => {
+    mainPreviewWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+}

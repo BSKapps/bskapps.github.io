@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://bskapps.com; connect-src 'self' https://api.iconify.design https://cloudflareinsights.com; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="bm-version" content="130">
+<meta name="bm-version" content="131">
 <title>BSK Button Maker - Free Companion, Stream Deck, REAPER and App Icon Designer</title>
 <meta name="description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars, plus app icons. Icon library, presets, button sets, PNG, Companion page and REAPER toolbar export.">
 <meta property="og:title" content="BSK Button Maker">
@@ -41,7 +41,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&family=Archivo+Black&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=130">
+<link rel="stylesheet" href="css/style.css?v=131">
 </head>
 <body>
 <header class="app-header">
@@ -227,6 +227,7 @@
         <input type="file" id="presetImportFile" accept=".json" class="hidden">
       </div>
     </div>
+    <canvas id="miniPreview" width="144" height="144" aria-hidden="true"></canvas>
     <div class="preview-wrap">
       <div class="preview-frame">
         <canvas id="preview" width="288" height="288"></canvas>
@@ -243,8 +244,8 @@
       <span id="editBannerLabel"></span>
       <button class="btn ghost small hidden" id="editAllBtn" title="Go back to editing the whole set">Edit All</button>
     </div>
-    <details class="section set-card" open>
-      <summary>Make a set</summary>
+    <details class="section set-card hints-hidden" open>
+      <summary>Make a set<button type="button" class="help-toggle" aria-label="Show help for this card" title="Show help">?</button></summary>
       <div class="section-body">
         <p class="hint">Optional. Turn one design into a whole row of matching buttons.</p>
         <div class="seg" id="seriesMode">
@@ -261,8 +262,8 @@
         </div>
       </div>
     </details>
-    <details class="section onstate-card" open>
-      <summary>On states</summary>
+    <details class="section onstate-card hints-hidden" open>
+      <summary>On states<button type="button" class="help-toggle" aria-label="Show help for this card" title="Show help">?</button></summary>
       <div class="section-body">
         <p class="hint">Pick a preset for a toggle's on or active look. It adds a linked, editable on state button (one per button) shown in the preview - then tweak it with the cards on the left. REAPER exports a linked on state as name_on.</p>
         <div class="seg" id="effectType">
@@ -274,26 +275,25 @@
         <p class="hint" id="effectScopeHint"></p>
       </div>
     </details>
-    <details class="section download-card" open>
-      <summary>Download</summary>
+    <details class="section download-card hints-hidden" open>
+      <summary>Download<button type="button" class="help-toggle" aria-label="Show help for this card" title="Show help">?</button></summary>
       <div class="section-body">
         <div class="row download-row">
           <button class="btn primary" id="exportPng">PNG</button>
           <button class="btn primary" id="exportZip">Set as ZIP</button>
-          <button class="btn primary" id="exportCompanion">Companion Page</button>
-          <button class="btn primary" id="exportReaper">REAPER Icons</button>
-        </div>
-        <p class="hint" id="exportSummary"></p>
-        <div class="row">
-          <label for="exportSize">PNG size</label>
-          <select id="exportSize">
+          <select id="exportSize" aria-label="PNG size" title="PNG size - 288 px is a safe button default; pick 1024 px for app icons">
             <option value="72">72 px</option>
             <option value="144">144 px</option>
             <option value="288" selected>288 px</option>
             <option value="1024">1024 px (app icon)</option>
           </select>
         </div>
-        <p class="hint">288 px is a safe button default; pick 1024 px for app icons</p>
+        <div class="row download-row">
+          <button class="btn primary" id="exportCompanion">Companion Page</button>
+          <button class="btn primary" id="exportReaper">REAPER Icons</button>
+        </div>
+        <p class="hint" id="exportSummary"></p>
+        <p class="hint">288 px is a safe button default; pick 1024 px for app icons. The size applies to PNG and ZIP.</p>
       </div>
     </details>
     <details class="section promo-card" open>
@@ -437,7 +437,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair, Cockos or Apple. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=130"></script>
-<script type="module" src="js/app.js?v=130"></script>
+<script src="vendor/jszip.min.js?v=131"></script>
+<script type="module" src="js/app.js?v=131"></script>
 </body>
 </html>

@@ -2,6 +2,12 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v131 - 2026-08-04
+- Phones: a small floating preview follows you while you edit, so slider changes are visible without scrolling back up. Tap it to jump to the full preview.
+- Download card: PNG size now sits beside the PNG and ZIP buttons it applies to, with Companion and REAPER exports on their own row.
+- Make a set, On states and Download cards start compact; a ? button on each card shows its help text.
+- Choose Buttons & Sets and Start Fresh are now an equal-width pair.
+
 ## v130 - 2026-08-04
 - Text outline: new Outline width and colour controls on the Text card. The stroke sits behind the fill, works with bend and rotation, and bakes into every export.
 - Fixed the bm-version meta tag left at 128 since v129, which made every visit take one unnecessary refresh.
