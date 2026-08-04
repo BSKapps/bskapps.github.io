@@ -15,68 +15,178 @@
     "title": "Target Trace",
     "text": "A target curve editor for Mac: draw, refine and export curves for Smaart and REW.",
     "href": "/targettrace",
-    "linkText": "Target Trace"
+    "linkText": "Target Trace",
+    "icon": "targettrace-icon.png",
+    "buyText": "Buy Target Trace",
+    "buyHref": "https://bskapps.lemonsqueezy.com/checkout/buy/2d6a5745-536e-4e65-9953-ad34ad59fdb7?dark=1&media=0&desc=0&checkout%5Bcustom%5D%5Bsrc%5D=guide-target-trace",
+    "buyNote": "One-time purchase - 2 activations"
   },
   "intro": [
-    { "type": "paragraph", "text": "Target Trace is an editor for the target curves used in audio measurement. You shape a curve on a frequency graph and save it as a Smaart .crv file (or a REW house curve). The window has a curve library on the left, the editing canvas in the middle, and a properties panel on the right." }
+    {
+      "type": "paragraph",
+      "text": "Target Trace is an editor for the target curves used in audio measurement. You shape a curve on a frequency graph and save it as a Smaart .crv file (or a REW house curve). The window has a curve library on the left, the editing canvas in the middle, and a properties panel on the right."
+    }
   ],
   "sections": [
-    { "id": "starting-a-curve", "title": "Starting a curve", "blocks": [
-      { "type": "paragraph", "text": "The app opens with an empty curve named \"My Curve\". Start from scratch with the control points and pencil below, or pick a starting shape from **New from Preset** (press P), or load an existing curve from the library or by dragging a .crv file onto the canvas." }
-    ] },
-    { "id": "control-points", "title": "Control points", "blocks": [
-      { "type": "paragraph", "text": "The curve is a set of points you place and move." },
-      { "type": "bullets", "items": [
-        "**Add** - double-click an empty spot on the canvas.",
-        "**Move** - drag a point. Frequency moves on a log scale, level in dB.",
-        "**Select** - click a point; Cmd-click to add more; Shift-click to select a range; Cmd-A for all.",
-        "**Delete** - select and press Delete, or use the buttons in the Control Points panel. **Clear Curve** in the toolbar empties the whole curve.",
-        "**Type a value** - with one point selected, set its exact Freq and Level in the panel. With several selected, set them all to one Level."
-      ] },
-      { "type": "paragraph", "text": "Nudge selected points with Option-arrows (left/right by a semitone, up/down by 0.5 dB). Ctrl-click snaps a point to the cursor. A Hide toggle in the Control Points panel hides the dots without changing the curve." }
-    ] },
-    { "id": "the-pencil", "title": "The pencil", "blocks": [
-      { "type": "paragraph", "text": "Press **D** or click **Draw** to switch to the pencil, then drag to sketch a curve freehand. On release it is simplified to the current band and merged with any points outside the drawn area. Drawing a fresh shape resets the name to \"My Curve\" and clears the offset readout." }
-    ] },
-    { "id": "tf-and-spectrum-modes", "title": "TF and Spectrum modes", "blocks": [
-      { "type": "paragraph", "text": "Switch with the **TF** and **RTA** buttons (or T and S)." },
-      { "type": "paragraph", "text": "**Transfer Function (TF)** is a target relative to a reference level, so 0 dB means \"hit the reference at this frequency\". TF curves can show a tolerance band and have a TF Reference SPL (default 80 dB). **Spectrum / RTA** is an absolute dB SPL target and adds smoothing and weighting options. Switching modes converts the points using the reference level, and converts back exactly." }
-    ] },
-    { "id": "curve-properties", "title": "Curve properties", "blocks": [
-      { "type": "paragraph", "text": "The right panel holds the curve settings:" },
-      { "type": "bullets", "items": [
-        "**Name** - used as the filename when you save.",
-        "**Colour** and **line weight** (1 to 5 pt) for how the curve draws.",
-        "**Tolerance band** (TF only) - a shaded plus/minus dB region around the curve.",
-        "**Offset** - a running readout of global dB shifts (Cmd-up/down or the plus/minus buttons). Click it to reset. The offset is a working convenience and is never saved into the file.",
-        "**Smoothing** (Spectrum only) - Off, 1, 1/3, 1/6, 1/12 octave; a display resolution that does not change your points.",
-        "**Weighting** (Spectrum only) - Z (none), A or C; a display-only view that shifts the curve to match how loudness is heard. Flipping back to Z restores the raw shape exactly.",
-        "**TF Reference SPL** (TF only) - 60 to 100 dB, the level TF maps to."
-      ] }
-    ] },
-    { "id": "moving-around-the-graph", "title": "Moving around the graph", "blocks": [
-      { "type": "paragraph", "text": "Arrow keys and the scroll wheel pan and zoom frequency; hold Shift to zoom the dB axis. The toolbar has zoom in, zoom out and reset buttons, and a trackpad pinch zooms frequency. Hovering a point shows its frequency and level. **Split View** (V) adds a read-only second pane showing the curve in the opposite mode while you edit. The dB grid matches Smaart's defaults - a labelled line every 3 dB in Transfer Function and every 12 dB in Spectrum - in both the main and split-view panes." }
-    ] },
-    { "id": "the-curve-library", "title": "The curve library", "blocks": [
-      { "type": "paragraph", "text": "The left sidebar is your library - it lists the .crv files in your Smaart TargetCurves folder. There are two ways to use a curve: **double-click it (or drag it onto the canvas) to load it for editing**, which replaces the current curve; or **tick its checkbox to overlay it** for comparison, drawn dimmed and read-only without changing what you are editing. Drag a curve up or down within the list to reorder it (or use the right-click menu's Move Up, Down, to Top and to Bottom), and right-click to move it to Trash. On first launch Target Trace finds your Smaart TargetCurves folder automatically when there is one; use the folder button to change it, and if the folder goes missing a notice lets you re-pick it. Use the All / RTA / TF buttons to filter the list by type; All shows everything split into an RTA group then a TF group. When Match type is on the list follows the curve you are editing (RTA or TF) and the buttons reflect that; turn Match type off to choose a filter yourself, which returns the list to All." }
-    ] },
-    { "id": "overlays", "title": "Overlays", "blocks": [
-      { "type": "paragraph", "text": "The overlay controls sit in one panel. **Show overlays** is the master switch; overlaid curves draw dimmed and read-only, so you cannot edit them by accident. Each overlay is drawn the way Smaart shows it, sitting at its own saved offset. **Match type**, when on, shows only the overlays whose type (TF or RTA) matches the pane, and focuses the library list to that type as well; turn it off to show every overlay and browse the full library, which returns the list to All. **Tolerance** shows each TF overlay's own saved plus/minus band, taken from the curve's Tolerance value; RTA overlays never show one, matching Smaart. **Offset** shifts every overlay up or down together so you can line a reference up against your curve and compare its shape; it is view-only and never saved." }
-    ] },
-    { "id": "presets", "title": "Presets", "blocks": [
-      { "type": "paragraph", "text": "**New from Preset** (P) offers Flat, Tilt, 9 dB Haystack, 15 dB Haystack and X-Curve (Cinema). Tilt has adjustable tilt amount and pivot frequency, and both Tilt and Flat can add an optional sub bump. Applying a preset replaces the current curve, names it \"My Curve\" and can be undone." }
-    ] },
-    { "id": "point-spacing", "title": "Point spacing", "blocks": [
-      { "type": "paragraph", "text": "The **Point Spacing** section in the properties panel evens out how points are spread across the curve. Pick an octave band (1, 1/3, 1/6 or 1/12) and a frequency range, then **Apply** to re-sample the curve onto that grid - a finer band adds points, a coarser one reduces them. **Restore** brings the original points back." }
-    ] },
-    { "id": "saving-and-exporting", "title": "Saving and exporting", "blocks": [
-      { "type": "paragraph", "text": "Press Cmd-S to save. The dialog offers two formats: **Smaart (.crv)** keeps all the metadata (colour, type, tolerance, smoothing band) and the points; **REW House Curve (.txt)** writes just the frequency and dB columns for use in REW. Saving into your Smaart TargetCurves folder updates the library automatically. REW .txt files are an export only and cannot be loaded back in." }
-    ] },
-    { "id": "undo-and-shortcuts", "title": "Undo and shortcuts", "blocks": [
-      { "type": "paragraph", "text": "Cmd-Z undoes any edit, including loads and preset applies, and Cmd-Shift-Z redoes the last undone edit; text edits bundle into one undo per field. Handy keys: D draw, T/S modes, V split, P presets, Cmd-A select all, Delete to remove, Option-arrows to nudge a point, Cmd-up/down to shift the whole curve. The Help menu has a full Keyboard Shortcuts reference." }
-    ] },
-    { "id": "licence-and-activation", "title": "Licence and activation", "blocks": [
-      { "type": "paragraph", "text": "Target Trace is a one-time purchase with two activations. Enter your licence key on first launch. Manage or move the licence from the app menu. Check for Updates and Email Support - which copies a diagnostics report and opens an email to support - are in the same menu." }
-    ] }
+    {
+      "id": "starting-a-curve",
+      "title": "Starting a curve",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The app opens with an empty curve named \"My Curve\". Start from scratch with the control points and pencil below, or pick a starting shape from **New from Preset** (press P), or load an existing curve from the library or by dragging a .crv file onto the canvas."
+        }
+      ]
+    },
+    {
+      "id": "control-points",
+      "title": "Control points",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The curve is a set of points you place and move."
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "**Add** - double-click an empty spot on the canvas.",
+            "**Move** - drag a point. Frequency moves on a log scale, level in dB.",
+            "**Select** - click a point; Cmd-click to add more; Shift-click to select a range; Cmd-A for all.",
+            "**Delete** - select and press Delete, or use the buttons in the Control Points panel. **Clear Curve** in the toolbar empties the whole curve.",
+            "**Type a value** - with one point selected, set its exact Freq and Level in the panel. With several selected, set them all to one Level."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Nudge selected points with Option-arrows (left/right by a semitone, up/down by 0.5 dB). Ctrl-click snaps a point to the cursor. A Hide toggle in the Control Points panel hides the dots without changing the curve."
+        }
+      ]
+    },
+    {
+      "id": "the-pencil",
+      "title": "The pencil",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Press **D** or click **Draw** to switch to the pencil, then drag to sketch a curve freehand. On release it is simplified to the current band and merged with any points outside the drawn area. Drawing a fresh shape resets the name to \"My Curve\" and clears the offset readout."
+        }
+      ]
+    },
+    {
+      "id": "tf-and-spectrum-modes",
+      "title": "TF and Spectrum modes",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Switch with the **TF** and **RTA** buttons (or T and S)."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Transfer Function (TF)** is a target relative to a reference level, so 0 dB means \"hit the reference at this frequency\". TF curves can show a tolerance band and have a TF Reference SPL (default 80 dB). **Spectrum / RTA** is an absolute dB SPL target and adds smoothing and weighting options. Switching modes converts the points using the reference level, and converts back exactly."
+        }
+      ]
+    },
+    {
+      "id": "curve-properties",
+      "title": "Curve properties",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The right panel holds the curve settings:"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "**Name** - used as the filename when you save.",
+            "**Colour** and **line weight** (1 to 5 pt) for how the curve draws.",
+            "**Tolerance band** (TF only) - a shaded plus/minus dB region around the curve.",
+            "**Offset** - a running readout of global dB shifts (Cmd-up/down or the plus/minus buttons). Click it to reset. The offset is a working convenience and is never saved into the file.",
+            "**Smoothing** (Spectrum only) - Off, 1, 1/3, 1/6, 1/12 octave; a display resolution that does not change your points.",
+            "**Weighting** (Spectrum only) - Z (none), A or C; a display-only view that shifts the curve to match how loudness is heard. Flipping back to Z restores the raw shape exactly.",
+            "**TF Reference SPL** (TF only) - 60 to 100 dB, the level TF maps to."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "moving-around-the-graph",
+      "title": "Moving around the graph",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Arrow keys and the scroll wheel pan and zoom frequency; hold Shift to zoom the dB axis. The toolbar has zoom in, zoom out and reset buttons, and a trackpad pinch zooms frequency. Hovering a point shows its frequency and level. **Split View** (V) adds a read-only second pane showing the curve in the opposite mode while you edit. The dB grid matches Smaart's defaults - a labelled line every 3 dB in Transfer Function and every 12 dB in Spectrum - in both the main and split-view panes."
+        }
+      ]
+    },
+    {
+      "id": "the-curve-library",
+      "title": "The curve library",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The left sidebar is your library - it lists the .crv files in your Smaart TargetCurves folder. There are two ways to use a curve: **double-click it (or drag it onto the canvas) to load it for editing**, which replaces the current curve; or **tick its checkbox to overlay it** for comparison, drawn dimmed and read-only without changing what you are editing. Drag a curve up or down within the list to reorder it (or use the right-click menu's Move Up, Down, to Top and to Bottom), and right-click to move it to Trash. On first launch Target Trace finds your Smaart TargetCurves folder automatically when there is one; use the folder button to change it, and if the folder goes missing a notice lets you re-pick it. Use the All / RTA / TF buttons to filter the list by type; All shows everything split into an RTA group then a TF group. When Match type is on the list follows the curve you are editing (RTA or TF) and the buttons reflect that; turn Match type off to choose a filter yourself, which returns the list to All."
+        }
+      ]
+    },
+    {
+      "id": "overlays",
+      "title": "Overlays",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The overlay controls sit in one panel. **Show overlays** is the master switch; overlaid curves draw dimmed and read-only, so you cannot edit them by accident. Each overlay is drawn the way Smaart shows it, sitting at its own saved offset. **Match type**, when on, shows only the overlays whose type (TF or RTA) matches the pane, and focuses the library list to that type as well; turn it off to show every overlay and browse the full library, which returns the list to All. **Tolerance** shows each TF overlay's own saved plus/minus band, taken from the curve's Tolerance value; RTA overlays never show one, matching Smaart. **Offset** shifts every overlay up or down together so you can line a reference up against your curve and compare its shape; it is view-only and never saved."
+        }
+      ]
+    },
+    {
+      "id": "presets",
+      "title": "Presets",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "**New from Preset** (P) offers Flat, Tilt, 9 dB Haystack, 15 dB Haystack and X-Curve (Cinema). Tilt has adjustable tilt amount and pivot frequency, and both Tilt and Flat can add an optional sub bump. Applying a preset replaces the current curve, names it \"My Curve\" and can be undone."
+        }
+      ]
+    },
+    {
+      "id": "point-spacing",
+      "title": "Point spacing",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The **Point Spacing** section in the properties panel evens out how points are spread across the curve. Pick an octave band (1, 1/3, 1/6 or 1/12) and a frequency range, then **Apply** to re-sample the curve onto that grid - a finer band adds points, a coarser one reduces them. **Restore** brings the original points back."
+        }
+      ]
+    },
+    {
+      "id": "saving-and-exporting",
+      "title": "Saving and exporting",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Press Cmd-S to save. The dialog offers two formats: **Smaart (.crv)** keeps all the metadata (colour, type, tolerance, smoothing band) and the points; **REW House Curve (.txt)** writes just the frequency and dB columns for use in REW. Saving into your Smaart TargetCurves folder updates the library automatically. REW .txt files are an export only and cannot be loaded back in."
+        }
+      ]
+    },
+    {
+      "id": "undo-and-shortcuts",
+      "title": "Undo and shortcuts",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Cmd-Z undoes any edit, including loads and preset applies, and Cmd-Shift-Z redoes the last undone edit; text edits bundle into one undo per field. Handy keys: D draw, T/S modes, V split, P presets, Cmd-A select all, Delete to remove, Option-arrows to nudge a point, Cmd-up/down to shift the whole curve. The Help menu has a full Keyboard Shortcuts reference."
+        }
+      ]
+    },
+    {
+      "id": "licence-and-activation",
+      "title": "Licence and activation",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Target Trace is a one-time purchase with two activations. Enter your licence key on first launch. Manage or move the licence from the app menu. Check for Updates and Email Support - which copies a diagnostics report and opens an email to support - are in the same menu."
+        }
+      ]
+    }
   ]
 }

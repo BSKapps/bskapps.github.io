@@ -47,9 +47,22 @@
 {%- endunless -%}{%- endfor %}
 
             <div class="article-cta">
-                <h3>{{ g.cta.title }}</h3>
-                <p>{{ g.cta.text }}</p>
-                <a class="cta-link" href="{{ g.cta.href }}">{{ g.cta.linkText }} &rarr;</a>
+                {%- if g.cta.icon %}
+                <img class="cta-icon" src="/images/{{ g.cta.icon }}" alt="" width="64" height="64">
+                {%- endif %}
+                <div class="cta-body">
+                    <h3>{{ g.cta.title }}</h3>
+                    <p>{{ g.cta.text }}</p>
+                    <div class="cta-actions">
+                        {%- if g.cta.buyHref %}
+                        <a class="buy-btn" href="{{ g.cta.buyHref }}" aria-label="{{ g.cta.buyText }}">{{ g.cta.buyText }}</a>
+                        {%- endif %}
+                        <a class="cta-link" href="{{ g.cta.href }}">See what it does &rarr;</a>
+                    </div>
+                    {%- if g.cta.buyNote %}
+                    <span class="cta-note">{{ g.cta.buyNote }}</span>
+                    {%- endif %}
+                </div>
             </div>
         </article>
 

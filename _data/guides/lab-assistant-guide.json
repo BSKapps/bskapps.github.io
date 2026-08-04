@@ -15,84 +15,224 @@
     "title": "Lab Assistant",
     "text": "Bulk QLab workspace prep on Mac: levels, routing, trimming, numbering, fades, colours and file processing with Mint.",
     "href": "/labassistant",
-    "linkText": "Lab Assistant"
+    "linkText": "Lab Assistant",
+    "icon": "labassistant-icon.png",
+    "buyText": "Buy Lab Assistant",
+    "buyHref": "https://bskapps.lemonsqueezy.com/checkout/buy/efb96677-ac6d-43c1-8697-e465e62d1d00?dark=1&desc=0&media=0&checkout%5Bcustom%5D%5Bsrc%5D=guide-lab-assistant",
+    "buyNote": "One-time purchase - 2 activations"
   },
   "intro": [
-    { "type": "paragraph", "text": "Lab Assistant prepares a QLab workspace in bulk. You pick cues in QLab, choose which jobs to run, and Lab Assistant works through them: setting levels, trimming silence, routing outputs, numbering and colouring. It talks to QLab 5 (and QLab 4). This guide covers what each module does and how to use it." }
+    {
+      "type": "paragraph",
+      "text": "Lab Assistant prepares a QLab workspace in bulk. You pick cues in QLab, choose which jobs to run, and Lab Assistant works through them: setting levels, trimming silence, routing outputs, numbering and colouring. It talks to QLab 5 (and QLab 4). This guide covers what each module does and how to use it."
+    }
   ],
   "sections": [
-    { "id": "connecting", "title": "Connecting to QLab", "blocks": [
-      { "type": "paragraph", "text": "Open your workspace in QLab, then open Lab Assistant. The sidebar shows a status dot, green for connected, red for no QLab, with the workspace name in the toolbar. Click **Open QLab** if it is not running. Lab Assistant follows the cues you select in QLab and keeps in step as you change the selection." }
-    ] },
-    { "id": "selecting-cues", "title": "Selecting cues", "blocks": [
-      { "type": "paragraph", "text": "Select the cues you want in QLab, or click **Select All** to grab every audio and video cue in the current cue list. Select All also follows a Select All you do in QLab itself: the button reads **All Selected** and clears again when you deselect a cue. The filter dropdown narrows this to All, Audio, Video, or Audio+Video. The sidebar shows how many cues (and groups) are selected." }
-    ] },
-    { "id": "running-modules", "title": "Running modules", "blocks": [
-      { "type": "paragraph", "text": "Each module has an on/off toggle and its own **Run** button, so you can run one job on its own. **Run All** runs every enabled module in sequence across the selected cues. If you don't want a module's job, just leave its sidebar switch off; **Run All** runs only the switched-on modules and skips the rest. A progress bar and elapsed time show during a run, and you can cancel at any point. You can have Lab Assistant confirm before a run in Settings. Destructive modes (the reset and clear options below) reset to safe settings when the app restarts." }
-    ] },
-    { "id": "levels", "title": "Levels", "blocks": [
-      { "type": "paragraph", "text": "Measures each cue's loudness and sets its fader so every cue sits at a consistent level. Pick a target:" },
-      { "type": "bullets", "items": [
-        "Film / Streaming - -14 LUFS",
-        "Theatre / Live Performance - -18 LUFS (default)",
-        "EBU R128 Broadcast - -23 LUFS",
-        "US Broadcast (ATSC A/85) - -24 LUFS",
-        "Reset Levels - sets faders back to 0 dB (or -10 dB if the fader offset is on)"
-      ] },
-      { "type": "paragraph", "text": "Turn on the **fader offset** to land cues at -10 dB instead of at unity, leaving headroom to push a cue during the show. If a cue needs more than QLab's level cap allows, the result flags it so you can see where it ran out of room." }
-    ] },
-    { "id": "routing", "title": "Routing", "blocks": [
-      { "type": "paragraph", "text": "Two modes, chosen with the picker at the top of the module." },
-      { "type": "paragraph", "text": "**Mono / Stereo fold** sends cues to a chosen output pair (1/2 up to 63/64): \"Mono to Dual Mono\" feeds a mono cue to both outputs, \"All Cues to Dual Mono\" sums stereo to mono and sends it to both, and \"Reset Routing\" restores channel 1 to output 1 and channel 2 to output 2." },
-      { "type": "paragraph", "text": "**Multi-output routing** sends cues to any output or pair. Sending to a pair keeps stereo cues left/right and plays mono cues out both outputs; sending to a single output sums everything to that one output (stereo summed to mono at -6 dB). It can also sort automatically by name: turn on **Auto-Sort by Name** and Lab Assistant classifies cues into Music, VOG and FX categories by keywords in the cue name or notes, then routes each to its own output pair. You can edit the keywords and the output pairs, and rename the categories. After a run, hover a result row to re-route and re-colour a cue directly from Results." }
-    ] },
-    { "id": "top-and-tail", "title": "Top and Tail", "blocks": [
-      { "type": "paragraph", "text": "Trims silence from the start and end of each audio cue using QLab's start and end times (audio cues only - video cues are skipped), so playback starts and ends without dead air. Set the **start pad** (default 50 ms) and **end pad** (default 400 ms) to leave a little silence either side. It respects start and end points you have set by hand. The **Reset Start and End Points** mode clears the trim back to the full file." }
-    ] },
-    { "id": "numbering", "title": "Numbering", "blocks": [
-      { "type": "paragraph", "text": "Four modes:" },
-      { "type": "bullets", "items": [
-        "**Add Missing Cue Numbers** - numbers only the cues that have none, leaving existing numbers alone.",
-        "**Renumber Sequentially** - clears and renumbers 1, 2, 3, with an optional prefix (for example Q1, Q2), a custom start and a custom increment.",
-        "**Renumber with Group Sub-Numbers** - groups get 1, 2, 3, and their children get 1.01, 1.02, and so on, with the same optional prefix and start number.",
-        "**Clear All Cue Numbers** - removes numbers without reassigning."
-      ] }
-    ] },
-    { "id": "fade-and-stop", "title": "Fade and Stop", "blocks": [
-      { "type": "paragraph", "text": "Adds fade-and-stop behaviour so starting one cue fades others out. Choose the scope: **Peers** (others in the same group), **List** (the whole cue list), or **All** (everything running). Set the fade time with the preset buttons (0.5s, 1.0s, 2.0s, 3.0s) or type your own. **Reset Fade and Stop** removes the behaviour again." }
-    ] },
-    { "id": "continue-mode", "title": "Continue mode", "blocks": [
-      { "type": "paragraph", "text": "Sets how a cue hands on to the next one: **Do Not Continue**, **Auto-Continue** (the next cue starts with this one), or **Auto-Follow** (the next cue starts when this one finishes)." }
-    ] },
-    { "id": "colour", "title": "Colour", "blocks": [
-      { "type": "paragraph", "text": "**Apply Colours** colour-codes cues by type (stereo, mono, looped, for audio and video), by category (VOG, FX), and by status (warning, error, group), using a colour map you can edit and reset. You can also colour control cues (Fade, MIDI, Script and more); left as None they stay uncoloured. Drag a swatch onto a type to reassign it. **Clear All Colours** removes colours, groups included." }
-    ] },
-    { "id": "musical-intelligence", "title": "Musical Intelligence", "blocks": [
-      { "type": "paragraph", "text": "Detects each cue's tempo and key, and can reorder cues for smoother transitions. Two independent choices. Under **Detect**, tick **BPM**, **Key**, or both; the values show in Results and can be written to cue notes. Under **Reorder cues**, choose **Don't reorder** (just detect), **By BPM** (sort by tempo), **By Key** (order by Camelot-wheel compatibility), or **BPM + Key** (group by compatible key, then sort by tempo within each group). Picking a reorder automatically ticks the detection it needs and unticks the one it doesn't - re-tick it if you also want that value in the notes. It does not reorder a selection that spans different groups." }
-    ] },
-    { "id": "notes", "title": "Notes", "blocks": [
-      { "type": "paragraph", "text": "Write module results into each cue's notes during a run (Levels, Routing, Top and Tail, Musical), with Write All and Write None controls. You can also tag each cue's category (for example Cat: VOG) at the top of its notes, using the same Music/VOG/FX keyword matching. You can clear notes from a single module, clear just Lab Assistant's own notes while keeping yours, or clear all notes." }
-    ] },
-    { "id": "mint", "title": "Mint", "blocks": [
-      { "type": "paragraph", "text": "Mint is the file-processing window, opened with **Mint - Processing** in the sidebar. It edits the actual audio (and video) behind your selected cues and writes new files. The pipeline runs in order: noise removal, a seven-band EQ, dual-mono, trim, fade, gain, then normalise." },
-      { "type": "bullets", "items": [
-        "**Noise removal** with a strength slider.",
-        "**Seven-band EQ** (60 Hz to 12 kHz), plus or minus 12 dB per band, with a preview.",
-        "**Trim and fade** per file, with a fade preview; an empty end keeps each file's full length.",
-        "**Gain**, or **Normalise** to a LUFS or peak target (gain greys out when normalise is on).",
-        "**Output**: format (WAV, AIFF, MP3, AAC or FLAC), sample rate, bit depth or bitrate, and channels, with Match Source as the default. Video can be kept (adjusting its sound), converted (MP4 or MOV, H.264 or HEVC, with resolution and frame rate), or have its audio extracted; trimming a video shows the start and end frames.",
-        "**Output mode**: Copy and Insert (a new file and a new cue), Save as Copy and Replace (a new file, with the existing cue repointed to it), or Overwrite."
-      ] },
-      { "type": "paragraph", "text": "Audition changes before you commit with the preview: pick a cue, choose an output device, set a preview length, and play. When Mint creates cues, it selects the new ones so they are ready for Run All." }
-    ] },
-    { "id": "results", "title": "Results", "blocks": [
-      { "type": "paragraph", "text": "The Results view lists every processed cue with a pass, warning or error icon, a per-module breakdown, and a summary with counts and total run time. A cue with a missing output device still gets its levels and trim, with a warning; only a cue whose media file is missing is skipped. Filter chips show All, Errors, Warnings, and each routing destination. Turn on Save CSV Report in Settings to write a CSV of each run to a folder you choose." }
-    ] },
-    { "id": "presets", "title": "Presets", "blocks": [
-      { "type": "paragraph", "text": "Save your whole setup as a named preset and switch between setups from the **Preset** menu in the toolbar. A preset captures the module layout, levels, routing, categories, colours, numbering, notes and Mint settings. A built-in **Defaults** preset resets everything; **Manage Presets** renames or deletes one. Device settings like Max Outputs and the Mint preview device stay put when you switch." }
-    ] },
-    { "id": "settings", "title": "Settings and licence", "blocks": [
-      { "type": "paragraph", "text": "Open Settings from the gear in the toolbar (top-right). It holds updates (with auto-check), your licence (activate or deactivate), which modules are visible, the maximum number of outputs routing offers (**Max Outputs**, default 8, which keeps the routing menus matched to your device and routing quick to apply; higher counts like 32 or 64 take a little longer to apply across large cue lists, so set it only as high as your setup needs), the welcome screen, the confirm-before-processing and completion-summary toggles, and an option to minimise to the menu bar. An Email Support button copies a diagnostics report and opens an email to support. Lab Assistant is a one-time purchase with two activations." }
-    ] }
+    {
+      "id": "connecting",
+      "title": "Connecting to QLab",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Open your workspace in QLab, then open Lab Assistant. The sidebar shows a status dot, green for connected, red for no QLab, with the workspace name in the toolbar. Click **Open QLab** if it is not running. Lab Assistant follows the cues you select in QLab and keeps in step as you change the selection."
+        }
+      ]
+    },
+    {
+      "id": "selecting-cues",
+      "title": "Selecting cues",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Select the cues you want in QLab, or click **Select All** to grab every audio and video cue in the current cue list. Select All also follows a Select All you do in QLab itself: the button reads **All Selected** and clears again when you deselect a cue. The filter dropdown narrows this to All, Audio, Video, or Audio+Video. The sidebar shows how many cues (and groups) are selected."
+        }
+      ]
+    },
+    {
+      "id": "running-modules",
+      "title": "Running modules",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Each module has an on/off toggle and its own **Run** button, so you can run one job on its own. **Run All** runs every enabled module in sequence across the selected cues. If you don't want a module's job, just leave its sidebar switch off; **Run All** runs only the switched-on modules and skips the rest. A progress bar and elapsed time show during a run, and you can cancel at any point. You can have Lab Assistant confirm before a run in Settings. Destructive modes (the reset and clear options below) reset to safe settings when the app restarts."
+        }
+      ]
+    },
+    {
+      "id": "levels",
+      "title": "Levels",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Measures each cue's loudness and sets its fader so every cue sits at a consistent level. Pick a target:"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "Film / Streaming - -14 LUFS",
+            "Theatre / Live Performance - -18 LUFS (default)",
+            "EBU R128 Broadcast - -23 LUFS",
+            "US Broadcast (ATSC A/85) - -24 LUFS",
+            "Reset Levels - sets faders back to 0 dB (or -10 dB if the fader offset is on)"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Turn on the **fader offset** to land cues at -10 dB instead of at unity, leaving headroom to push a cue during the show. If a cue needs more than QLab's level cap allows, the result flags it so you can see where it ran out of room."
+        }
+      ]
+    },
+    {
+      "id": "routing",
+      "title": "Routing",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Two modes, chosen with the picker at the top of the module."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Mono / Stereo fold** sends cues to a chosen output pair (1/2 up to 63/64): \"Mono to Dual Mono\" feeds a mono cue to both outputs, \"All Cues to Dual Mono\" sums stereo to mono and sends it to both, and \"Reset Routing\" restores channel 1 to output 1 and channel 2 to output 2."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Multi-output routing** sends cues to any output or pair. Sending to a pair keeps stereo cues left/right and plays mono cues out both outputs; sending to a single output sums everything to that one output (stereo summed to mono at -6 dB). It can also sort automatically by name: turn on **Auto-Sort by Name** and Lab Assistant classifies cues into Music, VOG and FX categories by keywords in the cue name or notes, then routes each to its own output pair. You can edit the keywords and the output pairs, and rename the categories. After a run, hover a result row to re-route and re-colour a cue directly from Results."
+        }
+      ]
+    },
+    {
+      "id": "top-and-tail",
+      "title": "Top and Tail",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Trims silence from the start and end of each audio cue using QLab's start and end times (audio cues only - video cues are skipped), so playback starts and ends without dead air. Set the **start pad** (default 50 ms) and **end pad** (default 400 ms) to leave a little silence either side. It respects start and end points you have set by hand. The **Reset Start and End Points** mode clears the trim back to the full file."
+        }
+      ]
+    },
+    {
+      "id": "numbering",
+      "title": "Numbering",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Four modes:"
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "**Add Missing Cue Numbers** - numbers only the cues that have none, leaving existing numbers alone.",
+            "**Renumber Sequentially** - clears and renumbers 1, 2, 3, with an optional prefix (for example Q1, Q2), a custom start and a custom increment.",
+            "**Renumber with Group Sub-Numbers** - groups get 1, 2, 3, and their children get 1.01, 1.02, and so on, with the same optional prefix and start number.",
+            "**Clear All Cue Numbers** - removes numbers without reassigning."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fade-and-stop",
+      "title": "Fade and Stop",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Adds fade-and-stop behaviour so starting one cue fades others out. Choose the scope: **Peers** (others in the same group), **List** (the whole cue list), or **All** (everything running). Set the fade time with the preset buttons (0.5s, 1.0s, 2.0s, 3.0s) or type your own. **Reset Fade and Stop** removes the behaviour again."
+        }
+      ]
+    },
+    {
+      "id": "continue-mode",
+      "title": "Continue mode",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Sets how a cue hands on to the next one: **Do Not Continue**, **Auto-Continue** (the next cue starts with this one), or **Auto-Follow** (the next cue starts when this one finishes)."
+        }
+      ]
+    },
+    {
+      "id": "colour",
+      "title": "Colour",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "**Apply Colours** colour-codes cues by type (stereo, mono, looped, for audio and video), by category (VOG, FX), and by status (warning, error, group), using a colour map you can edit and reset. You can also colour control cues (Fade, MIDI, Script and more); left as None they stay uncoloured. Drag a swatch onto a type to reassign it. **Clear All Colours** removes colours, groups included."
+        }
+      ]
+    },
+    {
+      "id": "musical-intelligence",
+      "title": "Musical Intelligence",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Detects each cue's tempo and key, and can reorder cues for smoother transitions. Two independent choices. Under **Detect**, tick **BPM**, **Key**, or both; the values show in Results and can be written to cue notes. Under **Reorder cues**, choose **Don't reorder** (just detect), **By BPM** (sort by tempo), **By Key** (order by Camelot-wheel compatibility), or **BPM + Key** (group by compatible key, then sort by tempo within each group). Picking a reorder automatically ticks the detection it needs and unticks the one it doesn't - re-tick it if you also want that value in the notes. It does not reorder a selection that spans different groups."
+        }
+      ]
+    },
+    {
+      "id": "notes",
+      "title": "Notes",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Write module results into each cue's notes during a run (Levels, Routing, Top and Tail, Musical), with Write All and Write None controls. You can also tag each cue's category (for example Cat: VOG) at the top of its notes, using the same Music/VOG/FX keyword matching. You can clear notes from a single module, clear just Lab Assistant's own notes while keeping yours, or clear all notes."
+        }
+      ]
+    },
+    {
+      "id": "mint",
+      "title": "Mint",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Mint is the file-processing window, opened with **Mint - Processing** in the sidebar. It edits the actual audio (and video) behind your selected cues and writes new files. The pipeline runs in order: noise removal, a seven-band EQ, dual-mono, trim, fade, gain, then normalise."
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "**Noise removal** with a strength slider.",
+            "**Seven-band EQ** (60 Hz to 12 kHz), plus or minus 12 dB per band, with a preview.",
+            "**Trim and fade** per file, with a fade preview; an empty end keeps each file's full length.",
+            "**Gain**, or **Normalise** to a LUFS or peak target (gain greys out when normalise is on).",
+            "**Output**: format (WAV, AIFF, MP3, AAC or FLAC), sample rate, bit depth or bitrate, and channels, with Match Source as the default. Video can be kept (adjusting its sound), converted (MP4 or MOV, H.264 or HEVC, with resolution and frame rate), or have its audio extracted; trimming a video shows the start and end frames.",
+            "**Output mode**: Copy and Insert (a new file and a new cue), Save as Copy and Replace (a new file, with the existing cue repointed to it), or Overwrite."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Audition changes before you commit with the preview: pick a cue, choose an output device, set a preview length, and play. When Mint creates cues, it selects the new ones so they are ready for Run All."
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": "Results",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The Results view lists every processed cue with a pass, warning or error icon, a per-module breakdown, and a summary with counts and total run time. A cue with a missing output device still gets its levels and trim, with a warning; only a cue whose media file is missing is skipped. Filter chips show All, Errors, Warnings, and each routing destination. Turn on Save CSV Report in Settings to write a CSV of each run to a folder you choose."
+        }
+      ]
+    },
+    {
+      "id": "presets",
+      "title": "Presets",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Save your whole setup as a named preset and switch between setups from the **Preset** menu in the toolbar. A preset captures the module layout, levels, routing, categories, colours, numbering, notes and Mint settings. A built-in **Defaults** preset resets everything; **Manage Presets** renames or deletes one. Device settings like Max Outputs and the Mint preview device stay put when you switch."
+        }
+      ]
+    },
+    {
+      "id": "settings",
+      "title": "Settings and licence",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Open Settings from the gear in the toolbar (top-right). It holds updates (with auto-check), your licence (activate or deactivate), which modules are visible, the maximum number of outputs routing offers (**Max Outputs**, default 8, which keeps the routing menus matched to your device and routing quick to apply; higher counts like 32 or 64 take a little longer to apply across large cue lists, so set it only as high as your setup needs), the welcome screen, the confirm-before-processing and completion-summary toggles, and an option to minimise to the menu bar. An Email Support button copies a diagnostics report and opens an email to support. Lab Assistant is a one-time purchase with two activations."
+        }
+      ]
+    }
   ]
 }

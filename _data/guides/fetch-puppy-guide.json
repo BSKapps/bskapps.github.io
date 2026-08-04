@@ -15,71 +15,169 @@
     "title": "Fetch Puppy",
     "text": "A media downloader for Mac: paste a link, pick a format, and it queues the download.",
     "href": "/fetchpuppy",
-    "linkText": "Fetch Puppy"
+    "linkText": "Fetch Puppy",
+    "icon": "fetchpuppy-icon.png",
+    "buyText": "Buy Fetch Puppy",
+    "buyHref": "https://bskapps.lemonsqueezy.com/checkout/buy/99a45e24-5f0c-4ef7-86a9-be1cf7c555af?dark=1&media=0&desc=0&checkout%5Bcustom%5D%5Bsrc%5D=guide-fetch-puppy",
+    "buyNote": "One-time purchase - 2 activations"
   },
   "intro": [
-    { "type": "paragraph", "text": "Fetch Puppy downloads and converts music and video on your Mac. Pick a mode in the sidebar, paste or drag in a link, choose **Audio** or **Video** and a format, then click **Fetch**." },
-    { "type": "paragraph", "text": "For personal and research use only - downloading copyrighted material without authorisation may break the law, and you are responsible for the content you fetch." }
+    {
+      "type": "paragraph",
+      "text": "Fetch Puppy downloads and converts music and video on your Mac. Pick a mode in the sidebar, paste or drag in a link, choose **Audio** or **Video** and a format, then click **Fetch**."
+    },
+    {
+      "type": "paragraph",
+      "text": "For personal and research use only - downloading copyrighted material without authorisation may break the law, and you are responsible for the content you fetch."
+    }
   ],
   "sections": [
-    { "id": "the-modes", "title": "The modes", "blocks": [
-      { "type": "paragraph", "text": "The sidebar has six modes. In each, paste a link into the field (or drag one in from your browser or the source app) and click **Fetch**." },
-      { "type": "bullets", "items": [
-        "**Spotify** - playlists, albums and tracks. Public links work as-is; private playlists need your own Spotify API credentials (see Settings).",
-        "**Apple Music** - playlists, albums and songs, no account needed.",
-        "**YouTube** - videos, shorts and playlists. If a pasted link is both a video and a playlist, Fetch Puppy asks whether you want just the video or the whole playlist. Dragging one video out of a playlist skips the question and fetches just that video; use the playlist's own link when you want the lot.",
-        "**Social Media** - TikTok, Instagram, X, Facebook, Reddit, Vimeo, Twitch, Dailymotion, Threads and Snapchat. These need browser cookies (see Settings).",
-        "**CSV File** - drop a two-column Artist, Title CSV (or click Choose File); each row is matched and downloaded.",
-        "**Search** - type a title, get the top matches with thumbnails, then preview any match right in the app (ad-free, full-length playback with fullscreen) before you download. Previewed results stay highlighted so you can find your way back to the one you want."
-      ] }
-    ] },
-    { "id": "drag-and-drop", "title": "Drag and drop", "blocks": [
-      { "type": "paragraph", "text": "You can drag links onto the app window, or onto the menu bar icon, to start a download without switching modes first. Dropping several links at once downloads them together when they are all Spotify tracks; otherwise the first link is used. A CSV file can be dropped anywhere in the window or onto the menu bar icon too." }
-    ] },
-    { "id": "audio-and-video-formats", "title": "Audio and video formats", "blocks": [
-      { "type": "paragraph", "text": "Each mode has its own **Audio** / **Video** switch and remembers your choice. Audio formats are MP3 320 kbps (default), AAC 256 kbps, WAV, AIFF and FLAC. Video formats are MP4 (best available quality) or MOV (H.264 plus AAC, the more compatible option)." },
-      { "type": "paragraph", "text": "Setting Spotify, Apple Music or CSV to **Video** downloads the matching music video instead of the audio. Prefer one setting everywhere? Turn on **Universal format selection** in Settings under Download options, and the Audio/Video choice and format you pick in any tab applies to all of them at once; turn it off and each mode keeps its own setting again." },
-      { "type": "paragraph", "text": "On the Search tab you can right-click the **Download** button on any result, or in the preview window, to grab just that one in a different format as a one-off, without changing your saved choice. The list shows every format with audio and video grouped." }
-    ] },
-    { "id": "the-download-queue", "title": "The download queue", "blocks": [
-      { "type": "paragraph", "text": "Click **Downloads** in the sidebar to watch progress. One job runs at a time; others wait, shown as colour-coded tabs (blue running, orange queued, green done, red failed, grey cancelled). Each job shows its tracks with per-track status and the format used, a progress bar, and counts for total, done, failed and remaining." },
-      { "type": "bullets", "items": [
-        "**Cancel** a running or queued job from its header, or right-click its tab to cancel and remove it.",
-        "**Retry** or **Retry Failed (N)** appear after a job finishes if there is anything to retry.",
-        "Right-click a track to remove it from the list.",
-        "**Open Folder** jumps to the files in Finder."
-      ] }
-    ] },
-    { "id": "where-files-go", "title": "Where files go", "blocks": [
-      { "type": "paragraph", "text": "Downloads land in **~/Downloads/Fetch Puppy Downloads/** by default; change the base folder in Settings. Singles collect into a folder per source (for example \"Spotify Tracks\"); albums and playlists get their own named folder." },
-      { "type": "paragraph", "text": "Two Settings options apply to playlists and albums: **Number tracks** prepends a two-digit number (01, 02, and so on) to filenames, and **Export track list** saves a CSV of the track list alongside the files." }
-    ] },
-    { "id": "the-download-engine", "title": "The download engine", "blocks": [
-      { "type": "paragraph", "text": "Everything Fetch Puppy needs to download and convert is built in, so there is nothing to install. If downloads ever stop working, open Settings and use Check for Updates under Download Engine to refresh it; the app also offers an update on launch when one is available." }
-    ] },
-    { "id": "browser-cookies", "title": "Browser cookies", "blocks": [
-      { "type": "paragraph", "text": "YouTube and the social platforms need cookies from a signed-in browser to download reliably; Video mode in the Spotify, Apple Music and CSV tabs needs them too." },
-      { "type": "paragraph", "text": "Fetch Puppy reads them automatically - no manual export. It tries Firefox first, then Chrome, Brave and Edge. Safari is not supported because macOS keeps its cookies sealed off. Settings shows which browser is in use; with Chrome, Brave or Edge, choose \"Always Allow\" at the keychain prompt so it does not ask again." }
-    ] },
-    { "id": "settings", "title": "Settings", "blocks": [
-      { "type": "bullets", "items": [
-        "**Download options** - output folder, number tracks, export track list, universal format selection, and notify when downloads complete.",
-        "**App Updates** - manual check and an auto-check toggle.",
-        "**Download Engine** - check for and apply download engine updates.",
-        "**Spotify API Credentials** - optional Client ID and Secret for private playlists and more reliable metadata; stored locally on your Mac (the secret in your keychain), never sent to BSK. For your own private or liked playlists, also add your Spotify account email under User Management in your Spotify developer app, otherwise Spotify denies the login.",
-        "**YouTube Browser Cookies** - which browser to read, with setup notes.",
-        "**General** - show the welcome page, and minimise to the menu bar when closed.",
-        "**Tips & Shortcuts** - a quick reference for drag-and-drop.",
-        "**Download History** - past downloads, with a clear button.",
-        "**Support** - Email Support copies a diagnostics report and opens an email to support.",
-        "**License** - activate or deactivate (see below)."
-      ] }
-    ] },
-    { "id": "menu-bar", "title": "Menu bar", "blocks": [
-      { "type": "paragraph", "text": "Turn on **Minimise to menu bar** (Settings > General) and closing the window keeps Fetch Puppy running behind a puppy icon in the menu bar. A green dot appears on the icon when a download finishes and clears when you bring the app to the front. You can drop links onto the icon to start a download." }
-    ] },
-    { "id": "licence-and-activation", "title": "Licence and activation", "blocks": [
-      { "type": "paragraph", "text": "Fetch Puppy is a one-time purchase with two activations. On first launch, paste your licence key to activate. To move it to another Mac, deactivate in Settings, which frees an activation." }
-    ] }
+    {
+      "id": "the-modes",
+      "title": "The modes",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The sidebar has six modes. In each, paste a link into the field (or drag one in from your browser or the source app) and click **Fetch**."
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "**Spotify** - playlists, albums and tracks. Public links work as-is; private playlists need your own Spotify API credentials (see Settings).",
+            "**Apple Music** - playlists, albums and songs, no account needed.",
+            "**YouTube** - videos, shorts and playlists. If a pasted link is both a video and a playlist, Fetch Puppy asks whether you want just the video or the whole playlist. Dragging one video out of a playlist skips the question and fetches just that video; use the playlist's own link when you want the lot.",
+            "**Social Media** - TikTok, Instagram, X, Facebook, Reddit, Vimeo, Twitch, Dailymotion, Threads and Snapchat. These need browser cookies (see Settings).",
+            "**CSV File** - drop a two-column Artist, Title CSV (or click Choose File); each row is matched and downloaded.",
+            "**Search** - type a title, get the top matches with thumbnails, then preview any match right in the app (ad-free, full-length playback with fullscreen) before you download. Previewed results stay highlighted so you can find your way back to the one you want."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "drag-and-drop",
+      "title": "Drag and drop",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "You can drag links onto the app window, or onto the menu bar icon, to start a download without switching modes first. Dropping several links at once downloads them together when they are all Spotify tracks; otherwise the first link is used. A CSV file can be dropped anywhere in the window or onto the menu bar icon too."
+        }
+      ]
+    },
+    {
+      "id": "audio-and-video-formats",
+      "title": "Audio and video formats",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Each mode has its own **Audio** / **Video** switch and remembers your choice. Audio formats are MP3 320 kbps (default), AAC 256 kbps, WAV, AIFF and FLAC. Video formats are MP4 (best available quality) or MOV (H.264 plus AAC, the more compatible option)."
+        },
+        {
+          "type": "paragraph",
+          "text": "Setting Spotify, Apple Music or CSV to **Video** downloads the matching music video instead of the audio. Prefer one setting everywhere? Turn on **Universal format selection** in Settings under Download options, and the Audio/Video choice and format you pick in any tab applies to all of them at once; turn it off and each mode keeps its own setting again."
+        },
+        {
+          "type": "paragraph",
+          "text": "On the Search tab you can right-click the **Download** button on any result, or in the preview window, to grab just that one in a different format as a one-off, without changing your saved choice. The list shows every format with audio and video grouped."
+        }
+      ]
+    },
+    {
+      "id": "the-download-queue",
+      "title": "The download queue",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Click **Downloads** in the sidebar to watch progress. One job runs at a time; others wait, shown as colour-coded tabs (blue running, orange queued, green done, red failed, grey cancelled). Each job shows its tracks with per-track status and the format used, a progress bar, and counts for total, done, failed and remaining."
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "**Cancel** a running or queued job from its header, or right-click its tab to cancel and remove it.",
+            "**Retry** or **Retry Failed (N)** appear after a job finishes if there is anything to retry.",
+            "Right-click a track to remove it from the list.",
+            "**Open Folder** jumps to the files in Finder."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "where-files-go",
+      "title": "Where files go",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Downloads land in **~/Downloads/Fetch Puppy Downloads/** by default; change the base folder in Settings. Singles collect into a folder per source (for example \"Spotify Tracks\"); albums and playlists get their own named folder."
+        },
+        {
+          "type": "paragraph",
+          "text": "Two Settings options apply to playlists and albums: **Number tracks** prepends a two-digit number (01, 02, and so on) to filenames, and **Export track list** saves a CSV of the track list alongside the files."
+        }
+      ]
+    },
+    {
+      "id": "the-download-engine",
+      "title": "The download engine",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Everything Fetch Puppy needs to download and convert is built in, so there is nothing to install. If downloads ever stop working, open Settings and use Check for Updates under Download Engine to refresh it; the app also offers an update on launch when one is available."
+        }
+      ]
+    },
+    {
+      "id": "browser-cookies",
+      "title": "Browser cookies",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "YouTube and the social platforms need cookies from a signed-in browser to download reliably; Video mode in the Spotify, Apple Music and CSV tabs needs them too."
+        },
+        {
+          "type": "paragraph",
+          "text": "Fetch Puppy reads them automatically - no manual export. It tries Firefox first, then Chrome, Brave and Edge. Safari is not supported because macOS keeps its cookies sealed off. Settings shows which browser is in use; with Chrome, Brave or Edge, choose \"Always Allow\" at the keychain prompt so it does not ask again."
+        }
+      ]
+    },
+    {
+      "id": "settings",
+      "title": "Settings",
+      "blocks": [
+        {
+          "type": "bullets",
+          "items": [
+            "**Download options** - output folder, number tracks, export track list, universal format selection, and notify when downloads complete.",
+            "**App Updates** - manual check and an auto-check toggle.",
+            "**Download Engine** - check for and apply download engine updates.",
+            "**Spotify API Credentials** - optional Client ID and Secret for private playlists and more reliable metadata; stored locally on your Mac (the secret in your keychain), never sent to BSK. For your own private or liked playlists, also add your Spotify account email under User Management in your Spotify developer app, otherwise Spotify denies the login.",
+            "**YouTube Browser Cookies** - which browser to read, with setup notes.",
+            "**General** - show the welcome page, and minimise to the menu bar when closed.",
+            "**Tips & Shortcuts** - a quick reference for drag-and-drop.",
+            "**Download History** - past downloads, with a clear button.",
+            "**Support** - Email Support copies a diagnostics report and opens an email to support.",
+            "**License** - activate or deactivate (see below)."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "menu-bar",
+      "title": "Menu bar",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Turn on **Minimise to menu bar** (Settings > General) and closing the window keeps Fetch Puppy running behind a puppy icon in the menu bar. A green dot appears on the icon when a download finishes and clears when you bring the app to the front. You can drop links onto the icon to start a download."
+        }
+      ]
+    },
+    {
+      "id": "licence-and-activation",
+      "title": "Licence and activation",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Fetch Puppy is a one-time purchase with two activations. On first launch, paste your licence key to activate. To move it to another Mac, deactivate in Settings, which frees an activation."
+        }
+      ]
+    }
   ]
 }

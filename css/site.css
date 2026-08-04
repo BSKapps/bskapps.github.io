@@ -281,10 +281,14 @@ article pre { background: #232327; border: 1px solid var(--border); border-radiu
 article pre code { background: none; border: none; padding: 0; font-size: 0.85em; line-height: 1.55; color: var(--text); }
 article .note { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin: 0 0 18px; font-size: 0.95rem; color: var(--text); }
 
-.article-cta { margin: 36px 0 8px; padding: 22px 24px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.25); }
+.article-cta { display: flex; gap: 18px; align-items: flex-start; margin: 36px 0 8px; padding: 22px 24px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.25); }
+.cta-icon { width: 64px; height: 64px; border-radius: 14px; flex-shrink: 0; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.45)); }
+.cta-body { flex: 1; min-width: 0; }
+.cta-actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.cta-note { display: block; color: var(--text-on-card); font-size: 0.78rem; margin-top: 12px; }
 .article-cta h3 { color: var(--heading); font-size: 1.05rem; margin: 0 0 8px; }
 .article-cta p { color: var(--text-on-card); line-height: 1.6; margin: 0 0 12px; font-size: 0.95rem; }
-.article-cta a.cta-link { display: inline-block; color: var(--brand); font-weight: 600; text-decoration: none; font-size: 0.95rem; margin-right: 18px; }
+.article-cta a.cta-link { display: inline-block; color: var(--brand); font-weight: 600; text-decoration: none; font-size: 0.95rem; }
 .article-cta a.cta-link:hover { color: var(--brand-bright); }
 
 .section-title { font-size: 1.3rem; font-weight: 600; color: var(--heading); margin-bottom: 8px; }
@@ -483,6 +487,9 @@ footer a:hover { color: var(--heading); }
     .game-icon { width: 64px; height: 64px; }
     .product-header h1 { font-size: 1.8rem; }
     .product-icon { width: 72px; height: 72px; border-radius: 16px; }
+    .article-cta { flex-direction: column; gap: 14px; }
+    .cta-actions { flex-direction: column; align-items: stretch; gap: 12px; }
+    .cta-actions .cta-link { text-align: center; }
     .fblock { grid-template-columns: 1fr; gap: 18px; padding: 26px 0; }
     .fblock.flip .fb-text { order: 0; }
 }

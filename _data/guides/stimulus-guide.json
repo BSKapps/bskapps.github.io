@@ -15,7 +15,11 @@
     "title": "Stimulus",
     "text": "A four-generator test signal rack for live sound: tones, sweeps, harmonics, noise, GLITS and polarity pops, plus period-matched measurement signals.",
     "href": "/stimulus/",
-    "linkText": "Stimulus"
+    "linkText": "Stimulus",
+    "icon": "stimulus-icon.png",
+    "buyText": "Get Stimulus on the App Store",
+    "buyHref": "https://apps.apple.com/app/id6792156906",
+    "buyNote": "App Store - one purchase covers Mac and iPad"
   },
   "intro": [
     {
