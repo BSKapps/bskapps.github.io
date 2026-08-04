@@ -66,19 +66,59 @@
         </video>
 
 
-        <div class="gallery-wrap">
-            <button class="gallery-arrow" onclick="scrollGallery(-1)">&#8249;</button>
-            <div class="screenshot-scroll" id="gallery">
-                <figure><img src="images/la-levels.png" alt="Levels module"><figcaption>Levels</figcaption></figure>
-                <figure><img src="images/la-routing.png" alt="Multi-Output Routing module"><figcaption>Multi-Output Routing</figcaption></figure>
-                <figure><img src="images/la-musical.png" alt="Musical Intelligence module"><figcaption>Musical Intelligence</figcaption></figure>
-                <figure><img src="images/la-colour.png" alt="Colour Code Cues module"><figcaption>Colour Code Cues</figcaption></figure>
-                <figure><img src="images/la-results.png" alt="Results view"><figcaption>Results</figcaption></figure>
-                <figure><img src="images/la-mint.png" alt="Mint processing window"><figcaption>Mint - Processing</figcaption></figure>
+        <div class="fblock">
+            <div class="fb-text">
+                <p class="fb-kicker">Levels</p>
+                <h3>Normalise a whole workspace at once</h3>
+                <p>Measures integrated LUFS across your selection and sets QLab fader levels to a broadcast target, with an optional -10 dB offset.</p>
             </div>
-            <button class="gallery-arrow" onclick="scrollGallery(1)">&#8250;</button>
+            <img src="images/la-levels.png" alt="Levels module">
         </div>
-        <div id="gallery-counter" class="gallery-counter">1 of 6</div>
+
+        <div class="fblock flip">
+            <div class="fb-text">
+                <p class="fb-kicker">Routing</p>
+                <h3>Mono and multi-output in one pass</h3>
+                <p>Send cues to any output or pair, up to 64, with dual-mono and stereo fold-down handled, or let auto-classify sort Music, VOG and FX.</p>
+            </div>
+            <img src="images/la-routing.png" alt="Multi-Output Routing module">
+        </div>
+
+        <div class="fblock">
+            <div class="fb-text">
+                <p class="fb-kicker">Musical Intelligence</p>
+                <h3>Key and tempo, sorted for you</h3>
+                <p>Detects BPM and musical key, then sorts cues by Camelot wheel so transitions land instead of clashing.</p>
+            </div>
+            <img src="images/la-musical.png" alt="Musical Intelligence module">
+        </div>
+
+        <div class="fblock flip">
+            <div class="fb-text">
+                <p class="fb-kicker">Colour Code</p>
+                <h3>A cue list you can read at a glance</h3>
+                <p>A customisable colour map for audio, video, group and control cues, by type, channels, category and status.</p>
+            </div>
+            <img src="images/la-colour.png" alt="Colour Code Cues module">
+        </div>
+
+        <div class="fblock">
+            <div class="fb-text">
+                <p class="fb-kicker">Results</p>
+                <h3>See exactly what it did</h3>
+                <p>Every cue it touched, what it measured and what it applied, and it can write the same detail into QLab cue notes.</p>
+            </div>
+            <img src="images/la-results.png" alt="Results view">
+        </div>
+
+        <div class="fblock flip">
+            <div class="fb-text">
+                <p class="fb-kicker">Mint</p>
+                <h3>Fix the files, not just the cues</h3>
+                <p>Convert, trim, EQ, normalise and clean the audio and video behind your cues, then drop the results straight back into QLab.</p>
+            </div>
+            <img src="images/la-mint.png" alt="Mint processing window">
+        </div>
 
         <div class="section">
             <h2>Mint Audio &amp; Video Converter &amp; Editor</h2>
@@ -128,6 +168,13 @@
             </ul>
         </div>
 
+
+        <div class="closer">
+            <p>Prep the whole workspace in one pass instead of cue by cue.</p>
+            <a href="https://bskapps.lemonsqueezy.com/checkout/buy/efb96677-ac6d-43c1-8697-e465e62d1d00?dark=1&desc=0&media=0&checkout%5Bcustom%5D%5Bsrc%5D=product-page-closer" class="buy-btn large lemonsqueezy-button" aria-label="Buy Lab Assistant for {{ site.data.content.apps.labassistant.price }}">Buy Lab Assistant - {{ site.data.content.apps.labassistant.price }}</a>
+            <span class="buy-note">One-time purchase &middot; 2 activations</span>
+        </div>
+
         <footer>
             <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
             <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
@@ -145,7 +192,7 @@ function lbShow(i) {
     lbImg.src = lbImgs[lbIdx].src;
     lb.classList.add('active');
 }
-document.querySelectorAll('.screenshot-scroll img').forEach((img, i) => {
+document.querySelectorAll('.fblock img').forEach((img, i) => {
     lbImgs.push(img);
     img.addEventListener('click', (e) => { e.stopPropagation(); lbShow(i); });
 });
@@ -158,35 +205,6 @@ document.addEventListener('keydown', e => {
     if (e.key === 'ArrowRight') lbShow(lbIdx + 1);
     if (e.key === 'Escape') lb.classList.remove('active');
 });
-function scrollGallery(dir) {
-    const g = document.getElementById('gallery');
-    const fig = g.querySelector('figure');
-    const w = fig.offsetWidth + 16;
-    const maxScroll = g.scrollWidth - g.clientWidth;
-    if (dir > 0 && g.scrollLeft >= maxScroll - 4) {
-        g.scrollTo({ left: 0, behavior: 'smooth' });
-    } else if (dir < 0 && g.scrollLeft <= 4) {
-        g.scrollTo({ left: maxScroll, behavior: 'smooth' });
-    } else {
-        g.scrollBy({ left: dir * w, behavior: 'smooth' });
-    }
-}
-function updateCounter() {
-    const g = document.getElementById('gallery');
-    const figs = g.querySelectorAll('figure');
-    const w = figs[0].offsetWidth + 16;
-    const idx = Math.round(g.scrollLeft / w) + 1;
-    document.getElementById('gallery-counter').textContent = idx + ' of ' + figs.length;
-}
-document.getElementById('gallery').addEventListener('scroll', updateCounter);
-window.addEventListener('load', updateCounter);
-const g = document.getElementById('gallery');
-let isDown = false, startX, scrollLeft;
-g.addEventListener('mousedown', e => { isDown = true; g.style.cursor = 'grabbing'; startX = e.pageX - g.offsetLeft; scrollLeft = g.scrollLeft; });
-g.addEventListener('mouseleave', () => { isDown = false; g.style.cursor = 'grab'; });
-g.addEventListener('mouseup', () => { isDown = false; g.style.cursor = 'grab'; });
-g.addEventListener('mousemove', e => { if (!isDown) return; e.preventDefault(); const x = e.pageX - g.offsetLeft; g.scrollLeft = scrollLeft - (x - startX); });
-g.style.cursor = 'grab';
 </script>
 </body>
 </html>
