@@ -290,14 +290,16 @@
         .pc-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
         .pc-head img { width: 28px; height: 28px; border-radius: 6px; }
         .pc-name { font-size: 0.95rem; font-weight: 700; color: #fff; }
-        .pc-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
-        .pc-label { font-size: 0.6rem; color: #A2A2A8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
-        .pc-num { font-size: 1.1rem; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
+        .pc-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(66px, 1fr)); gap: 10px 8px; margin-bottom: 12px; }
+        .pc-num.per { color: #8FBCE8; }
+        .pc-label { font-size: 0.58rem; white-space: nowrap; color: #A2A2A8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+        .pc-num { font-size: 1.02rem; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
         .pc-num.money { color: #E8C667; }
         .pc-num.conv { color: #5FBE8A; }
         .pc-sources { font-size: 0.78rem; color: #A9A9AF; border-top: 1px solid rgba(255,255,255,0.10); padding-top: 10px; }
         .pc-sources .pcs-label { font-size: 0.6rem; color: #8A8A90; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
         .pc-sources b { color: #E4E4E7; font-weight: 700; }
+        .section-note { margin-left: 10px; font-size: 0.72rem; font-weight: 600; color: #8FBCE8; letter-spacing: 0.3px; }
 
         .analytics-row {
             display: flex;
@@ -601,8 +603,18 @@
             </div>
         </details>
 
+        <details class="collapse-section" data-key="referrers" open>
+            <summary><span class="chev">&#9656;</span><span class="section-title">Where the Whole Site Comes From</span></summary>
+            <div class="data-table-wrap">
+                <table class="data-table">
+                    <thead><tr><th>Source</th><th class="num">Views</th><th class="num">Share</th></tr></thead>
+                    <tbody id="referrers-tbody"><tr><td colspan="3" class="muted">--</td></tr></tbody>
+                </table>
+            </div>
+        </details>
+
         <details class="collapse-section" data-key="inhouse" open>
-            <summary><span class="chev">&#9656;</span><span class="section-title">Button Maker Ad Clicks</span></summary>
+            <summary><span class="chev">&#9656;</span><span class="section-title">Button Maker Ad Clicks</span><span class="section-note" id="inhouse-rate"></span></summary>
             <div class="data-table-wrap">
                 <table class="data-table">
                     <thead><tr><th>Destination</th><th>Path</th><th class="num">Clicks</th></tr></thead>
@@ -1253,14 +1265,24 @@ function displayStats() {
         const paths = INHOUSE_ADS.slice();
         Object.keys(inhouse).forEach(function(p) { if (paths.indexOf(p) === -1) paths.push(p); });
         const rows = paths.map(function(p) { return { path: p, clicks: inhouse[p] || 0 }; }).sort(function(a, b) { return b.clicks - a.clicks; });
+        const bmPage = (stats.pages && stats.pages[key] || []).find(function(x) { return x.path === '/buttonmaker/'; });
+        const bmVisits = bmPage ? (bmPage.visits || 0) : 0;
+        const totalClicks = rows.reduce(function(a, r) { return a + r.clicks; }, 0);
+        const rateEl = document.getElementById('inhouse-rate');
+        if (rateEl) rateEl.textContent = bmVisits > 0
+            ? totalClicks.toLocaleString() + ' clicks from ' + bmVisits.toLocaleString() + ' visits - ' + (totalClicks / bmVisits * 100).toFixed(1) + '%'
+            : '';
         inhouseTbody.innerHTML = rows.map(function(r) {
             return '<tr><td>' + esc(pageLabel(r.path)) + '</td><td class="muted">' + esc(r.path) + '</td><td class="num">' + r.clicks.toLocaleString() + '</td></tr>';
         }).join('');
     } else {
+        const rateEl2 = document.getElementById('inhouse-rate');
+        if (rateEl2) rateEl2.textContent = '';
         inhouseTbody.innerHTML = '<tr><td colspan="3" class="muted">' + (inhouse && inhouse.error ? esc(inhouse.error) : '--') + '</td></tr>';
     }
 
     renderProductCards(stats, key, audRate);
+    renderReferrers(stats, key);
 
     const countries = stats.countries && stats.countries[key];
     const countriesTbody = document.getElementById('countries-tbody');
@@ -1561,7 +1583,16 @@ const SOURCE_LABELS = {
 
 function sourceLabel(host) {
     if (SOURCE_LABELS[host]) return SOURCE_LABELS[host];
-    return host.replace(/^www\./, '');
+    const bare = host.replace(/^www\./, '');
+    if (/(^|\.)facebook\.com$/.test(bare)) return 'Facebook';
+    if (/(^|\.)google\./.test(bare)) return 'Google';
+    if (/(^|\.)reddit\.com$/.test(bare)) return 'Reddit';
+    if (/(^|\.)linkedin\.com$/.test(bare)) return 'LinkedIn';
+    if (/(^|\.)instagram\.com$/.test(bare)) return 'Instagram';
+    if (/(^|\.)youtube\.com$/.test(bare) || bare === 'youtu.be') return 'YouTube';
+    if (/(^|\.)telegram\.org$/.test(bare) || bare === 't.me') return 'Telegram';
+    if (/(^|\.)microsoft\.com$/.test(bare) || /teams\./.test(bare)) return 'Microsoft Teams';
+    return bare;
 }
 
 const SOURCE_ORDER = ['Google', 'Bing', 'DuckDuckGo', 'Direct', 'Reddit', 'Facebook', 'Twitter/X', 'GitHub', 'Hacker News'];
@@ -1591,6 +1622,30 @@ function buildSourceLine(srcArr, bmClicks) {
     return line || '<span class="muted">No data yet</span>';
 }
 
+function renderReferrers(stats, key) {
+    const tbody = document.getElementById('referrers-tbody');
+    if (!tbody) return;
+    const sources = (stats.sources && stats.sources[key]) || {};
+    const totals = {};
+    Object.keys(sources).forEach(function(path) {
+        (sources[path] || []).forEach(function(s) {
+            const host = s.host || '';
+            if (host === 'bskapps.com' || host === 'www.bskapps.com') return;
+            const label = host === '' ? 'Direct' : sourceLabel(host);
+            totals[label] = (totals[label] || 0) + (s.count || 0);
+        });
+    });
+    const rows = Object.keys(totals).map(function(l) { return { label: l, count: totals[l] }; })
+        .sort(function(a, b) { return b.count - a.count; });
+    const sum = rows.reduce(function(a, r) { return a + r.count; }, 0);
+    tbody.innerHTML = rows.length
+        ? rows.map(function(r) {
+            const share = sum > 0 ? (r.count / sum * 100).toFixed(0) + '%' : '--';
+            return '<tr><td>' + esc(r.label) + '</td><td class="num">' + r.count.toLocaleString() + '</td><td class="num">' + share + '</td></tr>';
+          }).join('')
+        : '<tr><td colspan="3" class="muted">No data yet</td></tr>';
+}
+
 function renderProductCards(stats, key, audRate) {
     const container = document.getElementById('product-cards');
     if (!container) return;
@@ -1613,6 +1668,7 @@ function renderProductCards(stats, key, audRate) {
         });
         if (currentCurrency === 'AUD') gross = gross * audRate;
         const conv = visits > 0 ? (orders / visits * 100).toFixed(1) + '%' : '--';
+        const perVisit = visits > 0 ? '$' + (gross / visits).toFixed(2) : '--';
         const sline = buildSourceLine(sources[p.path], inhouse[p.path] || 0);
         return '<div class="product-card">'
             + '<div class="pc-head"><img src="/images/' + p.icon + '" alt=""><span class="pc-name">' + esc(p.label) + '</span></div>'
@@ -1621,6 +1677,7 @@ function renderProductCards(stats, key, audRate) {
             + '<div><div class="pc-label">Orders</div><div class="pc-num">' + orders.toLocaleString() + '</div></div>'
             + '<div><div class="pc-label">Rev ' + currentCurrency + '</div><div class="pc-num money">$' + Math.round(gross).toLocaleString() + '</div></div>'
             + '<div><div class="pc-label">Conv</div><div class="pc-num conv">' + conv + '</div></div>'
+            + '<div><div class="pc-label">Per visit</div><div class="pc-num per">' + perVisit + '</div></div>'
             + '</div>'
             + '<div class="pc-sources"><span class="pcs-label">Where from</span>' + sline + '</div>'
             + '</div>';
