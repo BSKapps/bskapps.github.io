@@ -244,6 +244,7 @@ body {
 
 .merged-row label:not(:first-child) { flex: 0 0 auto; margin-left: 6px; }
 .merged-row select, .merged-row input[type="range"] { min-width: 0; }
+.merged-row #textFont { flex: 2; }
 
 .row input[type="color"] {
   width: 44px;
@@ -274,10 +275,8 @@ body {
 .row textarea { resize: none; height: 52px; line-height: 1.4; }
 .row input[type="number"] { flex: 0 0 80px; }
 
-.number-range { flex-wrap: wrap; opacity: 0.6; transition: opacity 0.12s; }
-.number-range:hover, .number-range:focus-within { opacity: 1; }
-.row.number-range .btn { flex: 0 0 auto; width: auto; margin: 0; background: none; font-weight: 500; color: var(--muted); }
-.number-range:hover .btn, .number-range:focus-within .btn { color: var(--text); }
+.number-range { flex-wrap: wrap; }
+.row.number-range .btn { flex: 0 0 auto; width: auto; margin: 0; background: none; font-weight: 500; }
 .number-range label { flex: 0 0 auto; }
 .number-range label:last-of-type { margin-left: 6px; }
 .number-range input[type="number"] { flex: 0 0 68px; }
@@ -434,11 +433,7 @@ body {
 
 .seg button:disabled { opacity: 0.4; cursor: default; }
 
-.check { display: flex; align-items: center; gap: 8px; }
-
-.check input { accent-color: var(--brand); }
-
-.check label { flex: none; color: var(--text); font-size: 0.92rem; }
+.row input[type="checkbox"] { accent-color: var(--brand); }
 
 .edge-toggles { display: flex; flex: 1; gap: 16px; }
 
@@ -946,6 +941,10 @@ body {
 
 .promo-row:hover .promo-text b { color: var(--brand-bright); }
 
+.promo-all { margin: 12px 0 0; font-size: 0.85rem; }
+.promo-all a { color: var(--brand); text-decoration: none; font-weight: 600; }
+.promo-all a:hover { color: var(--brand-bright); text-decoration: underline; }
+
 
 .app-footer {
   border-top: 1px solid var(--border);
@@ -966,6 +965,7 @@ body {
   .layout { display: flex; flex-direction: column; }
   .stage { display: contents; }
   .preset-strip-wrap { order: 1; padding: 18px 12px 8px; box-sizing: border-box; width: 100%; }
+  #effectScopeHint { order: 2; width: 100%; box-sizing: border-box; padding: 0 12px; }
   .preview-wrap { order: 2; padding: 16px 12px; margin-top: 0; box-sizing: border-box; width: 100%; }
   #seriesPreview { order: 2; width: 100%; }
   .panel { order: 3; position: static; max-height: none; height: auto; overflow: visible; border-right: none; border-top: 1px solid var(--border); }
@@ -974,6 +974,7 @@ body {
   .edit-banner { order: 2; width: calc(100% - 24px); margin: 0 12px 12px; }
   .download-card { order: 4; width: calc(100% - 24px); margin: 0 12px 12px; }
   .promo-card { order: 5; width: calc(100% - 24px); margin: 0 12px 12px; }
+  .tools-card { order: 7; }
   .help-card { order: 6; width: calc(100% - 24px); margin: 0 12px 24px; }
   .preset-actions { flex-wrap: wrap; }
   .preset-actions input[type="text"] { flex: 1 1 100%; }
@@ -1000,7 +1001,7 @@ body {
 }
 .help-toggle:hover { color: var(--text); border-color: var(--text-muted); }
 .section:not(.hints-hidden) .help-toggle { background: var(--brand); border-color: var(--brand); color: #fff; }
-.section.hints-hidden .section-body .hint:not(#exportSummary):not(#effectScopeHint) { display: none; }
+.section.hints-hidden .section-body > .hint:not(#exportSummary) { display: none; }
 
 .download-row select { flex: 0 0 auto; margin: 0; }
 

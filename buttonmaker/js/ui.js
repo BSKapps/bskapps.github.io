@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, editTarget, editTargets, buttonCount } from './state.js?v=136';
-import { triggerIconUpload } from './icons.js?v=136';
-import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=136';
-import { noteDesignsEdited } from './effects.js?v=136';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, editTarget, editTargets, buttonCount } from './state.js?v=137';
+import { triggerIconUpload } from './icons.js?v=137';
+import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=137';
+import { noteDesignsEdited } from './effects.js?v=137';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -558,6 +558,9 @@ export function initUI() {
   document.querySelectorAll('#panelTabs button').forEach((btn) => {
     btn.addEventListener('click', () => showPanelTab(btn.dataset.tab));
   });
+  document.querySelectorAll('.panel .section > summary').forEach((sum) => {
+    sum.setAttribute('tabindex', '-1');
+  });
   showPanelTab('bg');
 
   document.getElementById('editAllBtn').addEventListener('click', deselectListItem);
@@ -566,7 +569,7 @@ export function initUI() {
     document.getElementById('seriesFrom').dispatchEvent(new Event('change'));
     document.getElementById('seriesTo').dispatchEvent(new Event('change'));
     const items = state.series.items;
-    const atRisk = items.length > 1 || items.some((it) => it.design);
+    const atRisk = items.length > 1 || items.some((it) => it.design || (it.label && it.label.trim()));
     const noun = items.length === 1 ? ' button' : ' buttons';
     if (atRisk && !confirm('Replace the ' + items.length + noun + ' in your set with a numbered set?')) return;
     releaseSelection();

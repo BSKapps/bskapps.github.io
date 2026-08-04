@@ -1,7 +1,7 @@
-import { state, emit, deepClone, dotLayer } from './state.js?v=136';
-import { seriesVariants } from './series.js?v=136';
-import { mixHex, isLightColor } from './color.js?v=136';
-import { releaseSelection, selectListItem } from './ui.js?v=136';
+import { state, emit, deepClone, dotLayer } from './state.js?v=137';
+import { seriesVariants } from './series.js?v=137';
+import { mixHex, isLightColor } from './color.js?v=137';
+import { releaseSelection, selectListItem } from './ui.js?v=137';
 
 export const EFFECT_DEFAULTS = {
   tint: { type: 'tint', color: '#1f9d3a', strength: 40, elements: { bg: true, icon: true, text: true } },
@@ -143,13 +143,14 @@ export function makeOnState(effect) {
 }
 
 let lit = null;
+let lastVal = null;
 let onColour = '#1f9d3a';
 
 function syncEffectSeg() {
   document.querySelectorAll('#effectType button').forEach((b) => {
     b.classList.toggle('active', !!lit && b.dataset.val === lit.val);
   });
-  const colourless = !!lit && !COLOURED.includes(lit.val);
+  const colourless = !!lastVal && !COLOURED.includes(lastVal);
   const row = document.getElementById('effectColours');
   if (!row) return;
   row.classList.toggle('inert', colourless);
@@ -170,6 +171,7 @@ export function noteDesignsEdited(designs) {
 export function updateEffectControls() {
   if (lit && (state.series.mode !== 'list' || !lit.targets.every((it) => state.series.items.includes(it)))) {
     lit = null;
+    lastVal = null;
   }
   syncEffectSeg();
   const hint = document.getElementById('effectScopeHint');
@@ -191,10 +193,9 @@ function effectFor(val) {
 }
 
 function runEffect(val) {
-  const fold = document.getElementById('onStateFold');
-  if (fold) fold.open = true;
   const targets = makeOnState(effectFor(val)) || [];
   lit = targets.length ? { val, targets } : null;
+  if (targets.length) lastVal = val;
   syncEffectSeg();
 }
 
@@ -219,7 +220,7 @@ export function initEffects() {
       btn.appendChild(cap);
       btn.addEventListener('click', () => {
         onColour = c.color;
-        runEffect(lit && COLOURED.includes(lit.val) ? lit.val : 'colour');
+        runEffect(lastVal && COLOURED.includes(lastVal) ? lastVal : 'colour');
       });
       colours.appendChild(btn);
     }

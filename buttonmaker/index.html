@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://bskapps.com; connect-src 'self' https://api.iconify.design https://cloudflareinsights.com; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="bm-version" content="136">
+<meta name="bm-version" content="137">
 <title>BSK Button Maker - Free Companion, Stream Deck, REAPER and App Icon Designer</title>
 <meta name="description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars, plus app icons. Icon library, presets, button sets, PNG, Companion page and REAPER toolbar export.">
 <meta property="og:title" content="BSK Button Maker">
@@ -41,7 +41,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&family=Archivo+Black&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=136">
+<link rel="stylesheet" href="css/style.css?v=137">
 </head>
 <body>
 <header class="app-header">
@@ -88,14 +88,14 @@
           <button data-val="gradient">Gradient</button>
           <button data-val="image">Image</button>
         </div>
-        <div class="row merged-row" id="bgSolidRow">
+        <div class="row" id="bgSolidRow">
           <label for="bgColor">Colour</label>
           <input type="color" id="bgColor" value="#1a2230" data-label="Background">
           <label class="inline-check" for="bgInvert">Invert</label><input type="checkbox" id="bgInvert">
         </div>
         <div id="bgGradientRows" class="hidden">
           <div class="row"><label for="bgColor2a">From</label><input type="color" id="bgColor2a" value="#16324f" data-label="Gradient from"></div>
-          <div class="row merged-row" id="bgGradToRow"><label for="bgColor2b">To</label><input type="color" id="bgColor2b" value="#0a0e14" data-label="Gradient to"></div>
+          <div class="row" id="bgGradToRow"><label for="bgColor2b">To</label><input type="color" id="bgColor2b" value="#0a0e14" data-label="Gradient to"></div>
           <div class="row"><label for="bgAngle">Angle</label><input type="range" id="bgAngle" min="0" max="360" value="135" data-default="135"><input type="number" class="val" id="bgAngleVal" value="135"></div>
           <div class="row"><label for="bgBlend">Blend</label><input type="range" id="bgBlend" min="0" max="100" value="100" data-default="100"><input type="number" class="val" id="bgBlendVal" value="100"></div>
         </div>
@@ -322,7 +322,7 @@
         <p class="hint"><b>One Button:</b> Pick a starting point, then set background, image, text and shape. Download the PNG and drop it into a button's image box in Companion.</p>
         <p class="hint"><b>Library:</b> Click "Open Library" for the picker. Click a button to add it, or "Add Set" for a whole row. Your own saved designs sit at the top under My Presets, marked (user) - double-click a name to rename, x to delete, and adding one brings its name back so you can edit it and save over it. "Start Fresh" clears everything back to a blank button.</p>
         <p class="hint"><b>Save, back up and share:</b> Type a name and "Save to My Presets" keeps the design in this browser. "Back Up" writes all your presets to a file and "Restore" loads one back - worth doing, because clearing your browser data wipes saved presets. "Copy Design Link" copies a web link that reopens this exact design and set on any machine, with no file to send; designs with a large uploaded image are too big for a link, so use Back Up for those.</p>
-        <p class="hint"><b>Make a set:</b> Add buttons from the picker, or switch to Custom Set in the "Make a set" card and use "Number Them" to fill the set with a numbered range (PC 1, PC 2... or cue numbers like 1.1 to 1.5). The set shows under the preview.</p>
+        <p class="hint"><b>Make a set:</b> Add buttons from the picker, or use "Make a numbered set" at the foot of the sidebar to fill a set with a numbered range (PC 1, PC 2... or cue numbers like 1.1 to 1.5). The set shows under the preview.</p>
         <p class="hint"><b>Duplicate:</b> Click the + tile under the preview to copy your button into a set, or drag any button in a set onto the + tile to duplicate it. The picker also adds buttons from any preset into your set.</p>
         <p class="hint"><b>Edit one, some or all:</b> With a set, changes apply to every button by default. Click one to style it alone, Cmd-click or Shift-click to grab a few. Click empty space, or "Edit All", to go back to editing everything.</p>
         <p class="hint"><b>Reorder and reuse:</b> Drag a button onto another to reorder, or onto the big preview to make it your single button.</p>
@@ -331,11 +331,11 @@
         <p class="hint"><b>App icons:</b> Pick 1024 px for a full-size app icon, and tick Squircle in the Border/Shape card to clip the button to an Apple-style rounded shape with transparent corners. The preview shows the exact shape that exports.</p>
         <p class="hint"><b>File names:</b> a PNG is named after its text, or its icon name if there is no text, otherwise button-1. To name an icon-only button, type the name and drop its text opacity to zero - invisible on the button, used as the file name.</p>
         <p class="hint"><b>Export for REAPER:</b> In the Download card, click "REAPER Icons" to get toolbar icon strips (normal, hover and active in one PNG) as a ZIP that mirrors REAPER's toolbar_icons folder, with the 150 and 200 hi-DPI copies. Linked on states become a matching name_on strip, so you assign the base icon and REAPER finds the on state. Unzip it there, restart REAPER, and assign each icon in the toolbar editor.</p>
-        <p class="hint"><b>On states:</b> In the "On states" card, the presets make a button's on or active look. Pick Tint, Highlight, Invert or Dot and it adds a real, editable on state button to your set, linked to its button - then edit it with the cards on the left. Highlight lifts dark buttons brighter and deepens light ones, so it reads as active on any colour. REAPER export pairs it as name_on, no renaming. Each design card also has its own Invert tick next to its colour, to flip just that part. Tint and Highlight change solid and gradient backgrounds; Invert and Dot work on any background, including images.</p>
+        <p class="hint"><b>On states:</b> Under "On state" at the foot of the sidebar, the presets make a button's on or active look. Pick Tint, Highlight, Invert, Dot or Colour and it adds a real, editable on state button to your set, linked to its button - then edit it with the cards on the left. Highlight lifts dark buttons brighter and deepens light ones, so it reads as active on any colour. REAPER export pairs it as name_on, no renaming. Each design card also has its own Invert tick next to its colour, to flip just that part. The swatch under those presets sets the colour used by Tint, Dot and Colour; Highlight and Invert have no colour of their own, so it greys out for them. Tint and Highlight change solid and gradient backgrounds; Invert, Dot and Colour work on any background, including images.</p>
         <p class="hint"><b>Shortcuts:</b> Double-click a slider to reset it. Cmd-Z undoes and Cmd-Shift-Z redoes, up to 50 steps back. In a set, Cmd-A selects every button.</p>
       </div>
     </details>
-    <details class="section promo-card" open>
+    <details class="section promo-card tools-card" open>
       <summary>More free tools</summary>
       <div class="section-body">
         <a class="promo-row" href="https://bskapps.com/tools/companion/">
@@ -384,7 +384,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair, Cockos or Apple. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=136"></script>
-<script type="module" src="js/app.js?v=136"></script>
+<script src="vendor/jszip.min.js?v=137"></script>
+<script type="module" src="js/app.js?v=137"></script>
 </body>
 </html>

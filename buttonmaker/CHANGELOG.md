@@ -2,6 +2,15 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v137 - 2026-08-04
+- Phones: the on-state note no longer appears as a stray sentence at the very top of the page, and Help sits between the apps and tools cards as it does on desktop.
+- Phones: "Make a numbered set" is no longer permanently greyed. It was only lighting up on hover, which a touchscreen never does.
+- On state colours: after you hand-edit an on state, clicking a colour swatch no longer wipes it with a flat colour. The swatch stays with the treatment you chose, and greys out for Highlight and Invert.
+- Restored the warning before "Make a numbered set" replaces a named button that came from a saved preset or a shared link.
+- The "See all BSK apps" link is styled again instead of coming out as a default blue browser link.
+- Help text now matches the app: no more references to Custom Set, "Number Them" or the old On states card, and it covers the new Colour on state.
+- Font no longer squeezed to half width by the Weight box beside it, and Invert lines up the same way in Background, Icon and Text.
+
 ## v136 - 2026-08-04
 - Border/Shape now sits above Background in the Background tab.
 - House ads rebuilt: one card for all four BSK apps, one for the three free tools, with Help between them. All entries are the same compact size - the big duplicate tiles at the bottom are gone.
@@ -25,8 +34,6 @@ Internal version log. The app version lives in js/state.js (APP_VERSION), index.
 - On states: pick a colour for your on state. White, amber, green or red now sets the colour used by Tint, Dot and the new Colour treatment, so a red tint or an amber dot is finally possible. Highlight and Invert have no colour of their own, so the swatches grey out for those.
 - Colour: a new on state that swaps the whole background and puts the text and icons in black or white, whichever reads on it.
 - The Looks card has gone. It was eight background swatches that also rewrote your font behind your back.
-- Fixed your set being destroyed when you switched to One Button. Switching back now brings it straight back.
-- Number Them no longer looks like it is already switched on, and its help text now hides with the rest of the card's help.
 - Colour and Invert share a line in the Icon and Text cards, so there is less to scroll past.
 
 ## v133 - 2026-08-04
