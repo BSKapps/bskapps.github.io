@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://bskapps.com; connect-src 'self' https://api.iconify.design https://cloudflareinsights.com; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="bm-version" content="131">
+<meta name="bm-version" content="132">
 <title>BSK Button Maker - Free Companion, Stream Deck, REAPER and App Icon Designer</title>
 <meta name="description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars, plus app icons. Icon library, presets, button sets, PNG, Companion page and REAPER toolbar export.">
 <meta property="og:title" content="BSK Button Maker">
@@ -41,7 +41,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&family=Archivo+Black&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=131">
+<link rel="stylesheet" href="css/style.css?v=132">
 </head>
 <body>
 <header class="app-header">
@@ -224,6 +224,7 @@
         <button class="btn" id="presetSave">Save to My Presets</button>
         <button class="btn ghost" id="presetExport" title="Save all your presets to a file to back up or share">Back Up</button>
         <button class="btn ghost" id="presetImportBtn" title="Load presets from a backup file">Restore</button>
+        <button class="btn ghost" id="shareLink" title="Copy a link that opens this design and set">Share Link</button>
         <input type="file" id="presetImportFile" accept=".json" class="hidden">
       </div>
     </div>
@@ -280,6 +281,7 @@
       <div class="section-body">
         <div class="row download-row">
           <button class="btn primary" id="exportPng">PNG</button>
+          <button class="btn primary" id="exportCopy" title="Copy the button image to the clipboard, ready to paste">Copy PNG</button>
           <button class="btn primary" id="exportZip">Set as ZIP</button>
           <select id="exportSize" aria-label="PNG size" title="PNG size - 288 px is a safe button default; pick 1024 px for app icons">
             <option value="72">72 px</option>
@@ -437,7 +439,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair, Cockos or Apple. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=131"></script>
-<script type="module" src="js/app.js?v=131"></script>
+<script src="vendor/jszip.min.js?v=132"></script>
+<script type="module" src="js/app.js?v=132"></script>
 </body>
 </html>

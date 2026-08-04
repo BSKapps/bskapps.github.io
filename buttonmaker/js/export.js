@@ -1,8 +1,8 @@
-import { state, primarySelection, defaultTextLayer } from './state.js?v=131';
-import { renderToDataUrl, renderDesign } from './renderer.js?v=131';
-import { seriesVariants, variantFileName } from './series.js?v=131';
-import { downloadBlob } from './presets.js?v=131';
-import { buildCompanionPage } from './companion.js?v=131';
+import { state, primarySelection, defaultTextLayer } from './state.js?v=132';
+import { renderToDataUrl, renderDesign } from './renderer.js?v=132';
+import { seriesVariants, variantFileName } from './series.js?v=132';
+import { downloadBlob } from './presets.js?v=132';
+import { buildCompanionPage } from './companion.js?v=132';
 
 const SS = 4;
 const STATE_LIFT = [0, 0.05, 0.12];
@@ -126,6 +126,12 @@ export async function buildReaperZip(zip, variants, links) {
 
 export function initExport() {
   document.getElementById('exportPng').addEventListener('click', exportPng);
+  const copyBtn = document.getElementById('exportCopy');
+  if (navigator.clipboard && window.ClipboardItem) {
+    copyBtn.addEventListener('click', copyPng);
+  } else {
+    copyBtn.style.display = 'none';
+  }
   document.getElementById('exportZip').addEventListener('click', exportZip);
   document.getElementById('exportCompanion').addEventListener('click', exportCompanion);
   document.getElementById('exportReaper').addEventListener('click', exportReaper);
@@ -139,6 +145,26 @@ async function exportPng() {
   const v = variants[idx] || variants[0];
   const url = await renderToDataUrl(v.design, size, { bakeText: true });
   downloadBlob(dataUrlToBlob(url), variantFileName(v, idx) + '.png');
+}
+
+function copyPng() {
+  const blobPromise = (async () => {
+    const size = state.export.size;
+    const variants = seriesVariants();
+    const sel = primarySelection();
+    const idx = state.series.mode === 'list' && sel !== null && variants[sel] ? sel : 0;
+    const v = variants[idx] || variants[0];
+    const url = await renderToDataUrl(v.design, size, { bakeText: true });
+    return dataUrlToBlob(url);
+  })();
+  const btn = document.getElementById('exportCopy');
+  navigator.clipboard.write([new ClipboardItem({ 'image/png': blobPromise })]).then(
+    () => {
+      btn.textContent = 'Copied';
+      setTimeout(() => { btn.textContent = 'Copy PNG'; }, 1200);
+    },
+    () => alert('Could not copy the image. The browser blocked clipboard access, or the button failed to render.')
+  );
 }
 
 async function exportZip() {

@@ -1,12 +1,12 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=131';
-import { renderDesign } from './renderer.js?v=131';
-import { seriesVariants, numberSet } from './series.js?v=131';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=131';
-import { initIconPicker } from './icons.js?v=131';
-import { initPresets, normalizeDesign } from './presets.js?v=131';
-import { initExport } from './export.js?v=131';
-import { initEffects, updateEffectControls } from './effects.js?v=131';
-import { initColorPopover } from './colorpicker.js?v=131';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=132';
+import { renderDesign } from './renderer.js?v=132';
+import { seriesVariants, numberSet } from './series.js?v=132';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=132';
+import { initIconPicker } from './icons.js?v=132';
+import { initPresets, normalizeDesign } from './presets.js?v=132';
+import { initExport } from './export.js?v=132';
+import { initEffects, updateEffectControls } from './effects.js?v=132';
+import { initColorPopover } from './colorpicker.js?v=132';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -478,27 +478,30 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-function restoreSession() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(SESSION_KEY));
-    if (saved && saved.design && Array.isArray(saved.design.texts)) {
-      Object.assign(state.design, normalizeDesign(saved.design));
-      const series = saved.series || {};
-      if (series.mode === 'numbers') {
-        series.items = numberSet(state.design, series.from, series.to);
-        series.mode = 'list';
-      }
-      if (Array.isArray(series.items)) {
-        if (series.items.length > 64) series.items = series.items.slice(0, 64);
-        for (const it of series.items) {
-          if (it && it.design) it.design = normalizeDesign(it.design);
-        }
-      }
-      Object.assign(state.series, series);
-      if (state.series.mode === 'list' && (!Array.isArray(state.series.items) || !state.series.items.length)) {
-        state.series.mode = 'off';
+function applySaved(saved) {
+  if (saved && saved.design && Array.isArray(saved.design.texts)) {
+    Object.assign(state.design, normalizeDesign(saved.design));
+    const series = saved.series || {};
+    if (series.mode === 'numbers') {
+      series.items = numberSet(state.design, series.from, series.to);
+      series.mode = 'list';
+    }
+    if (Array.isArray(series.items)) {
+      if (series.items.length > 64) series.items = series.items.slice(0, 64);
+      for (const it of series.items) {
+        if (it && it.design) it.design = normalizeDesign(it.design);
       }
     }
+    Object.assign(state.series, series);
+    if (state.series.mode === 'list' && (!Array.isArray(state.series.items) || !state.series.items.length)) {
+      state.series.mode = 'off';
+    }
+  }
+}
+
+function restoreSession() {
+  try {
+    applySaved(JSON.parse(localStorage.getItem(SESSION_KEY)));
   } catch (err) {}
 }
 
@@ -585,3 +588,69 @@ if (miniPreview && mainPreviewWrap && 'IntersectionObserver' in window) {
     mainPreviewWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
 }
+
+const shareBtn = document.getElementById('shareLink');
+if ('CompressionStream' in window && navigator.clipboard) {
+  shareBtn.addEventListener('click', shareDesignLink);
+} else {
+  shareBtn.style.display = 'none';
+}
+
+async function shareDesignLink() {
+  const cs = new CompressionStream('deflate-raw');
+  const buf = await new Response(new Blob([snapshot()]).stream().pipeThrough(cs)).arrayBuffer();
+  const bytes = new Uint8Array(buf);
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) {
+    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  }
+  const code = btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const url = location.origin + location.pathname + '#d=' + code;
+  if (url.length > 30000) {
+    alert('This design is too large to share as a link, probably from an uploaded image. Use Back Up to share it as a file instead.');
+    return;
+  }
+  navigator.clipboard.writeText(url).then(
+    () => {
+      shareBtn.textContent = 'Link Copied';
+      setTimeout(() => { shareBtn.textContent = 'Share Link'; }, 1200);
+    },
+    () => alert('Could not copy the link, the browser blocked clipboard access.')
+  );
+}
+
+async function loadSharedDesign() {
+  const m = location.hash.match(/^#d=([A-Za-z0-9_-]+)$/);
+  if (!m || !('DecompressionStream' in window)) return;
+  let saved = null;
+  try {
+    const b64 = m[1].replace(/-/g, '+').replace(/_/g, '/');
+    const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+    const ds = new DecompressionStream('deflate-raw');
+    const json = await new Response(new Blob([bytes]).stream().pipeThrough(ds)).text();
+    saved = JSON.parse(json);
+  } catch (err) {
+    saved = null;
+  }
+  if (!(saved && saved.design && Array.isArray(saved.design.texts))) {
+    history.replaceState(null, '', location.pathname);
+    return;
+  }
+  const untouched = state.series.mode === 'off' && JSON.stringify(state.design) === JSON.stringify(defaultDesign());
+  if (!untouched && !window.confirm('Open the shared design from this link? It replaces your current design and set.')) {
+    history.replaceState(null, '', location.pathname);
+    return;
+  }
+  try {
+    applySaved(saved);
+    state.ui.activeText = 0;
+    state.ui.activeIcon = 0;
+    releaseSelection();
+    emit();
+  } catch (err) {
+    startFresh();
+  } finally {
+    history.replaceState(null, '', location.pathname);
+  }
+}
+loadSharedDesign();

@@ -2,6 +2,11 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v132 - 2026-08-04
+- Copy PNG: new button in the Download card puts the previewed button on the clipboard, ready to paste straight into Companion or anywhere else.
+- Share Link: copies a link that opens your exact design and set on any machine - no file needed. Designs with big uploaded images fall back to Back Up.
+- Opening a shared link asks before replacing your current design.
+
 ## v131 - 2026-08-04
 - Phones: a small floating preview follows you while you edit, so slider changes are visible without scrolling back up. Tap it to jump to the full preview.
 - Download card: PNG size now sits beside the PNG and ZIP buttons it applies to, with Companion and REAPER exports on their own row.
