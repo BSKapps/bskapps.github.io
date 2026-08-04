@@ -88,7 +88,7 @@ Each tile: `.tile-shot` screenshot (152px, object-fit cover, negative margins to
 
 ## Contrast
 
-`--text-on-card` (#C6C6CC) is for muted text sitting on a `--card` background. `--text-muted` (#A9A9AF) fails AA at 3.76:1 on cards - it is only for text on `--bg`. Use `--text-on-card` inside `.tile`, `.game-card` and `.article-cta`.
+`--text-on-card` (#C6C6CC) is for muted text sitting on a `--card` background - use it inside `.tile`, `.game-card` and `.article-cta`. On the current card (#343B4A) `--text-muted` reaches 4.80:1, but `--text-on-card` is still the intended token and gives 6.60:1.
 
 ## Link previews (Open Graph)
 

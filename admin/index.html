@@ -13,7 +13,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #222226;
+            background: #1B1B1F;
             color: #e0e0e0;
             min-height: 100vh;
         }
@@ -34,7 +34,7 @@
             width: 100%;
             max-width: 360px;
             padding: 12px 16px;
-            background: #45454A;
+            background: #343B4A;
             border: 1px solid rgba(255,255,255,0.16);
             border-radius: 10px;
             color: #fff;
@@ -102,7 +102,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.10);
             position: sticky;
             top: 53px;
-            background: #222226;
+            background: #1B1B1F;
             z-index: 40;
         }
         .tab {
@@ -124,7 +124,7 @@
 
         /* CARDS */
         .card {
-            background: #45454A;
+            background: #343B4A;
             border: 1px solid rgba(255,255,255,0.12);
             border-radius: 12px;
             padding: 24px;
@@ -264,7 +264,7 @@
             margin-bottom: 16px;
         }
         .stat-box {
-            background: #45454A;
+            background: #343B4A;
             border: 1px solid rgba(255,255,255,0.12);
             border-radius: 10px;
             padding: 18px 20px;
@@ -277,7 +277,7 @@
         .stat-box.revenue .stat-value-secondary { font-size: 1.1rem; font-weight: 700; color: #5FBE8A; margin-top: 2px; }
         .stat-sublabel { font-size: 0.65rem; color: #A2A2A8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 10px; margin-bottom: 2px; }
 
-        .data-table-wrap { background: #45454A; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; overflow: hidden; overflow-x: auto; margin-bottom: 16px; }
+        .data-table-wrap { background: #343B4A; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; overflow: hidden; overflow-x: auto; margin-bottom: 16px; }
         .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
         .data-table th { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: #A2A2A8; font-weight: 600; padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.12); }
         .data-table td { padding: 9px 16px; color: #E4E4E7; border-bottom: 1px solid rgba(255,255,255,0.06); }
@@ -286,11 +286,12 @@
         .data-table .muted { color: #8A8A90; font-size: 0.78rem; }
 
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 16px; }
-        .product-card { background: #45454A; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 16px 18px; }
+        .product-card { background: #343B4A; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 16px 18px; }
         .pc-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
         .pc-head img { width: 28px; height: 28px; border-radius: 6px; }
         .pc-name { font-size: 0.95rem; font-weight: 700; color: #fff; }
         .pc-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(66px, 1fr)); gap: 10px 8px; margin-bottom: 12px; }
+        .pc-stats > div { min-width: 0; }
         .pc-num.per { color: #8FBCE8; }
         .pc-label { font-size: 0.58rem; white-space: nowrap; color: #A2A2A8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
         .pc-num { font-size: 1.02rem; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -314,7 +315,7 @@
             align-items: center;
             gap: 14px;
             padding: 16px 20px;
-            background: #45454A;
+            background: #343B4A;
             border: 1px solid rgba(255,255,255,0.12);
             border-radius: 10px;
             text-decoration: none;
@@ -356,7 +357,7 @@
         .api-field label { font-size: 0.75rem; color: #A2A2A8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
         .api-field input {
             padding: 8px 12px;
-            background: #45454A;
+            background: #343B4A;
             border: 1px solid rgba(255,255,255,0.14);
             border-radius: 8px;
             color: #e0e0e0;
@@ -398,7 +399,7 @@
             position: sticky;
             top: 90px;
             z-index: 30;
-            background: #222226;
+            background: #1B1B1F;
             padding: 12px 0 10px;
             margin-bottom: 6px;
             border-bottom: 1px solid rgba(255,255,255,0.10);
@@ -430,14 +431,14 @@
             align-items: center;
             justify-content: space-between;
             padding: 14px 18px;
-            background: #45454A;
+            background: #343B4A;
             border: 1px solid rgba(255,255,255,0.12);
             border-radius: 10px;
             margin-bottom: 8px;
             cursor: pointer;
             transition: border-color 0.15s, background 0.15s;
         }
-        .article-row:hover { border-color: rgba(255,255,255,0.22); background: #4A4A50; }
+        .article-row:hover { border-color: rgba(255,255,255,0.22); background: #3B4251; }
         .article-row .article-slug { color: #fff; font-size: 0.95rem; font-weight: 600; }
         .article-row .article-arrow { color: #8A8A90; font-size: 1rem; }
         .article-row:hover .article-arrow { color: #6FA3D9; }
@@ -604,7 +605,7 @@
         </details>
 
         <details class="collapse-section" data-key="referrers" open>
-            <summary><span class="chev">&#9656;</span><span class="section-title">Where the Whole Site Comes From</span></summary>
+            <summary><span class="chev">&#9656;</span><span class="section-title">Where the Product Pages Come From</span></summary>
             <div class="data-table-wrap">
                 <table class="data-table">
                     <thead><tr><th>Source</th><th class="num">Views</th><th class="num">Share</th></tr></thead>
@@ -653,7 +654,7 @@
                     </div>
                     <div class="api-field">
                         <label>Apple Private Key (.p8 contents)</label>
-                        <textarea id="apple-private-key" placeholder="-----BEGIN PRIVATE KEY-----&#10;...&#10;-----END PRIVATE KEY-----" style="padding:8px 12px; background:#45454A; border:1px solid rgba(255,255,255,0.14); border-radius:8px; color:#e0e0e0; font-size:0.82rem; font-family:monospace; outline:none; width:100%; min-height:80px; resize:vertical;"></textarea>
+                        <textarea id="apple-private-key" placeholder="-----BEGIN PRIVATE KEY-----&#10;...&#10;-----END PRIVATE KEY-----" style="padding:8px 12px; background:#343B4A; border:1px solid rgba(255,255,255,0.14); border-radius:8px; color:#e0e0e0; font-size:0.82rem; font-family:monospace; outline:none; width:100%; min-height:80px; resize:vertical;"></textarea>
                     </div>
                 </div>
                 <button class="api-save-btn" onclick="saveApiKeys()">Save to GitHub Secrets</button>
@@ -1265,7 +1266,8 @@ function displayStats() {
         const paths = INHOUSE_ADS.slice();
         Object.keys(inhouse).forEach(function(p) { if (paths.indexOf(p) === -1) paths.push(p); });
         const rows = paths.map(function(p) { return { path: p, clicks: inhouse[p] || 0 }; }).sort(function(a, b) { return b.clicks - a.clicks; });
-        const bmPage = (stats.pages && stats.pages[key] || []).find(function(x) { return x.path === '/buttonmaker/'; });
+        const bmPageSrc = stats.pages && stats.pages[key];
+        const bmPage = Array.isArray(bmPageSrc) ? bmPageSrc.find(function(x) { return x.path === '/buttonmaker/'; }) : null;
         const bmVisits = bmPage ? (bmPage.visits || 0) : 0;
         const totalClicks = rows.reduce(function(a, r) { return a + r.clicks; }, 0);
         const rateEl = document.getElementById('inhouse-rate');
@@ -1591,7 +1593,7 @@ function sourceLabel(host) {
     if (/(^|\.)instagram\.com$/.test(bare)) return 'Instagram';
     if (/(^|\.)youtube\.com$/.test(bare) || bare === 'youtu.be') return 'YouTube';
     if (/(^|\.)telegram\.org$/.test(bare) || bare === 't.me') return 'Telegram';
-    if (/(^|\.)microsoft\.com$/.test(bare) || /teams\./.test(bare)) return 'Microsoft Teams';
+    if (/(^|\.)microsoft\.com$/.test(bare)) return 'Microsoft Teams';
     return bare;
 }
 
@@ -1628,7 +1630,8 @@ function renderReferrers(stats, key) {
     const sources = (stats.sources && stats.sources[key]) || {};
     const totals = {};
     Object.keys(sources).forEach(function(path) {
-        (sources[path] || []).forEach(function(s) {
+        if (!Array.isArray(sources[path])) return;
+        sources[path].forEach(function(s) {
             const host = s.host || '';
             if (host === 'bskapps.com' || host === 'www.bskapps.com') return;
             const label = host === '' ? 'Direct' : sourceLabel(host);

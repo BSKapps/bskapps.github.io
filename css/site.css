@@ -42,7 +42,7 @@ a.app-card { display: block; text-decoration: none; color: inherit; }
 .app {
     position: relative;
     background: var(--card);
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-strong);
     border-radius: 10px;
     padding: 28px 32px;
     margin-bottom: 20px;
@@ -135,7 +135,7 @@ iframe[src*="lemonsqueezy.com"] {
 .hero-note { font-size: 0.85rem; color: var(--text-faint); margin-top: 14px; }
 
 .grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 20px; row-gap: 34px; }
-.grid > .app-card:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 8px); margin-top: 24px; }
+.grid > .app-card:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 10px); margin-top: 24px; }
 
 .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 18px; row-gap: 24px; }
 .tile-mini { padding: 16px 16px 14px; }
@@ -279,9 +279,9 @@ article a:hover { color: var(--brand-bright); }
 article code { background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-size: 0.9em; color: var(--text); }
 article pre { background: #232327; border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; overflow-x: auto; margin: 0 0 18px; }
 article pre code { background: none; border: none; padding: 0; font-size: 0.85em; line-height: 1.55; color: var(--text); }
-article .note { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin: 0 0 18px; font-size: 0.95rem; color: var(--text); }
+article .note { background: var(--card); border: 1px solid var(--border-strong); border-radius: 10px; padding: 14px 18px; margin: 0 0 18px; font-size: 0.95rem; color: var(--text); }
 
-.article-cta { display: flex; gap: 18px; align-items: flex-start; margin: 36px 0 8px; padding: 22px 24px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.25); }
+.article-cta { display: flex; gap: 18px; align-items: flex-start; margin: 36px 0 8px; padding: 22px 24px; background: var(--card); border: 1px solid var(--border-strong); border-radius: 10px; box-shadow: 0 3px 12px rgba(0,0,0,0.38); }
 .cta-icon { width: 64px; height: 64px; border-radius: 14px; flex-shrink: 0; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.45)); }
 .cta-body { flex: 1; min-width: 0; }
 .cta-actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
@@ -441,7 +441,7 @@ article .note { background: var(--card); border: 1px solid var(--border); border
 
 .game-card {
     background: var(--card);
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-strong);
     border-radius: 10px;
     padding: 24px 26px;
     margin-bottom: 16px;

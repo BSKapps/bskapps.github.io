@@ -3,3 +3,12 @@ description: Utilities for AV Professionals
 url: https://bskapps.com
 exclude:
   - _promo
+  - CLAUDE.md
+  - Gemfile
+  - Gemfile.lock
+  - gemfiles
+  - node_modules
+  - vendor/bundle
+  - vendor/cache
+  - vendor/gems
+  - vendor/ruby
