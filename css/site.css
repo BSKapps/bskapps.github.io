@@ -157,17 +157,36 @@ iframe[src*="lemonsqueezy.com"] {
     flex-direction: column;
 }
 .app-card:hover .tile { background: var(--card-hover); border-color: var(--border-strong); }
-.tile-shot {
-    display: block;
-    width: calc(100% + 44px);
-    height: 152px;
-    object-fit: cover;
-    object-position: top center;
-    background: #1b1b1f;
-    margin: -22px -22px 18px;
-    border-bottom: 1px solid var(--border);
-    border-radius: 9px 9px 0 0;
+.tile-staged { padding: 0; overflow: hidden; position: relative; }
+.tile-stage {
+    position: relative; height: 210px; overflow: hidden;
+    background:
+      radial-gradient(110% 150% at 75% -30%, var(--glow) 0%, rgba(0,0,0,0) 60%),
+      linear-gradient(180deg, #22252d 0%, #1b1d23 100%);
+    border-bottom: 1px solid var(--border-strong);
 }
+.tile-stage .tile-shot {
+    position: absolute; left: 7%; top: 30px; width: 90%;
+    border-radius: 9px;
+    border: 1px solid rgba(255,255,255,0.16);
+    box-shadow: 0 20px 44px rgba(0,0,0,0.6), 0 4px 12px rgba(0,0,0,0.45);
+}
+.stage-qip { --glow: rgba(90,150,255,0.38); }
+.stage-qip .tile-shot { transform: rotate(-2.4deg); transform-origin: top left; }
+.stage-tt { --glow: rgba(80,230,210,0.30); }
+.stage-tt .tile-shot { left: 5%; top: 26px; }
+.stage-la { --glow: rgba(110,220,130,0.28); }
+.stage-la .tile-shot { left: 8%; top: 24px; width: 130%; }
+.stage-fp { --glow: rgba(170,110,255,0.32); }
+.stage-fp .tile-shot { left: 9%; top: 14px; width: 105%; transform: rotate(1.4deg); transform-origin: top left; }
+.tile-icon-float { position: absolute; right: 20px; width: 100%; z-index: 3; pointer-events: none; }
+.tile-icon-float img {
+    position: absolute; right: 0; top: 172px; width: 78px; height: 78px;
+    border-radius: 18px;
+    filter: drop-shadow(0 10px 22px rgba(0,0,0,0.65));
+}
+.tile-body { padding: 22px; display: flex; flex-direction: column; flex: 1; }
+.tile-staged .tile-head { position: relative; z-index: 2; padding-right: 96px; }
 .tile-head { display: flex; align-items: center; gap: 14px; }
 .tile-icon { width: 58px; height: 58px; border-radius: 13px; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.45)); }
 .tile h2 { font-size: 1.2rem; color: var(--heading); }

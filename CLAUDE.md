@@ -84,7 +84,7 @@ Lab Assistant's Mint / Processing Modules sections and QIP's Lite vs Pro table a
 
 Tiles are `<a class="app-card" href="...">` wrapping a `.tile`. This is only safe because the tiles contain NO inner links - the buy buttons were removed August 2026. If you ever put a link back inside a tile you must revert to the old `<div class="app-card" onclick>` pattern, because nesting `<a>` inside `<a>` is invalid HTML and browsers auto-close the outer anchor, breaking the layout.
 
-Each tile: `.tile-shot` screenshot (152px, object-fit cover, negative margins to bleed to the card edge), `.tile-head` icon + name + subtitle, `.tile-line` tagline, then `.tile-foot` with `.tile-price` (price + small meta line) and `.tile-view`.
+Each tile (August 2026 staged design): `.tile.tile-staged` > `.tile-stage.stage-{qip,tt,la,fp}` (210px image stage: per-app `--glow` radial accent + dark gradient, floating `.tile-shot` with shadow; QIP tilted -2.4deg, FP +1.4deg, TT/LA flat, LA zoomed 130%), then `.tile-icon-float` (78px icon straddling the stage/body boundary), then `.tile-body` (22px padding) holding `.tile-head` (name + subtitle, no inline icon), `.tile-line` tagline, `.tile-foot` with `.tile-price` and `.tile-view`. Per-tile tilt/zoom values live in site.css `.stage-*` rules.
 
 ## Contrast
 
