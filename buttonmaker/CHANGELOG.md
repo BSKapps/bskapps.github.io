@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v133 - 2026-08-04
+- Looks: a new card with eight one-click house styles. A look recolours the current button and every button in its set - background, text, icons, border - without touching names, icons or layout. Live previews show each look applied to your own design.
+
 ## v132 - 2026-08-04
 - Copy PNG: new button in the Download card puts the previewed button on the clipboard, ready to paste straight into Companion or anywhere else.
 - Share Link: copies a link that opens your exact design and set on any machine - no file needed. Designs with big uploaded images fall back to Back Up.

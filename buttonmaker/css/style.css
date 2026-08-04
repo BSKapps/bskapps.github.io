@@ -434,7 +434,7 @@ body {
 
 .preset-actions .btn { width: auto; margin: 0; padding: 7px 12px; font-size: 0.85rem; }
 
-.set-card, .onstate-card, .download-card, .promo-card { width: min(860px, 100%); margin-bottom: 0; }
+.set-card, .looks-card, .onstate-card, .download-card, .promo-card { width: min(860px, 100%); margin-bottom: 0; }
 
 .set-tools.reserved { visibility: hidden; }
 
@@ -964,6 +964,7 @@ body {
   .panel { order: 3; position: static; max-height: none; border-right: none; border-top: 1px solid var(--border); }
   .edit-banner { order: 2; width: calc(100% - 24px); margin: 0 12px 12px; }
   .set-card { order: 4; width: calc(100% - 24px); margin: 0 12px 12px; }
+  .looks-card { order: 4; width: calc(100% - 24px); margin: 0 12px 12px; }
   .onstate-card { order: 4; width: calc(100% - 24px); margin: 0 12px 12px; }
   .download-card { order: 4; width: calc(100% - 24px); margin: 0 12px 12px; }
   .promo-card { order: 5; width: calc(100% - 24px); margin: 0 12px 12px; }
@@ -1014,3 +1015,10 @@ body {
 @media (max-width: 820px) {
   #miniPreview.visible { display: block; }
 }
+
+.looks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 10px; margin-top: 4px; }
+.look-chip { background: none; border: none; padding: 0; cursor: pointer; text-align: center; font-family: inherit; }
+.look-chip canvas { width: 56px; height: 56px; border-radius: 12px; border: 1px solid var(--border); transition: transform 0.08s; }
+.look-chip:hover canvas { border-color: var(--border-strong); transform: scale(1.05); }
+.look-chip span { display: block; font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
+.look-chip:hover span { color: var(--text); }
