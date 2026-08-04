@@ -1,12 +1,12 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=135';
-import { renderDesign } from './renderer.js?v=135';
-import { seriesVariants, numberSet } from './series.js?v=135';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=135';
-import { initIconPicker } from './icons.js?v=135';
-import { initPresets, normalizeDesign } from './presets.js?v=135';
-import { initExport } from './export.js?v=135';
-import { initEffects, updateEffectControls } from './effects.js?v=135';
-import { initColorPopover } from './colorpicker.js?v=135';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=136';
+import { renderDesign } from './renderer.js?v=136';
+import { seriesVariants, numberSet } from './series.js?v=136';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=136';
+import { initIconPicker } from './icons.js?v=136';
+import { initPresets, normalizeDesign } from './presets.js?v=136';
+import { initExport } from './export.js?v=136';
+import { initEffects, updateEffectControls } from './effects.js?v=136';
+import { initColorPopover } from './colorpicker.js?v=136';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -613,7 +613,7 @@ async function shareDesignLink() {
   navigator.clipboard.writeText(url).then(
     () => {
       shareBtn.textContent = 'Link Copied';
-      setTimeout(() => { shareBtn.textContent = 'Share Link'; }, 1200);
+      setTimeout(() => { shareBtn.textContent = 'Copy Design Link'; }, 1200);
     },
     () => alert('Could not copy the link, the browser blocked clipboard access.')
   );

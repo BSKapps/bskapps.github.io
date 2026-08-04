@@ -2,6 +2,13 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v136 - 2026-08-04
+- Border/Shape now sits above Background in the Background tab.
+- House ads rebuilt: one card for all four BSK apps, one for the three free tools, with Help between them. All entries are the same compact size - the big duplicate tiles at the bottom are gone.
+- "Open Library" is a calmer single line, and it now says what is inside: ready-made buttons and sets, plus My Presets.
+- "Share Link" is now "Copy Design Link", and the Help card explains what the link does, what saving and backing up actually keep, and when a design is too big to share as a link.
+- The Library picker is now titled "Buttons, Sets & My Presets", so the thing "Save to My Presets" saves into has a visible name.
+
 ## v135 - 2026-08-04
 - The sidebar is now tabbed: Background, Icon and Text. One card at a time, so on a normal screen there is no sidebar scrolling at all.
 - Make a set and On state moved to a pinned dock at the bottom of the sidebar, next to the button strip they affect. Both are gone from the middle of the page.

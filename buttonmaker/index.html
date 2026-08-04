@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://bskapps.com; connect-src 'self' https://api.iconify.design https://cloudflareinsights.com; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="bm-version" content="135">
+<meta name="bm-version" content="136">
 <title>BSK Button Maker - Free Companion, Stream Deck, REAPER and App Icon Designer</title>
 <meta name="description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars, plus app icons. Icon library, presets, button sets, PNG, Companion page and REAPER toolbar export.">
 <meta property="og:title" content="BSK Button Maker">
@@ -41,7 +41,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&family=Archivo+Black&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=135">
+<link rel="stylesheet" href="css/style.css?v=136">
 </head>
 <body>
 <header class="app-header">
@@ -62,6 +62,23 @@
     </div>
 
     <div class="tab-area">
+
+
+    <details class="section card-shape" open>
+      <summary><svg class="card-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2,2H8V4H4V8H2V2M16,2H22V8H20V4H16V2M20,16H22V22H16V20H20V16M8,20V22H2V16H4V20H8Z"/></svg><span class="card-title">Border<span class="card-sep">/</span>Shape</span></summary>
+      <div class="section-body">
+        <div class="row merged-row"><label for="shapeBorder">Border</label><input type="range" id="shapeBorder" min="0" max="8" value="0" step="0.5" data-default="0"><input type="number" class="val" id="shapeBorderVal" value="0"><input type="color" id="shapeBorderColor" value="#ffffff" data-label="Border colour" aria-label="Border colour" title="Border colour"></div>
+        <div class="row"><label>Border edges</label><div class="edge-toggles">
+          <label><input type="checkbox" id="edgeTop" checked> T</label>
+          <label><input type="checkbox" id="edgeBottom" checked> B</label>
+          <label><input type="checkbox" id="edgeLeft" checked> L</label>
+          <label><input type="checkbox" id="edgeRight" checked> R</label>
+        </div></div>
+        <div class="row merged-row"><label for="shapeRadius">Corners</label><input type="range" id="shapeRadius" min="0" max="35" value="0" data-default="0"><input type="number" class="val" id="shapeRadiusVal" value="0"><label class="inline-check" for="shapeSquircle">Squircle</label><input type="checkbox" id="shapeSquircle" title="Clip to an Apple-style squircle with transparent corners - ideal for 1024 px app icons"></div>
+        <div class="row"><label for="shapeRotate">Rotate button</label><input type="range" id="shapeRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="shapeRotateVal" value="0"></div>
+        <div class="row"><label for="shapeZoom">Zoom contents</label><input type="range" id="shapeZoom" min="25" max="200" value="100" data-default="100"><input type="number" class="val" id="shapeZoomVal" value="100"></div>
+      </div>
+    </details>
 
     <details class="section card-bg" open>
       <summary><svg class="card-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.5,12A1.5,1.5 0 0,1 16,10.5A1.5,1.5 0 0,1 17.5,9A1.5,1.5 0 0,1 19,10.5A1.5,1.5 0 0,1 17.5,12M14.5,8A1.5,1.5 0 0,1 13,6.5A1.5,1.5 0 0,1 14.5,5A1.5,1.5 0 0,1 16,6.5A1.5,1.5 0 0,1 14.5,8M9.5,8A1.5,1.5 0 0,1 8,6.5A1.5,1.5 0 0,1 9.5,5A1.5,1.5 0 0,1 11,6.5A1.5,1.5 0 0,1 9.5,8M6.5,12A1.5,1.5 0 0,1 5,10.5A1.5,1.5 0 0,1 6.5,9A1.5,1.5 0 0,1 8,10.5A1.5,1.5 0 0,1 6.5,12M12,3A9,9 0 0,0 3,12A9,9 0 0,0 12,21A1.5,1.5 0 0,0 13.5,19.5C13.5,19.11 13.35,18.76 13.11,18.5C12.88,18.23 12.73,17.88 12.73,17.5A1.5,1.5 0 0,1 14.23,16H16A5,5 0 0,0 21,11C21,6.58 16.97,3 12,3Z"/></svg>Background</summary>
@@ -99,22 +116,6 @@
           <div class="row"><label for="bgImageDim">Dim</label><input type="range" id="bgImageDim" min="0" max="80" value="0" data-default="0"><input type="number" class="val" id="bgImageDimVal" value="0"></div>
           <div class="row"><label for="bgImageRotate">Rotate</label><input type="range" id="bgImageRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="bgImageRotateVal" value="0"></div>
         </div>
-      </div>
-    </details>
-
-    <details class="section card-shape" open>
-      <summary><svg class="card-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2,2H8V4H4V8H2V2M16,2H22V8H20V4H16V2M20,16H22V22H16V20H20V16M8,20V22H2V16H4V20H8Z"/></svg><span class="card-title">Border<span class="card-sep">/</span>Shape</span></summary>
-      <div class="section-body">
-        <div class="row merged-row"><label for="shapeBorder">Border</label><input type="range" id="shapeBorder" min="0" max="8" value="0" step="0.5" data-default="0"><input type="number" class="val" id="shapeBorderVal" value="0"><input type="color" id="shapeBorderColor" value="#ffffff" data-label="Border colour" aria-label="Border colour" title="Border colour"></div>
-        <div class="row"><label>Border edges</label><div class="edge-toggles">
-          <label><input type="checkbox" id="edgeTop" checked> T</label>
-          <label><input type="checkbox" id="edgeBottom" checked> B</label>
-          <label><input type="checkbox" id="edgeLeft" checked> L</label>
-          <label><input type="checkbox" id="edgeRight" checked> R</label>
-        </div></div>
-        <div class="row merged-row"><label for="shapeRadius">Corners</label><input type="range" id="shapeRadius" min="0" max="35" value="0" data-default="0"><input type="number" class="val" id="shapeRadiusVal" value="0"><label class="inline-check" for="shapeSquircle">Squircle</label><input type="checkbox" id="shapeSquircle" title="Clip to an Apple-style squircle with transparent corners - ideal for 1024 px app icons"></div>
-        <div class="row"><label for="shapeRotate">Rotate button</label><input type="range" id="shapeRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="shapeRotateVal" value="0"></div>
-        <div class="row"><label for="shapeZoom">Zoom contents</label><input type="range" id="shapeZoom" min="25" max="200" value="100" data-default="100"><input type="number" class="val" id="shapeZoomVal" value="100"></div>
       </div>
     </details>
 
@@ -237,15 +238,15 @@
     <div class="preset-strip-wrap">
       <div class="library-card">
         <button class="library-open" id="openPickerBtn">
-          <span class="library-title">Buttons &amp; Sets Library</span>
-          <span class="library-sub">Ready-made buttons and whole sets, plus every design you save</span>
+          <span class="library-title">Open Library</span>
+          <span class="library-sub">Ready-made buttons and sets, plus My Presets</span>
         </button>
         <div class="preset-actions">
           <input type="text" id="presetName" placeholder="Name this design" autocomplete="off">
-          <button class="btn" id="presetSave">Save to My Presets</button>
+          <button class="btn" id="presetSave" title="Saves this design into My Presets, at the top of the Library">Save to My Presets</button>
           <button class="btn ghost" id="presetExport" title="Save all your presets to a file to back up or share">Back Up</button>
           <button class="btn ghost" id="presetImportBtn" title="Load presets from a backup file">Restore</button>
-          <button class="btn ghost" id="shareLink" title="Copy a link that opens this design and set">Share Link</button>
+          <button class="btn ghost" id="shareLink" title="Copies a web link that reopens this exact design and set on any machine - nothing to download">Copy Design Link</button>
           <input type="file" id="presetImportFile" accept=".json" class="hidden">
         </div>
       </div>
@@ -294,7 +295,7 @@
       </div>
     </details>
     <details class="section promo-card" open>
-      <summary>Also by BSK Apps</summary>
+      <summary>More by BSK Apps</summary>
       <div class="section-body">
         <a class="promo-row" href="https://bskapps.com/quickerip/">
           <img src="https://bskapps.com/images/quickip-icon.png" alt="" width="40" height="40">
@@ -304,13 +305,23 @@
           <img src="https://bskapps.com/images/labassistant-icon.png" alt="" width="40" height="40">
           <span class="promo-text"><b>Lab Assistant</b>Auto levels, auto top and tail, and routing for a whole QLab workspace.</span>
         </a>
+        <a class="promo-row" href="https://bskapps.com/targettrace/">
+          <img src="https://bskapps.com/images/targettrace-icon.png" alt="" width="40" height="40">
+          <span class="promo-text"><b>Target Trace</b>Build target curves for Smaart or REW, from scratch or your own measurements.</span>
+        </a>
+        <a class="promo-row" href="https://bskapps.com/fetchpuppy/">
+          <img src="https://bskapps.com/images/fetchpuppy-icon.png" alt="" width="40" height="40">
+          <span class="promo-text"><b>Fetch Puppy</b>Find and save music and video - YouTube, Spotify playlists, TikTok and more.</span>
+        </a>
+        <p class="promo-all"><a href="https://bskapps.com/">See all BSK apps &rarr;</a></p>
       </div>
     </details>
     <details class="section help-card">
       <summary>Help</summary>
       <div class="section-body">
         <p class="hint"><b>One Button:</b> Pick a starting point, then set background, image, text and shape. Download the PNG and drop it into a button's image box in Companion.</p>
-        <p class="hint"><b>Presets:</b> Click "Choose Buttons &amp; Sets" to open the picker. Click a button to add it, or "Add Set" for a whole row. Your own presets sit at the top, marked (user) - double-click a name to rename, x to delete, and adding one brings its name back so you can edit it and Save over it. "Start Fresh" clears everything back to a blank button.</p>
+        <p class="hint"><b>Library:</b> Click "Open Library" for the picker. Click a button to add it, or "Add Set" for a whole row. Your own saved designs sit at the top under My Presets, marked (user) - double-click a name to rename, x to delete, and adding one brings its name back so you can edit it and save over it. "Start Fresh" clears everything back to a blank button.</p>
+        <p class="hint"><b>Save, back up and share:</b> Type a name and "Save to My Presets" keeps the design in this browser. "Back Up" writes all your presets to a file and "Restore" loads one back - worth doing, because clearing your browser data wipes saved presets. "Copy Design Link" copies a web link that reopens this exact design and set on any machine, with no file to send; designs with a large uploaded image are too big for a link, so use Back Up for those.</p>
         <p class="hint"><b>Make a set:</b> Add buttons from the picker, or switch to Custom Set in the "Make a set" card and use "Number Them" to fill the set with a numbered range (PC 1, PC 2... or cue numbers like 1.1 to 1.5). The set shows under the preview.</p>
         <p class="hint"><b>Duplicate:</b> Click the + tile under the preview to copy your button into a set, or drag any button in a set onto the + tile to duplicate it. The picker also adds buttons from any preset into your set.</p>
         <p class="hint"><b>Edit one, some or all:</b> With a set, changes apply to every button by default. Click one to style it alone, Cmd-click or Shift-click to grab a few. Click empty space, or "Edit All", to go back to editing everything.</p>
@@ -324,62 +335,24 @@
         <p class="hint"><b>Shortcuts:</b> Double-click a slider to reset it. Cmd-Z undoes and Cmd-Shift-Z redoes, up to 50 steps back. In a set, Cmd-A selects every button.</p>
       </div>
     </details>
-
-    <section class="more-bsk">
-      <p class="group-label">BSK apps for live production</p>
-      <div class="bsk-grid">
-        <a class="bsk-tile" href="https://bskapps.com/targettrace/">
-          <div class="bsk-tile-head">
-            <img src="https://bskapps.com/images/targettrace-icon.png" alt="Target Trace" width="58" height="58">
-            <div>
-              <h2>Target Trace</h2>
-              <p class="bsk-tile-sub">Target curve editor</p>
-            </div>
-          </div>
-          <p class="bsk-tile-line">Build precise target curves for Smaart or REW - from scratch, your own measurements, or built-in presets.</p>
-          <span class="bsk-tile-meta">Mac</span>
+    <details class="section promo-card" open>
+      <summary>More free tools</summary>
+      <div class="section-body">
+        <a class="promo-row" href="https://bskapps.com/tools/companion/">
+          <img src="https://bskapps.com/images/spotify-module-icon.svg" alt="" width="40" height="40">
+          <span class="promo-text"><b>BSK Spotify for Companion</b>Full Spotify control inside Bitfocus Companion.</span>
         </a>
-        <a class="bsk-tile" href="https://bskapps.com/fetchpuppy/">
-          <div class="bsk-tile-head">
-            <img src="https://bskapps.com/images/fetchpuppy-icon.png" alt="Fetch Puppy" width="58" height="58">
-            <div>
-              <h2>Fetch Puppy</h2>
-              <p class="bsk-tile-sub">Fetch Music &amp; Video</p>
-            </div>
-          </div>
-          <p class="bsk-tile-line">Find and save music and video - YouTube, Spotify playlists, TikTok, and more.</p>
-          <span class="bsk-tile-meta">Mac</span>
+        <a class="promo-row" href="https://bskapps.com/tools/companion/">
+          <img src="https://bskapps.com/images/smaart-module-icon.svg" alt="" width="40" height="40">
+          <span class="promo-text"><b>BSK Smaart for Companion</b>Smaart control with live SPL, inside Bitfocus Companion.</span>
+        </a>
+        <a class="promo-row" href="https://bskapps.com/tools/reaper/">
+          <img src="https://bskapps.com/images/reaper-scripts-icon.svg" alt="" width="40" height="40">
+          <span class="promo-text"><b>REAPER Live Recording Template</b>Templates patched to 128 inputs, safe transport, track-name import.</span>
         </a>
       </div>
+    </details>
 
-      <p class="group-label">More free tools</p>
-      <div class="bsk-grid">
-        <a class="bsk-tile" href="https://bskapps.com/tools/companion/">
-          <div class="bsk-tile-head">
-            <img src="https://bskapps.com/images/spotify-module-icon.svg" alt="BSK Spotify for Companion" width="58" height="58">
-            <img src="https://bskapps.com/images/smaart-module-icon.svg" alt="BSK Smaart for Companion" width="58" height="58">
-            <div>
-              <h2>BSK Companion Modules</h2>
-              <p class="bsk-tile-sub">Spotify &amp; Smaart</p>
-            </div>
-          </div>
-          <p class="bsk-tile-line">Full Spotify control, and Smaart control with live SPL, inside Bitfocus Companion.</p>
-          <span class="bsk-tile-meta">Free</span>
-        </a>
-        <a class="bsk-tile" href="https://bskapps.com/tools/reaper/">
-          <div class="bsk-tile-head">
-            <img src="https://bskapps.com/images/reaper-scripts-icon.svg" alt="REAPER Live Recording Template and Lua Scripts" width="58" height="58">
-            <div>
-              <h2>REAPER Live Recording Template</h2>
-              <p class="bsk-tile-sub">Full live recording setup for REAPER</p>
-            </div>
-          </div>
-          <p class="bsk-tile-line">Templates patched to 128 inputs, safe transport buttons, track-name import, 1-to-1 autopatch.</p>
-          <span class="bsk-tile-meta">Free</span>
-        </a>
-      </div>
-      <p class="more-bsk-all"><a href="https://bskapps.com/">See all BSK apps &rarr;</a></p>
-    </section>
   </section>
 </main>
 
@@ -399,7 +372,7 @@
   <div class="modal-box">
     <div class="modal-head">
       <button class="btn ghost small" id="resetDesign" title="Clear everything and start with a blank button">Start Fresh</button>
-      <span class="modal-title">Choose Buttons &amp; Sets</span>
+      <span class="modal-title">Buttons, Sets &amp; My Presets</span>
       <button class="btn ghost" id="presetPickerClose">Close</button>
     </div>
     <div class="preset-picker-list" id="presetPickerList"></div>
@@ -411,7 +384,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair, Cockos or Apple. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=135"></script>
-<script type="module" src="js/app.js?v=135"></script>
+<script src="vendor/jszip.min.js?v=136"></script>
+<script type="module" src="js/app.js?v=136"></script>
 </body>
 </html>
