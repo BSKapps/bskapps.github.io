@@ -63,8 +63,7 @@
 
         <div class="demo-wrap">
             <video class="product-video" autoplay loop muted playsinline disablepictureinpicture controlslist="nodownload nofullscreen noremoteplayback">
-                <source src="images/tt-demo.mov" type="video/quicktime">
-                <source src="images/tt-demo.mov" type="video/mp4">
+                <source src="videos/demo.mov?v=1" type="video/mp4">
             </video>
         </div>
 
@@ -145,7 +144,7 @@
         </footer>
     </div>
 
-    <div class="lightbox" id="lightbox"><img src="" alt=""></div>
+    <div class="lightbox" id="lightbox"><img src="" alt=""><span id="lb-counter" class="lightbox-counter"></span></div>
     <button class="lightbox-arrow prev" id="lb-prev">&#8249;</button>
     <button class="lightbox-arrow next" id="lb-next">&#8250;</button>
 
@@ -153,9 +152,11 @@
     let lbImgs = [], lbIdx = 0;
     const lb = document.getElementById('lightbox');
     const lbImg = lb.querySelector('img');
+    const lbCounter = document.getElementById('lb-counter');
     function lbShow(i) {
         lbIdx = (i + lbImgs.length) % lbImgs.length;
         lbImg.src = lbImgs[lbIdx].src;
+        lbCounter.textContent = (lbIdx + 1) + ' / ' + lbImgs.length;
         lb.classList.add('active');
     }
     document.querySelectorAll('.fblock img').forEach((img, i) => {

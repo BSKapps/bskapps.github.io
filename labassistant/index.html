@@ -50,16 +50,16 @@
 
         <p class="meta-line">{{ site.data.content.apps.labassistant.macos }}</p>
 
-        <div class="buy-section">
-            <a href="https://bskapps.lemonsqueezy.com/checkout/buy/efb96677-ac6d-43c1-8697-e465e62d1d00?dark=1&desc=0&media=0" class="buy-btn large lemonsqueezy-button" aria-label="Buy Lab Assistant for {{ site.data.content.apps.labassistant.price }}">Buy - {{ site.data.content.apps.labassistant.price }}</a>
-            <p class="buy-note">One-time purchase · 2 activations</p>
-            <p class="version-line">{{ site.data.content.apps.labassistant.version }} · Released {{ site.data.content.apps.labassistant.released }}</p>
-            <p class="buy-note">May be tax deductible for AV professionals.</p>
-        </div>
-
         <p class="outcome">{{ site.data.content.apps.labassistant.tagline }}</p>
 
         <p class="description">{{ site.data.content.apps.labassistant.description }}</p>
+
+        <div class="buy-section">
+            <a href="https://bskapps.lemonsqueezy.com/checkout/buy/efb96677-ac6d-43c1-8697-e465e62d1d00?dark=1&desc=0&media=0" class="buy-btn large lemonsqueezy-button" aria-label="Buy Lab Assistant for {{ site.data.content.apps.labassistant.price }}">Buy - {{ site.data.content.apps.labassistant.price }}</a>
+            <span class="buy-note">One-time purchase &middot; 2 activations</span>
+            <span class="version-line">{{ site.data.content.apps.labassistant.version }} &middot; Released {{ site.data.content.apps.labassistant.released }}</span>
+            <span class="buy-note">May be tax deductible for AV professionals.</span>
+        </div>
 
         <video class="product-video" autoplay muted loop playsinline>
             <source src="videos/demo.mp4" type="video/mp4">
@@ -179,16 +179,18 @@
             <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
         </footer>
     </div>
-<div class="lightbox" id="lightbox"><img src="" alt=""></div>
+<div class="lightbox" id="lightbox"><img src="" alt=""><span id="lb-counter" class="lightbox-counter"></span></div>
 <button class="lightbox-arrow prev" id="lb-prev">&#8249;</button>
 <button class="lightbox-arrow next" id="lb-next">&#8250;</button>
 <script>
 let lbImgs = [], lbIdx = 0;
 const lb = document.getElementById('lightbox');
 const lbImg = lb.querySelector('img');
+const lbCounter = document.getElementById('lb-counter');
 function lbShow(i) {
     lbIdx = (i + lbImgs.length) % lbImgs.length;
     lbImg.src = lbImgs[lbIdx].src;
+    lbCounter.textContent = (lbIdx + 1) + ' / ' + lbImgs.length;
     lb.classList.add('active');
 }
 document.querySelectorAll('.fblock img').forEach((img, i) => {

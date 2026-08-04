@@ -39,12 +39,12 @@
     },
     "targettrace": {
       "name": "Target Trace",
-      "subtitle": "Target curve editor ",
+      "subtitle": "Target curve editor",
       "tagline": "Build precise target curves for Smaart or REW - from scratch, your own measurements, or built-in presets.",
       "price": "$12.99 USD",
       "macos": "macOS 14.6+",
       "version": "v1.2.1",
-      "released": "09 July 2026",
+      "released": "9 July 2026",
       "features": [
         "Freehand draw mode with pencil cursor",
         "Preset starting shapes - tilt, haystack, X-curve, and more",

@@ -55,9 +55,9 @@
         <p class="description">{{ site.data.content.apps.fetchpuppy.description }}</p>
 
         <div class="buy-section">
-            <a href="https://bskapps.lemonsqueezy.com/checkout/buy/99a45e24-5f0c-4ef7-86a9-be1cf7c555af?dark=1&media=0&desc=0" class="buy-btn large lemonsqueezy-button" aria-label="Buy Fetch Puppy for {{ site.data.content.apps.fetchpuppy.price }}" style="margin-top: 0;">Buy - {{ site.data.content.apps.fetchpuppy.price }}</a>
-            <span class="buy-note">One-time purchase · 2 activations</span>
-            <span class="version-line">{{ site.data.content.apps.fetchpuppy.version }} · Released {{ site.data.content.apps.fetchpuppy.released }}</span>
+            <a href="https://bskapps.lemonsqueezy.com/checkout/buy/99a45e24-5f0c-4ef7-86a9-be1cf7c555af?dark=1&media=0&desc=0" class="buy-btn large lemonsqueezy-button" aria-label="Buy Fetch Puppy for {{ site.data.content.apps.fetchpuppy.price }}">Buy - {{ site.data.content.apps.fetchpuppy.price }}</a>
+            <span class="buy-note">One-time purchase &middot; 2 activations</span>
+            <span class="version-line">{{ site.data.content.apps.fetchpuppy.version }} &middot; Released {{ site.data.content.apps.fetchpuppy.released }}</span>
             <span class="buy-note">May be tax deductible for AV professionals.</span>
         </div>
 
@@ -141,16 +141,18 @@
             <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
         </footer>
     </div>
-<div class="lightbox" id="lightbox"><img src="" alt=""></div>
+<div class="lightbox" id="lightbox"><img src="" alt=""><span id="lb-counter" class="lightbox-counter"></span></div>
 <button class="lightbox-arrow prev" id="lb-prev">&#8249;</button>
 <button class="lightbox-arrow next" id="lb-next">&#8250;</button>
 <script>
 let lbImgs = [], lbIdx = 0;
 const lb = document.getElementById('lightbox');
 const lbImg = lb.querySelector('img');
+const lbCounter = document.getElementById('lb-counter');
 function lbShow(i) {
     lbIdx = (i + lbImgs.length) % lbImgs.length;
     lbImg.src = lbImgs[lbIdx].src;
+    lbCounter.textContent = (lbIdx + 1) + ' / ' + lbImgs.length;
     lb.classList.add('active');
 }
 document.querySelectorAll('.fblock img').forEach((img, i) => {

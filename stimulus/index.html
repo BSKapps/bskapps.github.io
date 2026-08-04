@@ -128,7 +128,7 @@
         <div class="closer">
             <p>Sweeps, noise, GLITS and harmonics, on Mac and iPad.</p>
             <a href="https://apps.apple.com/app/id6792156906" aria-label="Get Stimulus on the App Store" style="text-decoration:none;">
-                <img src="https://tools.applemediaservices.com/api/badges/download-on-the-mac-app-store/black/en-us?size=250x83" alt="Download on the Mac App Store" style="height:44px;">
+                <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store" style="height:44px;">
             </a>
             <span class="buy-note">{{ site.data.content.apps.stimulus.price }} &middot; one purchase covers Mac and iPad</span>
         </div>
@@ -139,7 +139,7 @@
         </footer>
     </div>
 
-    <div class="lightbox" id="lightbox"><img src="" alt=""></div>
+    <div class="lightbox" id="lightbox"><img src="" alt=""><span id="lb-counter" class="lightbox-counter"></span></div>
     <button class="lightbox-arrow prev" id="lb-prev">&#8249;</button>
     <button class="lightbox-arrow next" id="lb-next">&#8250;</button>
 
@@ -147,9 +147,11 @@
     let lbImgs = [], lbIdx = 0;
     const lb = document.getElementById('lightbox');
     const lbImg = lb.querySelector('img');
+    const lbCounter = document.getElementById('lb-counter');
     function lbShow(i) {
         lbIdx = (i + lbImgs.length) % lbImgs.length;
         lbImg.src = lbImgs[lbIdx].src;
+        lbCounter.textContent = (lbIdx + 1) + ' / ' + lbImgs.length;
         lb.classList.add('active');
     }
     document.querySelectorAll('.fblock img').forEach((img, i) => {
