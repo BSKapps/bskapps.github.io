@@ -198,6 +198,38 @@ a.buy-link:hover { color: #76D2A0; }
 .resource-feature:hover strong { color: var(--brand-bright); }
 .resource-feature span { display: block; color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-top: 6px; }
 
+.product-hero {
+    display: block;
+    width: 100%;
+    margin: 36px 0 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: zoom-in;
+}
+
+.fblock {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: center;
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+}
+.fblock:nth-of-type(even) .fb-text { order: 2; }
+.fblock img { width: 100%; display: block; border: 1px solid var(--border); border-radius: 8px; cursor: zoom-in; }
+.fb-kicker { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px; }
+.fb-text h3 { font-size: 1.15rem; color: var(--heading); margin-bottom: 8px; }
+.fb-text p { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
+
+.closer {
+    border-top: 1px solid var(--border);
+    margin-top: 36px;
+    padding-top: 32px;
+    text-align: center;
+}
+.closer p { color: var(--text-muted); margin-bottom: 18px; }
+.closer .buy-note { margin-top: 12px; }
+
 .more { margin-top: 0; }
 .more-link { display: block; padding: 20px 4px; border-top: 1px solid var(--border); text-decoration: none; }
 .more-link strong { color: var(--brand); font-size: 1.05rem; font-weight: 700; }
@@ -455,4 +487,6 @@ footer a:hover { color: var(--heading); }
     .game-icon { width: 64px; height: 64px; }
     .product-header h1 { font-size: 1.8rem; }
     .product-icon { width: 72px; height: 72px; border-radius: 16px; }
+    .fblock { grid-template-columns: 1fr; gap: 18px; padding: 26px 0; }
+    .fblock:nth-of-type(even) .fb-text { order: 0; }
 }

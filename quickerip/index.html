@@ -69,20 +69,61 @@
 
         <p class="description">{{ site.data.content.apps.quickerip.description }}</p>
 
-        <div class="gallery-wrap">
-            <button class="gallery-arrow" onclick="scrollGallery(-1)">&#8249;</button>
-            <div class="screenshot-scroll" id="gallery">
-                <figure><img src="images/frame-1.png" alt="Quicker IP main menu with live vitals"><figcaption>Main Menu</figcaption></figure>
-                <figure><img src="images/frame-2.png" alt="Quicker IP presets editor and preset menu"><figcaption>Presets</figcaption></figure>
-                <figure><img src="images/frame-3.png" alt="Quicker IP static IP setup"><figcaption>Static IP</figcaption></figure>
-                <figure><img src="images/frame-4.png" alt="Quicker IP LAN scan results"><figcaption>LAN Scan</figcaption></figure>
-                <figure><img src="images/frame-5.png" alt="Quicker IP speed test results"><figcaption>Speed Test</figcaption></figure>
-                <figure><img src="images/frame-6.png" alt="Quicker IP Wi-Fi network info"><figcaption>Wi-Fi Info</figcaption></figure>
-                <figure><img src="images/frame-7.png" alt="Quicker IP settings windows"><figcaption>Settings</figcaption></figure>
+        <img class="product-hero" src="images/frame-1.png" alt="Quicker IP menu bar panel with live vitals">
+
+        <div class="fblock">
+            <div class="fb-text">
+                <p class="fb-kicker">One click</p>
+                <h3>Your whole network, in the menu bar</h3>
+                <p>Live vitals and every interface without opening System Settings. Click any IP, subnet, gateway or MAC to copy it.</p>
             </div>
-            <button class="gallery-arrow" onclick="scrollGallery(1)">&#8250;</button>
+            <img src="images/frame-3.png" alt="Quicker IP static IP setup">
         </div>
-        <div id="gallery-counter" class="gallery-counter"></div>
+
+        <div class="fblock">
+            <div class="fb-text">
+                <p class="fb-kicker">Presets</p>
+                <h3>Every rig, one click away</h3>
+                <p>Save, reorder and load IP presets for any device. DHCP, static or DHCP-reserved, per adapter, with your own DNS.</p>
+            </div>
+            <img src="images/frame-2.png" alt="Quicker IP presets editor and preset menu">
+        </div>
+
+        <div class="fblock">
+            <div class="fb-text">
+                <p class="fb-kicker">Scanner</p>
+                <h3>Find the device, then hop to it</h3>
+                <p>See every device on the LAN, with vendor lookup. One-click Join puts you on another subnet without touching the adapter settings.</p>
+            </div>
+            <img src="images/frame-4.png" alt="Quicker IP LAN scan results">
+        </div>
+
+        <div class="fblock">
+            <div class="fb-text">
+                <p class="fb-kicker">Diagnostics</p>
+                <h3>Prove where the problem is</h3>
+                <p>Speed test, bufferbloat, a live packet-loss monitor, and per-adapter error counters you can clear so only new faults show.</p>
+            </div>
+            <img src="images/frame-5.png" alt="Quicker IP speed test results">
+        </div>
+
+        <div class="fblock">
+            <div class="fb-text">
+                <p class="fb-kicker">Interface detail</p>
+                <h3>Every fact about every adapter</h3>
+                <p>Band, signal, security, link speed, duplex and MTU on hover, with duplicate IP and subnet-overlap warnings when something is wrong.</p>
+            </div>
+            <img src="images/frame-6.png" alt="Quicker IP network information panel">
+        </div>
+
+        <div class="fblock">
+            <div class="fb-text">
+                <p class="fb-kicker">Settings</p>
+                <h3>Set it up the way you work</h3>
+                <p>Choose what shows in the menu bar, which adapters appear, and how much detail each one gives you.</p>
+            </div>
+            <img src="images/frame-7.png" alt="Quicker IP settings windows">
+        </div>
 
         <div class="section">
             <h2>Lite vs Pro</h2>
@@ -117,6 +158,12 @@
             </a>
         </div>
 
+        <div class="closer">
+            <p>Try the free Lite version on the App Store, or get the full toolkit.</p>
+            <a href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0" class="buy-btn large lemonsqueezy-button" aria-label="Buy Quicker IP Pro for {{ site.data.content.apps.quickerip.price }}">Buy Quicker IP - {{ site.data.content.apps.quickerip.price }}</a>
+            <span class="buy-note">One-time purchase &middot; 2 activations &middot; 30-day refund</span>
+        </div>
+
         <footer>
             <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
             <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
@@ -136,7 +183,7 @@ function lbShow(i) {
     lbCounter.textContent = (lbIdx + 1) + ' / ' + lbImgs.length;
     lb.classList.add('active');
 }
-document.querySelectorAll('.screenshot-scroll img').forEach((img, i) => {
+document.querySelectorAll('.product-hero, .fblock img').forEach((img, i) => {
     lbImgs.push(img);
     img.addEventListener('click', (e) => { e.stopPropagation(); lbShow(i); });
 });
@@ -149,35 +196,6 @@ document.addEventListener('keydown', e => {
     if (e.key === 'ArrowRight') lbShow(lbIdx + 1);
     if (e.key === 'Escape') lb.classList.remove('active');
 });
-function scrollGallery(dir) {
-    const g = document.getElementById('gallery');
-    const fig = g.querySelector('figure');
-    const w = fig.offsetWidth + 16;
-    const maxScroll = g.scrollWidth - g.clientWidth;
-    if (dir > 0 && g.scrollLeft >= maxScroll - 4) {
-        g.scrollTo({ left: 0, behavior: 'smooth' });
-    } else if (dir < 0 && g.scrollLeft <= 4) {
-        g.scrollTo({ left: maxScroll, behavior: 'smooth' });
-    } else {
-        g.scrollBy({ left: dir * w, behavior: 'smooth' });
-    }
-}
-function updateCounter() {
-    const g = document.getElementById('gallery');
-    const figs = g.querySelectorAll('figure');
-    const w = figs[0].offsetWidth + 16;
-    const idx = Math.round(g.scrollLeft / w) + 1;
-    document.getElementById('gallery-counter').textContent = idx + ' of ' + figs.length;
-}
-document.getElementById('gallery').addEventListener('scroll', updateCounter);
-window.addEventListener('load', updateCounter);
-const g = document.getElementById('gallery');
-let isDown = false, startX, scrollLeft;
-g.addEventListener('mousedown', e => { isDown = true; g.style.cursor = 'grabbing'; startX = e.pageX - g.offsetLeft; scrollLeft = g.scrollLeft; });
-g.addEventListener('mouseleave', () => { isDown = false; g.style.cursor = 'grab'; });
-g.addEventListener('mouseup', () => { isDown = false; g.style.cursor = 'grab'; });
-g.addEventListener('mousemove', e => { if (!isDown) return; e.preventDefault(); const x = e.pageX - g.offsetLeft; g.scrollLeft = scrollLeft - (x - startX); });
-g.style.cursor = 'grab';
 </script>
 </body>
 </html>
