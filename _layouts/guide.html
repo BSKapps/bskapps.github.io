@@ -13,7 +13,7 @@
     <meta property="og:description" content="{{ g.web.ogDescription }}">
     <meta property="og:image" content="{{ g.web.ogImage }}">
     <meta property="og:url" content="{{ g.web.canonical }}">
-    <link rel="stylesheet" href="/css/site.css?v=20260804">
+    <link rel="stylesheet" href="/css/site.css?v=20260804b">
 </head>
 <body>
     <div class="container">
@@ -57,7 +57,7 @@
                         {%- if g.cta.buyHref %}
                         <a class="buy-btn" href="{{ g.cta.buyHref }}" aria-label="{{ g.cta.buyText }}">{{ g.cta.buyText }}</a>
                         {%- endif %}
-                        <a class="cta-link" href="{{ g.cta.href }}">See what it does &rarr;</a>
+                        <a class="cta-link" href="{{ g.cta.href }}">{{ g.cta.linkText | default: "See what it does" }} &rarr;</a>
                     </div>
                     {%- if g.cta.buyNote %}
                     <span class="cta-note">{{ g.cta.buyNote }}</span>

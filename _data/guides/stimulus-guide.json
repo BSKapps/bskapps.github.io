@@ -17,9 +17,7 @@
     "href": "/stimulus/",
     "linkText": "Stimulus",
     "icon": "stimulus-icon.png",
-    "buyText": "Get Stimulus on the App Store",
-    "buyHref": "https://apps.apple.com/app/id6792156906",
-    "buyNote": "App Store - one purchase covers Mac and iPad"
+    "buyNote": "App Store &middot; one purchase covers Mac and iPad"
   },
   "intro": [
     {
