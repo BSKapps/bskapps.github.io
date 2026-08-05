@@ -1,8 +1,8 @@
-import { state, primarySelection, defaultTextLayer } from './state.js?v=137';
-import { renderToDataUrl, renderDesign } from './renderer.js?v=137';
-import { seriesVariants, variantFileName } from './series.js?v=137';
-import { downloadBlob } from './presets.js?v=137';
-import { buildCompanionPage } from './companion.js?v=137';
+import { state, primarySelection, defaultTextLayer } from './state.js?v=138';
+import { renderToDataUrl, renderDesign } from './renderer.js?v=138';
+import { seriesVariants, variantFileName } from './series.js?v=138';
+import { downloadBlob } from './presets.js?v=138';
+import { buildCompanionPage } from './companion.js?v=138';
 
 const SS = 4;
 const STATE_LIFT = [0, 0.05, 0.12];
@@ -161,7 +161,7 @@ function copyPng() {
   navigator.clipboard.write([new ClipboardItem({ 'image/png': blobPromise })]).then(
     () => {
       btn.textContent = 'Copied';
-      setTimeout(() => { btn.textContent = 'Copy PNG'; }, 1200);
+      setTimeout(() => { btn.textContent = 'Copy to Clipboard instead'; }, 1200);
     },
     () => alert('Could not copy the image. The browser blocked clipboard access, or the button failed to render.')
   );

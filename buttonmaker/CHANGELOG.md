@@ -2,6 +2,11 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v138 - 2026-08-04
+- Less scrolling: the header is a third shorter with the title and tagline on one line, and the Open Library block, the top strip and the gaps between blocks are all tighter. The preview now starts 74px higher up the page.
+- "Copy PNG" is now "Copy to Clipboard instead" and sits on its own line under the download buttons, so it no longer reads as a third thing to download.
+- Open Library is a normal-width button instead of stretching the full width of the page.
+
 ## v137 - 2026-08-04
 - Phones: the on-state note no longer appears as a stray sentence at the very top of the page, and Help sits between the apps and tools cards as it does on desktop.
 - Phones: "Make a numbered set" is no longer permanently greyed. It was only lighting up on hover, which a touchscreen never does.
