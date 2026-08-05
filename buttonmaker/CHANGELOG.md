@@ -2,15 +2,18 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v143 - 2026-08-05
+- Fixed the top bar running off the side of the screen on a half-width desktop window.
+
 ## v142 - 2026-08-05
 - Help now opens in a proper window in the middle of the page, from a "Help and tips" button at the foot of the sidebar. Much easier to read than the old card.
 - "More by BSK Apps" and "More free tools" no longer collapse.
-- Phones: the Download and app cards now run the full width of the screen, matching the design cards.
+- Phones: the design cards now run the full width of the screen, matching the Download and app cards.
 - Phones: the top bar buttons are now equal width, two to a row.
-- The name field starts where the preview does, so the top bar lines up with the sidebar.
+- The name field now starts at the line between the sidebar and the main area, so the top bar lines up with the sidebar.
 
 ## v141 - 2026-08-05
-- Open Library now matches the width of the cards below it, so the top bar lines up with the sidebar and the name field starts where the preview does.
+- Open Library now matches the width of the cards below it.
 
 ## v140 - 2026-08-05
 - New Sets tab in the sidebar, next to Background, Icon and Text. It holds "Make a numbered set" and the On state presets, both now full size instead of squeezed into the strip at the foot of the sidebar.
