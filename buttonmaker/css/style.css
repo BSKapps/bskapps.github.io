@@ -108,6 +108,12 @@ body {
 .panel .section summary { pointer-events: none; }
 .panel .section summary::after { display: none; }
 
+.promo-card > summary { pointer-events: none; }
+.promo-card > summary::after { display: none; }
+
+.panel-foot { flex-shrink: 0; margin-top: auto; padding-top: 10px; }
+.panel-foot .btn { width: auto; margin: 0; }
+
 .card-sets .number-range input[type="number"] { flex: 0 0 62px; }
 .card-sets .row .set-go { flex: 0 0 auto; width: auto; margin: 0; }
 .card-onstate .seg { margin: 10px 0; }
@@ -436,6 +442,7 @@ body {
   align-items: baseline;
   gap: 8px;
   flex: 0 0 var(--panel-card-w);
+  margin-right: 22px;
   max-width: 100%;
   text-align: left;
   background: var(--brand);
@@ -492,10 +499,10 @@ body {
 .copy-row .btn { flex: 0 0 auto; width: auto; margin: 0; }
 .download-row .btn { flex: 1 1 0; min-width: 110px; margin: 0; }
 
-.help-card { width: min(860px, 100%); margin-bottom: 0; }
-.help-card .section-body { padding-top: 8px; }
-.help-card .hint { margin: 7px 0; }
-.help-card .hint b { color: var(--text); font-weight: 600; }
+.modal-box.help-box { width: min(760px, 92vw); }
+.help-scroll { overflow-y: auto; padding-right: 4px; }
+.help-scroll .hint { margin: 9px 0; font-size: 0.86rem; }
+.help-scroll .hint b { color: var(--text); font-weight: 600; }
 
 .preview-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 4px; }
 
@@ -916,13 +923,12 @@ body {
   .stage { display: contents; }
   .preview-wrap { order: 2; padding: 16px 12px; margin-top: 0; box-sizing: border-box; width: 100%; }
   #seriesPreview { order: 2; width: 100%; }
-  .panel { order: 3; position: static; max-height: none; height: auto; overflow: visible; border-right: none; border-top: 1px solid var(--border); padding: 16px 12px; }
+  .panel { order: 3; position: static; align-self: stretch; max-height: none; height: auto; overflow: visible; border-right: none; border-top: 1px solid var(--border); padding: 16px 12px; }
   .tab-area { overflow: visible; min-height: 0; }
   .edit-banner { order: 2; width: calc(100% - 24px); margin: 0 12px 12px; }
   .download-card { order: 4; width: calc(100% - 24px); margin: 0 12px 12px; }
   .promo-card { order: 5; width: calc(100% - 24px); margin: 0 12px 12px; }
   .tools-card { order: 7; }
-  .help-card { order: 6; width: calc(100% - 24px); margin: 0 12px 24px; }
   .dead-preset-input { flex: 1 1 100%; }
   .library-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .app-header { position: static; }
@@ -930,6 +936,8 @@ body {
   .tagline { display: none; }
   .header-library { flex-wrap: wrap; }
   .header-library #presetName { flex: 1 1 100%; }
+  .header-library .library-open { flex: 1 1 100%; margin-right: 0; }
+  .header-library .btn { flex: 1 1 calc(50% - 3px); justify-content: center; }
   .undo-row { display: flex; }
   .pos-row::after { width: 90px; height: 90px; right: 12px; }
 }

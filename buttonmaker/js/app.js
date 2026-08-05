@@ -1,12 +1,12 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=141';
-import { renderDesign } from './renderer.js?v=141';
-import { seriesVariants, numberSet } from './series.js?v=141';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=141';
-import { initIconPicker } from './icons.js?v=141';
-import { initPresets, normalizeDesign } from './presets.js?v=141';
-import { initExport } from './export.js?v=141';
-import { initEffects, updateEffectControls } from './effects.js?v=141';
-import { initColorPopover } from './colorpicker.js?v=141';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=142';
+import { renderDesign } from './renderer.js?v=142';
+import { seriesVariants, numberSet } from './series.js?v=142';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=142';
+import { initIconPicker } from './icons.js?v=142';
+import { initPresets, normalizeDesign } from './presets.js?v=142';
+import { initExport } from './export.js?v=142';
+import { initEffects, updateEffectControls } from './effects.js?v=142';
+import { initColorPopover } from './colorpicker.js?v=142';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -552,6 +552,16 @@ onChange(() => {
 document.fonts.ready.then(() => emit());
 emit();
 pushHistory();
+
+const helpModal = document.getElementById('helpModal');
+document.getElementById('openHelpBtn').addEventListener('click', () => helpModal.classList.remove('hidden'));
+document.getElementById('helpModalClose').addEventListener('click', () => helpModal.classList.add('hidden'));
+helpModal.addEventListener('click', (e) => {
+  if (e.target === helpModal) helpModal.classList.add('hidden');
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') helpModal.classList.add('hidden');
+});
 
 for (const btn of document.querySelectorAll('.help-toggle')) {
   btn.addEventListener('click', (e) => {
