@@ -139,3 +139,65 @@ Priority order: Quicker IP (menu bar, IP switch, LAN scan), Target Trace (draw a
 - **/admin Analytics** - per-page visits, per-product orders and conversion, Button Maker click-throughs. Read the Button Maker number as a rate, not a count: it was roughly 170 clicks from 1210 visits over 90 days, about 14%.
 - **LemonSqueezy custom data** - every article and closer checkout link now carries `checkout[custom][src]`, so orders record which page produced them. Values look like `article-smaart-target-curves`, `guide-target-trace`, `product-page-closer`.
 - **Search Console** - sort by impressions, not clicks. Anything ranking 5 to 15 with impressions is traffic already earned and not captured.
+
+---
+
+## 7. Listening - bring the questions to you
+
+Three mechanisms, none of them paid. RSS does Reddit posts, F5Bot does Reddit comments, Google Alerts does the public forums. Manual reading covers what no keyword reaches.
+
+Marketing spend on this is zero and stays zero until something here produces a sale.
+
+### The RSS wall (Reddit posts) - do this one first
+
+Every Reddit search has an RSS feed. Verified working 2026-08-05:
+
+`https://www.reddit.com/search.rss?q=QUERY&sort=new&t=week`
+
+Point them at NetNewsWire (free, Mac and iPhone, no account). This beats any keyword tool on the free tier because there are no slots, no daily caps, and Reddit's own search syntax gives real boolean and `subreddit:` scoping. It is also not email, so it never becomes an inbox to avoid.
+
+URL-encode the query. Feeds to add:
+
+- [ ] **Target Trace / Stimulus** - `subreddit:livesound (smaart OR "target curve" OR "house curve")`
+- [ ] **Lab Assistant** - `(subreddit:livesound OR subreddit:techtheatre) qlab`
+- [ ] **Quicker IP** - `(subreddit:livesound OR subreddit:CommercialAV OR subreddit:VIDEOENGINEERING) (igmp OR "dante controller" OR "static ip" OR ptp)`
+- [ ] **Fetch Puppy** - `yt-dlp OR "youtube to mp3" OR "4k video downloader"`
+- [ ] **Button Maker** - `subreddit:StreamDeck (icons OR "button design" OR bitfocus)`
+- [ ] **Brand watch** - `bskapps OR "quicker ip" OR "target trace" OR "fetch puppy"`
+
+Two things to know. Reddit rate-limits bursts, so a normal reader interval is fine but do not hammer it. And the `subreddit:` scoping above is standard Reddit search syntax but was not verified live, because the test IP hit a 429 mid-check - confirm each feed returns hits when you add it.
+
+### F5Bot (Reddit comments only)
+
+Free tier is roughly five keywords, which is useless as general coverage. It has exactly one job here: **comments**. Reddit search indexes posts, not comments, and comments are where "what should I use for this" actually gets answered.
+
+So use the free `no-posts` flag on every keyword and it becomes the comment layer with zero overlap against the RSS wall. Sign up at https://f5bot.com.
+
+- [ ] `smaart no-posts`
+- [ ] `qlab no-posts`
+- [ ] `yt-dlp no-posts`
+- [ ] `igmp querier no-posts`
+- [ ] `stream deck icons no-posts`
+
+Matching is literal case-insensitive substring, sitewide, no wildcards or regex, with a daily alert cap per keyword. Good at nouns, useless at intents - nobody types "auto set levels" or "trim silence" as a phrase. That is also why bare "dante", "av", "companion", "elgato" and "level" are not here: one noisy word eats its own cap by mid-morning. `rew` needs the `whole` flag and is still not worth a slot.
+
+If a comment thread ever turns into an actual sale, Silver at $9.99/month buys 20 slots and the queue is: `quickerip` and `quicker ip` (both spellings, substring matching will not join them), `fetch puppy`, `target trace`, `bskapps`, `dante controller`, `rational acoustics`, `audinate`, `ptp grandmaster`, `self-assigned ip`, `house curve`, `target curve`, `bitfocus`, `companion button`, `streamdeck icons`. Not before.
+
+### Google Alerts (the public forums)
+
+F5Bot cannot see vBulletin boards, which is every forum in section 1. Google Alerts can, because they are public and indexed. Slower - hours to days, and indexed pages only - but it reaches phrasings F5Bot's literal matching never will.
+
+One alert per query at https://google.com/alerts:
+
+- [ ] `site:forums.rationalacoustics.com (target curve OR house curve OR trace)`
+- [ ] `site:forum.cockos.com (live recording OR multitrack template)`
+- [ ] `site:community.audinate.com (igmp OR querier OR ptp OR "static ip")`
+- [ ] `site:prosoundweb.com (smaart OR "target curve")`
+- [ ] `site:controlbooth.com qlab`
+- [ ] `bskapps OR "quicker ip" OR "target trace" OR "fetch puppy"` - unscoped brand watch outside Reddit
+
+Both those forums run vBulletin, which will email on new posts if you subscribe to a subforum. Higher volume than an alert, but instant and complete. Worth it for Rational Acoustics.
+
+### Manual, twice a week
+
+The concept-shaped stuff no keyword reaches. Ten minutes on r/livesound and r/techtheatre, sorted new, beats any keyword list for "someone is describing a problem my app solves". Facebook groups are the same job and there is no tool for them at all - notifications set to All Posts on four or five groups is the only mechanism that works.
