@@ -2,10 +2,10 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
-## v138 - 2026-08-04
-- Less scrolling: the header is a third shorter with the title and tagline on one line, and the Open Library block, the top strip and the gaps between blocks are all tighter. The preview now starts 74px higher up the page.
-- "Copy PNG" is now "Copy to Clipboard instead" and sits on its own line under the download buttons, so it no longer reads as a third thing to download.
-- Open Library is a normal-width button instead of stretching the full width of the page.
+## v139 - 2026-08-04
+- The header and the Library now sit in one bar that stays put while you scroll, so your buttons and controls get the rest of the screen.
+- Much less scrolling to reach anything: everything above the preview is tighter, and the preview starts near the top of the page.
+- "Copy PNG" is now "Copy to Clipboard", on its own line so it no longer looks like a third download button.
 
 ## v137 - 2026-08-04
 - Phones: the on-state note no longer appears as a stray sentence at the very top of the page, and Help sits between the apps and tools cards as it does on desktop.
@@ -39,6 +39,7 @@ Internal version log. The app version lives in js/state.js (APP_VERSION), index.
 - On states: pick a colour for your on state. White, amber, green or red now sets the colour used by Tint, Dot and the new Colour treatment, so a red tint or an amber dot is finally possible. Highlight and Invert have no colour of their own, so the swatches grey out for those.
 - Colour: a new on state that swaps the whole background and puts the text and icons in black or white, whichever reads on it.
 - The Looks card has gone. It was eight background swatches that also rewrote your font behind your back.
+- Fixed your set being destroyed when you switched away to a single button.
 - Colour and Invert share a line in the Icon and Text cards, so there is less to scroll past.
 
 ## v133 - 2026-08-04

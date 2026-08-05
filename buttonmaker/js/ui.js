@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, editTarget, editTargets, buttonCount } from './state.js?v=138';
-import { triggerIconUpload } from './icons.js?v=138';
-import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=138';
-import { noteDesignsEdited } from './effects.js?v=138';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, editTarget, editTargets, buttonCount } from './state.js?v=139';
+import { triggerIconUpload } from './icons.js?v=139';
+import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=139';
+import { noteDesignsEdited } from './effects.js?v=139';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();

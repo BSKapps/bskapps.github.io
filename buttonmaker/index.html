@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://bskapps.com; connect-src 'self' https://api.iconify.design https://cloudflareinsights.com; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="bm-version" content="138">
+<meta name="bm-version" content="139">
 <title>BSK Button Maker - Free Companion, Stream Deck, REAPER and App Icon Designer</title>
 <meta name="description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars, plus app icons. Icon library, presets, button sets, PNG, Companion page and REAPER toolbar export.">
 <meta property="og:title" content="BSK Button Maker">
@@ -41,15 +41,30 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&family=Archivo+Black&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=138">
+<link rel="stylesheet" href="css/style.css?v=139">
 </head>
 <body>
 <header class="app-header">
-  <div class="brand">
-    <a href="/" title="BSK Apps home"><img src="images/bsk-logo-small.png" alt="BSK Apps" width="26" height="26"></a>
-    <h1>BSK Button Maker</h1>
+  <div class="header-top">
+    <div class="brand">
+      <a href="/" title="BSK Apps home"><img src="images/bsk-logo-small.png" alt="BSK Apps" width="24" height="24"></a>
+      <h1>BSK Button Maker</h1>
+    </div>
+    <p class="tagline">Free button designer for Bitfocus Companion, Stream Deck and REAPER, plus app icons</p>
+    <button class="btn ghost small" id="resetDesignStep" title="Clear everything and start with a blank button">Start Fresh</button>
   </div>
-  <p class="tagline">Free button designer for Bitfocus Companion, Stream Deck and REAPER, plus app icons</p>
+  <div class="header-library">
+    <button class="library-open" id="openPickerBtn">
+      <span class="library-title">Open Library</span>
+      <span class="library-sub">Buttons, sets and My Presets</span>
+    </button>
+    <input type="text" id="presetName" placeholder="Name this design" autocomplete="off">
+    <button class="btn" id="presetSave" title="Saves this design into My Presets, at the top of the Library">Save to My Presets</button>
+    <button class="btn ghost" id="presetExport" title="Save all your presets to a file to back up or share">Back Up</button>
+    <button class="btn ghost" id="presetImportBtn" title="Load presets from a backup file">Restore</button>
+    <button class="btn ghost" id="shareLink" title="Copies a web link that reopens this exact design and set on any machine - nothing to download">Copy Design Link</button>
+    <input type="file" id="presetImportFile" accept=".json" class="hidden">
+  </div>
 </header>
 
 <main class="layout">
@@ -235,25 +250,6 @@
   </aside>
 
   <section class="stage">
-    <div class="preset-strip-wrap">
-      <div class="library-card">
-        <button class="library-open" id="openPickerBtn">
-          <span class="library-title">Open Library</span>
-          <span class="library-sub">Ready-made buttons and sets, plus My Presets</span>
-        </button>
-        <div class="preset-actions">
-          <input type="text" id="presetName" placeholder="Name this design" autocomplete="off">
-          <button class="btn" id="presetSave" title="Saves this design into My Presets, at the top of the Library">Save to My Presets</button>
-          <button class="btn ghost" id="presetExport" title="Save all your presets to a file to back up or share">Back Up</button>
-          <button class="btn ghost" id="presetImportBtn" title="Load presets from a backup file">Restore</button>
-          <button class="btn ghost" id="shareLink" title="Copies a web link that reopens this exact design and set on any machine - nothing to download">Copy Design Link</button>
-          <input type="file" id="presetImportFile" accept=".json" class="hidden">
-        </div>
-      </div>
-      <div class="fresh-row">
-        <button class="btn ghost small" id="resetDesignStep" title="Clear everything and start with a blank button">Start Fresh</button>
-      </div>
-    </div>
     <canvas id="miniPreview" width="144" height="144" aria-hidden="true"></canvas>
     <div class="preview-wrap">
       <div class="preview-frame">
@@ -386,7 +382,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair, Cockos or Apple. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=138"></script>
-<script type="module" src="js/app.js?v=138"></script>
+<script src="vendor/jszip.min.js?v=139"></script>
+<script type="module" src="js/app.js?v=139"></script>
 </body>
 </html>

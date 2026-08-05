@@ -1,7 +1,7 @@
-import { state, emit, deepClone, dotLayer } from './state.js?v=138';
-import { seriesVariants } from './series.js?v=138';
-import { mixHex, isLightColor } from './color.js?v=138';
-import { releaseSelection, selectListItem } from './ui.js?v=138';
+import { state, emit, deepClone, dotLayer } from './state.js?v=139';
+import { seriesVariants } from './series.js?v=139';
+import { mixHex, isLightColor } from './color.js?v=139';
+import { releaseSelection, selectListItem } from './ui.js?v=139';
 
 export const EFFECT_DEFAULTS = {
   tint: { type: 'tint', color: '#1f9d3a', strength: 40, elements: { bg: true, icon: true, text: true } },
@@ -169,7 +169,10 @@ export function noteDesignsEdited(designs) {
 }
 
 export function updateEffectControls() {
-  if (lit && (state.series.mode !== 'list' || !lit.targets.every((it) => state.series.items.includes(it)))) {
+  if (state.series.mode !== 'list') {
+    lit = null;
+    lastVal = null;
+  } else if (lit && !lit.targets.every((it) => state.series.items.includes(it))) {
     lit = null;
     lastVal = null;
   }

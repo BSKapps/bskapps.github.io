@@ -1,8 +1,8 @@
-import { state, primarySelection, defaultTextLayer } from './state.js?v=138';
-import { renderToDataUrl, renderDesign } from './renderer.js?v=138';
-import { seriesVariants, variantFileName } from './series.js?v=138';
-import { downloadBlob } from './presets.js?v=138';
-import { buildCompanionPage } from './companion.js?v=138';
+import { state, primarySelection, defaultTextLayer } from './state.js?v=139';
+import { renderToDataUrl, renderDesign } from './renderer.js?v=139';
+import { seriesVariants, variantFileName } from './series.js?v=139';
+import { downloadBlob } from './presets.js?v=139';
+import { buildCompanionPage } from './companion.js?v=139';
 
 const SS = 4;
 const STATE_LIFT = [0, 0.05, 0.12];
@@ -130,7 +130,7 @@ export function initExport() {
   if (navigator.clipboard && window.ClipboardItem) {
     copyBtn.addEventListener('click', copyPng);
   } else {
-    copyBtn.style.display = 'none';
+    (copyBtn.closest('.copy-row') || copyBtn).style.display = 'none';
   }
   document.getElementById('exportZip').addEventListener('click', exportZip);
   document.getElementById('exportCompanion').addEventListener('click', exportCompanion);
