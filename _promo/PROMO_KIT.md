@@ -163,6 +163,7 @@ URL-encode the query. Feeds to add:
 - [ ] **Quicker IP** - `(subreddit:livesound OR subreddit:CommercialAV OR subreddit:VIDEOENGINEERING) (igmp OR "dante controller" OR "static ip" OR ptp)`
 - [ ] **Fetch Puppy** - `yt-dlp OR "youtube to mp3" OR "4k video downloader"`
 - [ ] **Button Maker** - `subreddit:StreamDeck (icons OR "button design" OR bitfocus)`
+- [ ] **Lab Assistant, the licence question** - `qlab (license OR licence OR "worth it" OR free)` - highest-intent feed in the wall. Unlicensed QLab users doing by hand what a licence automates are Lab Assistant's buyers: price-sensitive, already frustrated, and $14.99 against a QLab licence at multiples of that.
 - [ ] **Brand watch** - `bskapps OR "quicker ip" OR "target trace" OR "fetch puppy"`
 
 Two things to know. Reddit rate-limits bursts, so a normal reader interval is fine but do not hammer it. And the `subreddit:` scoping above is standard Reddit search syntax but was not verified live, because the test IP hit a 429 mid-check - confirm each feed returns hits when you add it.
