@@ -1,5 +1,7 @@
 :root {
   color-scheme: dark;
+  --panel-w: max(390px, 32vw);
+  --panel-card-w: calc(var(--panel-w) - 44px);
   --bg: #1B1B1F;
   --card: #343B4A;
   --card-hover: #3B4251;
@@ -72,7 +74,7 @@ body {
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(390px, 32%) 1fr;
+  grid-template-columns: var(--panel-w) 1fr;
   gap: 0;
   min-height: calc(100vh - 116px);
 }
@@ -433,7 +435,7 @@ body {
   display: inline-flex;
   align-items: baseline;
   gap: 8px;
-  flex: 0 0 auto;
+  flex: 0 0 var(--panel-card-w);
   max-width: 100%;
   text-align: left;
   background: var(--brand);
