@@ -1,12 +1,12 @@
-import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, editTarget, editTargets, buttonCount } from './state.js?v=139';
-import { triggerIconUpload } from './icons.js?v=139';
-import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=139';
-import { noteDesignsEdited } from './effects.js?v=139';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, editTarget, editTargets, buttonCount } from './state.js?v=140';
+import { triggerIconUpload } from './icons.js?v=140';
+import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=140';
+import { noteDesignsEdited } from './effects.js?v=140';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
 
-const PANEL_TABS = { bg: ['card-bg', 'card-shape'], icon: ['card-image'], text: ['card-text'] };
+const PANEL_TABS = { bg: ['card-bg', 'card-shape'], icon: ['card-image'], text: ['card-text'], sets: ['card-sets', 'card-onstate'] };
 
 function showPanelTab(key) {
   for (const [tab, cards] of Object.entries(PANEL_TABS)) {

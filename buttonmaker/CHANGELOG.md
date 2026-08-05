@@ -2,6 +2,11 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v140 - 2026-08-05
+- New Sets tab in the sidebar, next to Background, Icon and Text. It holds "Make a numbered set" and the On state presets, both now full size instead of squeezed into the strip at the foot of the sidebar.
+- On state is open and ready to use, no longer folded away, and its note about what the presets will do now sits with the buttons it describes.
+- Phones: that note no longer floats on its own under the button strip, and the sidebar cards line up with the Download card.
+
 ## v139 - 2026-08-04
 - The header and the Library now sit in one bar that stays put while you scroll, so your buttons and controls get the rest of the screen.
 - Much less scrolling to reach anything: everything above the preview is tighter, and the preview starts near the top of the page.
