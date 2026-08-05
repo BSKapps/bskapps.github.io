@@ -173,11 +173,15 @@ Free tier is roughly five keywords, which is useless as general coverage. It has
 
 So use the free `no-posts` flag on every keyword and it becomes the comment layer with zero overlap against the RSS wall. Sign up at https://f5bot.com.
 
-- [ ] `smaart no-posts`
-- [ ] `qlab no-posts`
-- [ ] `yt-dlp no-posts`
-- [ ] `igmp querier no-posts`
-- [ ] `stream deck icons no-posts`
+**Watch tool names, not topics.** In comments people do not describe a problem, they name the thing they are recommending - "level playing field" in a thread about setting levels. Every hit is someone being actively told what to use, in a thread where your app is the alternative. That is the whole value of the comment layer, and topic words waste it.
+
+- [ ] `level playing field no-posts` - Lab Assistant's territory
+- [ ] `downie no-posts` - the Mac downloader everyone recommends, Fetch Puppy's thread
+- [ ] `yt-dlp no-posts` - same thread, other half
+- [ ] `dante controller no-posts` - named constantly, and Quicker IP is usually what they needed
+- [ ] `tracebook no-posts` - Nathan Lively's, the Target Trace audience. `subaligner` if the other proves quiet.
+
+Add more QLab and Smaart tool names as they come up in threads - that list is worth more than any topic keyword and only comes from reading the rooms.
 
 Matching is literal case-insensitive substring, sitewide, no wildcards or regex, with a daily alert cap per keyword. Good at nouns, useless at intents - nobody types "auto set levels" or "trim silence" as a phrase. That is also why bare "dante", "av", "companion", "elgato" and "level" are not here: one noisy word eats its own cap by mid-morning. `rew` needs the `whole` flag and is still not worth a slot.
 
