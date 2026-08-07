@@ -952,14 +952,14 @@ body {
   border-radius: 50%;
   border: 1px solid var(--border-strong);
   background: none;
-  color: var(--text-muted);
+  color: var(--muted);
   font-size: 0.75rem;
   font-weight: 700;
   line-height: 1;
   cursor: pointer;
   flex: none;
 }
-.help-toggle:hover { color: var(--text); border-color: var(--text-muted); }
+.help-toggle:hover { color: var(--text); border-color: var(--muted); }
 .section:not(.hints-hidden) .help-toggle { background: var(--brand); border-color: var(--brand); color: #fff; }
 .section.hints-hidden .section-body > .hint:not(#exportSummary) { display: none; }
 

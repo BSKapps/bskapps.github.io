@@ -1,4 +1,4 @@
-import { invertHex } from './color.js?v=143';
+import { invertHex } from './color.js?v=144';
 
 const imageCache = new Map();
 const CACHE_MAX = 80;
@@ -342,6 +342,14 @@ export async function renderDesign(canvas, design, opts = {}) {
     } else if (allEdges) {
       ctx.strokeRect(bw / 2, bw / 2, size - bw, size - bw);
     } else {
+      ctx.save();
+      if (design.shape.squircle) {
+        squirclePath(ctx, size / 2, size / 2, size / 2, size / 2);
+        ctx.clip();
+      } else if (radius > 0) {
+        roundedPath(ctx, 0, 0, size, size, radius);
+        ctx.clip();
+      }
       const o = bw / 2;
       ctx.beginPath();
       if (e.top) { ctx.moveTo(0, o); ctx.lineTo(size, o); }
@@ -349,6 +357,7 @@ export async function renderDesign(canvas, design, opts = {}) {
       if (e.left) { ctx.moveTo(o, 0); ctx.lineTo(o, size); }
       if (e.right) { ctx.moveTo(size - o, 0); ctx.lineTo(size - o, size); }
       ctx.stroke();
+      ctx.restore();
     }
   }
 

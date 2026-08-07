@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, editTarget, editTargets, buttonCount } from './state.js?v=143';
-import { triggerIconUpload } from './icons.js?v=143';
-import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=143';
-import { noteDesignsEdited } from './effects.js?v=143';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, editTarget, editTargets, buttonCount } from './state.js?v=144';
+import { triggerIconUpload } from './icons.js?v=144';
+import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=144';
+import { noteDesignsEdited } from './effects.js?v=144';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -590,6 +590,7 @@ export function initUI() {
       n = clampSeriesNum(n);
       state.series[key] = n;
       el.value = n;
+      emit();
     });
   };
   bindSeriesNum('seriesFrom', 'from');

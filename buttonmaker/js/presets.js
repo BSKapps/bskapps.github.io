@@ -1,8 +1,8 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=143';
-import { renderDesign } from './renderer.js?v=143';
-import { numberSet, variantsFor } from './series.js?v=143';
-import { releaseSelection } from './ui.js?v=143';
-import { newId } from './effects.js?v=143';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=144';
+import { renderDesign } from './renderer.js?v=144';
+import { numberSet, variantsFor } from './series.js?v=144';
+import { releaseSelection } from './ui.js?v=144';
+import { newId } from './effects.js?v=144';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -619,6 +619,9 @@ export function initPresets() {
       const data = JSON.parse(await file.text());
       const incoming = Array.isArray(data.presets) ? data.presets : [];
       const valid = incoming.filter((p) => p && p.design && p.design.bg && (p.design.texts || p.design.text));
+      valid.forEach((p, i) => {
+        if (typeof p.name !== 'string' || !p.name.trim()) p.name = 'Imported ' + (i + 1);
+      });
       if (!valid.length) {
         alert('No presets found in that file.');
         return;

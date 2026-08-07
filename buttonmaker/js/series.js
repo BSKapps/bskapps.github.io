@@ -1,4 +1,4 @@
-import { state, deepClone } from './state.js?v=143';
+import { state, deepClone } from './state.js?v=144';
 
 export function hasToken(design) {
   return design.texts.some((t) => t.value && (t.value.includes('{n}') || t.value.includes('{label}')));
@@ -87,7 +87,7 @@ export function variantsFor(base, series) {
           for (const t of d.texts) t.color = item.color;
         }
       }
-      variants.push({ design: d, label: item.label || String(i + 1), companionText: firstText(d) });
+      variants.push({ design: d, label: item.label || String(i + 1), companionText: variantText(d, tokens) });
     });
   } else {
     const d = deepClone(base);
@@ -96,7 +96,7 @@ export function variantsFor(base, series) {
       const n = s.from === undefined ? 1 : Math.min(s.from, s.to);
       substituteLayers(d, n, firstLabel);
     }
-    variants.push({ design: d, label: '', companionText: firstText(d) });
+    variants.push({ design: d, label: '', companionText: variantText(d, tokens) });
   }
 
   return variants;
@@ -111,6 +111,11 @@ function substituteLayers(design, n, label) {
 function firstText(design) {
   const t = (design.texts || []).find((l) => l.value);
   return t ? t.value : '';
+}
+
+function variantText(design, tokens) {
+  if (!tokens) return firstText(design);
+  return (design.texts || []).map((l) => l.value).filter(Boolean).join(' ');
 }
 
 function substitute(text, n, label) {
