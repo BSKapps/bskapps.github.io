@@ -39,25 +39,6 @@ h1 { font-size: 2.2rem; font-weight: 700; color: var(--heading); margin-bottom: 
 
 a.app-card { display: block; text-decoration: none; color: inherit; }
 
-.app {
-    position: relative;
-    background: var(--card);
-    border: 1px solid var(--border-strong);
-    border-radius: 10px;
-    padding: 28px 32px;
-    margin-bottom: 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
-    transition: background 0.15s, border-color 0.15s;
-    cursor: pointer;
-}
-.app-card:hover .app { background: var(--card-hover); border-color: var(--border-strong); }
-
-.app h2 { font-size: 1.35rem; color: var(--heading); margin-bottom: 4px; }
-.app h2 a { color: inherit; text-decoration: none; }
-.app .subtitle { color: var(--text-muted); font-size: 0.95rem; }
-.app .outcome { color: var(--text); font-size: 1.02rem; font-weight: 600; line-height: 1.4; margin: 16px 0 10px; }
-.app p { line-height: 1.6; color: var(--text-muted); }
-
 .meta-line {
     font-size: 0.72rem;
     font-weight: 600;
@@ -66,26 +47,6 @@ a.app-card { display: block; text-decoration: none; color: inherit; }
     color: var(--text-muted);
     margin-bottom: 4px;
 }
-
-.app-header { display: flex; align-items: center; gap: 16px; padding-right: 80px; }
-.app-icon { width: 64px; height: 64px; border-radius: 14px; }
-
-.corner-link {
-    position: absolute;
-    top: 24px;
-    right: 24px;
-    color: var(--brand);
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 6px 10px;
-    border-radius: 8px;
-    transition: color 0.15s;
-}
-.corner-link:hover { color: var(--brand-bright); }
 
 .buy-btn {
     display: inline-block;
@@ -198,21 +159,6 @@ iframe[src*="lemonsqueezy.com"] {
 .tile-line { color: var(--text); font-size: 0.95rem; font-weight: 600; line-height: 1.4; margin: 14px 0 16px; }
 .tile-foot { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: auto; }
 .tile-meta { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-on-card); }
-.tile-note { display: inline-block; color: var(--text-on-card); font-size: 0.8rem; text-decoration: none; margin-top: 8px; }
-.tile-note:hover { color: var(--heading); }
-
-
-.resource-feature {
-    display: block;
-    margin-top: 40px;
-    padding: 20px 4px;
-    border-top: 1px solid var(--border);
-    text-decoration: none;
-}
-.resource-feature strong { display: block; color: var(--brand); font-size: 1.2rem; font-weight: 700; }
-.resource-feature:hover strong { color: var(--brand-bright); }
-.resource-feature span { display: block; color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-top: 6px; }
-
 .product-hero {
     display: block;
     width: 100%;
@@ -373,46 +319,6 @@ article .note { background: var(--card); border: 1px solid var(--border-strong);
 .dot.grey { background: #8e8e93; }
 .dot.red { background: #ff3b30; }
 
-.gallery-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-.gallery-arrow {
-    flex-shrink: 0;
-    background: rgba(255,255,255,0.08);
-    border: none;
-    color: var(--text-muted);
-    font-size: 2rem;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.gallery-arrow:hover { background: rgba(255,255,255,0.16); color: var(--heading); }
-.screenshot-scroll {
-    min-width: 0;
-    flex: 1;
-    display: flex;
-    gap: 16px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    padding: 4px 0 16px;
-    scrollbar-width: none;
-}
-.screenshot-scroll::-webkit-scrollbar { display: none; }
-.screenshot-scroll figure {
-    margin: 0;
-    flex: 0 0 100%;
-    scroll-snap-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.screenshot-scroll img { max-height: 500px; max-width: 100%; object-fit: contain; border-radius: 10px; cursor: pointer; }
-.screenshot-scroll figcaption { text-align: center; color: var(--text-faint); font-size: 0.8rem; margin-top: 6px; }
-.gallery-counter { text-align: center; color: var(--text-faint); font-size: 0.8rem; margin-bottom: 24px; }
-
 .lightbox {
     display: none;
     position: fixed;
@@ -454,7 +360,7 @@ article .note { background: var(--card); border: 1px solid var(--border-strong);
 .compare-table th { color: var(--heading); font-weight: 600; }
 .compare-table th:not(:first-child), .compare-table td:not(:first-child) { text-align: center; }
 .compare-table td:first-child { color: var(--text-muted); }
-.compare-table .check { color: #5FBE8A; font-weight: 600; }
+.compare-table .check { color: var(--accent); font-weight: 600; }
 .compare-table .no { color: var(--text-faint); }
 .compare-table .price-sub { color: var(--text-faint); font-weight: 400; font-size: 0.8rem; }
 

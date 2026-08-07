@@ -6,7 +6,7 @@
     <title>BSK Apps Admin</title>
     <meta name="robots" content="noindex, nofollow">
     <script type="module">
-        import sodium from 'https://cdn.jsdelivr.net/npm/libsodium-wrappers@0.7.15/+esm';
+        import sodium from './vendor/libsodium-wrappers.js';
         window.sodiumReady = sodium.ready.then(function() { window.sodium = sodium; return sodium; });
     </script>
     <style>
@@ -767,16 +767,25 @@ async function init() {
     document.getElementById('login').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
 
-    const res = await ghFetch('GET', 'repos/' + REPO + '/contents/' + DATA_FILE);
-    const file = await res.json();
-    fileSha = file.sha;
-    data = JSON.parse(atob(file.content.replace(/\n/g, '')));
-    originalJSON = JSON.stringify(data);
-    renderForm();
-    restoreTab();
-    restoreRange();
-    restoreCurrency();
-    loadApiKeys();
+    try {
+        const res = await ghFetch('GET', 'repos/' + REPO + '/contents/' + DATA_FILE);
+        if (!res.ok) throw new Error('GitHub returned ' + res.status + ' - the token may be expired or revoked.');
+        const file = await res.json();
+        fileSha = file.sha;
+        data = JSON.parse(decodeURIComponent(escape(atob(file.content.replace(/\n/g, '')))));
+        originalJSON = JSON.stringify(data);
+        renderForm();
+        restoreTab();
+        restoreRange();
+        restoreCurrency();
+        loadApiKeys();
+    } catch (e) {
+        document.getElementById('dashboard').style.display = 'none';
+        document.getElementById('login').style.display = 'flex';
+        const err = document.getElementById('login-error');
+        err.textContent = 'Could not load site content: ' + e.message + ' Sign in again with a valid token.';
+        err.style.display = 'block';
+    }
 }
 
 // ---- FORM ----
@@ -978,9 +987,9 @@ async function saveContent() {
         dirty = false;
         status.textContent = 'Saved! Site updating...';
         tbBtn.textContent = 'Save & Publish';
-        tbBtn.classList.remove('active');
+        tbBtn.classList.toggle('active', dirty || articleDirty);
         tbBtn.disabled = false;
-        setTimeout(function() { document.getElementById('save-bar').classList.remove('show'); }, 3000);
+        setTimeout(function() { if (!dirty && !articleDirty) document.getElementById('save-bar').classList.remove('show'); }, 3000);
     } catch (e) {
         status.textContent = 'Error: ' + e.message;
         tbBtn.textContent = 'Save & Publish';
@@ -1014,9 +1023,9 @@ async function saveArticle() {
         articleDirty = false;
         status.textContent = 'Saved! Site updating...';
         tbBtn.textContent = 'Save & Publish';
-        tbBtn.classList.remove('active');
+        tbBtn.classList.toggle('active', dirty || articleDirty);
         tbBtn.disabled = false;
-        setTimeout(function() { document.getElementById('save-bar').classList.remove('show'); }, 3000);
+        setTimeout(function() { if (!dirty && !articleDirty) document.getElementById('save-bar').classList.remove('show'); }, 3000);
     } catch (e) {
         status.textContent = 'Error: ' + e.message;
         tbBtn.textContent = 'Save & Publish';

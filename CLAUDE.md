@@ -77,8 +77,8 @@ Lab Assistant's Mint / Processing Modules sections and QIP's Lite vs Pro table a
 
 ## Galleries and lightbox (product pages)
 
-- `.screenshot-scroll` horizontal scroll with grab cursor, `.gallery-arrow` prev/next, `#gallery-counter` "X of Y" populated by `updateCounter()` - never hardcode the count
-- `#lightbox` with `#lb-prev`/`#lb-next`, counter, keyboard left/right/escape, click outside to close
+- Product pages use alternating `.fblock` feature blocks (image + text, `.flip` variant) - the old `.screenshot-scroll`/`.gallery-arrow` carousel is gone
+- `#lightbox` with `#lb-prev`/`#lb-next` (aria-labelled), counter, keyboard left/right/escape, click outside to close; gogames uses its own `.screenshot-row`
 
 ## Homepage tile wrappers (IMPORTANT)
 
