@@ -46,7 +46,7 @@
             "**Spotify** - playlists, albums and tracks. Public links work as-is; private playlists need your own Spotify API credentials (see Settings).",
             "**Apple Music** - playlists, albums and songs, no account needed.",
             "**YouTube** - videos, shorts and playlists. If a pasted link is both a video and a playlist, Fetch Puppy asks whether you want just the video or the whole playlist. Dragging one video out of a playlist skips the question and fetches just that video; use the playlist's own link when you want the lot.",
-            "**Social Media** - TikTok, Instagram, X, Facebook, Reddit, Vimeo, Twitch, Dailymotion, Threads and Snapchat. These need browser cookies (see Settings).",
+            "**Social Media** - TikTok, Instagram, X, Facebook, Reddit, Vimeo, Twitch, Dailymotion, Threads and Snapchat. Public posts download as-is; private and age-restricted ones need browser cookies (see Settings).",
             "**CSV File** - drop a two-column Artist, Title CSV (or click Choose File); each row is matched and downloaded.",
             "**Search** - type a title, get the top matches with thumbnails, then preview any match right in the app (ad-free, full-length playback with fullscreen) before you download. Previewed results stay highlighted so you can find your way back to the one you want."
           ]
@@ -130,7 +130,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "YouTube and the social platforms need cookies from a signed-in browser to download reliably; Video mode in the Spotify, Apple Music and CSV tabs needs them too."
+          "text": "YouTube needs cookies from a signed-in browser to download reliably, and so does Video mode in the Spotify, Apple Music and CSV tabs. Social media posts usually download without them - add them if a private or age-restricted post fails."
         },
         {
           "type": "paragraph",
