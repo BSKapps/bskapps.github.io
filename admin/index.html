@@ -1355,7 +1355,8 @@ function displayStats() {
         document.getElementById('stat-apple-sub').textContent = 'App Store · ' + currentCurrency;
         document.getElementById('stat-apple-proceeds').textContent = appleProceeds != null ? '$' + appleProceeds.toFixed(2) : '--';
         document.getElementById('stat-apple-units').textContent = apple.paid_units != null
-            ? apple.paid_units.toLocaleString() + ' paid · ' + (apple.free_units || 0).toLocaleString() + ' free'
+            ? apple.paid_units.toLocaleString() + ' paid · ' + (apple.free_units || 0).toLocaleString() + ' free · '
+              + (apple.update_units || 0).toLocaleString() + ' updates'
             : (apple.units || 0).toLocaleString();
     } else {
         document.getElementById('stat-apple').textContent = apple ? (apple.error || '--') : '--';
