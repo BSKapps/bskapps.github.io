@@ -79,7 +79,10 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
         zlib.gunzip(res.buffer, function(e, r) { if (e) reject(e); else resolve(r.toString('utf8')); });
     });
     const lines = tsv.split('\n').filter(function(l) { return l.trim(); });
-    if (lines.length < 2) return { units: 0, proceeds_by_currency: {}, sales_by_currency: {} };
+    if (lines.length < 2) {
+        console.log('Apple report ' + frequency + ' ' + reportDate + ': empty report');
+        return { units: 0, proceeds_by_currency: {}, sales_by_currency: {} };
+    }
     const headers = lines[0].split('\t');
     const unitsIdx = headers.indexOf('Units');
     const proceedsIdx = headers.indexOf('Developer Proceeds');
@@ -244,6 +247,15 @@ async function fetchApple(rates) {
             r = await fetchAppleReport(jwt, String(y), 'YEARLY');
         } catch (e) {
             noteFailure('yearly ' + y, e);
+            break;
+        }
+        // The just-ended year has no yearly report until Apple publishes it; its months are still in retention
+        if ((!r || !r.units) && y === thisYear - 1 && now.getMonth() === 0) {
+            const priorMonths = [];
+            for (let m = 0; m < 12; m++) {
+                priorMonths.push(y + '-' + String(m + 1).padStart(2, '0'));
+            }
+            r = sumReports(await Promise.all(priorMonths.map(getMonth)));
         }
         if (r && r.units) { yearly.push(r); misses = 0; } else { misses++; }
     }

@@ -467,6 +467,7 @@
             .range-row { justify-content: space-between; flex-wrap: wrap; }
             .range-btn { flex: 1; text-align: center; padding: 6px 8px; }
             .range-row .currency-btn { flex: 0 0 auto; }
+            #refresh-btn { flex: 0 0 auto; }
             .range-row > span { display: none; }
             .collapse-section[data-key="pages"] .data-table th:nth-child(2),
             .collapse-section[data-key="pages"] .data-table td:nth-child(2) { display: none; }
@@ -522,6 +523,7 @@
                 <div class="section-title" style="margin:0;">Live Stats</div>
                 <button class="range-btn" id="refresh-btn" onclick="refreshStats()">Refresh</button>
                 <span id="stats-updated" style="font-size:0.75rem; color:#8A8A90;"></span>
+                <span id="refresh-status" style="font-size:0.75rem; color:#8A8A90;"></span>
             </div>
             <div class="range-row">
                 <button class="range-btn active" data-range="1" onclick="setRange(1, this)">24h</button>
@@ -1327,13 +1329,14 @@ function displayStats() {
         document.getElementById('stat-revenue').textContent = lsRevenue != null ? '$' + lsRevenue.toFixed(2) : '$0.00';
         document.getElementById('stat-revenue-sub').textContent = 'LemonSqueezy · ' + currentCurrency;
         document.getElementById('stat-revenue-net').textContent = lsNetRevenue != null ? '$' + lsNetRevenue.toFixed(2) : '--';
-        if (cf && cf.visits > 0) {
-            document.getElementById('stat-conversion').textContent = ((ls.orders / cf.visits) * 100).toFixed(2) + '%';
-        }
+        document.getElementById('stat-conversion').textContent = (cf && cf.visits > 0)
+            ? ((ls.orders / cf.visits) * 100).toFixed(2) + '%'
+            : '--';
     } else {
         document.getElementById('stat-orders').textContent = ls ? ls.error : '--';
         document.getElementById('stat-revenue').textContent = '--';
         document.getElementById('stat-revenue-net').textContent = '--';
+        document.getElementById('stat-conversion').textContent = '--';
     }
 
     const apple = stats.apple && stats.apple[key];
@@ -1356,14 +1359,11 @@ function displayStats() {
     const appleSub = document.getElementById('stat-apple-sub');
     const appleFailures = stats.apple && stats.apple.failures;
     const dataThrough = stats.apple && stats.apple.data_through;
-    const lastMonth = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 2).toISOString().slice(0, 7);
     appleSub.title = '';
+    appleSub.textContent = 'App Store · ' + currentCurrency + (dataThrough ? ' · data through ' + dataThrough : '');
     if (appleFailures && appleFailures.length) {
-        appleSub.textContent = 'App Store · ' + appleFailures.length + ' report(s) unavailable';
+        appleSub.textContent += ' · reports unavailable';
         appleSub.title = appleFailures.join('\n');
-    } else if (dataThrough && dataThrough < lastMonth) {
-        appleSub.textContent = 'App Store · no data since ' + dataThrough;
-        appleSub.title = 'Apple reports no sales after ' + dataThrough + '. Check the vendor number in App Store Connect.';
     }
 }
 
@@ -1508,23 +1508,27 @@ async function loadStats() {
 
 async function refreshStats() {
     const btn = document.getElementById('refresh-btn');
-    const label = document.getElementById('stats-updated');
-    const before = cachedStats && cachedStats.updated;
+    const status = document.getElementById('refresh-status');
+    const before = (cachedStats && cachedStats.updated) || null;
     btn.disabled = true;
     btn.textContent = 'Refreshing';
+    status.textContent = '';
     try {
         const res = await ghFetch('POST', 'repos/' + REPO + '/actions/workflows/fetch-stats.yml/dispatches', { ref: BRANCH });
         if (res.status === 403 || res.status === 404) {
             throw new Error('token needs Actions: Read and write on ' + REPO);
         }
         if (!res.ok) throw new Error('GitHub returned ' + res.status);
-        for (let i = 0; i < 30; i++) {
+        let fresh = false;
+        for (let i = 0; i < 30 && !fresh; i++) {
             await new Promise(function(r) { setTimeout(r, 4000); });
             await loadStats();
-            if (cachedStats && cachedStats.updated !== before) break;
+            const now = (cachedStats && cachedStats.updated) || null;
+            fresh = now != null && now !== before;
         }
+        if (!fresh) status.textContent = 'Still running, try again shortly';
     } catch (e) {
-        label.textContent = 'Refresh failed: ' + e.message;
+        status.textContent = 'Refresh failed: ' + e.message;
     }
     btn.disabled = false;
     btn.textContent = 'Refresh';
