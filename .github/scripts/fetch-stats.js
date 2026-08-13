@@ -62,7 +62,14 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
             const first = (JSON.parse(res.buffer.toString()).errors || [])[0] || {};
             detail = [first.code, first.detail || first.title].filter(Boolean).join(' ');
         } catch (e) {}
-        if (res.status === 404 && /no (sales|reports?) (for|available)/i.test(detail)) return null;
+        if (res.status === 404 && /no (sales|reports?) (for|available)/i.test(detail)) {
+            console.log('Apple report ' + frequency + ' ' + reportDate + ': no sales');
+            return null;
+        }
+        if (res.status === 404 && /not available yet/i.test(detail)) {
+            console.log('Apple report ' + frequency + ' ' + reportDate + ': not published yet');
+            return null;
+        }
         throw new Error('HTTP ' + res.status + ' [' + frequency + ' ' + reportDate + '] ' + detail);
     }
     if (res.status !== 200) throw new Error('Apple API HTTP ' + res.status + ' [' + frequency + ' ' + reportDate + ']');
@@ -91,6 +98,7 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
         const price = (customerPriceIdx >= 0 ? parseFloat(cols[customerPriceIdx]) : 0) || 0;
         salesByCurrency[salesCur] = (salesByCurrency[salesCur] || 0) + price * u;
     }
+    console.log('Apple report ' + frequency + ' ' + reportDate + ': ' + units + ' units');
     return { units, proceeds_by_currency: proceedsByCurrency, sales_by_currency: salesByCurrency };
 }
 
@@ -219,6 +227,27 @@ async function fetchApple(rates) {
     const fyData = await Promise.all(fyMonths.map(getMonth));
     const sfy = sumReports(fyData.concat([currentMonthSum]));
     result['fy'] = convertAmounts(sfy);
+
+    // All time: yearly reports are kept for 10 years, daily/weekly/monthly only 1 year
+    const thisYear = now.getFullYear();
+    const yearly = [];
+    let misses = 0;
+    for (let y = thisYear - 1; y >= thisYear - 10 && misses < 2; y--) {
+        let r = null;
+        try {
+            r = await fetchAppleReport(jwt, String(y), 'YEARLY');
+        } catch (e) {
+            noteFailure('yearly ' + y, e);
+        }
+        if (r && r.units) { yearly.push(r); misses = 0; } else { misses++; }
+    }
+    const ytdMonths = [];
+    for (let m = 0; m < now.getMonth(); m++) {
+        ytdMonths.push(thisYear + '-' + String(m + 1).padStart(2, '0'));
+    }
+    const ytd = await Promise.all(ytdMonths.map(getMonth));
+    result['all'] = convertAmounts(sumReports(yearly.concat(ytd, [currentMonthSum])));
+
     if (failures.length) result.failures = failures;
 
     return result;
@@ -574,6 +603,10 @@ async function main() {
         }
     }
 
+    if (LS_KEY) {
+        stats.lemonsqueezy['all'] = lsError ? { error: lsError } : computeLS(lsOrders, 100000);
+    }
+
     let exchangeRates = {};
     try {
         exchangeRates = await fetchExchangeRates();
@@ -599,7 +632,7 @@ async function main() {
             stats.apple = await fetchApple(exchangeRates);
         } catch (e) {
             console.error('Apple error:', e.message);
-            for (const key of ['1d', '7d', '30d', '90d', 'fy']) {
+            for (const key of ['1d', '7d', '30d', '90d', 'fy', 'all']) {
                 stats.apple[key] = { error: e.message };
             }
         }

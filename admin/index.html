@@ -483,7 +483,7 @@
     <div id="login-error">Invalid token, or it lacks access to the required repos and permissions.</div>
     <button class="btn-primary" onclick="login()">Sign In</button>
     <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">Create a fine-grained GitHub token &rarr;</a>
-    <p>Scope it to repositories <strong>bskapps.github.io</strong> and <strong>bsk-stats</strong>, with permissions <strong>Contents: Read and write</strong> and <strong>Secrets: Read and write</strong>. Existing classic repo-scope tokens still work.</p>
+    <p>Scope it to repositories <strong>bskapps.github.io</strong> and <strong>bsk-stats</strong>, with permissions <strong>Contents: Read and write</strong>, <strong>Secrets: Read and write</strong> and <strong>Actions: Read and write</strong> (Actions is what the Refresh button needs). Existing classic repo-scope tokens still work.</p>
 </div>
 
 <!-- DASHBOARD -->
@@ -520,6 +520,7 @@
         <div class="analytics-controls">
             <div style="display:flex; align-items:baseline; gap:10px;">
                 <div class="section-title" style="margin:0;">Live Stats</div>
+                <button class="range-btn" id="refresh-btn" onclick="refreshStats()">Refresh</button>
                 <span id="stats-updated" style="font-size:0.75rem; color:#8A8A90;"></span>
             </div>
             <div class="range-row">
@@ -528,6 +529,7 @@
                 <button class="range-btn" data-range="30" onclick="setRange(30, this)">30d</button>
                 <button class="range-btn" data-range="90" onclick="setRange(90, this)">90d</button>
                 <button class="range-btn" data-range="fy" onclick="setRange('fy', this)">FY</button>
+                <button class="range-btn" data-range="all" onclick="setRange('all', this)">All</button>
                 <span style="color:#8A8A90; margin:0 4px;">|</span>
                 <button class="range-btn currency-btn active" id="cur-usd" onclick="setCurrency('USD', this)">USD</button>
                 <button class="range-btn currency-btn" id="cur-aud" onclick="setCurrency('AUD', this)">AUD</button>
@@ -1236,7 +1238,8 @@ function displayStats() {
     const stats = cachedStats;
     const key = currentKey;
     const isFy = key === 'fy';
-    const ordersLabelSuffix = isFy ? 'FY' : currentRange + 'd';
+    const isAll = key === 'all';
+    const ordersLabelSuffix = isAll ? 'All time' : (isFy ? 'FY' : currentRange + 'd');
     const updated = stats.updated ? new Date(stats.updated).toLocaleString() : '';
     const audRate = (stats.exchange_rates && stats.exchange_rates['AUD']) || 1.55;
 
@@ -1245,13 +1248,14 @@ function displayStats() {
     document.getElementById('sublabel-pageviews').textContent = rangeLabel;
     document.getElementById('sublabel-orders').textContent = rangeLabel;
 
+    if (updated) document.getElementById('stats-updated').textContent = 'Updated ' + updated;
     const cf = stats.cloudflare && stats.cloudflare[key];
     if (cf && !cf.error) {
         document.getElementById('stat-visits').textContent = cf.visits.toLocaleString();
         document.getElementById('stat-pageviews').textContent = cf.pageviews.toLocaleString();
-        if (updated) document.getElementById('stats-updated').textContent = 'Updated ' + updated;
     } else {
         document.getElementById('stat-visits').textContent = cf ? cf.error : '--';
+        document.getElementById('stat-pageviews').textContent = '--';
     }
 
     document.getElementById('sublabel-bm').textContent = rangeLabel;
@@ -1349,6 +1353,13 @@ function displayStats() {
         document.getElementById('stat-apple').textContent = apple ? (apple.error || '--') : '--';
         document.getElementById('stat-apple-proceeds').textContent = '--';
     }
+    const appleFailures = stats.apple && stats.apple.failures;
+    if (appleFailures && appleFailures.length) {
+        document.getElementById('stat-apple-sub').textContent = 'App Store · ' + appleFailures.length + ' report(s) unavailable';
+        document.getElementById('stat-apple-sub').title = appleFailures.join('\n');
+    } else {
+        document.getElementById('stat-apple-sub').title = '';
+    }
 }
 
 function fyDays() {
@@ -1358,14 +1369,17 @@ function fyDays() {
 }
 
 function setRange(days, btn) {
-    if (days === 'fy') {
+    if (days === 'all') {
+        currentRange = 'all';
+        currentKey = 'all';
+    } else if (days === 'fy') {
         currentRange = fyDays();
         currentKey = 'fy';
     } else {
         currentRange = days;
         currentKey = days + 'd';
     }
-    localStorage.setItem('bsk_range', days === 'fy' ? 'fy' : days);
+    localStorage.setItem('bsk_range', days);
     document.querySelectorAll('.range-btn:not(.currency-btn)').forEach(function(b) { b.classList.remove('active'); });
     btn.classList.add('active');
     loadStats();
@@ -1375,7 +1389,10 @@ function restoreRange() {
     const saved = localStorage.getItem('bsk_range') || '1';
     const btn = document.querySelector('.range-btn[data-range="' + saved + '"]');
     if (btn) {
-        if (saved === 'fy') {
+        if (saved === 'all') {
+            currentRange = 'all';
+            currentKey = 'all';
+        } else if (saved === 'fy') {
             currentRange = fyDays();
             currentKey = 'fy';
         } else {
@@ -1482,6 +1499,30 @@ async function loadStats() {
     } catch (e) {
         document.getElementById('stat-visits').textContent = 'Error: ' + e.message;
     }
+}
+
+async function refreshStats() {
+    const btn = document.getElementById('refresh-btn');
+    const label = document.getElementById('stats-updated');
+    const before = cachedStats && cachedStats.updated;
+    btn.disabled = true;
+    btn.textContent = 'Refreshing';
+    try {
+        const res = await ghFetch('POST', 'repos/' + REPO + '/actions/workflows/fetch-stats.yml/dispatches', { ref: BRANCH });
+        if (res.status === 403 || res.status === 404) {
+            throw new Error('token needs Actions: Read and write on ' + REPO);
+        }
+        if (!res.ok) throw new Error('GitHub returned ' + res.status);
+        for (let i = 0; i < 30; i++) {
+            await new Promise(function(r) { setTimeout(r, 4000); });
+            await loadStats();
+            if (cachedStats && cachedStats.updated !== before) break;
+        }
+    } catch (e) {
+        label.textContent = 'Refresh failed: ' + e.message;
+    }
+    btn.disabled = false;
+    btn.textContent = 'Refresh';
 }
 
 // ---- TABS ----
