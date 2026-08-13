@@ -55,13 +55,17 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
         method: 'GET',
         headers: { 'Authorization': 'Bearer ' + jwt, 'Accept': 'application/a-gzip' }
     });
-    if (res.status === 404 || res.status === 400) return null;
     const contentType = res.headers['content-type'] || '';
     if (contentType.includes('json')) {
-        const err = JSON.parse(res.buffer.toString());
-        throw new Error(JSON.stringify((err.errors || [{ detail: res.status }])[0]));
+        let detail = res.buffer.toString().slice(0, 400);
+        try {
+            const first = (JSON.parse(res.buffer.toString()).errors || [])[0] || {};
+            detail = [first.code, first.detail || first.title].filter(Boolean).join(' ');
+        } catch (e) {}
+        if (res.status === 404 && /no (sales|reports?) (for|available)/i.test(detail)) return null;
+        throw new Error('HTTP ' + res.status + ' [' + frequency + ' ' + reportDate + '] ' + detail);
     }
-    if (res.status !== 200) throw new Error('Apple API HTTP ' + res.status);
+    if (res.status !== 200) throw new Error('Apple API HTTP ' + res.status + ' [' + frequency + ' ' + reportDate + ']');
     const tsv = await new Promise(function(resolve, reject) {
         zlib.gunzip(res.buffer, function(e, r) { if (e) reject(e); else resolve(r.toString('utf8')); });
     });
@@ -105,6 +109,11 @@ async function fetchApple(rates) {
     const jwt = generateAppleJWT();
     const result = {};
     const monthlyCache = {};
+    const failures = [];
+    function noteFailure(label, e) {
+        console.error('Apple ' + label + ':', e.message);
+        if (failures.length < 5) failures.push(label + ': ' + e.message);
+    }
 
     function dateStr(daysAgo) {
         const d = new Date(Date.now() - daysAgo * 86400000);
@@ -157,7 +166,7 @@ async function fetchApple(rates) {
         try {
             daily.push(await fetchAppleReport(jwt, dateStr(i), 'DAILY') || empty);
         } catch (e) {
-            console.error('Apple daily d-' + i + ':', e.message);
+            noteFailure('daily d-' + i, e);
             daily.push(empty);
         }
     }
@@ -170,7 +179,7 @@ async function fetchApple(rates) {
         try {
             monthlyCache[m] = await fetchAppleReport(jwt, m, 'MONTHLY') || empty;
         } catch (e) {
-            console.error('Apple monthly ' + m + ':', e.message);
+            noteFailure('monthly ' + m, e);
             monthlyCache[m] = empty;
         }
         return monthlyCache[m];
@@ -184,7 +193,7 @@ async function fetchApple(rates) {
         try {
             currentMonthDaily.push(await fetchAppleReport(jwt, dateStr(i), 'DAILY') || empty);
         } catch (e) {
-            console.error('Apple daily d-' + i + ':', e.message);
+            noteFailure('daily d-' + i, e);
             currentMonthDaily.push(empty);
         }
     }
@@ -210,6 +219,7 @@ async function fetchApple(rates) {
     const fyData = await Promise.all(fyMonths.map(getMonth));
     const sfy = sumReports(fyData.concat([currentMonthSum]));
     result['fy'] = convertAmounts(sfy);
+    if (failures.length) result.failures = failures;
 
     return result;
 }
