@@ -13,6 +13,8 @@ const APPLE_ISSUER_ID = process.env.APPLE_ISSUER_ID;
 const APPLE_VENDOR_NUMBER = process.env.APPLE_VENDOR_NUMBER;
 const APPLE_PRIVATE_KEY = process.env.APPLE_PRIVATE_KEY;
 
+let appleDataThrough = null;
+
 const BUTTONMAKER_PATH = '/buttonmaker/';
 const SOURCE_PATHS = ['/quickerip/', '/labassistant/', '/fetchpuppy/', '/targettrace/', '/buttonmaker/', '/gogames/'];
 
@@ -99,6 +101,10 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
         salesByCurrency[salesCur] = (salesByCurrency[salesCur] || 0) + price * u;
     }
     console.log('Apple report ' + frequency + ' ' + reportDate + ': ' + units + ' units');
+    if (units > 0 && frequency !== 'YEARLY') {
+        const month = reportDate.slice(0, 7);
+        if (!appleDataThrough || month > appleDataThrough) appleDataThrough = month;
+    }
     return { units, proceeds_by_currency: proceedsByCurrency, sales_by_currency: salesByCurrency };
 }
 
@@ -249,6 +255,7 @@ async function fetchApple(rates) {
     result['all'] = convertAmounts(sumReports(yearly.concat(ytd, [currentMonthSum])));
 
     if (failures.length) result.failures = failures;
+    if (appleDataThrough) result.data_through = appleDataThrough;
 
     return result;
 }

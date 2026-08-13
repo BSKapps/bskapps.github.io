@@ -1353,12 +1353,17 @@ function displayStats() {
         document.getElementById('stat-apple').textContent = apple ? (apple.error || '--') : '--';
         document.getElementById('stat-apple-proceeds').textContent = '--';
     }
+    const appleSub = document.getElementById('stat-apple-sub');
     const appleFailures = stats.apple && stats.apple.failures;
+    const dataThrough = stats.apple && stats.apple.data_through;
+    const lastMonth = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 2).toISOString().slice(0, 7);
+    appleSub.title = '';
     if (appleFailures && appleFailures.length) {
-        document.getElementById('stat-apple-sub').textContent = 'App Store · ' + appleFailures.length + ' report(s) unavailable';
-        document.getElementById('stat-apple-sub').title = appleFailures.join('\n');
-    } else {
-        document.getElementById('stat-apple-sub').title = '';
+        appleSub.textContent = 'App Store · ' + appleFailures.length + ' report(s) unavailable';
+        appleSub.title = appleFailures.join('\n');
+    } else if (dataThrough && dataThrough < lastMonth) {
+        appleSub.textContent = 'App Store · no data since ' + dataThrough;
+        appleSub.title = 'Apple reports no sales after ' + dataThrough + '. Check the vendor number in App Store Connect.';
     }
 }
 
