@@ -155,7 +155,6 @@
           "type": "bullets",
           "items": [
             "**Pink** - periodic pink noise for transfer function and RTA, equal energy per octave.",
-            "**Random** - flat-spectrum pseudorandom noise, periodic at the frame.",
             "**Sweep** - a cycle-synchronised log sweep, 20 Hz to 20 kHz, for impulse response and transfer function."
           ]
         },
