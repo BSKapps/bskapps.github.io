@@ -106,17 +106,19 @@ Do NOT add an Articles link to the footer - articles are reached via the homepag
 ## Admin (/admin)
 
 - Single self-contained page, own inline CSS in the site palette (only page not using site.css)
-- GitHub token auth, stored in localStorage (persists across launches, auto-restores on load). Recommended: fine-grained token scoped to bskapps.github.io + bsk-stats with Contents + Secrets read/write; classic repo-scope tokens still work. Edits commit directly to main → deploys live
+- GitHub token auth, stored in localStorage (persists across launches, auto-restores on load). Recommended: fine-grained token scoped to bskapps.github.io + bsk-stats with Contents + Secrets read/write, plus Actions read/write (the Analytics Refresh button dispatches the workflow and 403s without it); classic repo-scope tokens still work. Edits commit directly to main → deploys live
 - Content tab: site title/tagline + per-app fields incl. description and features (see content.json section)
 - Articles tab: edits title/meta description/h1/date/body of article pages (parses markers: `<h1>`, `<p class="date">`, body runs to `<div class="article-cta">` or `</article>` - keep these markers when editing article HTML)
-- Analytics tab: reads stats.json from BSKapps/bsk-stats (hourly Action), ranges 24h/7d/30d/90d/FY, USD/AUD, LS gross/net, Apple sales/proceeds, conversion. API Keys panel writes encrypted GitHub Action secrets (CF_API_TOKEN, LS_API_KEY, APPLE_*)
+- Analytics tab: reads stats.json from BSKapps/bsk-stats (hourly Action), ranges 24h/7d/30d/90d/FY/All, USD/AUD, LS gross/net, Apple sales/proceeds, conversion. API Keys panel writes encrypted GitHub Action secrets (CF_API_TOKEN, LS_API_KEY, APPLE_*)
+- Refresh button dispatches the fetch-stats workflow and polls until stats.json changes, so you do not wait out the hourly cron. All time: LS sums every order, Apple sums YEARLY reports (Apple keeps those 10 years, daily/weekly/monthly only 1 year). Cloudflare has no all-time key, so those tiles read `--`
+- Apple report failures are never recorded as zero sales: the fetcher reads Apple's error body, and `stats.apple.data_through` carries the newest month that actually had units so a stalled feed shows on the Apple tile
 
 ## SEO
 
 - sitemap.xml submitted to Google Search Console
 - Canonical URLs on all pages; og:type on all pages
 - JSON-LD: Organization (homepage), SoftwareApplication (product pages), ItemList (resources/reaper)
-- robots.txt blocks AI training bots, allows Google-Extended, PerplexityBot, Applebot-Extended
+- robots.txt blocks AI training bots, allows Google-Extended, PerplexityBot, Applebot-Extended, and disallows /admin/, /multiviewport/ and /buttonmaker/tests/ for everyone
 - Page titles use hyphens, never em dashes
 
 ## Ads
