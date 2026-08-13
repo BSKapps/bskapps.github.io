@@ -30,5 +30,8 @@ Disallow: /
 
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /multiviewport/
+Disallow: /buttonmaker/tests/
 
 Sitemap: https://bskapps.com/sitemap.xml
