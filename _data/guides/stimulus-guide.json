@@ -120,7 +120,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Three by-ear checks for what is plugged where, and for polarity. Two of them identify a stereo pair: both are 1 kHz on both channels, both always feed both channels, and both want the level at -18 dBFS for the EBU reference."
+          "text": "Four by-ear checks for what is plugged where, whether it is in polarity, and whether it is in time. Two of them identify a stereo pair: both are 1 kHz on both channels, both always feed both channels, and both want the level at -18 dBFS for the EBU reference."
         },
         {
           "type": "bullets",
@@ -131,11 +131,15 @@
         },
         {
           "type": "paragraph",
-          "text": "**Pop** is a positive-going pulse at a set interval for polarity checks. **CLICK** is a short 0.5 ms tick for tweeters and HF sections; **FULL** is the standard 4 ms pulse; **SUB** stretches it to 20 ms so it reads through subwoofers. The first movement is always positive - if your tester or ears say otherwise, something in the chain is flipped."
+          "text": "**Pop** is a positive-going pulse at a set interval for polarity checks. **HF** is a short 0.5 ms pulse for tweeters and HF sections; **FULL** is the standard 4 ms pulse; **SUB** stretches it to 20 ms so it reads through subwoofers. The first movement is always positive - if your tester or ears say otherwise, something in the chain is flipped."
         },
         {
           "type": "paragraph",
-          "text": "The rate slider above the interval speeds the pulse up or slows it down while it runs, shown in beats per minute. Send it through the whole rig as a click track and walk the coverage: where mains and delays are aligned you hear one tick, where they are not it smears or doubles."
+          "text": "**Click** is a sharp broadband transient for checking timing by ear: instant attack, out of the way in a few milliseconds, with no low end to smear the onset. Send it to the whole rig and walk the coverage. Where mains and delays arrive together you hear one click; where they do not it smears or doubles. The rate slider runs from one every five seconds to three a second, shown in beats per minute, and can be dragged while it plays. Set the master **Auto-stop** if you want it to run for a fixed time and stop on its own."
+        },
+        {
+          "type": "paragraph",
+          "text": "Both the Pop and the Click sit on the same rate clock, so either can be sped up or slowed down while it runs without the transient in flight being cut short."
         }
       ]
     },
