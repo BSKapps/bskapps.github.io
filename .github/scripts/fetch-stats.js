@@ -5,9 +5,6 @@ const zlib = require('zlib');
 const CF_ACCOUNT = '304c227c3868c2cd96c3d6a840b7ef13';
 const CF_TOKEN = process.env.CF_API_TOKEN;
 const LS_KEY = process.env.LS_API_KEY;
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const GOOGLE_REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
 const APPLE_KEY_ID = process.env.APPLE_KEY_ID;
 const APPLE_ISSUER_ID = process.env.APPLE_ISSUER_ID;
 const APPLE_VENDOR_NUMBER = process.env.APPLE_VENDOR_NUMBER;
@@ -494,62 +491,6 @@ function computeLS(orders, days) {
     return { orders: ordersCount, revenue: Math.round(revenue * 100) / 100, net_revenue_usd: Math.round(net_revenue_usd * 100) / 100, by_product };
 }
 
-async function getGoogleAccessToken() {
-    const body = new URLSearchParams({
-        client_id: GOOGLE_CLIENT_ID,
-        client_secret: GOOGLE_CLIENT_SECRET,
-        refresh_token: GOOGLE_REFRESH_TOKEN,
-        grant_type: 'refresh_token'
-    }).toString();
-    const res = await request({
-        hostname: 'oauth2.googleapis.com',
-        path: '/token',
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': Buffer.byteLength(body) }
-    }, body);
-    if (!res.body.access_token) throw new Error('Failed to get Google access token');
-    return res.body.access_token;
-}
-
-async function getAdSenseAccountId(accessToken) {
-    const res = await request({
-        hostname: 'adsense.googleapis.com',
-        path: '/v2/accounts',
-        method: 'GET',
-        headers: { 'Authorization': 'Bearer ' + accessToken }
-    });
-    if (res.status !== 200) throw new Error('AdSense accounts error: ' + res.status);
-    const accounts = res.body.accounts || [];
-    if (!accounts.length) throw new Error('No AdSense accounts found');
-    return accounts[0].name;
-}
-
-async function fetchAdSense(days, accessToken, accountName) {
-    const end = new Date().toISOString().split('T')[0];
-    const start = new Date(Date.now() - days * 86400000).toISOString().split('T')[0];
-    const params = new URLSearchParams({
-        'dateRange': 'CUSTOM',
-        'startDate.year': start.split('-')[0],
-        'startDate.month': start.split('-')[1],
-        'startDate.day': start.split('-')[2],
-        'endDate.year': end.split('-')[0],
-        'endDate.month': end.split('-')[1],
-        'endDate.day': end.split('-')[2],
-        'metrics': 'ESTIMATED_EARNINGS,IMPRESSIONS,CLICKS'
-    });
-    const res = await request({
-        hostname: 'adsense.googleapis.com',
-        path: '/v2/' + accountName + '/reports:generate?' + params.toString(),
-        method: 'GET',
-        headers: { 'Authorization': 'Bearer ' + accessToken }
-    });
-    if (res.status !== 200) throw new Error('AdSense API error: ' + res.status + ' ' + JSON.stringify(res.body));
-    const rows = res.body.rows || [];
-    if (!rows.length) return { earnings: 0, clicks: 0 };
-    const vals = rows[0].cells.map(function(c) { return parseFloat(c.value) || 0; });
-    return { earnings: Math.round(vals[0] * 100) / 100, clicks: vals[2] };
-}
-
 function fyDays() {
     const now = new Date();
     const fyStart = new Date(now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1, 6, 1);
@@ -557,18 +498,7 @@ function fyDays() {
 }
 
 async function main() {
-    const stats = { updated: new Date().toISOString(), cloudflare: {}, pages: {}, inhouse: {}, sources: {}, countries: {}, lemonsqueezy: {}, adsense: {}, apple: {} };
-
-    let googleToken = null;
-    let adSenseAccount = null;
-    if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && GOOGLE_REFRESH_TOKEN) {
-        try {
-            googleToken = await getGoogleAccessToken();
-            adSenseAccount = await getAdSenseAccountId(googleToken);
-            console.log('AdSense account:', adSenseAccount);
-        }
-        catch (e) { console.error('Google auth error:', e.message); }
-    }
+    const stats = { updated: new Date().toISOString(), cloudflare: {}, pages: {}, inhouse: {}, sources: {}, countries: {}, lemonsqueezy: {}, apple: {} };
 
     const fyD = fyDays();
     stats.fyDays = fyD;
@@ -632,14 +562,6 @@ async function main() {
                 stats.lemonsqueezy[key] = { error: lsError };
             } else {
                 stats.lemonsqueezy[key] = computeLS(lsOrders, days);
-            }
-        }
-        if (googleToken && adSenseAccount) {
-            try {
-                stats.adsense[key] = await fetchAdSense(days, googleToken, adSenseAccount);
-            } catch (e) {
-                console.error('AdSense ' + key + ' error:', e.message);
-                stats.adsense[key] = { error: e.message };
             }
         }
     }
