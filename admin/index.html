@@ -405,6 +405,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.10);
         }
         .range-row { display: flex; gap: 6px; }
+        .currency-group { display: flex; gap: 6px; }
 
         .section-title {
             font-size: 0.8rem;
@@ -466,7 +467,8 @@
             .analytics-controls { flex-direction: column; align-items: stretch; gap: 10px; }
             .range-row { justify-content: space-between; flex-wrap: wrap; }
             .range-btn { flex: 1; text-align: center; padding: 6px 8px; }
-            .range-row .currency-btn { flex: 0 0 auto; }
+            .currency-group { flex: 0 0 100%; }
+            .currency-group .currency-btn { flex: 1; }
             #refresh-btn { flex: 0 0 auto; }
             .range-row > span { display: none; }
             .collapse-section[data-key="pages"] .data-table th:nth-child(2),
@@ -533,8 +535,10 @@
                 <button class="range-btn" data-range="fy" onclick="setRange('fy', this)">FY</button>
                 <button class="range-btn" data-range="all" onclick="setRange('all', this)">All</button>
                 <span style="color:#8A8A90; margin:0 4px;">|</span>
-                <button class="range-btn currency-btn active" id="cur-usd" onclick="setCurrency('USD', this)">USD</button>
-                <button class="range-btn currency-btn" id="cur-aud" onclick="setCurrency('AUD', this)">AUD</button>
+                <div class="currency-group">
+                    <button class="range-btn currency-btn active" id="cur-usd" onclick="setCurrency('USD', this)">USD</button>
+                    <button class="range-btn currency-btn" id="cur-aud" onclick="setCurrency('AUD', this)">AUD</button>
+                </div>
             </div>
         </div>
         <div id="stats-grid" class="stats-grid">
