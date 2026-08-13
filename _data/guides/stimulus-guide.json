@@ -32,7 +32,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "The editor shows one generator at a time; the rack on the right holds them all. Click a strip to edit it, press **+ Add generator** to spawn another (up to four), and the cross on a strip removes it. Each strip has its own level fader plus **M** (mute), **S** (solo) and the polarity flip. The reset control by the generator label defaults the current mode's own settings without touching the mix."
+          "text": "The editor shows one generator at a time; the rack on the right holds them all. Click a strip to edit it, press **+ Add generator** to spawn another (up to four), and holding a strip - or right-clicking it on a Mac - offers Move Up, Move Down and Remove. Each strip has its own level fader plus **M** (mute), **S** (solo) and the polarity flip. The reset control by the generator label defaults the current mode's own settings without touching the mix."
         },
         {
           "type": "paragraph",
