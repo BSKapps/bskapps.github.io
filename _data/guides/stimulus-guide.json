@@ -135,7 +135,7 @@
         },
         {
           "type": "paragraph",
-          "text": "**Click** is a sharp broadband transient for checking timing by ear: instant attack, out of the way in a few milliseconds, with no low end to smear the onset. Send it to the whole rig and walk the coverage. Where mains and delays arrive together you hear one click; where they do not it smears or doubles. The rate slider runs from one every five seconds to three a second, shown in beats per minute, and can be dragged while it plays. Set the master **Auto-stop** if you want it to run for a fixed time and stop on its own."
+          "text": "**Click** is a sharp broadband click for aligning delays by ear. Send it to two outputs - mains and delays, or delays and fills - and listen where they meet. In sync it is one click; out of sync it smears or doubles."
         },
         {
           "type": "paragraph",
@@ -174,7 +174,7 @@
         },
         {
           "type": "paragraph",
-          "text": "**DIM** ducks the output 20 dB so you can talk over the rig - tap it again, grab the master fader or type a level to restore. Behind the master strip's three-dot button are master fade in/out times and an auto-stop timer that ends playback after a set duration; with **Repeat** on it cycles play and stop until you stop it."
+          "text": "**DIM** ducks the output 20 dB so you can talk over the system - tap it again, grab the master fader or type a level to restore. Behind the master strip's three-dot button are master fade in/out times and an auto-stop timer that ends playback after a set duration; with **Repeat** on it cycles play and stop until you stop it."
         },
         {
           "type": "paragraph",
