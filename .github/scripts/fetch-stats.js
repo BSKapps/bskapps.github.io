@@ -117,13 +117,12 @@ async function fetchAppleReport(jwt, reportDate, frequency, vendor) {
         byType[bucket] = (byType[bucket] || 0) + u;
     }
     console.log('Apple report ' + frequency + ' ' + reportDate + ' [' + vendor + ']: ' + units + ' units (' + paidUnits + ' paid, ' + freeUnits + ' free, ' + updateUnits + ' updates) ' + JSON.stringify(byType));
-    if (units > 0 && frequency !== 'YEARLY') {
+    if (units > 0 && frequency !== 'YEARLY' && vendor === APPLE_VENDORS[0]) {
         const month = reportDate.slice(0, 7);
         if (!appleDataThrough || month > appleDataThrough) appleDataThrough = month;
     }
     return { units, paid_units: paidUnits, free_units: freeUnits, update_units: updateUnits, proceeds_by_currency: proceedsByCurrency, sales_by_currency: salesByCurrency };
 }
-
 
 function sumAppleReports(list) {
     return list.reduce(function(a, r) {
@@ -307,8 +306,9 @@ async function fetchApple(rates) {
             noteFailure('yearly ' + y, e);
             break;
         }
-        // The just-ended year has no yearly report until Apple publishes it; its months are still in retention
-        if ((!r || !r.units) && y === thisYear - 1 && now.getMonth() === 0) {
+        // In January the just-ended year may have no yearly report yet, and a summed
+        // result cannot tell which vendor is missing, so rebuild it from months either way
+        if (y === thisYear - 1 && now.getMonth() === 0) {
             const priorMonths = [];
             for (let m = 0; m < 12; m++) {
                 priorMonths.push(y + '-' + String(m + 1).padStart(2, '0'));
