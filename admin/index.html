@@ -1252,8 +1252,10 @@ function displayStats() {
     const audRate = (stats.exchange_rates && stats.exchange_rates['AUD']) || 1.55;
 
     const rangeLabel = ordersLabelSuffix;
-    document.getElementById('sublabel-visits').textContent = rangeLabel;
-    document.getElementById('sublabel-pageviews').textContent = rangeLabel;
+    // Cloudflare retention is shorter than the sales history, so never call its numbers all time
+    const cfLabel = isAll ? 'Traffic on record' : rangeLabel;
+    document.getElementById('sublabel-visits').textContent = cfLabel;
+    document.getElementById('sublabel-pageviews').textContent = cfLabel;
     document.getElementById('sublabel-orders').textContent = rangeLabel;
 
     if (updated) document.getElementById('stats-updated').textContent = 'Updated ' + updated;
@@ -1266,7 +1268,7 @@ function displayStats() {
         document.getElementById('stat-pageviews').textContent = '--';
     }
 
-    document.getElementById('sublabel-bm').textContent = rangeLabel;
+    document.getElementById('sublabel-bm').textContent = cfLabel;
     const pages = stats.pages && stats.pages[key];
     const pagesTbody = document.getElementById('pages-tbody');
     if (Array.isArray(pages)) {
@@ -1335,7 +1337,7 @@ function displayStats() {
         document.getElementById('stat-revenue').textContent = lsRevenue != null ? '$' + lsRevenue.toFixed(2) : '$0.00';
         document.getElementById('stat-revenue-sub').textContent = 'LemonSqueezy · ' + currentCurrency;
         document.getElementById('stat-revenue-net').textContent = lsNetRevenue != null ? '$' + lsNetRevenue.toFixed(2) : '--';
-        document.getElementById('stat-conversion').textContent = (cf && cf.visits > 0)
+        document.getElementById('stat-conversion').textContent = (!isAll && cf && cf.visits > 0)
             ? ((ls.orders / cf.visits) * 100).toFixed(2) + '%'
             : '--';
     } else {

@@ -577,7 +577,8 @@ async function main() {
         { days: 7, key: '7d' },
         { days: 30, key: '30d' },
         { days: 90, key: '90d' },
-        { days: fyD, key: 'fy' }
+        { days: fyD, key: 'fy' },
+        { days: 400, key: 'all' }
     ];
 
     let lsOrders = null, lsError = null;
@@ -593,7 +594,7 @@ async function main() {
 
     for (const { days, key } of ranges) {
         if (CF_TOKEN) {
-            const cfDays = Math.min(days, 90);
+            const cfDays = key === 'all' ? days : Math.min(days, 90);
             try {
                 stats.cloudflare[key] = await fetchCF(cfDays);
             } catch (e) {
