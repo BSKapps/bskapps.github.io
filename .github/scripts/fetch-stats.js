@@ -81,7 +81,7 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
     const lines = tsv.split('\n').filter(function(l) { return l.trim(); });
     if (lines.length < 2) {
         console.log('Apple report ' + frequency + ' ' + reportDate + ': empty report');
-        return { units: 0, proceeds_by_currency: {}, sales_by_currency: {} };
+        return { units: 0, paid_units: 0, free_units: 0, proceeds_by_currency: {}, sales_by_currency: {} };
     }
     const headers = lines[0].split('\t');
     const unitsIdx = headers.indexOf('Units');
@@ -89,7 +89,11 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
     const currencyIdx = headers.indexOf('Currency of Proceeds');
     const customerPriceIdx = headers.indexOf('Customer Price');
     const customerCurrencyIdx = headers.indexOf('Customer Currency');
+    const typeIdx = headers.indexOf('Product Type Identifier');
     let units = 0;
+    let paidUnits = 0;
+    let freeUnits = 0;
+    const byType = {};
     const proceedsByCurrency = {};
     const salesByCurrency = {};
     for (let i = 1; i < lines.length; i++) {
@@ -102,13 +106,17 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
         const salesCur = (customerCurrencyIdx >= 0 && cols[customerCurrencyIdx]) || 'USD';
         const price = (customerPriceIdx >= 0 ? parseFloat(cols[customerPriceIdx]) : 0) || 0;
         salesByCurrency[salesCur] = (salesByCurrency[salesCur] || 0) + price * u;
+        if (price > 0) { paidUnits += u; } else { freeUnits += u; }
+        const type = (typeIdx >= 0 && cols[typeIdx]) || '?';
+        const bucket = type + (price > 0 ? ' paid' : ' free');
+        byType[bucket] = (byType[bucket] || 0) + u;
     }
-    console.log('Apple report ' + frequency + ' ' + reportDate + ': ' + units + ' units');
+    console.log('Apple report ' + frequency + ' ' + reportDate + ': ' + units + ' units (' + paidUnits + ' paid, ' + freeUnits + ' free) ' + JSON.stringify(byType));
     if (units > 0 && frequency !== 'YEARLY') {
         const month = reportDate.slice(0, 7);
         if (!appleDataThrough || month > appleDataThrough) appleDataThrough = month;
     }
-    return { units, proceeds_by_currency: proceedsByCurrency, sales_by_currency: salesByCurrency };
+    return { units, paid_units: paidUnits, free_units: freeUnits, proceeds_by_currency: proceedsByCurrency, sales_by_currency: salesByCurrency };
 }
 
 async function fetchExchangeRates() {
@@ -160,6 +168,8 @@ async function fetchApple(rates) {
         const proceedsUsd = toUsd(r.proceeds_by_currency);
         return {
             units: r.units,
+            paid_units: r.paid_units || 0,
+            free_units: r.free_units || 0,
             sales_usd: salesUsd,
             sales_aud: Math.round(salesUsd * audRate * 100) / 100,
             proceeds_usd: proceedsUsd,
@@ -170,12 +180,14 @@ async function fetchApple(rates) {
         return reports.reduce(function(a, r) {
             return {
                 units: a.units + r.units,
+                paid_units: a.paid_units + (r.paid_units || 0),
+                free_units: a.free_units + (r.free_units || 0),
                 proceeds_by_currency: mergeCurrencies(a.proceeds_by_currency, r.proceeds_by_currency),
                 sales_by_currency: mergeCurrencies(a.sales_by_currency, r.sales_by_currency)
             };
-        }, { units: 0, proceeds_by_currency: {}, sales_by_currency: {} });
+        }, { units: 0, paid_units: 0, free_units: 0, proceeds_by_currency: {}, sales_by_currency: {} });
     }
-    const empty = { units: 0, proceeds_by_currency: {}, sales_by_currency: {} };
+    const empty = { units: 0, paid_units: 0, free_units: 0, proceeds_by_currency: {}, sales_by_currency: {} };
 
     // Fetch last 7 daily reports for 1d and 7d windows
     const daily = [];

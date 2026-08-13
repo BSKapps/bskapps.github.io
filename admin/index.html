@@ -576,6 +576,8 @@
                 <div class="stat-value" id="stat-apple">--</div>
                 <div class="stat-sublabel">Proceeds</div>
                 <div class="stat-value-secondary" id="stat-apple-proceeds">--</div>
+                <div class="stat-sublabel">Units</div>
+                <div class="stat-value-secondary" id="stat-apple-units">--</div>
                 <div class="stat-sub" id="stat-apple-sub">App Store · USD</div>
             </div>
             <div class="stat-box highlight">
@@ -1352,9 +1354,13 @@ function displayStats() {
         document.getElementById('stat-apple').textContent = appleSales != null ? '$' + appleSales.toFixed(2) : '$0.00';
         document.getElementById('stat-apple-sub').textContent = 'App Store · ' + currentCurrency;
         document.getElementById('stat-apple-proceeds').textContent = appleProceeds != null ? '$' + appleProceeds.toFixed(2) : '--';
+        document.getElementById('stat-apple-units').textContent = apple.paid_units != null
+            ? apple.paid_units.toLocaleString() + ' paid · ' + (apple.free_units || 0).toLocaleString() + ' free'
+            : (apple.units || 0).toLocaleString();
     } else {
         document.getElementById('stat-apple').textContent = apple ? (apple.error || '--') : '--';
         document.getElementById('stat-apple-proceeds').textContent = '--';
+        document.getElementById('stat-apple-units').textContent = '--';
     }
     const appleSub = document.getElementById('stat-apple-sub');
     const appleFailures = stats.apple && stats.apple.failures;
