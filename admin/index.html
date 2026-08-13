@@ -1252,8 +1252,8 @@ function displayStats() {
     const audRate = (stats.exchange_rates && stats.exchange_rates['AUD']) || 1.55;
 
     const rangeLabel = ordersLabelSuffix;
-    // Cloudflare retention is shorter than the sales history, so never call its numbers all time
-    const cfLabel = isAll ? 'Traffic on record' : rangeLabel;
+    // Cloudflare refuses ranges wider than 13w2d, so traffic can never be all time
+    const cfLabel = isAll ? 'Last 90d' : rangeLabel;
     document.getElementById('sublabel-visits').textContent = cfLabel;
     document.getElementById('sublabel-pageviews').textContent = cfLabel;
     document.getElementById('sublabel-orders').textContent = rangeLabel;

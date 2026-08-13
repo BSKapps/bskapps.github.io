@@ -46,7 +46,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Type a frequency or use the slider. The **Min** and **Max** fields set the slider's range: narrow them (say 400 to 500) and the full slider travel covers just that span, giving 1 Hz precision when you need it. The full range is 10 Hz to 22 kHz, always clamped to what your output device can actually reproduce."
+          "text": "Type a frequency or use the slider, which runs the full 10 Hz to 22 kHz range, always clamped to what your output device can actually reproduce. The row of recall keys under the field jumps straight to 60 Hz, 100 Hz, 400 Hz, 1 kHz or 10 kHz, and the slider follows."
         },
         {
           "type": "paragraph",
@@ -107,6 +107,10 @@
         {
           "type": "paragraph",
           "text": "**Band limit** restricts any colour to one octave or 1/3 octave around a centre frequency - set the centre with the frequency controls that appear. Band-limited pink on a sub is the classic use."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Burst** gates the noise on and off instead of running it continuously: set how long each burst lasts and how often it repeats. Useful for exciting an analyzer without filling the room with continuous noise, and for hearing a room's decay between bursts."
         }
       ]
     },
@@ -116,11 +120,22 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Two by-ear checks for what is plugged where. **GLITS** is a stereo left/right identification tone: 1 kHz on both channels, the left dropping out once each cycle and the right twice. One break is left, two is right, so a swapped or dead channel is obvious. It always feeds both channels; set the level to -18 dBFS for the EBU reference."
+          "text": "Three by-ear checks for what is plugged where, and for polarity. Two of them identify a stereo pair: both are 1 kHz on both channels, both always feed both channels, and both want the level at -18 dBFS for the EBU reference."
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "**Stereo ID** is the EBU ident: the left channel drops out for 250 ms every 3 seconds and the right runs continuously, so the channel with the gap is left. Summed to mono, a correct pair still gives the gap, while a polarity-reversed pair gives a short pip instead - a phase check as well as an ident.",
+            "**GLITS** drops the left once each cycle and the right twice. One break is left, two is right, so each channel is explicitly identified rather than inferred from the other."
+          ]
         },
         {
           "type": "paragraph",
           "text": "**Pop** is a positive-going pulse at a set interval for polarity checks. **CLICK** is a short 0.5 ms tick for tweeters and HF sections; **FULL** is the standard 4 ms pulse; **SUB** stretches it to 20 ms so it reads through subwoofers. The first movement is always positive - if your tester or ears say otherwise, something in the chain is flipped."
+        },
+        {
+          "type": "paragraph",
+          "text": "The rate slider above the interval speeds the pulse up or slows it down while it runs, shown in beats per minute. Send it through the whole rig as a click track and walk the coverage: where mains and delays are aligned you hear one tick, where they are not it smears or doubles."
         }
       ]
     },
@@ -152,7 +167,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Each generator has a level fader, fade in/out times, and an **Output** switch: left channel, right channel, or both (dual mono - no centre dip). The master section has its own fader, always-visible meters, and a safety limiter, on by default at -3 dBFS, that hard-clips rather than letting four summed generators overshoot."
+          "text": "Each generator has a level fader, fade in/out times, and an **Output** switch: left channel, right channel, or both (dual mono - no centre dip). The keys beside the fader recall -6, -12, -18 and -20 dBFS in one tap. The master section has its own fader, always-visible meters, and a safety limiter, on by default at -3 dBFS, that hard-clips rather than letting four summed generators overshoot."
         },
         {
           "type": "paragraph",

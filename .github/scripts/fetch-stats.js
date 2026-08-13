@@ -594,7 +594,8 @@ async function main() {
 
     for (const { days, key } of ranges) {
         if (CF_TOKEN) {
-            const cfDays = key === 'all' ? days : Math.min(days, 90);
+            // Cloudflare refuses any range wider than 13w2d, so 90 days is the ceiling for every key
+            const cfDays = Math.min(days, 90);
             try {
                 stats.cloudflare[key] = await fetchCF(cfDays);
             } catch (e) {
