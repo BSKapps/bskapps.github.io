@@ -8,6 +8,8 @@ const LS_KEY = process.env.LS_API_KEY;
 const APPLE_KEY_ID = process.env.APPLE_KEY_ID;
 const APPLE_ISSUER_ID = process.env.APPLE_ISSUER_ID;
 const APPLE_VENDOR_NUMBER = process.env.APPLE_VENDOR_NUMBER;
+// Comma separated: the live vendor first, then any deprecated ones holding pre-conversion history
+const APPLE_VENDORS = (APPLE_VENDOR_NUMBER || '').split(',').map(function(v) { return v.trim(); }).filter(Boolean);
 const APPLE_PRIVATE_KEY = process.env.APPLE_PRIVATE_KEY;
 
 let appleDataThrough = null;
@@ -43,12 +45,12 @@ function generateAppleJWT() {
     return signingInput + '.' + sig;
 }
 
-async function fetchAppleReport(jwt, reportDate, frequency) {
+async function fetchAppleReport(jwt, reportDate, frequency, vendor) {
     const params = new URLSearchParams({
         'filter[frequency]': frequency,
         'filter[reportType]': 'SALES',
         'filter[reportSubType]': 'SUMMARY',
-        'filter[vendorNumber]': APPLE_VENDOR_NUMBER,
+        'filter[vendorNumber]': vendor,
         'filter[reportDate]': reportDate
     });
     const res = await requestRaw({
@@ -65,11 +67,11 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
             detail = [first.code, first.detail || first.title].filter(Boolean).join(' ');
         } catch (e) {}
         if (res.status === 404 && /no (sales|reports?) (for|available)/i.test(detail)) {
-            console.log('Apple report ' + frequency + ' ' + reportDate + ': no sales');
+            console.log('Apple report ' + frequency + ' ' + reportDate + ' [' + vendor + ']: no sales');
             return null;
         }
         if (res.status === 404 && /not available yet/i.test(detail)) {
-            console.log('Apple report ' + frequency + ' ' + reportDate + ': not published yet');
+            console.log('Apple report ' + frequency + ' ' + reportDate + ' [' + vendor + ']: not published yet');
             return null;
         }
         throw new Error('HTTP ' + res.status + ' [' + frequency + ' ' + reportDate + '] ' + detail);
@@ -80,7 +82,7 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
     });
     const lines = tsv.split('\n').filter(function(l) { return l.trim(); });
     if (lines.length < 2) {
-        console.log('Apple report ' + frequency + ' ' + reportDate + ': empty report');
+        console.log('Apple report ' + frequency + ' ' + reportDate + ' [' + vendor + ']: empty report');
         return { units: 0, paid_units: 0, free_units: 0, update_units: 0, proceeds_by_currency: {}, sales_by_currency: {} };
     }
     const headers = lines[0].split('\t');
@@ -114,12 +116,51 @@ async function fetchAppleReport(jwt, reportDate, frequency) {
         const bucket = type + (price > 0 ? ' paid' : ' free');
         byType[bucket] = (byType[bucket] || 0) + u;
     }
-    console.log('Apple report ' + frequency + ' ' + reportDate + ': ' + units + ' units (' + paidUnits + ' paid, ' + freeUnits + ' free, ' + updateUnits + ' updates) ' + JSON.stringify(byType));
+    console.log('Apple report ' + frequency + ' ' + reportDate + ' [' + vendor + ']: ' + units + ' units (' + paidUnits + ' paid, ' + freeUnits + ' free, ' + updateUnits + ' updates) ' + JSON.stringify(byType));
     if (units > 0 && frequency !== 'YEARLY') {
         const month = reportDate.slice(0, 7);
         if (!appleDataThrough || month > appleDataThrough) appleDataThrough = month;
     }
     return { units, paid_units: paidUnits, free_units: freeUnits, update_units: updateUnits, proceeds_by_currency: proceedsByCurrency, sales_by_currency: salesByCurrency };
+}
+
+
+function sumAppleReports(list) {
+    return list.reduce(function(a, r) {
+        const merged = Object.assign({}, a.proceeds_by_currency);
+        for (const c in r.proceeds_by_currency) { merged[c] = (merged[c] || 0) + r.proceeds_by_currency[c]; }
+        const mergedSales = Object.assign({}, a.sales_by_currency);
+        for (const c in r.sales_by_currency) { mergedSales[c] = (mergedSales[c] || 0) + r.sales_by_currency[c]; }
+        return {
+            units: a.units + r.units,
+            paid_units: a.paid_units + (r.paid_units || 0),
+            free_units: a.free_units + (r.free_units || 0),
+            update_units: a.update_units + (r.update_units || 0),
+            proceeds_by_currency: merged,
+            sales_by_currency: mergedSales
+        };
+    }, { units: 0, paid_units: 0, free_units: 0, update_units: 0, proceeds_by_currency: {}, sales_by_currency: {} });
+}
+
+// Daily windows only ever cover recent dates, so deprecated vendors cannot hold anything there
+async function fetchAppleReportAllVendors(jwt, reportDate, frequency) {
+    const vendors = frequency === 'DAILY' ? APPLE_VENDORS.slice(0, 1) : APPLE_VENDORS;
+    const found = [];
+    for (let i = 0; i < vendors.length; i++) {
+        if (i === 0) {
+            const r = await fetchAppleReport(jwt, reportDate, frequency, vendors[i]);
+            if (r) found.push(r);
+        } else {
+            try {
+                const r = await fetchAppleReport(jwt, reportDate, frequency, vendors[i]);
+                if (r) found.push(r);
+            } catch (e) {
+                console.error('Apple legacy vendor ' + vendors[i] + ' ' + frequency + ' ' + reportDate + ':', e.message);
+            }
+        }
+    }
+    if (!found.length) return null;
+    return sumAppleReports(found);
 }
 
 async function fetchExchangeRates() {
@@ -198,7 +239,7 @@ async function fetchApple(rates) {
     const daily = [];
     for (let i = 1; i <= 7; i++) {
         try {
-            daily.push(await fetchAppleReport(jwt, dateStr(i), 'DAILY') || empty);
+            daily.push(await fetchAppleReportAllVendors(jwt, dateStr(i), 'DAILY') || empty);
         } catch (e) {
             noteFailure('daily d-' + i, e);
             daily.push(empty);
@@ -211,7 +252,7 @@ async function fetchApple(rates) {
     async function getMonth(m) {
         if (monthlyCache[m] !== undefined) return monthlyCache[m];
         try {
-            monthlyCache[m] = await fetchAppleReport(jwt, m, 'MONTHLY') || empty;
+            monthlyCache[m] = await fetchAppleReportAllVendors(jwt, m, 'MONTHLY') || empty;
         } catch (e) {
             noteFailure('monthly ' + m, e);
             monthlyCache[m] = empty;
@@ -225,7 +266,7 @@ async function fetchApple(rates) {
     const currentMonthDaily = daily.slice(0, Math.min(7, dayOfMonth - 1));
     for (let i = 8; i < dayOfMonth; i++) {
         try {
-            currentMonthDaily.push(await fetchAppleReport(jwt, dateStr(i), 'DAILY') || empty);
+            currentMonthDaily.push(await fetchAppleReportAllVendors(jwt, dateStr(i), 'DAILY') || empty);
         } catch (e) {
             noteFailure('daily d-' + i, e);
             currentMonthDaily.push(empty);
@@ -261,7 +302,7 @@ async function fetchApple(rates) {
     for (let y = thisYear - 1; y >= thisYear - 10 && misses < 2; y--) {
         let r = null;
         try {
-            r = await fetchAppleReport(jwt, String(y), 'YEARLY');
+            r = await fetchAppleReportAllVendors(jwt, String(y), 'YEARLY');
         } catch (e) {
             noteFailure('yearly ' + y, e);
             break;
@@ -590,7 +631,7 @@ async function main() {
         }
     }
 
-    if (APPLE_KEY_ID && APPLE_ISSUER_ID && APPLE_VENDOR_NUMBER && APPLE_PRIVATE_KEY) {
+    if (APPLE_KEY_ID && APPLE_ISSUER_ID && APPLE_VENDORS.length && APPLE_PRIVATE_KEY) {
         try {
             stats.apple = await fetchApple(exchangeRates);
         } catch (e) {
