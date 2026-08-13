@@ -13,7 +13,7 @@
     <meta property="og:url" content="https://bskapps.com/tools/companion/">
     <meta property="og:type" content="website">
     <link rel="canonical" href="https://bskapps.com/tools/companion/">
-    <link rel="stylesheet" href="/css/site.css?v=20260805a">
+    <link rel="stylesheet" href="/css/site.css?v=20260813a">
 </head>
 <body>
     <div class="container">
@@ -90,6 +90,31 @@
             <p class="note-line"><strong>Live SPL:</strong> while SPL logging is running in Smaart, every calibrated channel streams its meter values to Companion. A one-button SPL Logging Start/Stop action arms it from the surface.</p>
             <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-smaart/releases/latest" target="_blank" rel="noopener">Download latest release &rarr;</a>
             &nbsp; <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-smaart" target="_blank" rel="noopener">View on GitHub &rarr;</a>
+        </div>
+
+        <div class="script-card setup">
+            <h3>Ready-made presets</h3>
+            <p>55 presets across nine categories: Display, Traces, Measurements, Zoom, Views, Generator, Delay, SPL and Cursor. Open the <strong>Presets</strong> tab in Companion, pick <strong>BSK Apps: Smaart Control</strong>, and drag any button straight onto your surface. Colours and text come set up.</p>
+            <img class="step-shot" src="/tools/companion/images/smaart-presets-1.png" alt="Companion Presets tab showing BSK Smaart preset buttons grouped under Cursor, Delay, Display and Generator">
+            <img class="step-shot" src="/tools/companion/images/smaart-presets-2.png" alt="Companion Presets tab showing BSK Smaart preset buttons grouped under Measurements, SPL, Traces and Views">
+            <p class="note-line" style="margin-top:14px;"><strong>SPL readouts:</strong> there is one preset per SPL metric, plus a cycling readout button that steps through a list of metrics you choose, so a single button can show A Slow, C Slow and Leq in turn.</p>
+        </div>
+
+        <div class="script-card setup">
+            <h3>Actions, feedbacks and variables</h3>
+            <p><strong>51 actions.</strong></p>
+            <ul class="ref-list">
+                <li>Adjust Generator Level</li><li>Capture Trace</li><li>Clear All dB Offsets</li><li>Clear dB Offset (front trace only)</li><li>Clear Locked Cursor</li><li>Custom Keypress</li><li>Cycle Preferred Plot</li><li>Cycle SPL Readout Metric</li><li>Cycle Z Order</li><li>Find Delay (transfer function)</li><li>Front Trace Offset Up/Down</li><li>Hide All Traces</li><li>Hide Trace</li><li>Impulse Mode</li><li>Lock Cursor To Peak</li><li>Move Locked Cursor</li><li>Open Target Curves Dialog (picker)</li><li>Real-Time Mode</li><li>Rename Trace</li><li>Reset Averages</li><li>Reset SPL Leq Buffers</li><li>Run Command (list from Smaart)</li><li>Select View Preset</li><li>Set Delay (transfer function)</li><li>Set Generator Level</li><li>Set Zoom Preset</li><li>Show/Hide Target Curves</li><li>SPL Logging Start/Stop</li><li>SPL Mode</li><li>Start All Measurements</li><li>Start Delay Tracking (all TF measurements)</li><li>Start Signal Generator</li><li>Start/Stop Delay Tracking (one measurement)</li><li>Start/Stop Measurement</li><li>Stop All Measurements</li><li>Stop Delay Tracking (all TF measurements)</li><li>Stop Signal Generator</li><li>Toggle Bar</li><li>Toggle Clock/SPL Meter</li><li>Toggle Coherence</li><li>Toggle Data / SPL Meter Bar</li><li>Toggle Delay Tracking (all TF measurements)</li><li>Toggle Input Meter Orientation</li><li>Toggle Input Meters</li><li>Toggle Measurement Group (stop if any running, else start)</li><li>Toggle Peak Hold</li><li>Toggle Signal Generator</li><li>Toggle SPL Meters</li><li>Zoom X and Y Axis</li><li>Zoom X Axis</li><li>Zoom Y Axis</li>
+            </ul>
+            <p style="margin-top:18px;"><strong>12 feedbacks</strong> for button colour.</p>
+            <ul class="ref-list">
+                <li>Any Delay Tracking Running</li><li>Any Measurement Running</li><li>Any Spectrum Measurement Running</li><li>Any Transfer Function Running</li><li>Delay Tracking Running</li><li>Measurement Running</li><li>Signal Generator Running</li><li>SPL Above Level</li><li>SPL Alarm Level Reached</li><li>SPL Logging Running</li><li>SPL Zone Colour (cycling readout)</li><li>SPL Zone Colour (Smaart thresholds)</li>
+            </ul>
+            <p style="margin-top:18px;"><strong>Variables</strong>, plus a live set per calibrated SPL channel while logging runs.</p>
+            <ul class="ref-list">
+                <li>Smaart application name</li><li>Smaart version</li><li>Signal generator state</li><li>Signal generator level (dB FS)</li><li>Signal generator type</li><li>Number of running measurements</li><li>SPL logging running (On/Off)</li><li>Cycling readout: metric label</li><li>Cycling readout: value of the current metric (dB)</li><li>Last captured trace file path</li>
+            </ul>
+            <p class="note-line" style="margin-top:16px;"><strong>Run Command</strong> reads Smaart's own command list at connection time, so anything Smaart exposes that has no dedicated action above is still reachable from a button.</p>
         </div>
 
         <div class="script-card setup">

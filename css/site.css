@@ -275,6 +275,10 @@ article .note { background: var(--card); border: 1px solid var(--border-strong);
 .steps code, .script-card code { background: rgba(0,0,0,0.25); border: 1px solid var(--border); color: var(--text); padding: 1px 6px; border-radius: 4px; font-size: 0.85rem; }
 .step-shot { display: block; max-width: 100%; margin: 14px 0; border: 1px solid var(--border); border-radius: 8px; }
 
+.ref-list { columns: 2; column-gap: 28px; color: var(--text-muted); font-size: 0.88rem; line-height: 1.55; list-style: none; margin: 0; padding: 0; }
+.ref-list li { break-inside: avoid; padding-left: 12px; text-indent: -12px; }
+.ref-list li::before { content: "- "; color: var(--text-faint); }
+
 .section {
     padding: 22px 4px;
     margin-bottom: 0;
@@ -417,4 +421,5 @@ footer a:hover { color: var(--heading); }
     .cta-actions .cta-link { text-align: center; }
     .fblock { grid-template-columns: 1fr; gap: 18px; padding: 26px 0; }
     .fblock.flip .fb-text { order: 0; }
+    .ref-list { columns: 1; }
 }

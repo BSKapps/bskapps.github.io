@@ -125,7 +125,7 @@
         {
           "type": "bullets",
           "items": [
-            "**Stereo ID** is the EBU ident: the left channel drops out for 250 ms every 3 seconds and the right runs continuously, so the channel with the gap is left. Summed to mono, a correct pair still gives the gap, while a polarity-reversed pair gives a short pip instead - a phase check as well as an ident.",
+            "**Stereo ID** is the EBU ident: the left channel drops out for 250 ms every 3 seconds and the right runs continuously, so the channel with the gap is left. Summed to mono it is a phase check too - a correct pair dips 6 dB through the gap, while a polarity-reversed pair cancels to silence and the gap becomes a short pip instead.",
             "**GLITS** drops the left once each cycle and the right twice. One break is left, two is right, so each channel is explicitly identified rather than inferred from the other."
           ]
         },
