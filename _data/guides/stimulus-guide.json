@@ -5,7 +5,7 @@
     "pageTitle": "Stimulus user guide - BSK Apps",
     "h1": "Stimulus user guide",
     "dateLine": "Updated for version 1.0",
-    "description": "A how-to guide for Stimulus: tones, sweeps with hold and scrub, harmonics, noise with band limiting, GLITS and polarity pops, analyzer-matched measurement signals, mixing four generators, and exporting test files.",
+    "description": "A how-to guide for Stimulus: tones, sweeps with hold and scrub, harmonics, noise with band limiting and burst, the Stereo ID and GLITS channel idents, polarity pops, analyzer-matched measurement signals, mixing four generators, and exporting test files.",
     "canonical": "https://bskapps.com/articles/stimulus-guide/",
     "ogTitle": "Stimulus user guide",
     "ogDescription": "What each generator does and how to use it: tone, sweep, harmonics, noise, Identify, Measure, the rack, master section and export.",
@@ -13,7 +13,7 @@
   },
   "cta": {
     "title": "Stimulus",
-    "text": "A four-generator test signal rack for live sound: tones, sweeps, harmonics, noise, GLITS and polarity pops, plus period-matched measurement signals.",
+    "text": "A four-generator test signal rack for live sound: tones, sweeps, harmonics, noise, stereo idents and polarity pops, plus period-matched measurement signals.",
     "href": "/stimulus/",
     "linkText": "Stimulus",
     "icon": "stimulus-icon.png",
