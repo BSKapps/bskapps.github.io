@@ -188,7 +188,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Stimulus reopens as you left it: every generator, the mix and the master section are saved when you stop playback or quit, and restored at launch."
+          "text": "Stimulus reopens as you left it: every generator, the mix and the master section are saved when you stop playback or quit, and restored at launch. New Session in the File menu (Cmd-N) puts everything back to defaults: one fresh generator, master reset."
         }
       ]
     },
