@@ -103,11 +103,11 @@
         "Tone - sine from 10 Hz to 22 kHz with a log slider, typed entry, and keyboard nudge in 1 percent steps, 10 percent with Shift",
         "Sweep - log or linear, any range in either direction, continuous or stepped in 1/3-octave dwells, one-shot or looped, with return",
         "Hold freezes a sweep at its current frequency and lets you scrub the held tone by ear",
-        "Harmonics - a fundamental with seven partials from f/4 to 5f on faders, for exercising a rig with controlled harmonic content",
+        "Harmonics - a fundamental with seven partials from f/4 to 5f on faders, for exercising a system with controlled harmonic content",
         "Noise - pink, red/brown or white, full range or band-limited to 1 octave or 1/3 octave around a centre frequency",
         "Identify - GLITS for stereo left and right checks, plus positive-going polarity pops in click, full-range and sub widths",
         "Up to four generators at once, each with level, left/right/both routing, polarity invert, mute, exclusive solo, and click-free fade in and out",
-        "Master level with a hard limiter at -3 dBFS, a 20 dB dim for talking over the rig, master fades in seconds, and an auto-stop timer with optional repeat",
+        "Master level with a hard limiter at -3 dBFS, a 20 dB dim for talking over the system, master fades in seconds, and an auto-stop timer",
         "Stereo peak meters that follow every fade",
         "Render any generator or the whole mix to WAV or AIFF at 44.1, 48 or 96 kHz for playback machines and test rigs",
         "New generators always start at -20 dBFS. Nothing in the app defaults loud"
