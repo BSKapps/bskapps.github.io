@@ -96,21 +96,21 @@
       "description": "Stimulus is a test signal rack for live sound engineers. Four generators, a proper master section, and measurement signals that behave the way your analyzer expects.",
       "price": "$4.99 USD",
       "macos": "macOS 15+ & iPadOS 18+",
-      "version": "v1.0",
+      "version": "v1.1",
       "released": "24 July 2026",
       "features": [
         "Measure - pseudorandom pink noise period-matched to your analyzer's FFT frame (32K, 64K or 128K) and a cycle-synchronised log sweep. Both loop seamlessly, and export writes exactly one frame for analyzer playback",
-        "Tone - sine from 10 Hz to 22 kHz with a log slider, typed entry, and keyboard nudge in 1 percent steps, 10 percent with Shift",
+        "Tone - sine from 10 Hz to 22 kHz with a log slider, typed entry, one-tap keys for common frequencies, and keyboard nudge in 1 percent steps, 10 percent with Shift",
         "Sweep - log or linear, any range in either direction, continuous or stepped in 1/3-octave dwells, one-shot or looped, with return",
         "Hold freezes a sweep at its current frequency and lets you scrub the held tone by ear",
         "Harmonics - a fundamental with seven partials from f/4 to 5f on faders, for exercising a system with controlled harmonic content",
-        "Noise - pink, red/brown or white, full range or band-limited to 1 octave or 1/3 octave around a centre frequency",
-        "Identify - GLITS for stereo left and right checks, plus positive-going polarity pops in click, full-range and sub widths",
-        "Up to four generators at once, each with level, left/right/both routing, polarity invert, mute, exclusive solo, and click-free fade in and out",
+        "Noise - pink, red/brown or white; full range or band-limited to 1 octave or 1/3 octave around a centre frequency; continuous or in timed bursts",
+        "Identify - Stereo ID and GLITS for left and right checks with their break patterns drawn on screen, a Click for aligning delays by ear, and positive-going polarity Pops in HF, full-range and sub widths",
+        "Up to four generators at once, each with level, L, R or L+R routing, polarity invert, mute, exclusive solo, and click-free fade in and out. Drag strips to reorder; every strip shows its signal and where it goes",
         "Master level with a hard limiter at -3 dBFS, a 20 dB dim for talking over the system, master fades in seconds, and an auto-stop timer",
         "Stereo peak meters that follow every fade",
-        "Render any generator or the whole mix to WAV or AIFF at 44.1, 48 or 96 kHz for playback machines and test rigs",
-        "New generators always start at -20 dBFS. Nothing in the app defaults loud"
+        "Render any generator or the whole mix to WAV or AIFF at 44.1, 48 or 96 kHz for playback machines and test systems",
+        "New generators arrive muted and start at -18 dBFS. Nothing in the app defaults loud"
       ]
     }
   }
