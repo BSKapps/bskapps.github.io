@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Stimulus user guide - BSK Apps",
     "h1": "Stimulus user guide",
-    "dateLine": "Updated for version 1.0",
+    "dateLine": "Updated for version 1.1",
     "description": "A how-to guide for Stimulus: tones, sweeps with hold and scrub, harmonics, noise with band limiting and burst, the Stereo ID and GLITS channel idents, polarity pops, analyzer-matched measurement signals, mixing four generators, and exporting test files.",
     "canonical": "https://bskapps.com/articles/stimulus-guide/",
     "ogTitle": "Stimulus user guide",
@@ -92,7 +92,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "A fundamental with subharmonics below it and harmonics above: f/4, f/3, f/2, the fundamental, then 2f to 5f, each on its own fader. The label under each fader shows the actual frequency it lands on; a dash means that partial falls outside the playable range and stays silent. Everything is phase-locked to the fundamental."
+          "text": "A fundamental with subharmonics below it and harmonics above: f/4, f/3, f/2, the fundamental, then 2f to 5f, each on its own fader. The label under each fader shows the actual frequency it lands on; a dash means that partial falls outside the playable range and stays silent. Everything is phase-locked to the fundamental. Each partial adds its own level on top of the fundamental, so the combined level is higher than a plain tone at the same setting. The master limiter still caps the output at -3 dBFS."
         }
       ]
     },
@@ -170,7 +170,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Each generator has a level fader, fade in/out times, and an **Output** switch: left channel, right channel, or both (dual mono - no centre dip). The keys beside the fader recall -6, -12, -18 and -20 dBFS in one tap. The master section has its own fader, always-visible meters, and a safety limiter, on by default at -3 dBFS, that hard-clips rather than letting four summed generators overshoot."
+          "text": "Each generator has a level fader, fade in/out times, and an **Output** switch: left channel, right channel, or both (dual mono - no centre dip). The keys beside the fader recall -6, -12 and -18 dBFS in one tap. The master section has its own fader, always-visible meters, and a safety limiter, on by default at -3 dBFS, that hard-clips rather than letting four summed generators overshoot. Below the ceiling it does nothing at all - it is a safety clamp, not a compressor - and the LIM key glows bright while it is actually clamping."
         },
         {
           "type": "paragraph",
@@ -178,7 +178,7 @@
         },
         {
           "type": "paragraph",
-          "text": "New generators always start at -20 dBFS. Nothing in Stimulus ever defaults to full scale."
+          "text": "New generators always start at -18 dBFS. Nothing in Stimulus ever defaults to full scale."
         }
       ]
     },
