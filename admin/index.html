@@ -564,7 +564,7 @@
                 <div class="stat-label">Orders</div>
                 <div class="stat-sublabel" id="sublabel-orders">--</div>
                 <div class="stat-value" id="stat-orders">--</div>
-                <div class="stat-sub">LemonSqueezy</div>
+                <div class="stat-sub" id="stat-orders-sub">LemonSqueezy</div>
             </div>
             <div class="stat-box revenue">
                 <div class="stat-label">Lemon Squeezy Sales</div>
@@ -588,6 +588,12 @@
                 <div class="stat-label">Conversion</div>
                 <div class="stat-value" id="stat-conversion">--</div>
                 <div class="stat-sub">visits to sales</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Returning</div>
+                <div class="stat-sublabel" id="sublabel-returning">--</div>
+                <div class="stat-value" id="stat-returning">--</div>
+                <div class="stat-sub" id="stat-returning-sub">of orders</div>
             </div>
         </div>
 
@@ -1258,6 +1264,7 @@ function displayStats() {
     document.getElementById('sublabel-visits').textContent = cfLabel;
     document.getElementById('sublabel-pageviews').textContent = cfLabel;
     document.getElementById('sublabel-orders').textContent = rangeLabel;
+    document.getElementById('sublabel-returning').textContent = rangeLabel;
 
     if (updated) document.getElementById('stats-updated').textContent = 'Updated ' + updated;
     const cf = stats.cloudflare && stats.cloudflare[key];
@@ -1334,18 +1341,36 @@ function displayStats() {
         } else {
             lsNetRevenue = ls.net_revenue_usd;
         }
-        document.getElementById('stat-orders').textContent = ls.orders;
         document.getElementById('stat-revenue').textContent = lsRevenue != null ? '$' + lsRevenue.toFixed(2) : '$0.00';
         document.getElementById('stat-revenue-sub').textContent = 'LemonSqueezy · ' + currentCurrency;
         document.getElementById('stat-revenue-net').textContent = lsNetRevenue != null ? '$' + lsNetRevenue.toFixed(2) : '--';
+        const paidOrders = ls.paid_orders != null ? ls.paid_orders : ls.orders;
+        document.getElementById('stat-orders').textContent = paidOrders;
         document.getElementById('stat-conversion').textContent = (!isAll && cf && cf.visits > 0)
-            ? ((ls.orders / cf.visits) * 100).toFixed(2) + '%'
+            ? ((paidOrders / cf.visits) * 100).toFixed(2) + '%'
             : '--';
+        const refundedAmt = currentCurrency === 'AUD' ? (ls.refunded_usd || 0) * audRate : (ls.refunded_usd || 0);
+        const orderNotes = [];
+        if (ls.free_orders) orderNotes.push(ls.free_orders + ' free');
+        if (ls.refunds == null) orderNotes.push('LemonSqueezy');
+        else if (ls.refunds > 0) orderNotes.push(ls.refunds + ' refunded this period · $' + refundedAmt.toFixed(2));
+        else orderNotes.push('no refunds');
+        document.getElementById('stat-orders-sub').textContent = orderNotes.join(' · ');
+        const returning = ls.returning_customer_orders;
+        document.getElementById('stat-returning').textContent = (returning != null && paidOrders > 0)
+            ? Math.round((returning / paidOrders) * 100) + '%'
+            : '--';
+        document.getElementById('stat-returning-sub').textContent = (returning != null)
+            ? returning + ' of ' + paidOrders + ' paid orders'
+            : 'of paid orders';
     } else {
         document.getElementById('stat-orders').textContent = ls ? ls.error : '--';
+        document.getElementById('stat-orders-sub').textContent = 'LemonSqueezy';
         document.getElementById('stat-revenue').textContent = '--';
         document.getElementById('stat-revenue-net').textContent = '--';
         document.getElementById('stat-conversion').textContent = '--';
+        document.getElementById('stat-returning').textContent = '--';
+        document.getElementById('stat-returning-sub').textContent = 'of paid orders';
     }
 
     const apple = stats.apple && stats.apple[key];

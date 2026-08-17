@@ -508,18 +508,46 @@ async function fetchAllOrders() {
 
 function computeLS(orders, days) {
     const cutoff = new Date(Date.now() - days * 86400000);
+    const inWindow = function(d) { return !!d && new Date(d) >= cutoff; };
+    const refundedStore = function(o) { return (o.attributes.refunded_amount || 0) / 100; };
+    const refundedUsd = function(o) { return (o.attributes.refunded_amount_usd || 0) / 100; };
+    const isSale = function(o) {
+        return o.attributes.status === 'paid' || o.attributes.status === 'partial_refund';
+    };
+    const wasRefunded = function(o) {
+        return o.attributes.status === 'refunded' || o.attributes.status === 'partial_refund'
+            || o.attributes.refunded === true || refundedUsd(o) > 0;
+    };
     const recent = orders.filter(function(o) {
-        return new Date(o.attributes.created_at) >= cutoff && o.attributes.status === 'paid';
+        return inWindow(o.attributes.created_at) && isSale(o);
     });
-    const ordersCount = recent.length;
-    const revenue = recent.reduce(function(a, o) { return a + (o.attributes.total / 100); }, 0);
-    const net_revenue_usd = recent.reduce(function(a, o) {
-        return a + ((o.attributes.total_usd - (o.attributes.tax_usd || 0)) / 100);
-    }, 0);
+    const refundedRecent = orders.filter(function(o) {
+        return wasRefunded(o) && inWindow(o.attributes.refunded_at || o.attributes.created_at);
+    });
+    const refunded_usd = refundedRecent.reduce(function(a, o) { return a + refundedUsd(o); }, 0);
     const isFree = function(o) {
         return ((o.attributes.total_usd || 0) - (o.attributes.tax_usd || 0)) === 0;
     };
-    const paidCount = recent.filter(function(o) { return !isFree(o); }).length;
+    const paidRecent = recent.filter(function(o) { return !isFree(o); });
+    const paidCount = paidRecent.length;
+    const firstOrderId = {};
+    orders.filter(function(o) { return isSale(o) || o.attributes.status === 'refunded'; })
+        .sort(function(a, b) {
+            return new Date(a.attributes.created_at) - new Date(b.attributes.created_at);
+        }).forEach(function(o) {
+            const cid = o.attributes.customer_id;
+            if (cid !== undefined && cid !== null && firstOrderId[cid] === undefined) firstOrderId[cid] = o.id;
+        });
+    const newCustomerOrders = paidRecent.filter(function(o) {
+        const cid = o.attributes.customer_id;
+        if (cid === undefined || cid === null) return true;
+        return firstOrderId[cid] === o.id;
+    }).length;
+    const ordersCount = recent.length;
+    const revenue = recent.reduce(function(a, o) { return a + (o.attributes.total / 100) - refundedStore(o); }, 0);
+    const net_revenue_usd = recent.reduce(function(a, o) {
+        return a + ((o.attributes.total_usd - (o.attributes.tax_usd || 0)) / 100) - refundedUsd(o);
+    }, 0);
     const by_product = {};
     recent.forEach(function(o) {
         const item = o.attributes.first_order_item || {};
@@ -528,14 +556,14 @@ function computeLS(orders, days) {
         by_product[name].orders += 1;
         if (isFree(o)) by_product[name].free_orders += 1;
         else by_product[name].paid_orders += 1;
-        by_product[name].gross_usd += (o.attributes.total_usd || 0) / 100;
-        by_product[name].net_usd += ((o.attributes.total_usd || 0) - (o.attributes.tax_usd || 0)) / 100;
+        by_product[name].gross_usd += (o.attributes.total_usd || 0) / 100 - refundedUsd(o);
+        by_product[name].net_usd += ((o.attributes.total_usd || 0) - (o.attributes.tax_usd || 0)) / 100 - refundedUsd(o);
     });
     Object.keys(by_product).forEach(function(name) {
         by_product[name].gross_usd = Math.round(by_product[name].gross_usd * 100) / 100;
         by_product[name].net_usd = Math.round(by_product[name].net_usd * 100) / 100;
     });
-    return { orders: ordersCount, paid_orders: paidCount, free_orders: ordersCount - paidCount, revenue: Math.round(revenue * 100) / 100, net_revenue_usd: Math.round(net_revenue_usd * 100) / 100, by_product };
+    return { orders: ordersCount, paid_orders: paidCount, free_orders: ordersCount - paidCount, new_customer_orders: newCustomerOrders, returning_customer_orders: paidCount - newCustomerOrders, refunds: refundedRecent.length, refunded_usd: Math.round(refunded_usd * 100) / 100, revenue: Math.round(revenue * 100) / 100, net_revenue_usd: Math.round(net_revenue_usd * 100) / 100, by_product };
 }
 
 function fyDays() {
