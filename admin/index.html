@@ -1734,15 +1734,18 @@ function renderProductCards(stats, key, audRate) {
     container.innerHTML = PRODUCTS.map(function(p) {
         const page = pagesArr.find(function(x) { return x.path === p.path; });
         const visits = page ? (page.visits || 0) : 0;
-        let orders = 0, gross = 0;
+        let orders = 0, free = 0, gross = 0;
         Object.keys(lsByProduct).forEach(function(name) {
             const ln = name.toLowerCase();
             if (p.lsMatch.some(function(m) { return ln.indexOf(m) !== -1; })) {
-                orders += lsByProduct[name].orders || 0;
-                gross += lsByProduct[name].gross_usd || 0;
+                const bp = lsByProduct[name];
+                orders += (bp.paid_orders !== undefined ? bp.paid_orders : bp.orders) || 0;
+                free += bp.free_orders || 0;
+                gross += bp.gross_usd || 0;
             }
         });
         if (currentCurrency === 'AUD') gross = gross * audRate;
+        const ordersLabel = free > 0 ? 'Orders (+' + free + ' free)' : 'Orders';
         const conv = visits > 0 ? (orders / visits * 100).toFixed(1) + '%' : '--';
         const perVisit = visits > 0 ? '$' + (gross / visits).toFixed(2) : '--';
         const sline = buildSourceLine(sources[p.path], inhouse[p.path] || 0);
@@ -1750,7 +1753,7 @@ function renderProductCards(stats, key, audRate) {
             + '<div class="pc-head"><img src="/images/' + p.icon + '" alt=""><span class="pc-name">' + esc(p.label) + '</span></div>'
             + '<div class="pc-stats">'
             + '<div><div class="pc-label">Visits</div><div class="pc-num">' + visits.toLocaleString() + '</div></div>'
-            + '<div><div class="pc-label">Orders</div><div class="pc-num">' + orders.toLocaleString() + '</div></div>'
+            + '<div><div class="pc-label">' + ordersLabel + '</div><div class="pc-num">' + orders.toLocaleString() + '</div></div>'
             + '<div><div class="pc-label">Rev ' + currentCurrency + '</div><div class="pc-num money">$' + Math.round(gross).toLocaleString() + '</div></div>'
             + '<div><div class="pc-label">Conv</div><div class="pc-num conv">' + conv + '</div></div>'
             + '<div><div class="pc-label">Per visit</div><div class="pc-num per">' + perVisit + '</div></div>'

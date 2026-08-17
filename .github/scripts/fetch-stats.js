@@ -516,12 +516,18 @@ function computeLS(orders, days) {
     const net_revenue_usd = recent.reduce(function(a, o) {
         return a + ((o.attributes.total_usd - (o.attributes.tax_usd || 0)) / 100);
     }, 0);
+    const isFree = function(o) {
+        return ((o.attributes.total_usd || 0) - (o.attributes.tax_usd || 0)) === 0;
+    };
+    const paidCount = recent.filter(function(o) { return !isFree(o); }).length;
     const by_product = {};
     recent.forEach(function(o) {
         const item = o.attributes.first_order_item || {};
         const name = item.product_name || 'Unknown';
-        if (!by_product[name]) by_product[name] = { orders: 0, gross_usd: 0, net_usd: 0 };
+        if (!by_product[name]) by_product[name] = { orders: 0, paid_orders: 0, free_orders: 0, gross_usd: 0, net_usd: 0 };
         by_product[name].orders += 1;
+        if (isFree(o)) by_product[name].free_orders += 1;
+        else by_product[name].paid_orders += 1;
         by_product[name].gross_usd += (o.attributes.total_usd || 0) / 100;
         by_product[name].net_usd += ((o.attributes.total_usd || 0) - (o.attributes.tax_usd || 0)) / 100;
     });
@@ -529,7 +535,7 @@ function computeLS(orders, days) {
         by_product[name].gross_usd = Math.round(by_product[name].gross_usd * 100) / 100;
         by_product[name].net_usd = Math.round(by_product[name].net_usd * 100) / 100;
     });
-    return { orders: ordersCount, revenue: Math.round(revenue * 100) / 100, net_revenue_usd: Math.round(net_revenue_usd * 100) / 100, by_product };
+    return { orders: ordersCount, paid_orders: paidCount, free_orders: ordersCount - paidCount, revenue: Math.round(revenue * 100) / 100, net_revenue_usd: Math.round(net_revenue_usd * 100) / 100, by_product };
 }
 
 function fyDays() {
