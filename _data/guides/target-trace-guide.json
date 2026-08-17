@@ -62,7 +62,7 @@
         },
         {
           "type": "paragraph",
-          "text": "**Flatten Selected** (Cmd-F) eases a selected run of three or more points toward the straight line between the outer two, which stay put. Press once to calm a rough section, keep pressing to land it flat, or on a tilt when the end points sit at different levels."
+          "text": "**Flatten Selected** (Cmd-F) eases a selected run of three or more points toward the straight line between the outer two, which stay put. Each press flattens the section a step further - the button reads **Flatten More** while the same selection is active - so press once to calm a rough section, or keep pressing to land it dead flat, or on a tilt when the end points sit at different levels."
         }
       ]
     },
