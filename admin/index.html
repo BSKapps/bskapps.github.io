@@ -402,6 +402,7 @@
         .chart-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 10px; font-size: 0.8rem; color: #A2A2A8; }
         .chart-legend span { display: flex; align-items: center; gap: 6px; }
         .chart-legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+        .chart-range { font-size: 0.8rem; color: #8A8A90; font-weight: 600; }
         .chart-empty { color: #8A8A90; font-size: 0.85rem; padding: 24px 0; text-align: center; }
         .range-btn:hover { color: #fff; border-color: rgba(255,255,255,0.30); }
         .range-btn.active { background: rgba(111,163,217,0.15); border-color: rgba(111,163,217,0.5); color: #6FA3D9; }
@@ -615,13 +616,21 @@
             <div class="chart-head">
                 <span class="section-title" id="chart-title">Sales by Month</span>
                 <div class="chart-toggle">
-                    <button class="range-btn active" onclick="setChart('sales', this)">Sales</button>
-                    <button class="range-btn" onclick="setChart('visits', this)">Visits</button>
-                    <button class="range-btn" onclick="setChart('product', this)">By app</button>
+                    <button class="range-btn chart-btn active" onclick="setChart('sales', this)">Sales</button>
+                    <button class="range-btn chart-btn" onclick="setChart('visits', this)">Visits</button>
                 </div>
             </div>
             <div id="chart-body"></div>
             <div class="chart-legend" id="chart-legend"></div>
+        </div>
+
+        <div class="chart-panel">
+            <div class="chart-head">
+                <span class="section-title">Net Revenue by App</span>
+                <span class="chart-range" id="donut-range">--</span>
+            </div>
+            <div id="donut-body"></div>
+            <div class="chart-legend" id="donut-legend"></div>
         </div>
 
         <div class="section-title">By Product</div>
@@ -1280,9 +1289,18 @@ const CHART_COLOURS = ['#6FA3D9', '#5FBE8A', '#E8C667', '#8FBCE8'];
 
 function setChart(kind, btn) {
     currentChart = kind;
-    btn.parentElement.querySelectorAll('.range-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.chart-btn').forEach(function(b) { b.classList.remove('active'); });
     btn.classList.add('active');
     displayStats();
+}
+
+function trimToHistory(rows, valueOf, span) {
+    let first = -1;
+    for (let i = 0; i < rows.length; i++) {
+        if (valueOf(rows[i]) > 0) { first = i; break; }
+    }
+    if (first < 0) return [];
+    return rows.slice(first).slice(-span);
 }
 
 function monthLabel(key) {
@@ -1343,6 +1361,31 @@ function donutChartSVG(slices) {
     return svg;
 }
 
+function renderDonut(ls, rate) {
+    const body = document.getElementById('donut-body');
+    const legend = document.getElementById('donut-legend');
+    const label = document.getElementById('donut-range');
+    label.textContent = currentKey === 'all' ? 'All time' : (currentKey === 'fy' ? 'This FY' : currentKey);
+    legend.innerHTML = '';
+    const byProduct = (ls && ls.by_product) || {};
+    const slices = PRODUCTS.map(function(p, i) {
+        let net = 0;
+        Object.keys(byProduct).forEach(function(name) {
+            const ln = name.toLowerCase();
+            if (p.lsMatch.some(function(m) { return ln.indexOf(m) !== -1; })) net += byProduct[name].net_usd || 0;
+        });
+        return { label: p.label, value: net * rate, colour: CHART_COLOURS[i % CHART_COLOURS.length] };
+    }).filter(function(s) { return s.value > 0; });
+    if (!slices.length) {
+        body.innerHTML = '<div class="chart-empty">No sales in this range.</div>';
+        return;
+    }
+    body.innerHTML = donutChartSVG(slices);
+    legend.innerHTML = slices.map(function(s) {
+        return '<span><i style="background:' + s.colour + '"></i>' + esc(s.label) + ' $' + s.value.toFixed(2) + '</span>';
+    }).join('');
+}
+
 function renderChart(stats, ls, audRate) {
     const body = document.getElementById('chart-body');
     const legend = document.getElementById('chart-legend');
@@ -1351,47 +1394,36 @@ function renderChart(stats, ls, audRate) {
     const monthly = stats.monthly;
     legend.innerHTML = '';
 
-    if (currentChart === 'product') {
-        title.textContent = 'Net Revenue by App';
-        const byProduct = (ls && ls.by_product) || {};
-        const slices = PRODUCTS.map(function(p, i) {
-            let net = 0;
-            Object.keys(byProduct).forEach(function(name) {
-                const ln = name.toLowerCase();
-                if (p.lsMatch.some(function(m) { return ln.indexOf(m) !== -1; })) net += byProduct[name].net_usd || 0;
-            });
-            return { label: p.label, value: net * rate, colour: CHART_COLOURS[i % CHART_COLOURS.length] };
-        }).filter(function(s) { return s.value > 0; });
-        if (!slices.length) { body.innerHTML = '<div class="chart-empty">No sales in this range.</div>'; return; }
-        body.innerHTML = donutChartSVG(slices);
-        legend.innerHTML = slices.map(function(s) {
-            return '<span><i style="background:' + s.colour + '"></i>' + esc(s.label) + ' $' + s.value.toFixed(2) + '</span>';
-        }).join('');
-        return;
-    }
+    renderDonut(ls, rate);
 
     if (!monthly) { body.innerHTML = '<div class="chart-empty">Monthly history appears after the next stats refresh.</div>'; return; }
 
+    const span = monthly.span || 12;
+    const axis = (monthly.sales || []).map(function(r) { return r.month; });
+
     if (currentChart === 'visits') {
         title.textContent = 'Visits by Month';
-        const rows = (monthly.visits && Object.keys(monthly.visits).sort().map(function(m) {
-            return { month: m, visits: monthly.visits[m].visits || 0 };
-        })) || [];
+        const stored = monthly.visits || {};
+        const keys = axis.length ? axis : Object.keys(stored).sort();
+        const rows = trimToHistory(keys.map(function(m) {
+            return { month: m, visits: (stored[m] && stored[m].visits) || 0 };
+        }), function(r) { return r.visits; }, span);
         if (!rows.length) { body.innerHTML = '<div class="chart-empty">No monthly traffic stored yet.</div>'; return; }
         body.innerHTML = barChartSVG(rows, [{ field: 'visits', label: 'Visits', colour: CHART_COLOURS[0] }], false);
-        legend.innerHTML = '<span><i style="background:' + CHART_COLOURS[0] + '"></i>Visits, builds up month by month</span>';
+        legend.innerHTML = '<span><i style="background:' + CHART_COLOURS[0] + '"></i>Visits</span>'
+            + '<span>' + rows.length + ' of ' + span + ' months recorded, not affected by the range buttons</span>';
         return;
     }
 
     title.textContent = 'Sales by Month';
     const apple = monthly.apple || {};
-    const rows = (monthly.sales || []).map(function(r) {
+    const rows = trimToHistory((monthly.sales || []).map(function(r) {
         return {
             month: r.month,
             ls: (r.net_usd || 0) * rate,
             apple: ((apple[r.month] && apple[r.month].proceeds_usd) || 0) * rate
         };
-    });
+    }), function(r) { return r.ls + r.apple; }, span);
     if (!rows.length) { body.innerHTML = '<div class="chart-empty">No monthly sales stored yet.</div>'; return; }
     body.innerHTML = barChartSVG(rows, [
         { field: 'ls', label: 'LemonSqueezy', colour: CHART_COLOURS[0] },
@@ -1399,7 +1431,7 @@ function renderChart(stats, ls, audRate) {
     ], true);
     legend.innerHTML = '<span><i style="background:' + CHART_COLOURS[0] + '"></i>LemonSqueezy net</span>'
         + '<span><i style="background:' + CHART_COLOURS[1] + '"></i>App Store proceeds</span>'
-        + '<span>Last 12 months, not affected by the range buttons</span>';
+        + '<span>' + rows.length + ' of ' + span + ' months recorded, not affected by the range buttons</span>';
 }
 
 function displayStats() {
@@ -1580,7 +1612,7 @@ function setRange(days, btn) {
         currentKey = days + 'd';
     }
     localStorage.setItem('bsk_range', days);
-    document.querySelectorAll('.range-btn:not(.currency-btn)').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.range-btn:not(.currency-btn):not(.chart-btn)').forEach(function(b) { b.classList.remove('active'); });
     btn.classList.add('active');
     loadStats();
 }
@@ -1599,7 +1631,7 @@ function restoreRange() {
             currentRange = parseInt(saved);
             currentKey = saved + 'd';
         }
-        document.querySelectorAll('.range-btn:not(.currency-btn)').forEach(function(b) { b.classList.remove('active'); });
+        document.querySelectorAll('.range-btn:not(.currency-btn):not(.chart-btn)').forEach(function(b) { b.classList.remove('active'); });
         btn.classList.add('active');
     }
 }
