@@ -48,6 +48,7 @@
       "features": [
         "Live Grab - pull a live RTA or transfer function trace out of a running Smaart as an editable target curve, calibrated RTAs at real SPL",
         "Import Smaart ASCII trace exports - open, drop, or paste with Cmd+V",
+        "Flatten Selected (Cmd+F) - ease a rough section toward flat or a tilt, a step per press",
         "Freehand draw mode with pencil cursor",
         "Preset starting shapes - tilt, haystack, X-curve, and more",
         "Point Spacing - re-space a curve onto a 1/1, 1/3, 1/6 or 1/12 octave grid",
