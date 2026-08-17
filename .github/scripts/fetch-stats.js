@@ -19,6 +19,7 @@ const APPLE_UPDATE_TYPES = ['7', '7F', '7T', 'F7'];
 
 const BUTTONMAKER_PATH = '/buttonmaker/';
 const SOURCE_PATHS = ['/quickerip/', '/labassistant/', '/fetchpuppy/', '/targettrace/', '/buttonmaker/', '/gogames/'];
+const MONTHLY_SPAN = 12;
 
 function requestRaw(options) {
     return new Promise(function(resolve, reject) {
@@ -324,10 +325,99 @@ async function fetchApple(rates) {
     const ytd = await Promise.all(ytdMonths.map(getMonth));
     result['all'] = convertAmounts(sumReports(yearly.concat(ytd, [currentMonthSum])));
 
+    const seriesKeys = [];
+    for (let i = MONTHLY_SPAN - 1; i >= 1; i--) seriesKeys.push(monthStr(i));
+    const seriesData = await Promise.all(seriesKeys.map(getMonth));
+    const monthly = {};
+    seriesKeys.forEach(function(m, i) {
+        const c = convertAmounts(seriesData[i]);
+        monthly[m] = { sales_usd: c.sales_usd, proceeds_usd: c.proceeds_usd, units: c.units, paid_units: c.paid_units };
+    });
+    const cm = convertAmounts(currentMonthSum);
+    monthly[monthStr(0)] = { sales_usd: cm.sales_usd, proceeds_usd: cm.proceeds_usd, units: cm.units, paid_units: cm.paid_units };
+    result.monthly = monthly;
+
     if (failures.length) result.failures = failures;
     if (appleDataThrough) result.data_through = appleDataThrough;
 
     return result;
+}
+
+function monthKey(d) {
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+}
+
+function recentMonthKeys(span) {
+    const now = new Date();
+    const keys = [];
+    for (let i = span - 1; i >= 0; i--) keys.push(monthKey(new Date(now.getFullYear(), now.getMonth() - i, 1)));
+    return keys;
+}
+
+function computeMonthlySales(orders, span) {
+    const refundedUsd = function(o) { return (o.attributes.refunded_amount_usd || 0) / 100; };
+    const isSale = function(o) {
+        return o.attributes.status === 'paid' || o.attributes.status === 'partial_refund';
+    };
+    const isFree = function(o) {
+        return ((o.attributes.total_usd || 0) - (o.attributes.tax_usd || 0)) === 0;
+    };
+    const buckets = {};
+    recentMonthKeys(span).forEach(function(m) { buckets[m] = { month: m, net_usd: 0, paid_orders: 0, free_orders: 0 }; });
+    orders.filter(isSale).forEach(function(o) {
+        const m = monthKey(new Date(o.attributes.created_at));
+        if (!buckets[m]) return;
+        if (isFree(o)) { buckets[m].free_orders += 1; return; }
+        buckets[m].paid_orders += 1;
+        buckets[m].net_usd += ((o.attributes.total_usd || 0) - (o.attributes.tax_usd || 0)) / 100 - refundedUsd(o);
+    });
+    return recentMonthKeys(span).map(function(m) {
+        buckets[m].net_usd = Math.round(buckets[m].net_usd * 100) / 100;
+        return buckets[m];
+    });
+}
+
+async function fetchCFMonthlyVisits(span) {
+    const out = {};
+    const now = new Date();
+    for (let i = span - 1; i >= 0; i--) {
+        const first = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const last = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
+        const start = monthKey(first) + '-01';
+        const end = (last > now ? now : last).toISOString().split('T')[0];
+        const query = `{ viewer { accounts(filter: {accountTag: "${CF_ACCOUNT}"}) { rumPageloadEventsAdaptiveGroups(filter: {AND: [{date_geq: "${start}"}, {date_leq: "${end}"}]} limit: 1) { count sum { visits } } } } }`;
+        const body = JSON.stringify({ query });
+        try {
+            const res = await request({
+                hostname: 'api.cloudflare.com',
+                path: '/client/v4/graphql',
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + CF_TOKEN,
+                    'Content-Type': 'application/json',
+                    'Content-Length': Buffer.byteLength(body)
+                }
+            }, body);
+            if (res.body.errors) throw new Error(res.body.errors[0].message);
+            const g = res.body.data.viewer.accounts[0].rumPageloadEventsAdaptiveGroups[0];
+            if (g) out[monthKey(first)] = { visits: g.sum.visits || 0, pageviews: g.count || 0 };
+        } catch (e) {
+            console.error('CF monthly ' + monthKey(first) + ' error:', e.message);
+        }
+    }
+    return out;
+}
+
+function readPriorStats() {
+    const fs = require('fs');
+    const path = process.env.PRIOR_STATS_PATH;
+    if (!path) return null;
+    try {
+        return JSON.parse(fs.readFileSync(path, 'utf8'));
+    } catch (e) {
+        console.log('No prior stats to merge (' + e.message + ')');
+        return null;
+    }
 }
 
 function request(options, body) {
@@ -675,6 +765,21 @@ async function main() {
             }
         }
     }
+
+    const prior = readPriorStats();
+    const priorMonthly = (prior && prior.monthly) || {};
+    const appleMonthly = (stats.apple && stats.apple.monthly) || {};
+    if (stats.apple && stats.apple.monthly) delete stats.apple.monthly;
+
+    let visitsMonthly = Object.assign({}, priorMonthly.visits || {});
+    if (CF_TOKEN) {
+        const fetched = await fetchCFMonthlyVisits(MONTHLY_SPAN);
+        visitsMonthly = Object.assign(visitsMonthly, fetched);
+    }
+
+    const salesMonthly = lsOrders ? computeMonthlySales(lsOrders, MONTHLY_SPAN) : ((priorMonthly.sales) || []);
+    const appleSeries = Object.keys(appleMonthly).length ? appleMonthly : (priorMonthly.apple || {});
+    stats.monthly = { span: MONTHLY_SPAN, sales: salesMonthly, apple: appleSeries, visits: visitsMonthly };
 
     const fs = require('fs');
     fs.writeFileSync('_data/stats.json', JSON.stringify(stats, null, 2) + '\n');
