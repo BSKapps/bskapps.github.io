@@ -56,7 +56,8 @@
 
         <div class="script-card">
             <p>Full-featured Spotify Web API controller for Companion. Cue-point playback from a timestamp, named bookmarks, volume fades, album art grids (1x1, 2x2, 3x3), playlist control, 99 ready-made presets, and 30 dynamic variables for track info, timing, and state. Requires a Spotify Premium account and a free Spotify Developer app.</p>
-            <p class="note-line"><strong>macOS offline fallback:</strong> if the Web API drops out mid-show, transport actions keep working via AppleScript and the local Spotify app. Auto-recovers when the API returns.</p>
+            <p class="note-line"><strong>macOS offline fallback:</strong> if the Web API drops out mid-show, control continues via the local Spotify app: transport, volume, fades, seek, shuffle, repeat, play by track or playlist, timestamp cues and bookmark resume, with track info and album art still updating. Auto-recovers when the API returns. Playing a specific song while fully offline needs it downloaded in Spotify.</p>
+            <p class="note-line"><strong>Updates:</strong> the download always serves the latest version, but Companion does not alert you to new releases of this module. Re-download and re-import to update, or watch Releases on the GitHub repo.</p>
             <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-spotify/releases/latest" target="_blank" rel="noopener">Download latest release &rarr;</a>
             &nbsp; <a class="download-link" href="https://github.com/BSKapps/companion-module-bsk-spotify" target="_blank" rel="noopener">View on GitHub &rarr;</a>
         </div>
