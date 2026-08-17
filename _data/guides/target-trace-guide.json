@@ -172,6 +172,10 @@
         {
           "type": "paragraph",
           "text": "You can also import a Smaart **ASCII trace export**: open the file, drop it on the graph, or copy a trace in Smaart and paste it with Cmd-V."
+        },
+        {
+          "type": "paragraph",
+          "text": "A grab from a calibrated RTA lands at the measured SPL; a transfer function grab is relative and centres on 0 dB. **TF Ref** is the bridge between the two views: it sets which SPL 0 dB TF maps to. Set TF Ref to your measurement level and the RTA and TF views of the same grab line up."
         }
       ]
     },
