@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Target Trace user guide - BSK Apps",
     "h1": "Target Trace user guide",
-    "dateLine": "Updated for version 1.2",
+    "dateLine": "Updated for version 1.3",
     "description": "A how-to guide for Target Trace: drawing and editing target curves, TF and Spectrum modes, smoothing and weighting, the Smaart library, presets, and exporting .crv and REW files.",
     "canonical": "https://bskapps.com/articles/target-trace-guide/",
     "ogTitle": "Target Trace user guide",
@@ -59,6 +59,10 @@
         {
           "type": "paragraph",
           "text": "Nudge selected points with Option-arrows (left/right by a semitone, up/down by 0.5 dB). Ctrl-click snaps a point to the cursor. A Hide toggle in the Control Points panel hides the dots without changing the curve."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Flatten Selected** (Cmd-F) eases a selected run of three or more points toward the straight line between the outer two, which stay put. Press once to calm a rough section, keep pressing to land it flat, or on a tilt when the end points sit at different levels."
         }
       ]
     },
@@ -149,6 +153,29 @@
       ]
     },
     {
+      "id": "live-grab",
+      "title": "Live Grab",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "**Live Grab** in the toolbar connects Target Trace to a running Smaart and pulls a measured trace straight into the editor as an editable target curve. Enable the API in Smaart under **Options > Preferences > API**, then enter the host (use **localhost** when Smaart is on the same computer), the port (default 26000) and the password if you set one, and press **Connect**."
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "**Grab** next to any running measurement takes a snapshot of its trace and turns it into control points, ready to edit and save. The editor switches to the matching mode.",
+            "A grab from a **calibrated RTA** lands at its real SPL on the graph. A transfer function grab is centred on 0 dB.",
+            "The raw trace stays behind the editor as a faint **reference line** so you can see how far your target sits from the measurement. **Detail** sets its resolution, **Refresh** re-grabs, **Clear** removes it. It is never saved into the curve.",
+            "Grab needs the measurement running in Smaart; a stopped measurement's Grab button is greyed."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "You can also import a Smaart **ASCII trace export**: open the file, drop it on the graph, or copy a trace in Smaart and paste it with Cmd-V."
+        }
+      ]
+    },
+    {
       "id": "point-spacing",
       "title": "Point spacing",
       "blocks": [
@@ -165,6 +192,10 @@
         {
           "type": "paragraph",
           "text": "Press Cmd-S to save. The dialog offers two formats: **Smaart (.crv)** keeps all the metadata (colour, type, tolerance, smoothing band) and the points; **REW House Curve (.txt)** writes just the frequency and dB columns for use in REW. Saving into your Smaart TargetCurves folder updates the library automatically. REW .txt files are an export only and cannot be loaded back in."
+        },
+        {
+          "type": "paragraph",
+          "text": "Smaart reads its TargetCurves folder when it starts, so a curve saved while Smaart is already running will not appear there until you either restart Smaart or use **Import** in Smaart's Target Curves window. One caution: delete curves from Target Trace, not from Smaart's window - Target Trace moves the file to the Trash where it can be recovered, Smaart deletes it permanently."
         }
       ]
     },
@@ -174,7 +205,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Cmd-Z undoes any edit, including loads and preset applies, and Cmd-Shift-Z redoes the last undone edit; text edits bundle into one undo per field. Handy keys: D draw, T/S modes, V split, P presets, Cmd-A select all, Delete to remove, Option-arrows to nudge a point, Cmd-up/down to shift the whole curve. The Help menu has a full Keyboard Shortcuts reference."
+          "text": "Cmd-Z undoes any edit, including loads and preset applies, and Cmd-Shift-Z redoes the last undone edit; text edits bundle into one undo per field. Handy keys: D draw, T/S modes, V split, P presets, Cmd-A select all, Delete to remove, Option-arrows to nudge a point, Cmd-up/down to shift the whole curve (hold to repeat), Cmd-F to flatten the selected points. The Help menu has a full Keyboard Shortcuts reference."
         }
       ]
     },
