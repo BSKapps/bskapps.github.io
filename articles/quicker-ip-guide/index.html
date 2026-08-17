@@ -43,10 +43,14 @@
                 <li>Live traffic in and out</li>
                 <li>Link speed and duplex - half duplex is shown in red</li>
                 <li>MTU - shown in red if below 1500</li>
-                <li>MAC address</li>
-                <li>A subnet overlap warning if two adapters share a range</li>
+                <li>MAC and IPv6 address</li>
+                <li>Multicast - whether the adapter can carry the multicast traffic Dante and AES67 depend on</li>
+                <li>Tx Errors, Rx Errors and Collisions, counted from a baseline you can reset with Clear Counters so only new faults show</li>
+                <li>IGMP Query - reads "active", "seen Ns ago", or "no querier" when nothing on the network is querying</li>
+                <li>Audio Clock, Grandmaster and Clock Sync - the PTP audio clock seen on the network, which device is serving it, and whether it is still in sync. All three read "none found" on a network with no clock</li>
+                <li>A subnet overlap warning if two adapters share a range, and a duplicate IP warning if two live adapters hold the same address</li>
             </ul>
-            <p>Link speed, duplex, MTU and the overlap warning are the Dante monitoring checks: a full-duplex gigabit link at MTU 1500 with no overlapping subnets.</p>
+            <p>Link speed, duplex, MTU and the overlap warning are the Dante monitoring checks: a full-duplex gigabit link at MTU 1500 with no overlapping subnets. Multicast, IGMP Query and the three clock rows cover the rest of an AV network - multicast getting through, a querier keeping it flowing, and a clock the devices can lock to.</p>
             <p>Quicker IP also checks the gateway. If an adapter's gateway is not inside its own subnet, the gateway line turns red and Network Info reads "Gateway: Outside subnet, unreachable", because the adapter cannot reach a gateway off its subnet and traffic to other networks will not get out. An adapter that comes up this way raises a one-time Gateway Unreachable alert, and applying a static IP with an off-subnet gateway asks you to confirm first.</p>
 
             <h2>Setting an IP address</h2>
