@@ -43,9 +43,11 @@
       "tagline": "Build precise target curves for Smaart or REW - from scratch, your own measurements, or built-in presets.",
       "price": "$12.99 USD",
       "macos": "macOS 14.6+",
-      "version": "v1.2.1",
+      "version": "v1.3",
       "released": "9 July 2026",
       "features": [
+        "Live Grab - pull a live RTA or transfer function trace out of a running Smaart as an editable target curve, calibrated RTAs at real SPL",
+        "Import Smaart ASCII trace exports - open, drop, or paste with Cmd+V",
         "Freehand draw mode with pencil cursor",
         "Preset starting shapes - tilt, haystack, X-curve, and more",
         "Point Spacing - re-space a curve onto a 1/1, 1/3, 1/6 or 1/12 octave grid",
@@ -57,7 +59,7 @@
         "Overlay curves to compare - each at its own Smaart offset and tolerance band, with Match type filter",
         "Save directly to Smaart TargetCurves folder",
         "Export as REW house curve",
-        "Keyboard shortcuts - D for draw, V for Split View, T / S to switch curve type"
+        "Keyboard shortcuts - D for draw, V for Split View, T / S to switch curve type, Cmd+F to flatten a selection"
       ],
       "description": "Build target curves from presets, draw them freehand, or import and reshape your own measurements. Target Trace gives you a visual editor for Smaart .crv files with full control. Use target overlays, tolerance bands, weighting. With one-click export back to Smaart or REW."
     },
