@@ -23,6 +23,17 @@
 
         <p class="section-desc">Two modules for Bitfocus Companion 4+: full Spotify control, and Rational Acoustics Smaart control with live SPL. Both install the same way - import the module package, then follow its short setup below.</p>
 
+        <div style="display: flex; gap: 26px; flex-wrap: wrap; margin-top: 18px; align-items: center;">
+            <a class="download-link" href="#spotify" style="display: inline-flex; align-items: center; gap: 10px;">
+                <img src="/images/spotify-module-icon.svg" alt="" width="34" height="34">
+                BSK Spotify &darr;
+            </a>
+            <a class="download-link" href="#smaart" style="display: inline-flex; align-items: center; gap: 10px;">
+                <img src="/images/smaart-module-icon.svg" alt="" width="34" height="34">
+                BSK Smaart &darr;
+            </a>
+        </div>
+
         <h2 class="section-title" style="margin-top: 32px; margin-bottom: 16px;">Add a module to Companion</h2>
 
         <div class="script-card setup">
@@ -38,7 +49,7 @@
             <p class="note-line" style="margin-top:14px;"><strong>After Companion updates:</strong> in our testing the modules survived a version update intact, but we can't guarantee every update will preserve them. If a connection disappears after an update, re-import the <code>.tgz</code> from the latest release and re-add the connection. Your saved settings and tokens are kept in Companion's database and are usually preserved.</p>
         </div>
 
-        <div class="tile-head" style="margin-top: 44px; margin-bottom: 14px;">
+        <div class="tile-head" id="spotify" style="margin-top: 44px; margin-bottom: 14px;">
             <img class="tile-icon" src="/images/spotify-module-icon.svg" alt="BSK Spotify for Companion" width="58" height="58">
             <h2 class="section-title" style="margin: 0;">BSK Spotify</h2>
         </div>
@@ -80,7 +91,7 @@
             <p class="note-line" style="margin-top:14px;"><strong>If Authenticate fails with "INVALID_CLIENT" or similar:</strong> the most common cause is the Redirect URI in your Spotify app does not match <code>http://127.0.0.1:4115/callback</code> exactly. Whitespace, https vs http, or a trailing slash will all break it. Double-check it appears in the Redirect URIs list and re-save the Spotify app if needed.</p>
         </div>
 
-        <div class="tile-head" style="margin-top: 44px; margin-bottom: 14px;">
+        <div class="tile-head" id="smaart" style="margin-top: 44px; margin-bottom: 14px;">
             <img class="tile-icon" src="/images/smaart-module-icon.svg" alt="BSK Smaart for Companion" width="58" height="58">
             <h2 class="section-title" style="margin: 0;">BSK Smaart</h2>
         </div>
@@ -98,7 +109,9 @@
             <img class="step-shot" src="/tools/companion/images/smaart-presets-1.png?v=2" alt="Companion Presets tab showing BSK Smaart preset buttons grouped under Cursor, Delay and Display">
             <img class="step-shot" src="/tools/companion/images/smaart-presets-2.png?v=2" alt="Companion Presets tab showing BSK Smaart preset buttons grouped under Display, Generator and Measurements">
             <img class="step-shot" src="/tools/companion/images/smaart-presets-3.png" alt="Companion Presets tab showing BSK Smaart preset buttons grouped under Traces, Views and Zoom">
-            <p style="margin-top:18px;"><strong>SPL Readouts</strong> is the largest category: one preset per metric, each of which also starts and stops logging when you tap it. Plus a cycling readout that steps through a list of metrics you choose, so one button can show A Slow, C Slow and Leq in turn.</p>
+            <p style="margin-top:18px;"><strong>SPL Readouts</strong> is the largest category: one preset per metric, each of which also starts and stops logging when you tap it. Plus a cycling readout that steps through a list of metrics you choose, so one button can show A Slow, C Slow and Leq in turn. Here they are live, on a calibrated input with SPL logging running:</p>
+            <img class="step-shot" src="/tools/companion/images/smaart-presets-spl.png" alt="Companion Presets tab showing the SPL and SPL Readouts categories with live dB values on every button">
+            <p style="margin-top:18px;">The 21 metrics:</p>
             <ul class="ref-list">
                 <li>SPL Fast</li><li>SPL A Fast</li><li>SPL C Fast</li><li>SPL Slow</li><li>SPL A Slow</li><li>SPL C Slow</li><li>Leq 1</li><li>LAeq 1</li><li>LCeq 1</li><li>Leq 15</li><li>LAeq 15</li><li>LCeq 15</li><li>Leq 60</li><li>LAeq 60</li><li>LCeq 60</li><li>Peak</li><li>Peak A</li><li>Peak C</li><li>FS Peak</li><li>Exposure O</li><li>Exposure N</li>
             </ul>
@@ -109,7 +122,7 @@
             <h3>Actions, feedbacks and variables</h3>
             <p><strong>59 actions.</strong></p>
             <ul class="ref-list">
-                <li>Adjust Generator Level</li><li>Capture Quick Compare</li><li>Capture Trace</li><li>Clear All dB Offsets</li><li>Clear Locked Cursor</li><li>Clear dB Offset (front trace only)</li><li>Copy To ASCII</li><li>Custom Keypress</li><li>Cycle Preferred Plot</li><li>Cycle SPL Readout Metric</li><li>Cycle Skin</li><li>Cycle Z Order</li><li>Find Delay (transfer function)</li><li>Front Trace Offset Up/Down</li><li>Hide All Traces</li><li>Hide Trace</li><li>Impulse Mode</li><li>Increase/Decrease Delay</li><li>Lock Cursor To Peak</li><li>Move Locked Cursor</li><li>Open Target Curves Dialog (picker)</li><li>Real-Time Mode</li><li>Recapture</li><li>Rename Trace</li><li>Reset Averages</li><li>Reset Measurement Delays</li><li>Reset SPL Leq Buffers</li><li>Run Command (list from Smaart)</li><li>SPL Logging Start/Stop</li><li>SPL Mode</li><li>Select View Preset</li><li>Set Delay (transfer function)</li><li>Set Generator Level</li><li>Set Zoom Preset</li><li>Show/Hide Target Curves</li><li>Start All Measurements</li><li>Start Delay Tracking (all TF measurements)</li><li>Start Signal Generator</li><li>Start/Stop Delay Tracking (one measurement)</li><li>Start/Stop Measurement</li><li>Stop All Measurements</li><li>Stop Delay Tracking (all TF measurements)</li><li>Stop Signal Generator</li><li>Toggle Bar</li><li>Toggle Clock/SPL Meter</li><li>Toggle Coherence</li><li>Toggle Data / SPL Meter Bar</li><li>Toggle Delay Tracking (all TF measurements)</li><li>Toggle Input Meter Orientation</li><li>Toggle Input Meters</li><li>Toggle Measurement Group (stop if any running, else start)</li><li>Toggle Peak Hold</li><li>Toggle Quick Compare</li><li>Toggle SPL Meters</li><li>Toggle Signal Generator</li><li>Trigger Timer</li><li>Zoom X Axis</li><li>Zoom X and Y Axis</li><li>Zoom Y Axis</li>
+                <li>Adjust Generator Level</li><li>Capture Quick Compare</li><li>Capture Trace</li><li>Clear All dB Offsets</li><li>Clear Locked Cursor</li><li>Clear dB Offset (front trace only)</li><li>Copy To ASCII</li><li>Custom Keypress</li><li>Cycle Preferred Plot</li><li>Cycle SPL Readout Metric</li><li>Cycle Skin</li><li>Cycle Z Order</li><li>Find Delay (transfer function)</li><li>Front Trace Offset Up/Down</li><li>Hide All Traces</li><li>Hide Trace</li><li>Impulse Mode</li><li>Increase/Decrease Delay</li><li>Lock Cursor To Peak</li><li>Move Locked Cursor</li><li>Open Target Curves Dialog (opens another every press)</li><li>Real-Time Mode</li><li>Recapture</li><li>Rename Trace</li><li>Reset Averages</li><li>Reset Measurement Delays</li><li>Reset SPL Leq Buffers</li><li>Run Command (list from Smaart)</li><li>SPL Logging Start/Stop</li><li>SPL Mode</li><li>Select View Preset</li><li>Set Delay (transfer function)</li><li>Set Generator Level</li><li>Set Zoom Preset</li><li>Show/Hide Target Curves</li><li>Start All Measurements</li><li>Start Delay Tracking (all TF measurements)</li><li>Start Signal Generator</li><li>Start/Stop Delay Tracking (one measurement)</li><li>Start/Stop Measurement</li><li>Stop All Measurements</li><li>Stop Delay Tracking (all TF measurements)</li><li>Stop Signal Generator</li><li>Toggle Bar</li><li>Toggle Clock/SPL Meter</li><li>Toggle Coherence</li><li>Toggle Data / SPL Meter Bar</li><li>Toggle Delay Tracking (all TF measurements)</li><li>Toggle Input Meter Orientation</li><li>Toggle Input Meters</li><li>Toggle Measurement Group (stop if any running, else start)</li><li>Toggle Peak Hold</li><li>Toggle Quick Compare</li><li>Toggle SPL Meters</li><li>Toggle Signal Generator</li><li>Trigger Timer</li><li>Zoom X Axis</li><li>Zoom X and Y Axis</li><li>Zoom Y Axis</li>
             </ul>
             <p style="margin-top:18px;"><strong>12 feedbacks</strong> for button colour.</p>
             <ul class="ref-list">
