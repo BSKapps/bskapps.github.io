@@ -256,6 +256,17 @@ article .note { background: var(--card); border: 1px solid var(--border-strong);
 .article-cta a.cta-link { display: inline-block; color: var(--brand); font-weight: 600; text-decoration: none; font-size: 0.95rem; }
 .article-cta a.cta-link:hover { color: var(--brand-bright); }
 
+.house-ads { margin: 40px 0 8px; padding: 18px 24px 20px; background: var(--card); border: 1px solid var(--border-strong); border-radius: 10px; }
+.house-ads h3 { color: var(--heading); font-size: 1.05rem; margin: 0 0 6px; }
+.promo-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; text-decoration: none; color: var(--text); }
+.promo-row + .promo-row { border-top: 1px solid var(--border); }
+.promo-row img { width: 40px; height: 40px; border-radius: 9px; flex: 0 0 auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.45)); }
+.promo-text { font-size: 0.85rem; line-height: 1.45; color: var(--text-on-card); }
+.promo-text b { display: block; font-size: 0.95rem; color: var(--text); }
+.promo-row:hover .promo-text b { color: var(--brand-bright); }
+.promo-all { margin: 12px 0 0; font-size: 0.85rem; }
+.promo-all a { color: var(--brand); text-decoration: none; font-weight: 600; }
+
 .section-title { font-size: 1.3rem; font-weight: 600; color: var(--heading); margin-bottom: 8px; }
 .section-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px; line-height: 1.5; }
 .script-card {
