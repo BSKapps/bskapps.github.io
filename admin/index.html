@@ -259,9 +259,13 @@
         /* ANALYTICS */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 12px;
             margin-bottom: 16px;
+        }
+        @media (max-width: 760px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-grid .stat-box.total { grid-column: 1 / -1; }
         }
         .stat-box {
             background: #343B4A;
@@ -579,26 +583,11 @@
             <div class="stat-box">
                 <div class="stat-label">Orders</div>
                 <div class="stat-sublabel" id="sublabel-orders">--</div>
+                <div class="stat-sublabel">Lemon Squeezy</div>
                 <div class="stat-value" id="stat-orders">--</div>
+                <div class="stat-sublabel">App Store paid</div>
+                <div class="stat-value-secondary" id="stat-orders-apple">--</div>
                 <div class="stat-sub" id="stat-orders-sub">LemonSqueezy</div>
-            </div>
-            <div class="stat-box revenue">
-                <div class="stat-label">Lemon Squeezy Sales</div>
-                <div class="stat-sublabel">Gross</div>
-                <div class="stat-value" id="stat-revenue">--</div>
-                <div class="stat-sublabel">Net</div>
-                <div class="stat-value-secondary" id="stat-revenue-net">--</div>
-                <div class="stat-sub" id="stat-revenue-sub">LemonSqueezy · USD</div>
-            </div>
-            <div class="stat-box revenue">
-                <div class="stat-label">Apple Sales</div>
-                <div class="stat-sublabel">Sales</div>
-                <div class="stat-value" id="stat-apple">--</div>
-                <div class="stat-sublabel">Proceeds</div>
-                <div class="stat-value-secondary" id="stat-apple-proceeds">--</div>
-                <div class="stat-sublabel">Units</div>
-                <div class="stat-value-secondary" id="stat-apple-units">--</div>
-                <div class="stat-sub" id="stat-apple-sub">App Store · USD</div>
             </div>
             <div class="stat-box highlight">
                 <div class="stat-label">Conversion</div>
@@ -608,6 +597,30 @@
                 <div class="stat-sublabel">Returning</div>
                 <div class="stat-value-secondary" id="stat-returning">--</div>
                 <div class="stat-sub" id="stat-returning-sub">of orders</div>
+            </div>
+            <div class="stat-box revenue">
+                <div class="stat-label">Lemon Squeezy</div>
+                <div class="stat-sublabel">Gross</div>
+                <div class="stat-value" id="stat-revenue">--</div>
+                <div class="stat-sublabel">Net</div>
+                <div class="stat-value-secondary" id="stat-revenue-net">--</div>
+                <div class="stat-sub" id="stat-revenue-sub">LemonSqueezy &middot; USD</div>
+            </div>
+            <div class="stat-box revenue">
+                <div class="stat-label">App Store</div>
+                <div class="stat-sublabel">Sales</div>
+                <div class="stat-value" id="stat-apple">--</div>
+                <div class="stat-sublabel">Proceeds</div>
+                <div class="stat-value-secondary" id="stat-apple-proceeds">--</div>
+                <div class="stat-sublabel">Units</div>
+                <div class="stat-value-secondary" id="stat-apple-units">--</div>
+                <div class="stat-sub" id="stat-apple-sub">App Store &middot; USD</div>
+            </div>
+            <div class="stat-box revenue total">
+                <div class="stat-label">Total Net</div>
+                <div class="stat-sublabel" id="sublabel-total-net">--</div>
+                <div class="stat-value" id="stat-total-net">--</div>
+                <div class="stat-sub" id="stat-total-net-sub">Lemon Squeezy + App Store</div>
             </div>
         </div>
 
@@ -1469,6 +1482,7 @@ function displayStats() {
     document.getElementById('sublabel-visits').textContent = cfLabel;
     document.getElementById('sublabel-orders').textContent = rangeLabel;
     document.getElementById('sublabel-returning').textContent = rangeLabel;
+    document.getElementById('sublabel-total-net').textContent = rangeLabel;
 
     if (updated) document.getElementById('stats-updated').textContent = 'Updated ' + updated;
     const cf = stats.cloudflare && stats.cloudflare[key];
@@ -1601,10 +1615,12 @@ function displayStats() {
             ? apple.paid_units.toLocaleString() + ' paid · ' + (apple.free_units || 0).toLocaleString() + ' free · '
               + (apple.update_units || 0).toLocaleString() + ' updates'
             : (apple.units || 0).toLocaleString();
+        document.getElementById('stat-orders-apple').textContent = (apple.paid_units || 0).toLocaleString();
     } else {
         document.getElementById('stat-apple').textContent = apple ? (apple.error || '--') : '--';
         document.getElementById('stat-apple-proceeds').textContent = '--';
         document.getElementById('stat-apple-units').textContent = '--';
+        document.getElementById('stat-orders-apple').textContent = '--';
     }
     const appleSub = document.getElementById('stat-apple-sub');
     const appleFailures = stats.apple && stats.apple.failures;
@@ -1615,6 +1631,21 @@ function displayStats() {
         appleSub.textContent += ' · reports unavailable';
         appleSub.title = appleFailures.join('\n');
     }
+
+    const lsNet = (ls && !ls.error)
+        ? (currentCurrency === 'AUD'
+            ? (ls.net_revenue_aud != null ? ls.net_revenue_aud : (ls.net_revenue_usd != null ? ls.net_revenue_usd * audRate : null))
+            : ls.net_revenue_usd)
+        : null;
+    const appleNet = (apple && !apple.error)
+        ? (currentCurrency === 'AUD'
+            ? (apple.proceeds_aud != null ? apple.proceeds_aud : (apple.proceeds_usd != null ? apple.proceeds_usd * audRate : null))
+            : apple.proceeds_usd)
+        : null;
+    document.getElementById('stat-total-net').textContent = (lsNet != null || appleNet != null)
+        ? '$' + ((lsNet || 0) + (appleNet || 0)).toFixed(2)
+        : '--';
+    document.getElementById('stat-total-net-sub').textContent = 'Lemon Squeezy + App Store · ' + currentCurrency;
 }
 
 function fyDays() {
