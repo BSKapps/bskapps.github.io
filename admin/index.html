@@ -649,8 +649,18 @@
             <summary><span class="chev">&#9656;</span><span class="section-title">Page Views by Page</span></summary>
             <div class="data-table-wrap">
                 <table class="data-table">
-                    <thead><tr><th>Page</th><th>Path</th><th class="num">Visits</th><th class="num">Views</th></tr></thead>
-                    <tbody id="pages-tbody"><tr><td colspan="4" class="muted">--</td></tr></tbody>
+                    <thead><tr><th>Page</th><th>Path</th><th class="num">Visits</th><th class="num">Views</th><th class="num">Views/visit</th></tr></thead>
+                    <tbody id="pages-tbody"><tr><td colspan="5" class="muted">--</td></tr></tbody>
+                </table>
+            </div>
+        </details>
+
+        <details class="collapse-section" data-key="funnel" open>
+            <summary><span class="chev">&#9656;</span><span class="section-title">Article Funnel by App</span></summary>
+            <div class="data-table-wrap">
+                <table class="data-table">
+                    <thead><tr><th>App</th><th class="num">Articles</th><th class="num">Article visits</th><th class="num">Product page visits</th></tr></thead>
+                    <tbody id="funnel-tbody"><tr><td colspan="4" class="muted">--</td></tr></tbody>
                 </table>
             </div>
         </details>
@@ -1466,13 +1476,14 @@ function displayStats() {
     if (Array.isArray(pages)) {
         const visiblePages = pages.filter(function(p) { return !IGNORE_PATHS[p.path]; });
         pagesTbody.innerHTML = visiblePages.length ? visiblePages.map(function(p) {
-            return '<tr><td>' + esc(pageLabel(p.path)) + '</td><td class="muted">' + esc(p.path) + '</td><td class="num">' + (p.visits || 0).toLocaleString() + '</td><td class="num">' + (p.pageviews || 0).toLocaleString() + '</td></tr>';
-        }).join('') : '<tr><td colspan="4" class="muted">No data yet</td></tr>';
+            const depth = p.visits > 0 ? (p.pageviews / p.visits).toFixed(1) : '--';
+            return '<tr><td>' + esc(pageLabel(p.path)) + '</td><td class="muted">' + esc(p.path) + '</td><td class="num">' + (p.visits || 0).toLocaleString() + '</td><td class="num">' + (p.pageviews || 0).toLocaleString() + '</td><td class="num">' + depth + '</td></tr>';
+        }).join('') : '<tr><td colspan="5" class="muted">No data yet</td></tr>';
         const bm = pages.find(function(p) { return p.path === '/buttonmaker/'; });
         document.getElementById('stat-bm').textContent = bm ? (bm.visits || 0).toLocaleString() : '0';
         document.getElementById('stat-bm-views').textContent = bm ? (bm.pageviews || 0).toLocaleString() : '0';
     } else {
-        pagesTbody.innerHTML = '<tr><td colspan="4" class="muted">' + (pages && pages.error ? esc(pages.error) : '--') + '</td></tr>';
+        pagesTbody.innerHTML = '<tr><td colspan="5" class="muted">' + (pages && pages.error ? esc(pages.error) : '--') + '</td></tr>';
         document.getElementById('stat-bm').textContent = '--';
         document.getElementById('stat-bm-views').textContent = '--';
     }
@@ -1502,6 +1513,7 @@ function displayStats() {
 
     renderProductCards(stats, key, audRate);
     renderReferrers(stats, key);
+    renderFunnel(stats, key);
 
     const countries = stats.countries && stats.countries[key];
     const countriesTbody = document.getElementById('countries-tbody');
@@ -1934,7 +1946,7 @@ function sourceLabel(host) {
     return bare;
 }
 
-const SOURCE_ORDER = ['Google', 'Bing', 'DuckDuckGo', 'Direct', 'Reddit', 'Facebook', 'Twitter/X', 'GitHub', 'Hacker News'];
+const SOURCE_ORDER = ['Google', 'Bing', 'DuckDuckGo', 'Direct / untagged', 'Reddit', 'Facebook', 'Twitter/X', 'GitHub', 'Hacker News'];
 
 function sourceRank(label) {
     if (label === 'Button Maker') return 1000;
@@ -1949,7 +1961,7 @@ function buildSourceLine(srcArr, bmClicks) {
     (srcArr || []).forEach(function(s) {
         const host = s.host || '';
         if (host === 'bskapps.com' || host === 'www.bskapps.com') { internalTotal += s.count; return; }
-        items.push({ label: host === '' ? 'Direct' : sourceLabel(host), count: s.count });
+        items.push({ label: host === '' ? 'Direct / untagged' : sourceLabel(host), count: s.count });
     });
     if (bmClicks > 0) items.push({ label: 'Button Maker', count: bmClicks });
     const otherInternal = Math.max(0, internalTotal - bmClicks);
@@ -1959,6 +1971,51 @@ function buildSourceLine(srcArr, bmClicks) {
     top.sort(function(a, b) { return sourceRank(a.label) - sourceRank(b.label) || b.count - a.count; });
     const line = top.map(function(i) { return esc(i.label) + ' <b>' + i.count.toLocaleString() + '</b>'; }).join(' &middot; ');
     return line || '<span class="muted">No data yet</span>';
+}
+
+const ARTICLE_APP = {
+    '/articles/companion-macos-network/': 'Quicker IP',
+    '/articles/companion-module-setup/': 'Quicker IP',
+    '/articles/dante-mac-network-readiness/': 'Quicker IP',
+    '/articles/find-devices-on-network/': 'Quicker IP',
+    '/articles/ipv6-on-a-mac/': 'Quicker IP',
+    '/articles/mac-dns-for-av/': 'Quicker IP',
+    '/articles/mac-routing-table/': 'Quicker IP',
+    '/articles/quicker-ip-guide/': 'Quicker IP',
+    '/articles/static-ips-av-networks/': 'Quicker IP',
+    '/articles/qlab-audio-formats/': 'Lab Assistant',
+    '/articles/qlab-lufs-levels/': 'Lab Assistant',
+    '/articles/qlab-script-cues-spotify/': 'Lab Assistant',
+    '/articles/qlab-show-prep-checklist/': 'Lab Assistant',
+    '/articles/qlab-workspace-habits/': 'Lab Assistant',
+    '/articles/rew-house-curve/': 'Target Trace',
+    '/articles/smaart-target-curves/': 'Target Trace'
+};
+
+function renderFunnel(stats, key) {
+    const tbody = document.getElementById('funnel-tbody');
+    if (!tbody) return;
+    const pages = stats.pages && stats.pages[key];
+    const counts = {};
+    PRODUCTS.forEach(function(pr) { counts[pr.label] = { articles: 0, visits: 0, product: 0 }; });
+    Object.keys(ARTICLE_APP).forEach(function(path) {
+        const app = ARTICLE_APP[path];
+        if (counts[app]) counts[app].articles += 1;
+    });
+    if (Array.isArray(pages)) {
+        pages.forEach(function(p) {
+            const app = ARTICLE_APP[p.path];
+            if (app && counts[app]) counts[app].visits += (p.visits || 0);
+            PRODUCTS.forEach(function(pr) {
+                if (pr.path === p.path) counts[pr.label].product += (p.visits || 0);
+            });
+        });
+    }
+    const rows = PRODUCTS.map(function(pr) {
+        const c = counts[pr.label];
+        return '<tr><td>' + esc(pr.label) + '</td><td class="num">' + c.articles + '</td><td class="num">' + c.visits.toLocaleString() + '</td><td class="num">' + c.product.toLocaleString() + '</td></tr>';
+    }).join('');
+    tbody.innerHTML = Array.isArray(pages) ? rows : '<tr><td colspan="4" class="muted">--</td></tr>';
 }
 
 function renderReferrers(stats, key) {
@@ -1971,7 +2028,7 @@ function renderReferrers(stats, key) {
         sources[path].forEach(function(s) {
             const host = s.host || '';
             if (host === 'bskapps.com' || host === 'www.bskapps.com') return;
-            const label = host === '' ? 'Direct' : sourceLabel(host);
+            const label = host === '' ? 'Direct / untagged' : sourceLabel(host);
             totals[label] = (totals[label] || 0) + (s.count || 0);
         });
     });
