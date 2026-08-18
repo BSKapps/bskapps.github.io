@@ -677,7 +677,8 @@ async function getGSCToken() {
     })).toString('base64url');
     const sign = crypto.createSign('RSA-SHA256');
     sign.update(header + '.' + claim);
-    const jwt = header + '.' + claim + '.' + sign.sign(GSC_PRIVATE_KEY).toString('base64url');
+    const key = GSC_PRIVATE_KEY.indexOf('\\n') !== -1 ? GSC_PRIVATE_KEY.replace(/\\n/g, '\n') : GSC_PRIVATE_KEY;
+    const jwt = header + '.' + claim + '.' + sign.sign(key).toString('base64url');
     const body = 'grant_type=' + encodeURIComponent('urn:ietf:params:oauth:grant-type:jwt-bearer') + '&assertion=' + jwt;
     const res = await request({
         hostname: 'oauth2.googleapis.com',
@@ -688,15 +689,20 @@ async function getGSCToken() {
             'Content-Length': Buffer.byteLength(body)
         }
     }, body);
-    if (!res.body || !res.body.access_token) {
-        throw new Error('GSC token failed: ' + JSON.stringify(res.body).slice(0, 200));
+    if (res.status !== 200 || !res.body || !res.body.access_token) {
+        throw new Error('GSC token failed (' + res.status + '): ' + JSON.stringify(res.body).slice(0, 200));
     }
     return res.body.access_token;
 }
 
+// Search Console finalises a day two to three days late, so an end date of today
+// returns nothing and would make the 1d key look permanently broken
+const GSC_LAG_DAYS = 3;
+
 async function gscQuery(token, days, dimension, limit) {
-    const end = new Date().toISOString().split('T')[0];
-    const start = new Date(Date.now() - days * 86400000).toISOString().split('T')[0];
+    const endMs = Date.now() - GSC_LAG_DAYS * 86400000;
+    const end = new Date(endMs).toISOString().split('T')[0];
+    const start = new Date(endMs - days * 86400000).toISOString().split('T')[0];
     const body = JSON.stringify({ startDate: start, endDate: end, dimensions: [dimension], rowLimit: limit });
     const res = await request({
         hostname: 'searchconsole.googleapis.com',
@@ -762,20 +768,23 @@ async function main() {
         }
     }
 
-    let gscToken = null;
+    let gscToken = null, gscAuthError = null;
     if (GSC_CLIENT_EMAIL && GSC_PRIVATE_KEY) {
         try {
             gscToken = await getGSCToken();
         } catch (e) {
             console.error('GSC auth error:', e.message);
+            gscAuthError = e.message;
         }
     }
 
     for (const { days, key } of ranges) {
+        if (gscAuthError) {
+            stats.gsc[key] = { error: gscAuthError };
+        }
         if (gscToken) {
-            // Search Console keeps 16 months, so every range key is real data
             try {
-                stats.gsc[key] = await fetchGSC(gscToken, Math.min(days, 480));
+                stats.gsc[key] = await fetchGSC(gscToken, days);
             } catch (e) {
                 console.error('GSC ' + key + ' error:', e.message);
                 stats.gsc[key] = { error: e.message };

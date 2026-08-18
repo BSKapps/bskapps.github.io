@@ -92,7 +92,11 @@ Each tile (August 2026 staged design): `.tile.tile-staged` > `.tile-stage.stage-
 
 ## Link previews (Open Graph)
 
-Every page has a 1200x630 `images/og-*.png` card plus `og:image:width`/`height`. `og:title` is the SELLING line and is deliberately different from `<title>`, which stays keyword-shaped for Google. Cards are generated from HTML, not hand-drawn - regenerate rather than editing the PNGs. After changing any OG tag, re-scrape the URL in Facebook's Sharing Debugger or the old preview persists.
+Every page has a 1200x630 `images/og-*.png` card plus `og:image:width`/`height`.
+
+**August 2026, user decision: on the 11 app and free-tool pages `og:title` is now IDENTICAL to `<title>` - one headline per product across search and link previews.** The previous rule (og:title as a separate selling line) was reverted because 7 of 11 pages disagreed with their `<title>`, so Google and Facebook showed different text for the same link and the copy looked like it changed at random. Do not re-split them. Article pages still keep the older split.
+
+Note the third place this copy lives: the OG PNG has the app name, a subtitle line and a description sentence baked into the image, so a meta-tag edit alone does not change what a shared card reads. Cards are generated from HTML, not hand-drawn - regenerate rather than editing the PNGs. After changing any OG tag, re-scrape the URL in Facebook's Sharing Debugger or the old preview persists.
 
 ## Footer
 

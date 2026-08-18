@@ -574,7 +574,7 @@
                 <div class="stat-value" id="stat-bm">--</div>
                 <div class="stat-sublabel">Views</div>
                 <div class="stat-value-secondary" id="stat-bm-views">--</div>
-                <div class="stat-sub">Page</div>
+                <div class="stat-sub">/buttonmaker/</div>
             </div>
             <div class="stat-box">
                 <div class="stat-label">Orders</div>
@@ -669,7 +669,7 @@
             <summary><span class="chev">&#9656;</span><span class="section-title">Article Funnel by App</span></summary>
             <div class="data-table-wrap">
                 <table class="data-table">
-                    <thead><tr><th>App</th><th class="num">Articles</th><th class="num">Article visits</th><th class="num">From search</th><th class="num">Product page visits</th></tr></thead>
+                    <thead><tr><th>App</th><th class="num">Articles</th><th class="num">Article views</th><th class="num">From search</th><th class="num">Product page visits</th></tr></thead>
                     <tbody id="funnel-tbody"><tr><td colspan="5" class="muted">--</td></tr></tbody>
                 </table>
             </div>
@@ -1807,7 +1807,9 @@ async function refreshStats() {
         }
         if (!res.ok) throw new Error('GitHub returned ' + res.status);
         status.textContent = 'Queued';
-        const run = await findDispatchedRun(started - 20000, deadline);
+        // if the run cannot be identified (clock skew, Actions 403) fall through to the
+        // file poll with most of the budget intact rather than spending it all looking
+        const run = await findDispatchedRun(started - 20000, Math.min(deadline, started + 90000));
         if (run) {
             const conclusion = await waitForRunFinish(run.id, status, deadline);
             if (conclusion && conclusion !== 'success') throw new Error('run ' + conclusion);
@@ -2014,10 +2016,15 @@ const ARTICLE_APP = {
     '/articles/qlab-show-prep-checklist/': 'Lab Assistant',
     '/articles/qlab-workspace-habits/': 'Lab Assistant',
     '/articles/rew-house-curve/': 'Target Trace',
+    '/articles/fetch-puppy-guide/': 'Fetch Puppy',
     '/articles/show-media-offline/': 'Fetch Puppy',
+    '/articles/lab-assistant-guide/': 'Lab Assistant',
+    '/articles/target-trace-guide/': 'Target Trace',
     '/articles/line-check-test-signals/': 'Stimulus',
     '/articles/smaart-target-curves/': 'Target Trace'
 };
+
+const MIN_IMPRESSIONS = 10;
 
 function renderSearch(stats, key) {
     const tbody = document.getElementById('gsc-tbody');
@@ -2029,10 +2036,12 @@ function renderSearch(stats, key) {
         tbody.innerHTML = '<tr><td colspan="4" class="muted">' + esc(g && g.error ? g.error : 'No data yet') + '</td></tr>';
         return;
     }
-    note.innerHTML = g.clicks.toLocaleString() + ' clicks &middot; ' + g.impressions.toLocaleString() + ' impressions &middot; ' + g.ctr + '% CTR';
-    const rows = (g.pages || []).filter(function(p) { return p.clicks > 0 || p.impressions >= 10; }).slice(0, 25);
+    const clicks = g.clicks || 0, impressions = g.impressions || 0;
+    note.innerHTML = clicks.toLocaleString() + ' clicks &middot; ' + impressions.toLocaleString() + ' impressions &middot; ' + (g.ctr || 0) + '% CTR';
+    // a page with a handful of impressions is noise, not a ranking signal
+    const rows = (g.pages || []).filter(function(p) { return (p.clicks || 0) > 0 || (p.impressions || 0) >= MIN_IMPRESSIONS; }).slice(0, 25);
     tbody.innerHTML = rows.length ? rows.map(function(p) {
-        return '<tr><td>' + esc(pageLabel(p.path)) + '</td><td class="num">' + p.clicks.toLocaleString() + '</td><td class="num">' + p.impressions.toLocaleString() + '</td><td class="num">' + p.position.toFixed(1) + '</td></tr>';
+        return '<tr><td>' + esc(pageLabel(p.path || '')) + '</td><td class="num">' + (p.clicks || 0).toLocaleString() + '</td><td class="num">' + (p.impressions || 0).toLocaleString() + '</td><td class="num">' + (p.position || 0).toFixed(1) + '</td></tr>';
     }).join('') : '<tr><td colspan="4" class="muted">No data yet</td></tr>';
 }
 
@@ -2057,7 +2066,9 @@ function renderFunnel(stats, key) {
     if (Array.isArray(pages)) {
         pages.forEach(function(p) {
             const app = ARTICLE_APP[p.path];
-            if (app && counts[app]) counts[app].visits += (p.visits || 0);
+            // sources counts pageloads, so the article total must be pageloads too or
+            // the search slice can read larger than the total it belongs to
+            if (app && counts[app]) counts[app].visits += (p.pageviews || 0);
             PRODUCTS.forEach(function(pr) {
                 if (pr.path === p.path) counts[pr.label].product += (p.visits || 0);
             });
