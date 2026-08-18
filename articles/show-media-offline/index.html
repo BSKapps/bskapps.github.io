@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walk-In Music and Playback Video: Prepping Show Media Offline - BSK Apps</title>
+    <meta name="description" content="Why show playback should never depend on venue wifi, what to prepare ahead of time for walk-in, stings and reference tracks, and the formats that behave once the media is on the show Mac.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/show-media-offline/">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Walk-in music and playback video: getting show media offline">
+    <meta property="og:description" content="Venue wifi is not a playback system. What to prepare ahead of the show, the formats that behave in QLab and REAPER, and how to get it all local.">
+    <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
+    <link rel="stylesheet" href="/css/site.css?v=20260813a">
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>Walk-in music and playback video: getting show media offline</h1>
+            <p class="date">18 August 2026</p>
+
+            <p>Every tech who has run walk-in music off a streaming app has the same story: the venue wifi drops, or the free tier fires an ad into the PA, or the phone rings and the track ducks in front of two hundred people. Streaming is fine for listening. It is not a playback system, and the fix is boring and total - everything the show needs lives on the show machine before doors.</p>
+
+            <h2>What actually needs to be local</h2>
+            <p>More than people plan for. A typical corporate or theatre day wants:</p>
+            <ul>
+                <li><strong>Walk-in and walk-out music</strong> - usually an hour or more each, because nothing exposes a short playlist like a delayed start.</li>
+                <li><strong>Stings, bumpers and award beds</strong> - short, cued, often needed at a specific length.</li>
+                <li><strong>Video content</strong> - showreels, sponsor loops, VT packages, sometimes handed over as a link rather than a file.</li>
+                <li><strong>Reference tracks</strong> - the material you tune and check the system with, which should be the same tracks every time so you know what they are meant to sound like.</li>
+            </ul>
+            <p>That last one matters more than it gets credit for. Tuning a room against whatever happens to be streaming is guesswork. Tuning against tracks you have heard on fifty systems tells you what the room is doing.</p>
+
+            <h2>Formats that behave</h2>
+            <p>Once the media is local, the format decides how much trouble it causes:</p>
+            <ul>
+                <li><strong>Audio for QLab</strong> - uncompressed WAV or AIFF. Compressed files decode on the fly, which is usually fine and occasionally is not, and the failure lands mid-show rather than in prep.</li>
+                <li><strong>Sample rate</strong> - match the workspace and the interface. A 44.1 kHz file in a 48 kHz session gets converted somewhere, and where that happens is not always your choice.</li>
+                <li><strong>Video</strong> - a mezzanine codec like ProRes for anything being scrubbed, cut or played back reliably. Long-GOP web formats are built for streaming, not for seeking to a cue point.</li>
+                <li><strong>Loudness</strong> - a playlist assembled from mixed sources arrives at wildly different levels. Level it once during prep rather than riding a fader all night.</li>
+            </ul>
+
+            <h2>Metadata is not optional</h2>
+            <p>Forty files called <code>track01</code> in a cue list is its own kind of show risk. Artist and title tags survive into QLab cue names, into REAPER item names, and into the paperwork you hand the next operator. Artwork matters less on the audio side, but it is the difference between a browsable library and a folder you dread opening.</p>
+
+            <h2>A workflow that holds up</h2>
+            <ul>
+                <li>Build the playlists well before the day, when a missing track is an inconvenience rather than a crisis.</li>
+                <li>Pull everything down in one pass, in the format you actually need, rather than converting later under time pressure.</li>
+                <li>Level the set as a set, so walk-in does not lurch between songs.</li>
+                <li>Keep a standing reference-track folder that never changes, separate from show content.</li>
+                <li>Copy the whole lot to the backup machine at the same time. Media that only exists on one Mac is not prepared, it is pending.</li>
+            </ul>
+
+            <h2>A note on rights</h2>
+            <p>Prepping media offline does not change what you are allowed to play. Public performance of commercial music at an event is covered by the venue's or the client's licensing, and production libraries have their own terms. That is a paperwork question, not a technical one, but it is worth asking before the day rather than after.</p>
+
+            <h2>Getting it onto the machine</h2>
+            <p>The gap is usually the fetching itself: a client sends a playlist link, a video arrives as a URL, and you need the actual files in the actual format with the tags intact. <a href="/fetchpuppy">Fetch Puppy</a> is a Mac app for that part - search for what you need or drop in a playlist, and it finds every track, converts audio to the format you want with metadata and artwork, and saves video for playback.</p>
+
+            <p>Related: <a href="/articles/qlab-audio-formats/">audio file formats for QLab</a> and <a href="/articles/qlab-lufs-levels/">setting consistent QLab levels with LUFS</a>.</p>
+
+            <div class="article-cta">
+                <img class="cta-icon" src="/images/fetchpuppy-icon.png" alt="" width="64" height="64">
+                <div class="cta-body">
+                    <h3>Get the show media before the show</h3>
+                    <p>Fetch Puppy finds and saves music and video on your Mac - playlists in one pass, audio converted to the format you need, metadata and artwork intact.</p>
+                    <div class="cta-actions">
+                        <a class="buy-btn" href="https://bskapps.lemonsqueezy.com/checkout/buy/99a45e24-5f0c-4ef7-86a9-be1cf7c555af?dark=1&media=0&desc=0&checkout%5Bcustom%5D%5Bsrc%5D=article-show-media-offline" aria-label="Buy Fetch Puppy">Buy Fetch Puppy</a>
+                        <a class="cta-link" href="/fetchpuppy">See what it does &rarr;</a>
+                    </div>
+                    <span class="cta-note">One-time purchase &middot; 2 activations</span>
+                </div>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
+        </footer>
+    </div>
+</body>
+</html>
