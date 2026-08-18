@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Check Test Signals: Pink Noise, GLITS, Polarity Pops - BSK Apps</title>
+    <meta name="description" content="Which test signal to send for a line check, how GLITS and the EBU stereo ident identify a pair by ear, what a polarity pop tells you, and why pink noise is the default for PA work.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/line-check-test-signals/">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Line check test signals: what to send and what it tells you">
+    <meta property="og:description" content="Pink noise, GLITS, stereo idents and polarity pops - which signal answers which question during a line check, and how to read the result by ear.">
+    <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
+    <link rel="stylesheet" href="/css/site.css?v=20260813a">
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles">&larr; Articles</a>
+
+        <article>
+            <h1>Line check test signals: what to send and what it tells you</h1>
+            <p class="date">18 August 2026</p>
+
+            <p>A line check answers three questions: is the signal arriving, is it arriving on the right channel, and is it arriving the right way up. Music answers none of them reliably. A test signal answers one each, quickly, and from the middle of the room rather than hunched over a laptop.</p>
+
+            <h2>Pink noise, and why it is the default</h2>
+            <p>Pink noise carries equal energy per octave, which is a way of saying it sounds evenly weighted across the spectrum rather than hissy like white noise. White is flat per hertz, so it piles energy into the top octaves - useful as an FFT reference, unpleasant as a thing to stand in front of. Red or brown noise slopes further down at 6 dB per octave and is what you want when the question is about subs.</p>
+            <p>For a line check the point is not analysis, it is coverage: pink through a box tells you the driver is passing full range, and a band-limited version around a chosen centre frequency isolates one part of the system. Band-limited pink into a sub is the classic version of that trick.</p>
+
+            <h2>Identifying a stereo pair by ear</h2>
+            <p>Two signals answer the "which one is left" question without touching a meter, and both run at 1 kHz on both channels at -18 dBFS for the EBU reference:</p>
+            <ul>
+                <li><strong>The EBU stereo ident</strong> - the left channel drops out for 250 ms every three seconds while the right runs continuously. The channel with the gap is left. It doubles as a phase check when summed to mono: a correct pair dips about 6 dB through the gap, while a polarity-reversed pair cancels to silence and the gap turns into a short pip.</li>
+                <li><strong>GLITS</strong> - the same idea with a distinct pattern per channel, so you can identify either side on its own rather than by comparison.</li>
+            </ul>
+            <p>Both beat shouting "left" into a talkback mic, and both survive being heard from the back of a room.</p>
+
+            <h2>Polarity, and reading a pop</h2>
+            <p>A polarity pop is a positive-going pulse. The first movement of the cone should be outward, and a polarity tester or a trained ear at the box will tell you if it is not. Pulse width matters more than people expect: a very short pulse of around half a millisecond suits tweeters and HF sections, a standard few-millisecond pulse covers full-range boxes, and a much longer one is needed before a subwoofer will reproduce it at all. Sending an HF-length pop at a sub and concluding the sub is broken is a common and avoidable mistake.</p>
+
+            <h2>Alignment by ear</h2>
+            <p>A sharp broadband click sent to two outputs at once - mains and delays, or delays and fills - is a fast sanity check on time alignment. Standing where the two zones meet, in sync it reads as one click; out of sync it smears or doubles. It will not replace a transfer function measurement, but it catches a delay entered in feet when the system is set to metres before anyone has plugged in a measurement mic.</p>
+
+            <h2>When it becomes measurement</h2>
+            <p>Once an analyser is involved the requirements change. Transfer function work wants a signal that is periodic at the analyser's FFT frame - 32K, 64K or 128K - and looped, so the average settles to high coherence without spectral leakage smearing the result. Periodic pink is the general-purpose choice; a cycle-synchronised log sweep from 20 Hz to 20 kHz suits impulse response work. A file exported for this needs to be exactly one frame long at the capture sample rate, with no end fades, or the loop point itself shows up in the measurement.</p>
+
+            <h2>Keeping the signals to hand</h2>
+            <p>Most of these live on a phone as a folder of downloaded files, which is fine until you need a different pulse width or a band-limited noise you do not have. <a href="/stimulus">Stimulus</a> generates them directly on a Mac or iPad - tones, sweeps, harmonics, the three noise colours with band limiting and burst, GLITS and stereo idents, polarity pops at three widths, and periodic measurement signals for a transfer-function analyser, with up to four generators running at once through a small mixer with a limiter on the output.</p>
+
+            <p>Related: <a href="/articles/smaart-target-curves/">target curves in Smaart</a>.</p>
+
+            <div class="article-cta">
+                <img class="cta-icon" src="/images/stimulus-icon.png" alt="" width="64" height="64">
+                <div class="cta-body">
+                    <h3>Every line check signal in one rack</h3>
+                    <p>Stimulus is a four-generator test signal rack for live sound: tones, sweeps with hold and scrub, harmonics, noise with band limiting and burst, idents, polarity pops, and measurement excitation.</p>
+                    <div class="cta-actions">
+                        <a class="buy-btn" href="https://apps.apple.com/app/id6792156906" aria-label="Download Stimulus on the App Store">Download on the App Store</a>
+                        <a class="cta-link" href="/stimulus">See what it does &rarr;</a>
+                    </div>
+                    <span class="cta-note">App Store &middot; one purchase covers Mac and iPad</span>
+                </div>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
+        </footer>
+    </div>
+</body>
+</html>
