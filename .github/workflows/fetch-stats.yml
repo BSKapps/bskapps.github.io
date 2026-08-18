@@ -29,6 +29,8 @@ jobs:
           APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
           APPLE_VENDOR_NUMBER: ${{ secrets.APPLE_VENDOR_NUMBER }}
           APPLE_PRIVATE_KEY: ${{ secrets.APPLE_PRIVATE_KEY }}
+          GSC_CLIENT_EMAIL: ${{ secrets.GSC_CLIENT_EMAIL }}
+          GSC_PRIVATE_KEY: ${{ secrets.GSC_PRIVATE_KEY }}
         run: node .github/scripts/fetch-stats.js
 
       - name: Push stats to private repo

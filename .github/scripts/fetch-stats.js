@@ -11,6 +11,9 @@ const APPLE_VENDOR_NUMBER = process.env.APPLE_VENDOR_NUMBER;
 // Comma separated: the live vendor first, then any deprecated ones holding pre-conversion history
 const APPLE_VENDORS = (APPLE_VENDOR_NUMBER || '').split(',').map(function(v) { return v.trim(); }).filter(Boolean);
 const APPLE_PRIVATE_KEY = process.env.APPLE_PRIVATE_KEY;
+const GSC_CLIENT_EMAIL = process.env.GSC_CLIENT_EMAIL;
+const GSC_PRIVATE_KEY = process.env.GSC_PRIVATE_KEY;
+const GSC_SITE = 'sc-domain:bskapps.com';
 
 let appleDataThrough = null;
 
@@ -662,8 +665,80 @@ function fyDays() {
     return Math.ceil((now - fyStart) / 86400000);
 }
 
+async function getGSCToken() {
+    const now = Math.floor(Date.now() / 1000);
+    const header = Buffer.from(JSON.stringify({ alg: 'RS256', typ: 'JWT' })).toString('base64url');
+    const claim = Buffer.from(JSON.stringify({
+        iss: GSC_CLIENT_EMAIL,
+        scope: 'https://www.googleapis.com/auth/webmasters.readonly',
+        aud: 'https://oauth2.googleapis.com/token',
+        exp: now + 3600,
+        iat: now
+    })).toString('base64url');
+    const sign = crypto.createSign('RSA-SHA256');
+    sign.update(header + '.' + claim);
+    const jwt = header + '.' + claim + '.' + sign.sign(GSC_PRIVATE_KEY).toString('base64url');
+    const body = 'grant_type=' + encodeURIComponent('urn:ietf:params:oauth:grant-type:jwt-bearer') + '&assertion=' + jwt;
+    const res = await request({
+        hostname: 'oauth2.googleapis.com',
+        path: '/token',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': Buffer.byteLength(body)
+        }
+    }, body);
+    if (!res.body || !res.body.access_token) {
+        throw new Error('GSC token failed: ' + JSON.stringify(res.body).slice(0, 200));
+    }
+    return res.body.access_token;
+}
+
+async function gscQuery(token, days, dimension, limit) {
+    const end = new Date().toISOString().split('T')[0];
+    const start = new Date(Date.now() - days * 86400000).toISOString().split('T')[0];
+    const body = JSON.stringify({ startDate: start, endDate: end, dimensions: [dimension], rowLimit: limit });
+    const res = await request({
+        hostname: 'searchconsole.googleapis.com',
+        path: '/webmasters/v3/sites/' + encodeURIComponent(GSC_SITE) + '/searchAnalytics/query',
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(body)
+        }
+    }, body);
+    if (res.status !== 200) {
+        throw new Error('GSC ' + dimension + ' ' + res.status + ': ' + JSON.stringify(res.body).slice(0, 200));
+    }
+    return (res.body && res.body.rows) || [];
+}
+
+function gscRow(r) {
+    return {
+        key: r.keys[0],
+        clicks: r.clicks || 0,
+        impressions: r.impressions || 0,
+        position: Math.round((r.position || 0) * 10) / 10
+    };
+}
+
+async function fetchGSC(token, days) {
+    const pages = (await gscQuery(token, days, 'page', 100)).map(gscRow);
+    const queries = (await gscQuery(token, days, 'query', 25)).map(gscRow);
+    const clicks = pages.reduce(function(a, p) { return a + p.clicks; }, 0);
+    const impressions = pages.reduce(function(a, p) { return a + p.impressions; }, 0);
+    return {
+        clicks: clicks,
+        impressions: impressions,
+        ctr: impressions > 0 ? Math.round(clicks / impressions * 1000) / 10 : 0,
+        pages: pages.map(function(p) { return { path: p.key.replace(/^https?:\/\/[^/]+/, ''), clicks: p.clicks, impressions: p.impressions, position: p.position }; }),
+        queries: queries.map(function(q) { return { query: q.key, clicks: q.clicks, impressions: q.impressions, position: q.position }; })
+    };
+}
+
 async function main() {
-    const stats = { updated: new Date().toISOString(), cloudflare: {}, pages: {}, inhouse: {}, sources: {}, countries: {}, lemonsqueezy: {}, apple: {} };
+    const stats = { updated: new Date().toISOString(), cloudflare: {}, pages: {}, inhouse: {}, sources: {}, countries: {}, lemonsqueezy: {}, apple: {}, gsc: {} };
 
     const fyD = fyDays();
     stats.fyDays = fyD;
@@ -687,7 +762,25 @@ async function main() {
         }
     }
 
+    let gscToken = null;
+    if (GSC_CLIENT_EMAIL && GSC_PRIVATE_KEY) {
+        try {
+            gscToken = await getGSCToken();
+        } catch (e) {
+            console.error('GSC auth error:', e.message);
+        }
+    }
+
     for (const { days, key } of ranges) {
+        if (gscToken) {
+            // Search Console keeps 16 months, so every range key is real data
+            try {
+                stats.gsc[key] = await fetchGSC(gscToken, Math.min(days, 480));
+            } catch (e) {
+                console.error('GSC ' + key + ' error:', e.message);
+                stats.gsc[key] = { error: e.message };
+            }
+        }
         if (CF_TOKEN) {
             // Cloudflare refuses any range wider than 13w2d, so 90 days is the ceiling for every key
             const cfDays = Math.min(days, 90);
