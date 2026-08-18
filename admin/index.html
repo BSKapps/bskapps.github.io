@@ -1733,30 +1733,80 @@ async function loadStats() {
     }
 }
 
+function sleep(ms) {
+    return new Promise(function(r) { setTimeout(r, ms); });
+}
+
+async function findDispatchedRun(sinceMs, deadline) {
+    while (Date.now() < deadline) {
+        const res = await ghFetch('GET', 'repos/' + REPO + '/actions/workflows/fetch-stats.yml/runs?event=workflow_dispatch&per_page=5');
+        if (res.ok) {
+            const data = await res.json();
+            const runs = data.workflow_runs || [];
+            for (let i = 0; i < runs.length; i++) {
+                if (new Date(runs[i].created_at).getTime() >= sinceMs) return runs[i];
+            }
+        }
+        await sleep(3000);
+    }
+    return null;
+}
+
+async function waitForRunFinish(id, status, deadline) {
+    while (Date.now() < deadline) {
+        const res = await ghFetch('GET', 'repos/' + REPO + '/actions/runs/' + id);
+        if (res.ok) {
+            const run = await res.json();
+            if (run.status === 'completed') return run.conclusion;
+            status.textContent = run.status === 'queued' ? 'Queued' : 'Running';
+        }
+        await sleep(3000);
+    }
+    return null;
+}
+
 async function refreshStats() {
     const btn = document.getElementById('refresh-btn');
     const status = document.getElementById('refresh-status');
     const before = (cachedStats && cachedStats.updated) || null;
+    const started = Date.now();
+    const deadline = started + 240000;
     btn.disabled = true;
     btn.textContent = 'Refreshing';
-    status.textContent = '';
+    status.textContent = 'Starting';
+    const tick = setInterval(function() {
+        btn.textContent = 'Refreshing ' + Math.round((Date.now() - started) / 1000) + 's';
+    }, 1000);
     try {
         const res = await ghFetch('POST', 'repos/' + REPO + '/actions/workflows/fetch-stats.yml/dispatches', { ref: BRANCH });
         if (res.status === 403 || res.status === 404) {
             throw new Error('token needs Actions: Read and write on ' + REPO);
         }
         if (!res.ok) throw new Error('GitHub returned ' + res.status);
+        status.textContent = 'Queued';
+        const run = await findDispatchedRun(started - 20000, deadline);
+        if (run) {
+            const conclusion = await waitForRunFinish(run.id, status, deadline);
+            if (conclusion && conclusion !== 'success') throw new Error('run ' + conclusion);
+        }
+        status.textContent = 'Loading new stats';
         let fresh = false;
-        for (let i = 0; i < 30 && !fresh; i++) {
-            await new Promise(function(r) { setTimeout(r, 4000); });
+        while (!fresh && Date.now() < deadline) {
+            await sleep(3000);
             await loadStats();
             const now = (cachedStats && cachedStats.updated) || null;
             fresh = now != null && now !== before;
         }
-        if (!fresh) status.textContent = 'Still running, try again shortly';
+        if (fresh) {
+            status.textContent = 'Updated';
+            setTimeout(function() { status.textContent = ''; }, 4000);
+        } else {
+            status.textContent = 'Still running, try again shortly';
+        }
     } catch (e) {
         status.textContent = 'Refresh failed: ' + e.message;
     }
+    clearInterval(tick);
     btn.disabled = false;
     btn.textContent = 'Refresh';
 }
@@ -1783,6 +1833,7 @@ function restoreTab() {
 function ghFetch(method, path, body, tok) {
     const opts = {
         method: method,
+        cache: 'no-store',
         headers: {
             'Authorization': 'Bearer ' + (tok || token()),
             'Content-Type': 'application/json'
