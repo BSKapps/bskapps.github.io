@@ -139,7 +139,7 @@
                 <li><strong>General</strong> - Public IP display, Click to Copy, Run at Login, Allow Network Changes (Admin), Location Access (SSID), Edit Visible Services, Check for Updates and Manage License. Email Support sits at the bottom: it copies a diagnostics report and opens an email to support.</li>
                 <li><strong>Menu Bar</strong> - Colour Status Icon, and the IP Address / Wi-Fi Name / Live Speed display choice.</li>
                 <li><strong>Info Panel</strong> - the master Show Info Panel toggle and a switch for each reading.</li>
-                <li><strong>Alerts</strong> - IP change notifications, auto pop-ups for speed test and scan results, and the confirm prompts for IPv4 Off, Delete and Join Subnet.</li>
+                <li><strong>Alerts</strong> - IP change notifications, auto pop-ups for speed test and scan results, and the confirm prompts for IPv4 Off, Delete and Join Subnet. IP change notifications cover an adapter connecting or disconnecting, a self-assigned address, an adapter being removed, a DHCP lease renewing, an unreachable gateway, a subnet overlap, and an adapter name being reset to its hardware default (macOS does this on its own after some updates and network changes, and it can break anything matching on the name).</li>
             </ul>
             <p>Edit Visible Services lets you hide adapters you never touch. If a change would hide every service, the app beeps and reverts it. It also holds Show Inactive Services. Left on (the default), a disconnected adapter stays in the menu greyed-out so you can still pre-set it - apply a preset or a static IP ready for when it reconnects. Turned off, an unplugged adapter vanishes until it is plugged back in, so switch it on if you need to configure one that is not currently connected. Whenever inactive adapters are hidden, a Show N Hidden Adapters row appears at the foot of the menu as a one-click shortcut to bring them back.</p>
 
@@ -147,7 +147,7 @@
             <p>Quicker IP Pro is a one-time purchase with two activations per licence key. On first launch, paste your key to activate. To move the licence to another Mac, open Manage License in Settings and deactivate, which frees an activation. The app revalidates occasionally; a network error never removes your licence, only an explicit revocation (cancelled, expired, disabled or inactive) does.</p>
 
             <h2>Pro and Lite</h2>
-            <p>This guide covers Quicker IP Pro. The free Lite version on the Mac App Store shows your adapters, addresses and MAC, the public IP, click to copy, status dots and run at login, but does not change network settings, scan, run a speed test, or manage DNS, presets and locations.</p>
+            <p>This guide covers Quicker IP Pro. The free Lite version on the Mac App Store shows your adapters with their real names and modes (DHCP, Reserved, Static or IPv4 Off), addresses, subnet, gateway and MAC, IPv6 and subnet overlap warnings in Network Info, the summary line on collapsed adapters, the public IP, click to copy, status dots, change notifications and run at login. It does not change network settings, scan, run a speed test, or manage DNS, presets and locations.</p>
 
             <div class="article-cta">
                 <img class="cta-icon" src="/images/quickip-icon.png" alt="" width="64" height="64">
