@@ -532,7 +532,7 @@ async function fetchCFSources(days) {
     const byPath = {};
     groups.forEach(function(g) {
         const path = g.dimensions.requestPath;
-        if (SOURCE_PATHS.indexOf(path) === -1) return;
+        if (SOURCE_PATHS.indexOf(path) === -1 && path.indexOf('/articles/') !== 0) return;
         const host = g.dimensions.refererHost || '';
         if (!byPath[path]) byPath[path] = {};
         byPath[path][host] = (byPath[path][host] || 0) + g.count;

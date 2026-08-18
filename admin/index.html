@@ -659,8 +659,8 @@
             <summary><span class="chev">&#9656;</span><span class="section-title">Article Funnel by App</span></summary>
             <div class="data-table-wrap">
                 <table class="data-table">
-                    <thead><tr><th>App</th><th class="num">Articles</th><th class="num">Article visits</th><th class="num">Product page visits</th></tr></thead>
-                    <tbody id="funnel-tbody"><tr><td colspan="4" class="muted">--</td></tr></tbody>
+                    <thead><tr><th>App</th><th class="num">Articles</th><th class="num">Article visits</th><th class="num">From search</th><th class="num">Product page visits</th></tr></thead>
+                    <tbody id="funnel-tbody"><tr><td colspan="5" class="muted">--</td></tr></tbody>
                 </table>
             </div>
         </details>
@@ -1983,6 +1983,8 @@ function buildSourceLine(srcArr, bmClicks) {
     return line || '<span class="muted">No data yet</span>';
 }
 
+const SEARCH_HOSTS = /(^|\.)(google|bing|duckduckgo|ecosia|yahoo|brave)\./;
+
 const ARTICLE_APP = {
     '/articles/companion-macos-network/': 'Quicker IP',
     '/articles/companion-module-setup/': 'Quicker IP',
@@ -2007,7 +2009,15 @@ function renderFunnel(stats, key) {
     if (!tbody) return;
     const pages = stats.pages && stats.pages[key];
     const counts = {};
-    PRODUCTS.forEach(function(pr) { counts[pr.label] = { articles: 0, visits: 0, product: 0 }; });
+    PRODUCTS.forEach(function(pr) { counts[pr.label] = { articles: 0, visits: 0, product: 0, search: 0 }; });
+    const sources = (stats.sources && stats.sources[key]) || {};
+    Object.keys(sources).forEach(function(path) {
+        const app = ARTICLE_APP[path];
+        if (!app || !counts[app] || !Array.isArray(sources[path])) return;
+        sources[path].forEach(function(s) {
+            if (SEARCH_HOSTS.test(s.host || '')) counts[app].search += (s.count || 0);
+        });
+    });
     Object.keys(ARTICLE_APP).forEach(function(path) {
         const app = ARTICLE_APP[path];
         if (counts[app]) counts[app].articles += 1;
@@ -2023,9 +2033,9 @@ function renderFunnel(stats, key) {
     }
     const rows = PRODUCTS.map(function(pr) {
         const c = counts[pr.label];
-        return '<tr><td>' + esc(pr.label) + '</td><td class="num">' + c.articles + '</td><td class="num">' + c.visits.toLocaleString() + '</td><td class="num">' + c.product.toLocaleString() + '</td></tr>';
+        return '<tr><td>' + esc(pr.label) + '</td><td class="num">' + c.articles + '</td><td class="num">' + c.visits.toLocaleString() + '</td><td class="num">' + c.search.toLocaleString() + '</td><td class="num">' + c.product.toLocaleString() + '</td></tr>';
     }).join('');
-    tbody.innerHTML = Array.isArray(pages) ? rows : '<tr><td colspan="4" class="muted">--</td></tr>';
+    tbody.innerHTML = Array.isArray(pages) ? rows : '<tr><td colspan="5" class="muted">--</td></tr>';
 }
 
 function renderReferrers(stats, key) {
@@ -2035,6 +2045,7 @@ function renderReferrers(stats, key) {
     const totals = {};
     Object.keys(sources).forEach(function(path) {
         if (!Array.isArray(sources[path])) return;
+        if (path.indexOf('/articles/') === 0) return;
         sources[path].forEach(function(s) {
             const host = s.host || '';
             if (host === 'bskapps.com' || host === 'www.bskapps.com') return;
