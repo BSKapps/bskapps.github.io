@@ -274,6 +274,7 @@
         .stat-box .stat-sub { font-size: 0.8rem; color: #8A8A90; margin-top: 4px; }
         .stat-box.highlight .stat-value { color: #5FBE8A; }
         .stat-box.revenue .stat-value { color: #E8C667; font-size: 1.4rem; }
+        .stat-box .stat-value-secondary { font-size: 1.1rem; font-weight: 700; color: #fff; margin-top: 2px; }
         .stat-box.revenue .stat-value-secondary { font-size: 1.1rem; font-weight: 700; color: #5FBE8A; margin-top: 2px; }
         .stat-sublabel { font-size: 0.65rem; color: #A2A2A8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 10px; margin-bottom: 2px; }
 
@@ -558,22 +559,22 @@
         </div>
         <div id="stats-grid" class="stats-grid">
             <div class="stat-box">
-                <div class="stat-label">Visits</div>
+                <div class="stat-label">Traffic</div>
                 <div class="stat-sublabel" id="sublabel-visits">--</div>
+                <div class="stat-sublabel">Visits</div>
                 <div class="stat-value" id="stat-visits">--</div>
-                <div class="stat-sub">Cloudflare</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">Page Views</div>
-                <div class="stat-sublabel" id="sublabel-pageviews">--</div>
-                <div class="stat-value" id="stat-pageviews">--</div>
+                <div class="stat-sublabel">Views</div>
+                <div class="stat-value-secondary" id="stat-pageviews">--</div>
                 <div class="stat-sub">Cloudflare</div>
             </div>
             <div class="stat-box">
                 <div class="stat-label">Button Maker</div>
                 <div class="stat-sublabel" id="sublabel-bm">--</div>
+                <div class="stat-sublabel">Visits</div>
                 <div class="stat-value" id="stat-bm">--</div>
-                <div class="stat-sub">Page visits</div>
+                <div class="stat-sublabel">Views</div>
+                <div class="stat-value-secondary" id="stat-bm-views">--</div>
+                <div class="stat-sub">Page</div>
             </div>
             <div class="stat-box">
                 <div class="stat-label">Orders</div>
@@ -601,13 +602,11 @@
             </div>
             <div class="stat-box highlight">
                 <div class="stat-label">Conversion</div>
-                <div class="stat-value" id="stat-conversion">--</div>
-                <div class="stat-sub">visits to sales</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">Returning</div>
                 <div class="stat-sublabel" id="sublabel-returning">--</div>
-                <div class="stat-value" id="stat-returning">--</div>
+                <div class="stat-sublabel">Visits to sales</div>
+                <div class="stat-value" id="stat-conversion">--</div>
+                <div class="stat-sublabel">Returning</div>
+                <div class="stat-value-secondary" id="stat-returning">--</div>
                 <div class="stat-sub" id="stat-returning-sub">of orders</div>
             </div>
         </div>
@@ -1448,7 +1447,6 @@ function displayStats() {
     // Cloudflare refuses ranges wider than 13w2d, so traffic can never be all time
     const cfLabel = isAll ? 'Last 90d' : rangeLabel;
     document.getElementById('sublabel-visits').textContent = cfLabel;
-    document.getElementById('sublabel-pageviews').textContent = cfLabel;
     document.getElementById('sublabel-orders').textContent = rangeLabel;
     document.getElementById('sublabel-returning').textContent = rangeLabel;
 
@@ -1472,9 +1470,11 @@ function displayStats() {
         }).join('') : '<tr><td colspan="4" class="muted">No data yet</td></tr>';
         const bm = pages.find(function(p) { return p.path === '/buttonmaker/'; });
         document.getElementById('stat-bm').textContent = bm ? (bm.visits || 0).toLocaleString() : '0';
+        document.getElementById('stat-bm-views').textContent = bm ? (bm.pageviews || 0).toLocaleString() : '0';
     } else {
         pagesTbody.innerHTML = '<tr><td colspan="4" class="muted">' + (pages && pages.error ? esc(pages.error) : '--') + '</td></tr>';
         document.getElementById('stat-bm').textContent = '--';
+        document.getElementById('stat-bm-views').textContent = '--';
     }
 
     const inhouse = stats.inhouse && stats.inhouse[key];
