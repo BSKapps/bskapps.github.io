@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Fetch Puppy user guide - BSK Apps",
     "h1": "Fetch Puppy user guide",
-    "dateLine": "Updated for version 2.3",
+    "dateLine": "Updated for version 2.5",
     "description": "A how-to guide for Fetch Puppy: the download modes, choosing audio and video formats, the queue, output folders, browser cookies, the download engine and settings.",
     "canonical": "https://bskapps.com/articles/fetch-puppy-guide/",
     "ogTitle": "Fetch Puppy user guide",
@@ -120,7 +120,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Everything Fetch Puppy needs to download and convert is built in, so there is nothing to install. If downloads ever stop working, open Settings and use Check for Updates under Download Engine to refresh it; the app also offers an update on launch when one is available."
+          "text": "Everything Fetch Puppy needs to download and convert is built in, so there is nothing to install. The app keeps the download engine current on its own, so downloads keep working when the sites you download from change. If downloads ever stop working, open Settings and use Check for Updates under Download Engine to refresh it straight away."
         }
       ]
     },
