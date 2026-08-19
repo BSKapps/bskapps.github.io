@@ -110,7 +110,7 @@
         },
         {
           "type": "paragraph",
-          "text": "Two Settings options apply to playlists and albums: **Number tracks** prepends a two-digit number (01, 02, and so on) to filenames, and **Export track list** saves a CSV of the track list alongside the files."
+          "text": "Two options apply to playlists and albums: **Number tracks** prepends a two-digit number (01, 02, and so on) to filenames, and **Export track list** saves a CSV of the track list alongside the files. Number tracks sits on the Spotify, Apple Music and CSV tabs as well as in Settings; it is one setting shown in both places, so changing it either way changes it everywhere."
         }
       ]
     },
