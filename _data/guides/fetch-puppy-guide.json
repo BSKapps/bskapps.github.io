@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Fetch Puppy user guide - BSK Apps",
     "h1": "Fetch Puppy user guide",
-    "dateLine": "Updated for version 2.5",
+    "dateLine": "Updated for version 2.6",
     "description": "A how-to guide for Fetch Puppy: the download modes, choosing audio and video formats, the queue, output folders, browser cookies, the download engine and settings.",
     "canonical": "https://bskapps.com/articles/fetch-puppy-guide/",
     "ogTitle": "Fetch Puppy user guide",
@@ -73,7 +73,7 @@
         },
         {
           "type": "paragraph",
-          "text": "Setting Spotify, Apple Music or CSV to **Video** downloads the matching music video instead of the audio. Prefer one setting everywhere? Turn on **Universal format selection** in Settings under Download options, and the Audio/Video choice and format you pick in any tab applies to all of them at once; turn it off and each mode keeps its own setting again."
+          "text": "On **Audio**, Spotify, Apple Music and CSV match the album version of each track rather than the music video, so you get the same recording you would hear on Spotify. Setting them to **Video** downloads the matching music video instead. Prefer one setting everywhere? Turn on **Universal format selection** in Settings under Download options, and the Audio/Video choice and format you pick in any tab applies to all of them at once; turn it off and each mode keeps its own setting again."
         },
         {
           "type": "paragraph",
@@ -88,6 +88,10 @@
         {
           "type": "paragraph",
           "text": "Click **Downloads** in the sidebar to watch progress. One job runs at a time; others wait, shown as colour-coded tabs (blue running, orange queued, green done, red failed, grey cancelled). Each job shows its tracks with per-track status and the format used, a progress bar, and counts for total, done, failed and remaining."
+        },
+        {
+          "type": "paragraph",
+          "text": "When an **Audio** track from Spotify or Apple Music cannot be matched exactly, Fetch Puppy still saves the nearest version it can find, tags the row **Closest match** and shows the length of the file you got rather than the length it was aiming for. That usually means a different live take or edit of the same song; hover the tag to see both lengths. Checking the length needs a length to check against, so tracks from a CSV list are never tagged."
         },
         {
           "type": "bullets",
@@ -110,7 +114,7 @@
         },
         {
           "type": "paragraph",
-          "text": "Two options apply to playlists and albums: **Number tracks** prepends a two-digit number (01, 02, and so on) to filenames, and **Export track list** saves a CSV of the track list alongside the files. Number tracks sits on the Spotify, Apple Music and CSV tabs as well as in Settings; it is one setting shown in both places, so changing it either way changes it everywhere."
+          "text": "Two options apply to playlists and albums. **Number tracks in playlists/albums** prepends a two-digit number (01, 02, and so on) to filenames so the order is kept; single tracks are never numbered, and it applies to audio downloads only. **Export track list** saves a CSV of the track list alongside the files. Numbering sits on the Spotify, Apple Music and CSV tabs as well as in Settings - it is one setting shown in both places, so changing it either way changes it everywhere."
         }
       ]
     },
