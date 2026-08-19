@@ -13,9 +13,37 @@ declare -a MAP=(
   "stimulus-guide.json:$APPS_ROOT/Stimulus/App/Resources/stimulus-guide.json"
 )
 
+TARGET="${1:-}"
+
+if [ -n "$TARGET" ]; then
+  TARGET="${TARGET%.json}"
+  TARGET="${TARGET%-guide}"
+  matched=0
+  for entry in "${MAP[@]}"; do
+    [ "${entry%%:*}" = "$TARGET-guide.json" ] && matched=1
+  done
+  if [ "$matched" -eq 0 ]; then
+    printf 'unknown app: %s\n' "$1" >&2
+    printf 'known apps:' >&2
+    for entry in "${MAP[@]}"; do
+      name="${entry%%:*}"
+      printf ' %s' "${name%-guide.json}" >&2
+    done
+    printf '\n' >&2
+    exit 64
+  fi
+fi
+
 for entry in "${MAP[@]}"; do
   name="${entry%%:*}"
   dest="${entry#*:}"
+  if [ -n "$TARGET" ] && [ "$name" != "$TARGET-guide.json" ]; then
+    continue
+  fi
+  if cmp -s "$SRC/$name" "$dest"; then
+    echo "unchanged $name"
+    continue
+  fi
   mkdir -p "$(dirname "$dest")"
   cp "$SRC/$name" "$dest"
   echo "synced $name -> $dest"
