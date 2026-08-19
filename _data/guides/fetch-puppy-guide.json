@@ -130,7 +130,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "YouTube needs cookies from a signed-in browser to download reliably, and so does Video mode in the Spotify, Apple Music and CSV tabs. Social media posts usually download without them - add them if a private or age-restricted post fails."
+          "text": "Most downloads need no cookies at all - public YouTube videos, music and social posts all work signed out. Cookies matter for private, age-restricted or account-only content. Fetch Puppy adds them automatically when it finds them, so there is usually nothing to set up."
         },
         {
           "type": "paragraph",
