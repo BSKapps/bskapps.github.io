@@ -87,7 +87,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Click **Downloads** in the sidebar to watch progress. One job runs at a time; others wait, shown as colour-coded tabs (blue running, orange queued, green done, red failed, grey cancelled). Each job shows its tracks with per-track status and the format used, a progress bar, and counts for total, done, failed and remaining."
+          "text": "Click **Downloads** in the sidebar to watch progress. One job runs at a time; others wait, shown as colour-coded tabs (blue running, orange queued, green done, red failed, grey cancelled). Each job shows its tracks with per-track status and the format used, a progress bar, and counts for total, done, failed and remaining. Spotify, Apple Music and CSV tracks have to be matched first, so their rows move through Waiting, Searching, Connecting, Downloading and Converting; a YouTube or social media link is already known, so it goes straight to downloading. A row reading Incomplete download, try again means the file that came back was too short to be the real track, so it was discarded; retrying often finds a better source."
         },
         {
           "type": "paragraph",
