@@ -176,6 +176,21 @@
         {
           "type": "paragraph",
           "text": "Write module results into each cue's notes during a run (Levels, Routing, Top and Tail, Musical), with Write All and Write None controls. You can also tag each cue's category (for example Cat: VOG) at the top of its notes, using the same Music/VOG/FX keyword matching. You can clear notes from a single module, clear just Lab Assistant's own notes while keeping yours, or clear all notes."
+        },
+        {
+          "type": "paragraph",
+          "text": "A fully processed cue's notes read like this, with the category tag first and the rest in module order."
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "**Cat: VOG** - the category tag, written at the top of the notes.",
+            "**LUFS: -23.4 \u2192 Level: +2.1 dB** - the loudness measured, and the level applied to reach your target.",
+            "**Routing: VOG \u2192 Out 3/4** - where the cue was routed.",
+            "**Trim: In: 0.412s | Out: 3.980s** - the cue's new start and end times.",
+            "**BPM: 128 (64)** - the tempo, with the half-time value in brackets.",
+            "**Key: A minor [8A]** - the key, with its Camelot code in brackets."
+          ]
         }
       ]
     },
