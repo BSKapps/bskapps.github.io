@@ -54,7 +54,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Each module has an on/off toggle and its own **Run** button, so you can run one job on its own. **Run All** runs every enabled module in sequence across the selected cues. If you don't want a module's job, just leave its sidebar switch off; **Run All** runs only the switched-on modules and skips the rest. A progress bar and elapsed time show during a run, and you can cancel at any point. You can have Lab Assistant confirm before a run in Settings. Destructive modes (the reset and clear options below) reset to safe settings when the app restarts."
+          "text": "Each module has an on/off toggle and its own **Run** button, so you can run one job on its own. **Run All** runs every enabled module in sequence across the selected cues. If you don't want a module's job, just leave its sidebar switch off; **Run All** runs only the switched-on modules and skips the rest. A progress bar and elapsed time show during a run, and you can cancel at any point. Numbering is the exception: once it starts writing cue numbers the cancel button greys out and the run finishes, so it can never leave your cues half numbered. You can have Lab Assistant confirm before a run in Settings. Destructive modes (the reset and clear options below) reset to safe settings when the app restarts."
         }
       ]
     },
