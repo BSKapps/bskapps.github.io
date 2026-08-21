@@ -96,7 +96,7 @@
         },
         {
           "type": "paragraph",
-          "text": "**Multi-output routing** sends cues to any output or pair. Sending to a pair keeps stereo cues left/right and plays mono cues out both outputs; sending to a single output sums everything to that one output (stereo summed to mono at -6 dB). It can also sort automatically by name: turn on **Auto-Sort by Name** and Lab Assistant classifies cues into Music, VOG and FX categories by keywords in the cue name or notes, then routes each to its own output pair. You can edit the keywords and the output pairs, and rename the categories. After a run, hover a result row to re-route and re-colour a cue directly from Results."
+          "text": "**Multi-output routing** sends cues to any output or pair. Sending to a pair keeps stereo cues left/right and plays mono cues out both outputs; sending to a single output sums everything to that one output (stereo summed to mono at -6 dB). It can also sort automatically by name: turn on **Auto-Sort by Name** and Lab Assistant classifies cues into Music, VOG and FX categories by keywords in the cue name or notes, then routes each to its own output pair. You can edit the keywords and the output pairs, and rename the categories. **Max Outputs** (default 8) sets how many outputs the routing menus offer - set it to your device's size, as higher counts like 32 or 64 take a little longer to apply across large cue lists. After a run, hover a result row to re-route and re-colour a cue directly from Results."
         }
       ]
     },
@@ -188,7 +188,7 @@
             "**LUFS: -23.4 \u2192 Level: +2.1 dB** - the loudness measured, and the level applied to reach your target.",
             "**Routing: VOG \u2192 Out 3/4** - where the cue was routed.",
             "**Trim: In: 0.412s | Out: 3.980s** - the cue's new start and end times.",
-            "**BPM: 128 (64)** - the tempo, with the half-time value in brackets.",
+            "**BPM: 70 (detected 140)** - the tempo; when the raw detection was double-time, the original reading shows in brackets.",
             "**Key: A minor [8A]** - the key, with its Camelot code in brackets."
           ]
         }
@@ -245,7 +245,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Open Settings from the gear in the toolbar (top-right). It holds updates (with auto-check), your licence (activate or deactivate), which modules are visible, the maximum number of outputs routing offers (**Max Outputs**, default 8, which keeps the routing menus matched to your device and routing quick to apply; higher counts like 32 or 64 take a little longer to apply across large cue lists, so set it only as high as your setup needs), the welcome screen, the confirm-before-processing and completion-summary toggles, and an option to minimise to the menu bar. An Email Support button copies a diagnostics report and opens an email to support. Lab Assistant is a one-time purchase with two activations."
+          "text": "Open Settings from the gear in the toolbar (top-right). It holds updates (with auto-check), your licence (activate or deactivate), which modules are visible, the welcome screen, the confirm-before-processing and completion-summary toggles, and an option to minimise to the menu bar. An Email Support button copies a diagnostics report and opens an email to support. Lab Assistant is a one-time purchase with two activations."
         }
       ]
     }
