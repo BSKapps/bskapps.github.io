@@ -33,8 +33,8 @@
       "tagline": "Auto levels, auto top and tail, mono and multi-output routing - and Mint cleans up audio and video cues in place.",
       "price": "$14.99 USD",
       "macos": "macOS 14.6+",
-      "version": "v2.3.2",
-      "released": "11 July 2026",
+      "version": "v2.4",
+      "released": "21 August 2026",
       "description": "Select your QLab cues and hit Run All. Levels are auto-set to your LUFS target, mono routing and crosspoint outputs are configured, silence is trimmed, and cues are numbered and colour-coded. Built for QLab 5, licensed and free."
     },
     "targettrace": {
@@ -71,7 +71,7 @@
       "price": "$14.99 USD",
       "macos": "macOS 14.6+",
       "version": "v2.6",
-      "released": "19 August 2026",
+      "released": "21 August 2026",
       "features": [
         "Search and save from YouTube without ads",
         "Find and save music videos for an entire Spotify or Apple Music playlist",
