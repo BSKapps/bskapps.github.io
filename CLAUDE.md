@@ -156,7 +156,7 @@ The four app pages' `<title>`, `og:title`, `meta description`, and `og:descripti
 
 - Quicker IP - Network Toolkit for macOS / "Fast IP switching with presets, adapter management, system stats, speed test - and a powerful LAN scanner."
 - Lab Assistant - QLab Workspace Automation for macOS / "Auto levels, auto top and tail, mono and multi-output routing - and Mint cleans up audio and video cues in place."
-- Fetch Puppy - Download Music and Video for macOS / "Find and save music and video - YouTube, Spotify playlists, TikTok, and more."
+- Fetch Puppy - Download Music and Video / "Find and save music and video - YouTube, Spotify playlists, TikTok, and more."
 - Target Trace - Smaart Target Curve Editor for macOS / "Build precise target curves for Smaart or REW - from scratch, your own measurements, or built-in presets."
 
 og:title stays IDENTICAL to <title>. Descriptions are the content.json taglines - if a tagline changes in /admin, these follow it; nothing else moves them. After any change, re-scrape each URL in Facebook's Sharing Debugger.
