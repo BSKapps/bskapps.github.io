@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Lab Assistant user guide - BSK Apps",
     "h1": "Lab Assistant user guide",
-    "dateLine": "Updated for version 2.3",
+    "dateLine": "Updated for version 2.4",
     "description": "A how-to guide for Lab Assistant: connecting to QLab, the processing modules (Levels, Routing, Top and Tail, Numbering, Fade and Stop, Colour, Notes), Mint, and Run All.",
     "canonical": "https://bskapps.com/articles/lab-assistant-guide/",
     "ogTitle": "Lab Assistant user guide",
@@ -78,7 +78,7 @@
         },
         {
           "type": "paragraph",
-          "text": "Turn on the **fader offset** to land cues at -10 dB instead of at unity, leaving headroom to push a cue during the show. If a cue needs more than QLab's level cap allows, the result flags it so you can see where it ran out of room."
+          "text": "Turn on the **fader offset** to land cues at -10 dB instead of at unity, so a mixed bag of cues at very different recorded levels all fit under QLab's level cap. If a cue still needs more than the cap allows, the result flags it so you can see where it ran out of room."
         }
       ]
     },
@@ -165,7 +165,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Detects each cue's tempo and key, and can reorder cues for smoother transitions. Two independent choices. Under **Detect**, tick **BPM**, **Key**, or both; the values show in Results and can be written to cue notes. Under **Reorder cues**, choose **Don't reorder** (just detect), **By BPM** (sort by tempo), **By Key** (order by Camelot-wheel compatibility), or **BPM + Key** (group by compatible key, then sort by tempo within each group). Picking a reorder automatically ticks the detection it needs and unticks the one it doesn't - re-tick it if you also want that value in the notes. It does not reorder a selection that spans different groups."
+          "text": "Detects each cue's tempo and key, and can reorder cues for smoother transitions. Two independent choices. Under **Reorder cues**, choose **Don't reorder** (just detect), **By BPM** (sort by tempo), **By Key** (order by Camelot-wheel compatibility), or **BPM + Key** (group by compatible key, then sort by tempo within each group). Under **Detect**, tick **BPM**, **Key**, or both; the values show in Results and can be written to cue notes. Picking a reorder automatically ticks the detection it needs and unticks the one it doesn't - re-tick it if you also want that value in the notes. It does not reorder a selection that spans different groups."
         }
       ]
     },
@@ -188,7 +188,7 @@
             "**LUFS: -23.4 \u2192 Level: +2.1 dB** - the loudness measured, and the level applied to reach your target.",
             "**Routing: VOG \u2192 Out 3/4** - where the cue was routed.",
             "**Trim: In: 0.412s | Out: 3.980s** - the cue's new start and end times.",
-            "**BPM: 70 (detected 140)** - the tempo; when the raw detection was double-time, the original reading shows in brackets.",
+            "**BPM: 140 (half 70)** - the detected tempo; fast tracks also show the half-time value in brackets.",
             "**Key: A minor [8A]** - the key, with its Camelot code in brackets."
           ]
         }
@@ -210,7 +210,7 @@
             "**Trim and fade** per file, with a fade preview; an empty end keeps each file's full length.",
             "**Gain**, or **Normalise** to a LUFS or peak target (gain greys out when normalise is on).",
             "**Output**: format (WAV, AIFF, MP3, AAC or FLAC), sample rate, bit depth or bitrate, and channels, with Match Source as the default. Video can be kept (adjusting its sound), converted (MP4 or MOV, H.264 or HEVC, with resolution and frame rate), or have its audio extracted; trimming a video shows the start and end frames.",
-            "**Output mode**: Copy and Insert (a new file and a new cue), Save as Copy and Replace (a new file, with the existing cue repointed to it), or Overwrite."
+            "**Output mode**: Copy and Insert (a new file and a new cue), Save as Copy and Replace (a new file, with the existing cue repointed to it), or Overwrite. Overwrite is unavailable when extracting audio from video."
           ]
         },
         {
