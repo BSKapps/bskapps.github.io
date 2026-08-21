@@ -149,3 +149,14 @@ Do NOT add an Articles link to the footer - articles are reached via the homepag
 - Add ads, cookie-based tracking, or third-party analytics scripts (cookieless Cloudflare RUM is allowed - see Analytics)
 - Link to or mention MultiViewPort
 - Add emojis to code or output unless asked
+
+## LOCKED: app page titles and link-card copy (user order, 21 Aug 2026)
+
+The four app pages' `<title>`, `og:title`, `meta description`, and `og:description` are LOCKED to these exact values. DO NOT change them - not for SEO, not for consistency passes, not for "improvements". Only the user's explicitly dictated wording, given in chat, may change them; then update THIS block in the same commit.
+
+- Quicker IP - Network Toolkit for macOS / "Fast IP switching with presets, adapter management, system stats, speed test - and a powerful LAN scanner."
+- Lab Assistant - QLab Workspace Automation for macOS / "Auto levels, auto top and tail, mono and multi-output routing - and Mint cleans up audio and video cues in place."
+- Fetch Puppy - Download Music and Video for macOS / "Find and save music and video - YouTube, Spotify playlists, TikTok, and more."
+- Target Trace - Smaart Target Curve Editor for macOS / "Build precise target curves for Smaart or REW - from scratch, your own measurements, or built-in presets."
+
+og:title stays IDENTICAL to <title>. Descriptions are the content.json taglines - if a tagline changes in /admin, these follow it; nothing else moves them. After any change, re-scrape each URL in Facebook's Sharing Debugger.
