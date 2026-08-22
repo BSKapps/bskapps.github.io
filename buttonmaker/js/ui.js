@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, editTarget, editTargets, buttonCount } from './state.js?v=144';
-import { triggerIconUpload } from './icons.js?v=144';
-import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=144';
-import { noteDesignsEdited } from './effects.js?v=144';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, editTarget, editTargets, buttonCount } from './state.js?v=145';
+import { triggerIconUpload } from './icons.js?v=145';
+import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=145';
+import { noteDesignsEdited } from './effects.js?v=145';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -845,8 +845,8 @@ export function syncInputsFromState() {
 }
 
 function updateEditBanner() {
-  const banner = document.getElementById('editBanner');
-  const bLabel = document.getElementById('editBannerLabel');
+  const banner = document.getElementById('editStatus');
+  const bLabel = document.getElementById('editStatusLabel');
   const bAll = document.getElementById('editAllBtn');
   const sel = state.ui.selectedItems;
   if (state.series.mode === 'list' && sel.length) {

@@ -1,12 +1,12 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=144';
-import { renderDesign } from './renderer.js?v=144';
-import { seriesVariants, numberSet } from './series.js?v=144';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=144';
-import { initIconPicker } from './icons.js?v=144';
-import { initPresets, normalizeDesign } from './presets.js?v=144';
-import { initExport } from './export.js?v=144';
-import { initEffects, updateEffectControls } from './effects.js?v=144';
-import { initColorPopover } from './colorpicker.js?v=144';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=145';
+import { renderDesign } from './renderer.js?v=145';
+import { seriesVariants, numberSet } from './series.js?v=145';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=145';
+import { initIconPicker } from './icons.js?v=145';
+import { initPresets, normalizeDesign } from './presets.js?v=145';
+import { initExport } from './export.js?v=145';
+import { initEffects, updateEffectControls } from './effects.js?v=145';
+import { initColorPopover } from './colorpicker.js?v=145';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -509,7 +509,7 @@ const bmVersion = document.querySelector('meta[name="bm-version"]')?.content;
 if (bmVersion && bmVersion !== APP_VERSION) {
   if (!sessionStorage.getItem('bm-skew-reload')) {
     sessionStorage.setItem('bm-skew-reload', '1');
-    location.replace(location.pathname + '?fresh=' + APP_VERSION);
+    location.replace(location.pathname + '?fresh=' + APP_VERSION + location.hash);
   }
 } else {
   sessionStorage.removeItem('bm-skew-reload');

@@ -2,6 +2,17 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v145 - 2026-08-22
+- Fixed Copy Design Link: a link opened in a fresh browser session lost the design and opened an empty editor.
+- The page no longer loads itself twice on the first visit of every session.
+
+## v144 - 2026-08-07
+- Token set exports now name their files from the joined text layers.
+- Borders on part of an edge now clip to the button shape.
+- Importing a preset with no name no longer leaves it blank.
+- The set From and To fields now hold what you type.
+- Fixed the help toggle colour.
+
 ## v143 - 2026-08-05
 - Fixed the top bar running off the side of the screen on a half-width desktop window.
 

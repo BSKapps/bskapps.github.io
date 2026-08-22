@@ -124,7 +124,7 @@ body {
 
 .btn.small { padding: 4px 10px; font-size: 0.78rem; width: auto; }
 
-.edit-banner {
+.edit-status {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -139,9 +139,9 @@ body {
   color: var(--muted);
   line-height: 1.4;
 }
-.edit-banner.one { border-color: var(--brand); color: var(--text); }
-.edit-banner.idle { visibility: hidden; }
-.edit-banner .btn.small { flex-shrink: 0; }
+.edit-status.one { border-color: var(--brand); color: var(--text); }
+.edit-status.idle { visibility: hidden; }
+.edit-status .btn.small { flex-shrink: 0; }
 
 .section {
   background: var(--card);
@@ -928,7 +928,7 @@ body {
   #seriesPreview { order: 2; width: 100%; }
   .panel { order: 3; position: static; align-self: stretch; max-height: none; height: auto; overflow: visible; border-right: none; border-top: 1px solid var(--border); padding: 16px 12px; }
   .tab-area { overflow: visible; min-height: 0; }
-  .edit-banner { order: 2; width: calc(100% - 24px); margin: 0 12px 12px; }
+  .edit-status { order: 2; width: calc(100% - 24px); margin: 0 12px 12px; }
   .download-card { order: 4; width: calc(100% - 24px); margin: 0 12px 12px; }
   .promo-card { order: 5; width: calc(100% - 24px); margin: 0 12px 12px; }
   .tools-card { order: 7; }

@@ -816,6 +816,8 @@ let originalJSON = '';
 let dirty = false;
 
 // Articles state
+const GUIDE_SLUGS_FALLBACK = ['fetch-puppy-guide', 'lab-assistant-guide', 'stimulus-guide', 'target-trace-guide'];
+let guideSlugs = null;
 let articlesIndex = null;
 let currentArticle = null;
 let originalArticleFields = '';
@@ -888,7 +890,7 @@ function renderForm() {
     ]));
 
     // App cards
-    const appLabels = { quickerip: 'Quicker IP', labassistant: 'Lab Assistant', targettrace: 'Target Trace', fetchpuppy: 'Fetch Puppy', gogames: 'Go Games' };
+    const appLabels = { quickerip: 'Quicker IP', labassistant: 'Lab Assistant', targettrace: 'Target Trace', fetchpuppy: 'Fetch Puppy', gogames: 'Go Games', stimulus: 'Stimulus' };
     Object.keys(data.apps).forEach(function(key) {
         const app = data.apps[key];
         const children = [
@@ -914,7 +916,7 @@ function renderForm() {
         if (app.features) {
             children.push(makeFeaturesField('Features (product page)', 'apps.' + key + '.features', app.features));
         }
-        container.appendChild(makeCard(appLabels[key], 'APP', children));
+        container.appendChild(makeCard(appLabels[key] || app.name || key, 'APP', children));
     });
 }
 
@@ -1121,12 +1123,27 @@ async function saveArticle() {
 
 // ---- ARTICLES ----
 
+async function loadGuideSlugs() {
+    if (guideSlugs !== null) return;
+    try {
+        const res = await ghFetch('GET', 'repos/' + REPO + '/contents/_data/guides');
+        const items = await res.json();
+        guideSlugs = Array.isArray(items)
+            ? items.filter(function(i) { return i.type === 'file' && /\.json$/.test(i.name); })
+                   .map(function(i) { return i.name.replace(/\.json$/, ''); })
+            : GUIDE_SLUGS_FALLBACK.slice();
+    } catch (e) {
+        guideSlugs = GUIDE_SLUGS_FALLBACK.slice();
+    }
+}
+
 async function loadArticlesIndex() {
     if (articlesIndex !== null) return;
+    await loadGuideSlugs();
     const res = await ghFetch('GET', 'repos/' + REPO + '/contents/articles');
     const items = await res.json();
     articlesIndex = items
-        .filter(function(i) { return i.type === 'dir'; })
+        .filter(function(i) { return i.type === 'dir' && guideSlugs.indexOf(i.name) === -1; })
         .map(function(i) { return i.name; })
         .sort();
 }
@@ -1151,7 +1168,7 @@ function renderArticlesList() {
     view.innerHTML = '';
     const intro = document.createElement('div');
     intro.style.cssText = 'color:#A9A9AF; font-size:0.85rem; margin-bottom:14px;';
-    intro.textContent = 'Click an article to edit its title, description, heading, date, or body HTML.';
+    intro.textContent = 'Click an article to edit its title, description, heading, date, or body HTML. User guides are not listed: they render from _data/guides and are edited there.';
     view.appendChild(intro);
     articlesIndex.forEach(function(slug) {
         const row = document.createElement('div');
@@ -1905,6 +1922,7 @@ const PAGE_LABELS = {
     '/labassistant/': 'Lab Assistant',
     '/fetchpuppy/': 'Fetch Puppy',
     '/targettrace/': 'Target Trace',
+    '/stimulus/': 'Stimulus',
     '/gogames/': 'Go Games',
     '/buttonmaker/': 'Button Maker',
     '/tools/': 'Free Tools',
@@ -1962,8 +1980,9 @@ function countryLabel(c) {
 
 function pageLabel(p) {
     if (PAGE_LABELS[p]) return PAGE_LABELS[p];
-    const noSlash = p && p.length > 1 && p.slice(-1) === '/' ? p.slice(0, -1) + '/' : p;
-    return PAGE_LABELS[noSlash] || p;
+    if (!p) return p;
+    const alt = p.slice(-1) === '/' ? p.slice(0, -1) : p + '/';
+    return PAGE_LABELS[alt] || p;
 }
 
 function esc(s) {

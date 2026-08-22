@@ -35,7 +35,7 @@
       "macos": "macOS 14.6+",
       "version": "v2.4",
       "released": "21 August 2026",
-      "description": "Select your QLab cues and hit Run All. Levels are auto-set to your LUFS target, mono routing and crosspoint outputs are configured, silence is trimmed, and cues are numbered and colour-coded. Built for QLab 5, licensed and free."
+      "description": "Select your QLab cues and hit Run All. Levels are auto-set to your LUFS target, output routing and crosspoint outputs are configured, silence is trimmed, and cues are numbered and colour-coded. Built for QLab 5, licensed and free."
     },
     "targettrace": {
       "name": "Target Trace",
@@ -100,7 +100,7 @@
       "price": "$4.99 USD",
       "macos": "macOS 15+ & iPadOS 18+",
       "version": "v1.1",
-      "released": "24 July 2026",
+      "released": "19 August 2026",
       "features": [
         "Measure - pseudorandom pink noise period-matched to your analyzer's FFT frame (32K, 64K or 128K) and a cycle-synchronised log sweep. Both loop seamlessly, and export writes exactly one frame for analyzer playback",
         "Tone - sine from 10 Hz to 22 kHz with a log slider, typed entry, one-tap keys for common frequencies, and keyboard nudge in 1 percent steps, 10 percent with Shift",

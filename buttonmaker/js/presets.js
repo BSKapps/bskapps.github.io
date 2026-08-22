@@ -1,8 +1,8 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=144';
-import { renderDesign } from './renderer.js?v=144';
-import { numberSet, variantsFor } from './series.js?v=144';
-import { releaseSelection } from './ui.js?v=144';
-import { newId } from './effects.js?v=144';
+import { state, emit, deepClone, defaultDesign } from './state.js?v=145';
+import { renderDesign } from './renderer.js?v=145';
+import { numberSet, variantsFor } from './series.js?v=145';
+import { releaseSelection } from './ui.js?v=145';
+import { newId } from './effects.js?v=145';
 
 const STORE_KEY = 'cbm-presets-v1';
 
