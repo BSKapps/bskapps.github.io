@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IPv6 on a Mac: what it's doing and when to care - BSK Apps</title>
-    <meta name="description" content="What IPv6 is quietly doing on every Mac, why AV networks still run IPv4, whether turning IPv6 off helps, and how an IPv6-only adapter can actually be useful on show rigs.">
+    <meta name="description" content="What IPv6 is quietly doing on every Mac, why AV networks still run IPv4, whether turning it off helps, and when an IPv6-only adapter is useful.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="canonical" href="https://bskapps.com/articles/ipv6-on-a-mac/">
     <meta property="og:type" content="article">
     <meta property="og:title" content="IPv6 on a Mac: what it's doing and when to care">
-    <meta property="og:description" content="What IPv6 is quietly doing on every Mac, why AV networks still run IPv4, whether turning IPv6 off helps, and how an IPv6-only adapter can actually be useful on show rigs.">
+    <meta property="og:description" content="What IPv6 is quietly doing on every Mac, why AV networks still run IPv4, whether turning it off helps, and when an IPv6-only adapter is useful.">
     <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
     <meta property="og:url" content="https://bskapps.com/articles/ipv6-on-a-mac/">
     <link rel="stylesheet" href="/css/site.css?v=20260818b">
@@ -22,7 +22,7 @@
             <h1>IPv6 on a Mac: what it's doing and when to care</h1>
             <p class="date">5 July 2026</p>
 
-            <p>Open the network details on any Mac and alongside the familiar 192.168.x.x address there's a block of hex starting with fe80:: that most people have trained themselves not to see. That's IPv6, it's been on by default for years, and for AV work the practical questions are simple: what is it doing, will it break anything, and is it ever actually useful on a rig?</p>
+            <p>Open the network details on any Mac and alongside the familiar 192.168.x.x address there's a block of hex starting with fe80:: that most people have trained themselves not to see. That's IPv6, it's been on by default for years, and for AV work the practical questions are simple: what is it doing, will it break anything, and is it ever actually useful on a show network?</p>
 
             <h2>What's already happening without you</h2>
             <p>Every active interface on a Mac gives itself a <strong>link-local IPv6 address</strong> (the fe80:: one) the moment the link comes up - no DHCP, no router, no configuration. It's the IPv6 equivalent of the 169.254.x.x self-assigned IPv4 address, except it isn't a fallback: it always exists, alongside whatever IPv4 is doing.</p>
@@ -41,8 +41,8 @@
             </ul>
             <p>macOS exposes this per interface: Configure IPv6 can be Automatically, Manually, or Link-Local Only (the closest thing to "off" the UI offers - the fe80:: address remains, routable IPv6 stops).</p>
 
-            <h2>Where IPv6 earns its keep on a rig</h2>
-            <p>Here's the genuinely useful trick: because the stacks are independent, an adapter can drop out of IPv4 entirely while staying connected over IPv6. Wi-Fi is the classic case. On show day you want the audio network to own IPv4 routing - but Wi-Fi with IPv4 disabled still delivers internet (on IPv6-capable connections), AirPlay, and location services, without contributing an IPv4 default route that can hijack traffic meant for the rig. You keep the convenience and lose the routing hazard.</p>
+            <h2>Where IPv6 earns its keep on a system</h2>
+            <p>Here's the genuinely useful trick: because the stacks are independent, an adapter can drop out of IPv4 entirely while staying connected over IPv6. Wi-Fi is the classic case. On show day you want the audio network to own IPv4 routing - but Wi-Fi with IPv4 disabled still delivers internet (on IPv6-capable connections), AirPlay, and location services, without contributing an IPv4 default route that can hijack traffic meant for the system. You keep the convenience and lose the routing hazard.</p>
             <p>Doing that from System Settings is a dig through per-interface panes. <a href="/quickerip">Quicker IP</a> makes it a menu-bar click: its IPv4 Off mode switches an adapter out of IPv4 while leaving the link and IPv6 up, and the status dot tells you what's really happening - orange for "live over IPv6", red for "no working IP at all". Restore puts the previous settings back when the show's over.</p>
 
             <h2>The short version</h2>

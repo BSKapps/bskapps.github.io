@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v146 - 2026-08-22
+- "Make a numbered set" now numbers a button that only has an icon. The number sits under the icon instead of being left off.
+
 ## v145 - 2026-08-22
 - Fixed Copy Design Link: a link opened in a fresh browser session lost the design and opened an empty editor.
 - The page no longer loads itself twice on the first visit of every session.

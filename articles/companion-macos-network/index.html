@@ -44,7 +44,7 @@
             <p>With two adapters on the same subnet, the routing table has two competing entries for 192.168.1.0/24. The kernel picks one. Companion's traffic to a device at, say, 192.168.1.50 goes out whichever adapter won - which may not be the one physically connected to the device. The module shows as offline even though the device is right there. Flipping the service order or disconnecting Wi-Fi usually makes it start working, which confirms the diagnosis.</p>
             <p>The reliable fix is different subnets on different adapters. If you can't change the show LAN, turn Wi-Fi off. <a href="/quickerip">Quicker IP Pro</a> shows a red warning when two active adapters share a subnet and both have a gateway - useful for catching this before Companion starts throwing connection errors.</p>
 
-            <h2>Service order for a Companion rig</h2>
+            <h2>Service order for a Companion system</h2>
             <p>A typical setup has Companion on the same Mac as QLab, with Wi-Fi for general use and one or two wired adapters for the show. A workable service order for show day:</p>
             <ul>
                 <li>Show control LAN (wired) - first, so traffic to devices on that subnet goes out the right adapter</li>
@@ -55,7 +55,7 @@
 
             <h2>Remote surfaces and the Companion satellite</h2>
             <p>If you are running a Stream Deck on a separate machine - a stage manager's laptop, a FOH operator's computer - that machine runs Companion Satellite and connects back to the main Companion instance over the network. Satellite needs to reach Companion's IP on the satellite port set in Companion's settings.</p>
-            <p>The common failure here is the satellite machine being on a different network segment to the Companion machine. If the main rig is on a show control LAN and the satellite is on a venue Wi-Fi, they may not be able to reach each other at all. Either put both on the same subnet, or make sure there is a routed path between them. Companion itself doesn't require anything exotic - it just needs a TCP connection on that port.</p>
+            <p>The common failure here is the satellite machine being on a different network segment to the Companion machine. If the main system is on a show control LAN and the satellite is on a venue Wi-Fi, they may not be able to reach each other at all. Either put both on the same subnet, or make sure there is a routed path between them. Companion itself doesn't require anything exotic - it just needs a TCP connection on that port.</p>
 
             <h2>Checking the state</h2>
             <p>If a module is showing as disconnected and you think it should be working, confirm the basics before assuming a Companion bug:</p>

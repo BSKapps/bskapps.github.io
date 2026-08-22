@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Companion module setup for common AV gear - BSK Apps</title>
-    <meta name="description" content="Practical Companion module setup for QLab, REAPER, Spotify, Shure ULXD and Axient, Blackmagic ATEM, Barco Event Controller, vMix, Millumin, Smaart, and Stage Timer.">
+    <meta name="description" content="Companion module setup for QLab, REAPER, Spotify, Shure ULXD and Axient, Blackmagic ATEM, Barco Event Controller, vMix, Millumin, Smaart and Stage Timer.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="canonical" href="https://bskapps.com/articles/companion-module-setup/">
     <meta property="og:type" content="article">
@@ -40,7 +40,7 @@
             <p>Feedback works well on these modules: a Stream Deck button showing mute state per channel gives the RF tech a clear panel view without opening Shure Wireless Workbench. Battery level can feed button colours for a quick visual check pre-show.</p>
 
             <h2>Blackmagic ATEM</h2>
-            <p>ATEM switchers have excellent Companion support via the ATEM module. Add an instance pointing at the ATEM's IP - the address is set in ATEM Setup, which you run the first time you plug in. Static IP is the right choice; ATEM does have a DHCP mode but there is no reason to use it in a fixed rig.</p>
+            <p>ATEM switchers have excellent Companion support via the ATEM module. Add an instance pointing at the ATEM's IP - the address is set in ATEM Setup, which you run the first time you plug in. Static IP is the right choice; ATEM does have a DHCP mode but there is no reason to use it in a fixed system.</p>
             <p>The module exposes most of what you would do in ATEM Software Control: cut and auto transitions, input selection on program and preview, auxiliary output routing, upstream and downstream keyers, macro execution, and SuperSource layout on supported models. Macros are the most powerful option - program complex multi-step transitions in ATEM Software Control, then trigger them from a single Companion button.</p>
             <p>One thing to watch: if you are running ATEM Software Control on the same Mac as Companion, both are connecting to the ATEM simultaneously. ATEMs support multiple simultaneous control connections (the exact number varies by model and firmware), so this is fine in practice, but if you see unexpected state changes it is worth checking whether something else is sending commands to the switcher.</p>
 

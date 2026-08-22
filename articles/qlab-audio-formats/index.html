@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QLab Audio File Formats: Best Settings and What to Avoid - BSK Apps</title>
+    <title>QLab Audio Formats: Settings and What to Avoid - BSK Apps</title>
     <meta name="description" content="The audio formats that play reliably in QLab, why VBR MP3s cause dropouts, which sample rate to standardise on, and how to convert a whole folder in one pass.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="canonical" href="https://bskapps.com/articles/qlab-audio-formats/">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Audio file formats for QLab: what to use and what to avoid">
-    <meta property="og:description" content="Which audio formats play back reliably in QLab, why VBR MP3s cause trouble, what sample rate to standardise on, and how to convert a whole show's files in one pass.">
+    <meta property="og:description" content="Which audio formats play back reliably in QLab, why VBR MP3s cause trouble, what sample rate to standardise on, and how to convert a whole show in one pass.">
     <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
     <meta property="og:url" content="https://bskapps.com/articles/qlab-audio-formats/">
     <link rel="stylesheet" href="/css/site.css?v=20260818b">
@@ -28,7 +28,7 @@
             <p>For anything that matters, use WAV or AIFF:</p>
             <ul>
                 <li><strong>No decoding surprises.</strong> Uncompressed PCM has nothing to unpack - seeking is sample-accurate, durations are exact, and the CPU cost is trivial.</li>
-                <li><strong>48 kHz</strong> is the usual show standard, matching video and most playback rigs. Whatever your rig runs at, make every file match it - resampling on the fly is work the machine doesn't need to do during a show.</li>
+                <li><strong>48 kHz</strong> is the usual show standard, matching video and most playback systems. Whatever your system runs at, make every file match it - resampling on the fly is work the machine doesn't need to do during a show.</li>
                 <li><strong>16-bit or 24-bit</strong> both fine. 24-bit if the source has it, but nobody has ever lost a show to 16-bit playback.</li>
             </ul>
             <p>Disk space stopped being an argument years ago. A three-hour show's worth of stereo WAVs is a few gigabytes on a machine with hundreds free.</p>

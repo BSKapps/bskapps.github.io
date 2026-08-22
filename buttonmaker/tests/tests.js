@@ -1,12 +1,12 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer } from '../js/state.js?v=145';
-import { seriesVariants, safeFileName, variantFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=145';
-import { buildCompanionPage } from '../js/companion.js?v=145';
-import { renderToDataUrl } from '../js/renderer.js?v=145';
-import { selectListItem, releaseSelection, removeListItem } from '../js/ui.js?v=145';
-import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=145';
-import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=145';
-import { invertHex, mixHex } from '../js/color.js?v=145';
-import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=145';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer } from '../js/state.js?v=146';
+import { seriesVariants, safeFileName, variantFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=146';
+import { buildCompanionPage } from '../js/companion.js?v=146';
+import { renderToDataUrl } from '../js/renderer.js?v=146';
+import { selectListItem, releaseSelection, removeListItem } from '../js/ui.js?v=146';
+import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=146';
+import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=146';
+import { invertHex, mixHex } from '../js/color.js?v=146';
+import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=146';
 
 const results = [];
 
@@ -94,6 +94,20 @@ function run() {
   state.series.mode = 'list';
   v = seriesVariants();
   check('empty design numbered: number drawn as big centred text', v[0].design.texts.some((t) => t.value === '1' && t.align === 'center:center'));
+
+  resetState();
+  state.design.icons[0].svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>';
+  state.series.items = numberSet(state.design, 1, 3);
+  state.series.mode = 'list';
+  v = seriesVariants();
+  check('icon-only design numbered: number sits under the icon, not over it',
+    v[0].design.texts.some((t) => t.value === '1' && t.align === 'center:bottom')
+    && v[2].design.texts.some((t) => t.value === '3' && t.align === 'center:bottom'));
+  check('icon-only numbered layer carries every text field', (() => {
+    const t = v[0].design.texts.find((l) => l.value === '1');
+    const keys = Object.keys(defaultTextLayer());
+    return !!t && keys.every((k) => t[k] !== undefined);
+  })());
 
   resetState();
   state.design.texts[0].value = 'PC 1';

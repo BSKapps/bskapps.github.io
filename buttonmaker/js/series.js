@@ -1,11 +1,18 @@
-import { state, deepClone } from './state.js?v=145';
+import { state, deepClone, defaultTextLayer } from './state.js?v=146';
 
 export function hasToken(design) {
   return design.texts.some((t) => t.value && (t.value.includes('{n}') || t.value.includes('{label}')));
 }
 
-function numberLayer(value) {
-  return { value, font: 'Inter', weight: '600', size: 28, color: '#ffffff', align: 'center:center', x: 0, y: 0 };
+function numberLayer(value, underIcon) {
+  return Object.assign(defaultTextLayer(), {
+    value,
+    font: 'Inter',
+    weight: '600',
+    size: underIcon ? 15 : 28,
+    color: '#ffffff',
+    align: underIcon ? 'center:bottom' : 'center:center'
+  });
 }
 
 function decimalsOf(n) {
@@ -71,7 +78,7 @@ export function variantsFor(base, series) {
       } else if (item.label) {
         const t = d.texts.find((l) => l.value);
         if (t) t.value = item.label;
-        else if (!item.iconSvg && !base.icons.some((ic) => ic.svg)) d.texts.push(numberLayer(item.label));
+        else d.texts.push(numberLayer(item.label, !!item.iconSvg || base.icons.some((ic) => ic.svg)));
       }
       if (item.iconSvg) {
         d.icons[0].svg = item.iconSvg;

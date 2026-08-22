@@ -22,7 +22,7 @@
             <h1>Running multiple network adapters on a Mac</h1>
             <p class="date">18 April 2026</p>
 
-            <p>A MacBook used in live production rarely has one network connection. Touring rigs, installs, and even small corporate shows often have the same Mac on Wi-Fi, a wired control LAN, and a dedicated audio network at the same time. Each wants its own settings. macOS will happily run all three concurrently, but it will also happily route traffic out the wrong interface if you don't set it up.</p>
+            <p>A MacBook used in live production rarely has one network connection. Touring systems, installs, and even small corporate shows often have the same Mac on Wi-Fi, a wired control LAN, and a dedicated audio network at the same time. Each wants its own settings. macOS will happily run all three concurrently, but it will also happily route traffic out the wrong interface if you don't set it up.</p>
 
             <p>Here's a working approach. If you want to understand the routing mechanics behind why these rules exist, there's a companion piece: <a href="/articles/mac-routing-table">Part 2 - how macOS routes traffic across multiple adapters</a>.</p>
 
@@ -49,7 +49,7 @@
             <p>Two common configurations:</p>
             <ul>
                 <li><strong>Office or prep day</strong>: Wi-Fi on top, so general internet traffic goes out Wi-Fi. Wired networks still work for their own subnets, they just don't try to be the default route. Useful when you need software updates, cloud storage, or remote support while also on a show LAN.</li>
-                <li><strong>Show day</strong>: audio network on top, Wi-Fi below or off entirely. For a lot of rigs, the audio interface needs to win any tie-break - discovery, multicast, the lot. Pushing it to the top of the service order keeps macOS from preferring Wi-Fi for traffic that should stay wired.</li>
+                <li><strong>Show day</strong>: audio network on top, Wi-Fi below or off entirely. For a lot of systems, the audio interface needs to win any tie-break - discovery, multicast, the lot. Pushing it to the top of the service order keeps macOS from preferring Wi-Fi for traffic that should stay wired.</li>
             </ul>
             <p>Having to reorder this by hand every time you switch contexts is where Locations earn their keep. A "Show" Location with audio on top, a "Prep" Location with Wi-Fi on top, and you swap between them instead of dragging rows in System Settings under pressure. <a href="/quickerip">Quicker IP</a> shows the current service order in the menu bar and lets you switch Location or reorder services from there, so "Show" and "Prep" are one click apart with no System Settings detour.</p>
 
@@ -62,12 +62,12 @@
             </ul>
             <p>If an interface doesn't need a gateway, don't give it one. Two interfaces with gateways will silently fight about which one is the default route and you'll spend an hour on it at the worst possible time. <a href="/quickerip">Quicker IP Pro</a> detects this automatically - a red "Overlap detected" warning appears next to the subnet field of any affected adapter when two active interfaces share a subnet and both have a gateway configured.</p>
 
-            <h2>Switching between rigs</h2>
-            <p>All of this is fine when the Mac lives in the one rig. The moment it travels - same laptop, different venue, different networks - each of those interfaces needs a different configuration. macOS makes that slow. System Settings, Network, interface, Details, TCP/IP, switch from DHCP to Manually, enter four fields, switch to DNS, enter more fields, click OK, back out. Ten steps per interface. Three interfaces, thirty steps. Every show day.</p>
+            <h2>Switching between systems</h2>
+            <p>All of this is fine when the Mac lives in the one system. The moment it travels - same laptop, different venue, different networks - each of those interfaces needs a different configuration. macOS makes that slow. System Settings, Network, interface, Details, TCP/IP, switch from DHCP to Manually, enter four fields, switch to DNS, enter more fields, click OK, back out. Ten steps per interface. Three interfaces, thirty steps. Every show day.</p>
             <p>macOS has a built-in feature called Locations (Network pane, three-dots menu) that saves the whole set and lets you swap between them. It works, but it's buried and only stores the top-level config.</p>
             <p>This is the problem <a href="/quickerip">Quicker IP</a> is built for. Named presets per network, per interface, switched from the menu bar in one click. No System Settings detour.</p>
 
-            <p>Multiple adapters is the normal state of a touring Mac. Set the service order deliberately, give each interface only what it needs, and have a way to switch configurations quickly when the rig moves.</p>
+            <p>Multiple adapters is the normal state of a touring Mac. Set the service order deliberately, give each interface only what it needs, and have a way to switch configurations quickly when the system moves.</p>
         
             <div class="article-cta">
                 <img class="cta-icon" src="/images/quickip-icon.png" alt="" width="64" height="64">
