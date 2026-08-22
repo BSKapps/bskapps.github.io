@@ -124,16 +124,18 @@ async function fetchAppleReport(jwt, reportDate, frequency, vendor) {
         else { freeUnits += u; }
         const bucket = type + (price > 0 ? ' paid' : ' free');
         byType[bucket] = (byType[bucket] || 0) + u;
+        // Apple pads empty report fields with a single space, so trim before testing them
+        const parent = cell(cols, parentIdx);
         // In-app purchase rows carry the parent app's SKU, so they roll up under the app
-        const parent = (parentIdx >= 0 && cols[parentIdx]) || '';
-        const appKey = parent || (skuIdx >= 0 && cols[skuIdx]) || '?';
+        const appKey = parent || cell(cols, skuIdx) || '?';
         if (!byApp[appKey]) byApp[appKey] = { title: '', units: 0, paid_units: 0, free_units: 0, update_units: 0 };
         const app = byApp[appKey];
         app.units += u;
         if (isUpdate) { app.update_units += u; }
         else if (price > 0) { app.paid_units += u; }
         else { app.free_units += u; }
-        if (!parent && titleIdx >= 0 && cols[titleIdx]) app.title = cols[titleIdx];
+        const title = cell(cols, titleIdx);
+        if (!parent && title) app.title = title;
     }
     console.log('Apple report ' + frequency + ' ' + reportDate + ' [' + vendor + ']: ' + units + ' units (' + paidUnits + ' paid, ' + freeUnits + ' free, ' + updateUnits + ' updates) ' + JSON.stringify(byType));
     if (units > 0 && frequency !== 'YEARLY' && vendor === APPLE_VENDORS[0]) {
@@ -141,6 +143,10 @@ async function fetchAppleReport(jwt, reportDate, frequency, vendor) {
         if (!appleDataThrough || month > appleDataThrough) appleDataThrough = month;
     }
     return { units, paid_units: paidUnits, free_units: freeUnits, update_units: updateUnits, by_app: byApp, proceeds_by_currency: proceedsByCurrency, sales_by_currency: salesByCurrency };
+}
+
+function cell(cols, idx) {
+    return (idx >= 0 && cols[idx] ? String(cols[idx]) : '').trim();
 }
 
 function mergeByApp(a, b) {
