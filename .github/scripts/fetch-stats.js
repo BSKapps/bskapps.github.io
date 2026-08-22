@@ -87,7 +87,7 @@ async function fetchAppleReport(jwt, reportDate, frequency, vendor) {
     const lines = tsv.split('\n').filter(function(l) { return l.trim(); });
     if (lines.length < 2) {
         console.log('Apple report ' + frequency + ' ' + reportDate + ' [' + vendor + ']: empty report');
-        return { units: 0, paid_units: 0, free_units: 0, update_units: 0, proceeds_by_currency: {}, sales_by_currency: {} };
+        return { units: 0, paid_units: 0, free_units: 0, update_units: 0, by_app: {}, proceeds_by_currency: {}, sales_by_currency: {} };
     }
     const headers = lines[0].split('\t');
     const unitsIdx = headers.indexOf('Units');
@@ -96,11 +96,15 @@ async function fetchAppleReport(jwt, reportDate, frequency, vendor) {
     const customerPriceIdx = headers.indexOf('Customer Price');
     const customerCurrencyIdx = headers.indexOf('Customer Currency');
     const typeIdx = headers.indexOf('Product Type Identifier');
+    const skuIdx = headers.indexOf('SKU');
+    const titleIdx = headers.indexOf('Title');
+    const parentIdx = headers.indexOf('Parent Identifier');
     let units = 0;
     let paidUnits = 0;
     let freeUnits = 0;
     let updateUnits = 0;
     const byType = {};
+    const byApp = {};
     const proceedsByCurrency = {};
     const salesByCurrency = {};
     for (let i = 1; i < lines.length; i++) {
@@ -114,18 +118,45 @@ async function fetchAppleReport(jwt, reportDate, frequency, vendor) {
         const price = (customerPriceIdx >= 0 ? parseFloat(cols[customerPriceIdx]) : 0) || 0;
         salesByCurrency[salesCur] = (salesByCurrency[salesCur] || 0) + price * u;
         const type = (typeIdx >= 0 && cols[typeIdx]) || '?';
-        if (APPLE_UPDATE_TYPES.indexOf(type) >= 0) { updateUnits += u; }
+        const isUpdate = APPLE_UPDATE_TYPES.indexOf(type) >= 0;
+        if (isUpdate) { updateUnits += u; }
         else if (price > 0) { paidUnits += u; }
         else { freeUnits += u; }
         const bucket = type + (price > 0 ? ' paid' : ' free');
         byType[bucket] = (byType[bucket] || 0) + u;
+        // In-app purchase rows carry the parent app's SKU, so they roll up under the app
+        const parent = (parentIdx >= 0 && cols[parentIdx]) || '';
+        const appKey = parent || (skuIdx >= 0 && cols[skuIdx]) || '?';
+        if (!byApp[appKey]) byApp[appKey] = { title: '', units: 0, paid_units: 0, free_units: 0, update_units: 0 };
+        const app = byApp[appKey];
+        app.units += u;
+        if (isUpdate) { app.update_units += u; }
+        else if (price > 0) { app.paid_units += u; }
+        else { app.free_units += u; }
+        if (!parent && titleIdx >= 0 && cols[titleIdx]) app.title = cols[titleIdx];
     }
     console.log('Apple report ' + frequency + ' ' + reportDate + ' [' + vendor + ']: ' + units + ' units (' + paidUnits + ' paid, ' + freeUnits + ' free, ' + updateUnits + ' updates) ' + JSON.stringify(byType));
     if (units > 0 && frequency !== 'YEARLY' && vendor === APPLE_VENDORS[0]) {
         const month = reportDate.slice(0, 7);
         if (!appleDataThrough || month > appleDataThrough) appleDataThrough = month;
     }
-    return { units, paid_units: paidUnits, free_units: freeUnits, update_units: updateUnits, proceeds_by_currency: proceedsByCurrency, sales_by_currency: salesByCurrency };
+    return { units, paid_units: paidUnits, free_units: freeUnits, update_units: updateUnits, by_app: byApp, proceeds_by_currency: proceedsByCurrency, sales_by_currency: salesByCurrency };
+}
+
+function mergeByApp(a, b) {
+    const r = {};
+    for (const k in a) { r[k] = Object.assign({}, a[k]); }
+    for (const k in b) {
+        const src = b[k];
+        if (!r[k]) { r[k] = Object.assign({}, src); continue; }
+        const dst = r[k];
+        dst.units += src.units;
+        dst.paid_units += src.paid_units;
+        dst.free_units += src.free_units;
+        dst.update_units += src.update_units;
+        if (!dst.title && src.title) dst.title = src.title;
+    }
+    return r;
 }
 
 function sumAppleReports(list) {
@@ -139,10 +170,11 @@ function sumAppleReports(list) {
             paid_units: a.paid_units + (r.paid_units || 0),
             free_units: a.free_units + (r.free_units || 0),
             update_units: a.update_units + (r.update_units || 0),
+            by_app: mergeByApp(a.by_app, r.by_app || {}),
             proceeds_by_currency: merged,
             sales_by_currency: mergedSales
         };
-    }, { units: 0, paid_units: 0, free_units: 0, update_units: 0, proceeds_by_currency: {}, sales_by_currency: {} });
+    }, { units: 0, paid_units: 0, free_units: 0, update_units: 0, by_app: {}, proceeds_by_currency: {}, sales_by_currency: {} });
 }
 
 // Daily windows only ever cover recent dates, so deprecated vendors cannot hold anything there
@@ -218,6 +250,7 @@ async function fetchApple(rates) {
             paid_units: r.paid_units || 0,
             free_units: r.free_units || 0,
             update_units: r.update_units || 0,
+            by_app: r.by_app || {},
             sales_usd: salesUsd,
             sales_aud: Math.round(salesUsd * audRate * 100) / 100,
             proceeds_usd: proceedsUsd,
@@ -231,12 +264,13 @@ async function fetchApple(rates) {
                 paid_units: a.paid_units + (r.paid_units || 0),
                 free_units: a.free_units + (r.free_units || 0),
                 update_units: a.update_units + (r.update_units || 0),
+                by_app: mergeByApp(a.by_app, r.by_app || {}),
                 proceeds_by_currency: mergeCurrencies(a.proceeds_by_currency, r.proceeds_by_currency),
                 sales_by_currency: mergeCurrencies(a.sales_by_currency, r.sales_by_currency)
             };
-        }, { units: 0, paid_units: 0, free_units: 0, update_units: 0, proceeds_by_currency: {}, sales_by_currency: {} });
+        }, { units: 0, paid_units: 0, free_units: 0, update_units: 0, by_app: {}, proceeds_by_currency: {}, sales_by_currency: {} });
     }
-    const empty = { units: 0, paid_units: 0, free_units: 0, update_units: 0, proceeds_by_currency: {}, sales_by_currency: {} };
+    const empty = { units: 0, paid_units: 0, free_units: 0, update_units: 0, by_app: {}, proceeds_by_currency: {}, sales_by_currency: {} };
 
     // Fetch last 7 daily reports for 1d and 7d windows
     const daily = [];
