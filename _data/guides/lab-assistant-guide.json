@@ -92,11 +92,11 @@
         },
         {
           "type": "paragraph",
-          "text": "**Mono / Stereo fold** sends cues to a chosen output pair (1/2 up to 63/64): \"Mono to Dual Mono\" feeds a mono cue to both outputs, \"All Cues to Dual Mono\" sums stereo to mono and sends it to both, and \"Reset Routing\" restores channel 1 to output 1 and channel 2 to output 2."
+          "text": "**Mono / Stereo fold** sends cues to a chosen output pair (1/2 up to 63/64): \"Mono to Dual Mono\" feeds a mono cue to both outputs at -3 dB so it sits level with stereo cues, \"All Cues to Dual Mono\" sums stereo to mono (-6 dB) and sends it to both, and \"Reset Routing\" restores channel 1 to output 1 and channel 2 to output 2."
         },
         {
           "type": "paragraph",
-          "text": "**Multi-output routing** sends cues to any output or pair. Sending to a pair keeps stereo cues left/right and plays mono cues out both outputs; sending to a single output sums everything to that one output (stereo summed to mono at -6 dB). It can also sort automatically by name: turn on **Auto-Sort by Name** and Lab Assistant classifies cues into Music, VOG and FX categories by keywords in the cue name or notes, then routes each to its own output pair. You can edit the keywords and the output pairs, and rename the categories. **Max Outputs** (default 8) sets how many outputs the routing menus offer - set it to your device's size, as higher counts like 32 or 64 take a little longer to apply across large cue lists. After a run, hover a result row to re-route and re-colour a cue directly from Results."
+          "text": "**Multi-output routing** sends cues to any output or pair. Sending to a pair keeps stereo cues left/right and plays mono cues out both outputs at -3 dB; sending to a single output sums everything to that one output (stereo summed to mono at -6 dB). It can also sort automatically by name: turn on **Auto-Sort by Name** and Lab Assistant classifies cues into Music, VOG and FX categories by keywords in the cue name or notes, then routes each to its own output pair. You can edit the keywords and the output pairs, and rename the categories. **Max Outputs** (default 8) sets how many outputs the routing menus offer - set it to your device's size, as higher counts like 32 or 64 take a little longer to apply across large cue lists. After a run, hover a result row to re-route and re-colour a cue directly from Results."
         }
       ]
     },
