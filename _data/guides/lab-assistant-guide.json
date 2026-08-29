@@ -225,7 +225,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "The Results view lists every processed cue with a pass, warning or error icon, a per-module breakdown, and a summary with counts and total run time. A cue with a missing output device still gets its levels and trim, with a warning; only a cue whose media file is missing is skipped. Filter chips show All, Errors, Warnings, and each routing destination. Turn on Save CSV Report in Settings to write a CSV of each run to a folder you choose."
+          "text": "The Results view lists every processed cue with a pass, warning or error icon (grey means the run was stopped before that cue finished), a per-module breakdown, and a summary with counts and total run time. A cue with a missing output device still gets its levels and trim, with a warning; only a cue whose media file is missing is skipped. Filter chips show All, Errors, Warnings, and each routing destination. Turn on Save CSV Report in Settings to write a CSV of each run to a folder you choose."
         }
       ]
     },
