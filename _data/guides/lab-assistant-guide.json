@@ -165,7 +165,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Detects each cue's tempo and key, and can reorder cues for smoother transitions. Two independent choices. Under **Reorder cues**, choose **Don't reorder** (just detect), **By BPM** (sort by tempo), **By Key** (order by Camelot-wheel compatibility), or **BPM + Key** (group by compatible key, then sort by tempo within each group). Under **Detect**, tick **BPM**, **Key**, or both; the values show in Results and can be written to cue notes. Picking a reorder automatically ticks the detection it needs and unticks the one it doesn't - re-tick it if you also want that value in the notes. It does not reorder a selection that spans different groups."
+          "text": "Detects each cue's tempo and key, and can reorder cues for smoother transitions. Two independent choices. Under **Reorder cues**, choose **Don't reorder** (just detect), **By BPM** (sort by tempo), **By Key** (order by Camelot-wheel compatibility), or **BPM + Key** (group by compatible key, then sort by tempo within each group). Under **Detect**, tick **BPM**, **Key**, or both; the values show in Results and can be written to cue notes. Picking a reorder automatically ticks the detection it needs and unticks the one it doesn't - re-tick it if you also want that value in the notes. It does not reorder a selection that spans different groups. **Restore Previous Order** puts the cues back in the order they had before the last reorder; the remembered order lasts until Lab Assistant quits."
         }
       ]
     },
@@ -185,8 +185,8 @@
           "type": "bullets",
           "items": [
             "**Cat: VOG** - the category tag, written at the top of the notes.",
-            "**LUFS: -23.4 \u2192 Level: +2.1 dB** - the loudness measured, and the level applied to reach your target.",
-            "**Routing: VOG \u2192 Out 3/4** - where the cue was routed.",
+            "**LUFS: -23.4 → Level: +2.1 dB** - the loudness measured, and the level applied to reach your target.",
+            "**Routing: VOG → Out 3/4** - where the cue was routed.",
             "**Trim: In: 0.412s | Out: 3.980s** - the cue's new start and end times.",
             "**BPM: 140 (half 70)** - the detected tempo; fast tracks also show the half-time value in brackets.",
             "**Key: A minor [8A]** - the key, with its Camelot code in brackets."
