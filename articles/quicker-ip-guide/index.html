@@ -49,7 +49,7 @@
                 <li>Multicast - whether the adapter can carry the multicast traffic Dante and AES67 depend on</li>
                 <li>Tx Errors, Rx Errors and Collisions, counted from a baseline you can reset with Clear Counters so only new faults show</li>
                 <li>IGMP Query - reads "active (Ns ago)" or "no querier" when nothing on the network is querying</li>
-                <li>Audio Clock, Grandmaster and Clock Sync - the PTP audio clock seen on the network, which device is serving it, and whether it is still in sync. All three read "none found" on a network with no clock. Older systems running the legacy PTPv1 clock are shown too</li>
+                <li>Audio Clock, Grandmaster and Clock Sync - the PTP audio clock seen on the network, which device is serving it, and whether it is still in sync. If two devices both claim to be the clock, Clock Sync says so. All three read "none found" on a network with no clock. Older systems running the legacy PTPv1 clock are shown too</li>
                 <li>A subnet overlap warning if two adapters share a range, and a duplicate IP warning if two live adapters hold the same address</li>
             </ul>
             <p>Link speed, duplex, MTU and the overlap warning are the Dante monitoring checks: a full-duplex gigabit link at MTU 1500 with no overlapping subnets. Multicast, IGMP Query and the three clock rows cover the rest of an AV network - multicast getting through, a querier keeping it flowing, and a clock the devices can lock to.</p>
