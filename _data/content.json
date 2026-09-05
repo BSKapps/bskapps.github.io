@@ -43,8 +43,8 @@
       "tagline": "Build precise target curves for Smaart or REW - from scratch, your own measurements, or built-in presets.",
       "price": "$12.99 USD",
       "macos": "macOS 14.6+",
-      "version": "v1.3",
-      "released": "17 August 2026",
+      "version": "v1.3.1",
+      "released": "5 September 2026",
       "features": [
         "Live Grab - pull a live RTA or transfer function trace out of a running Smaart as an editable target curve, calibrated RTAs at real SPL",
         "Import Smaart ASCII trace exports - open, drop, or paste with Cmd+V",
