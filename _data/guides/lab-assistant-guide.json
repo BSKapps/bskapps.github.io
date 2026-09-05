@@ -155,7 +155,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "**Apply Colours** colour-codes cues by type (stereo, mono, looped, for audio and video), by category (VOG, FX), and by status (warning, error, group), using a colour map you can edit and reset. You can also colour control cues (Fade, MIDI, Script and more); left as None they stay uncoloured. Drag a swatch onto a type to reassign it. **Clear All Colours** removes colours, groups included."
+          "text": "**Apply Colours** colour-codes cues by type (stereo, mono, looped, for audio and video), by category (VOG, FX), and by status (warning, error, group), using a colour map you can edit and reset. You can also colour control cues (Fade, MIDI, Script and more); left as None they stay uncoloured. Drag a swatch onto a type to reassign it. A **Keyword colours** switch turns the VOG and FX name colours on or off; with it off, those cues keep their audio colour. **Clear All Colours** removes colours, groups included."
         }
       ]
     },
@@ -175,7 +175,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Write module results into each cue's notes during a run (Levels, Routing, Top and Tail, Musical), with Write All and Write None controls. You can also tag each cue's category (for example Cat: VOG) at the top of its notes, using the same Music/VOG/FX keyword matching. You can clear notes from a single module, clear just Lab Assistant's own notes while keeping yours, or clear all notes."
+          "text": "Write module results into each cue's notes during a run (Levels, Routing, Top and Tail, Musical, and Mint's applied effects), with Write All and Write None controls. You can also tag each cue's category (for example Cat: VOG) at the top of its notes, using the same Music/VOG/FX keyword matching. You can clear notes from a single module, clear just Lab Assistant's own notes while keeping yours, or clear all notes."
         },
         {
           "type": "paragraph",
@@ -189,7 +189,8 @@
             "**Routing: VOG → Out 3/4** - where the cue was routed.",
             "**Trim: In: 0.412s | Out: 3.980s** - the cue's new start and end times.",
             "**BPM: 140 (half 70)** - the detected tempo; fast tracks also show the half-time value in brackets.",
-            "**Key: A minor [8A]** - the key, with its Camelot code in brackets."
+            "**Key: A minor [8A]** - the key, with its Camelot code in brackets.",
+            "**Mint: Normalise, Trim, Fade** - the effects Mint applied when it processed the file."
           ]
         }
       ]
@@ -207,10 +208,12 @@
           "items": [
             "**Noise removal** with a strength slider.",
             "**Seven-band EQ** (60 Hz to 12 kHz), plus or minus 12 dB per band, with a preview.",
-            "**Trim and fade** per file, with a fade preview; an empty end keeps each file's full length.",
+            "**Trim and fade** per file, with a fade preview; an empty end keeps each file's full length. Trim can instead use **Each cue's QLab trim**, baking each cue's own start and end times into its file; cues without trim times stay full length, and in a replace or overwrite mode the cue's times are reset afterwards.",
             "**Gain**, or **Normalise** to a LUFS or peak target (gain greys out when normalise is on).",
             "**Output**: format (WAV, AIFF, MP3, AAC or FLAC), sample rate, bit depth or bitrate, and channels, with Match Source as the default. Video can be kept (adjusting its sound), converted (MP4 or MOV, H.264 or HEVC, with resolution and frame rate), or have its audio extracted; trimming a video shows the start and end frames.",
-            "**Output mode**: Copy and Insert (a new file and a new cue), Save as Copy and Replace (a new file, with the existing cue repointed to it), or Overwrite. Overwrite is unavailable when extracting audio from video."
+            "**Output mode**: Copy and Insert (a new file and a new cue), Save as Copy and Replace (a new file, with the existing cue repointed to it), or Overwrite. Overwrite is unavailable when extracting audio from video. Overwrite checks the new file is valid before replacing the original, and the old file goes to the Trash.",
+            "**Collect new cues into a group** puts a batch's new cues into one group, named after the applied effects, placed after the last selected cue. **Notes** can write a line listing the applied effects on each cue (tick Mint in the Notes module).",
+            "Several cues sharing one file are handled together: identical edits share one new file, different edit points each get their own, and Overwrite warns instead of processing the file twice. Cues with a missing or unreadable file are flagged before processing."
           ]
         },
         {
