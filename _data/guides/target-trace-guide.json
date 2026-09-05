@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Target Trace user guide - BSK Apps",
     "h1": "Target Trace user guide",
-    "dateLine": "Updated for version 1.3",
+    "dateLine": "Updated for version 1.3.1",
     "description": "A how-to guide for Target Trace: drawing and editing target curves, TF and Spectrum modes, smoothing and weighting, the Smaart library, presets, and exporting .crv and REW files.",
     "canonical": "https://bskapps.com/articles/target-trace-guide/",
     "ogTitle": "Target Trace user guide",
@@ -101,7 +101,7 @@
         {
           "type": "bullets",
           "items": [
-            "**Name** - used as the filename when you save.",
+            "**Name** - used as the filename when you save. Give the file a different name in the save dialog and the curve takes that name.",
             "**Colour** and **line weight** (1 to 5 pt) for how the curve draws.",
             "**Tolerance band** (TF only) - a shaded plus/minus dB region around the curve.",
             "**Offset** - a running readout of global dB shifts (Cmd-up/down or the plus/minus buttons). Click it to reset. The offset is a working convenience and is never saved into the file.",
