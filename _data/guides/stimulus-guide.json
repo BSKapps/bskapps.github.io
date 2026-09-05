@@ -104,7 +104,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Three colours, ordered by slope: **Red/Brown** (-6 dB per octave), **Pink** (-3) and **White** (flat). Pink is the usual choice for PA work; red/brown is the same signal Smaart calls red. White is flat per hertz, the reference for FFT work."
+          "text": "Three colours, ordered by slope: **Red/Brown** (-6 dB per octave), **Pink** (-3) and **White** (flat). Pink is the usual choice for PA work; red/brown is the same signal Smaart calls red. White is flat per hertz, the reference for FFT work. The level is RMS for every colour: a setting of -20 dBFS reads -20 on an RMS meter or analyzer whichever colour is playing. The app's own meters show peaks, about 13 dB above that for pink and red/brown, so pink above -13 dBFS runs into the -3 limiter and the LIM key will tell you."
         },
         {
           "type": "paragraph",
