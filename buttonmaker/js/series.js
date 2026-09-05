@@ -1,4 +1,4 @@
-import { state, deepClone, defaultTextLayer } from './state.js?v=146';
+import { state, deepClone, defaultTextLayer } from './state.js?v=147';
 
 export function hasToken(design) {
   return design.texts.some((t) => t.value && (t.value.includes('{n}') || t.value.includes('{label}')));

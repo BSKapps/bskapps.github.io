@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v147 - 2026-09-05
+- The design name field is no longer squashed on a window between 821 and 999 pixels wide. The header wraps to two lines there.
+
 ## v146 - 2026-08-22
 - "Make a numbered set" now numbers a button that only has an icon. The number sits under the icon instead of being left off.
 
