@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Stimulus user guide - BSK Apps",
     "h1": "Stimulus user guide",
-    "dateLine": "Updated for version 1.1",
+    "dateLine": "Updated for version 1.2",
     "description": "A how-to guide for Stimulus: tones, sweeps with hold and scrub, harmonics, noise with band limiting and burst, the Stereo ID and GLITS channel idents, polarity pops, analyzer-matched measurement signals, mixing four generators, and exporting test files.",
     "canonical": "https://bskapps.com/articles/stimulus-guide/",
     "ogTitle": "Stimulus user guide",
@@ -34,7 +34,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "The editor shows one generator at a time; the rack on the right holds them all. Click a strip to edit it, press **+ Add generator** to spawn another (up to four), hold a strip - or right-click it on a Mac - to remove it, and drag a strip to reorder the rack. Each strip has its own level fader plus **M** (mute), **S** (solo) and the polarity flip. The reset control by the generator label defaults the current mode's own settings without touching the mix."
+          "text": "The editor shows one generator at a time; the rack on the right holds them all. Click a strip to edit it, press **+ Add generator** to spawn another (up to four), hold a strip - or right-click it on a Mac - to remove it, and drag a strip to reorder the rack. Each strip has its own level fader plus **M** (mute), **S** (solo) and the polarity flip. A new generator arrives muted: unmute it when you want it in the mix. The reset control by the generator label returns the whole generator to its defaults, muted."
         },
         {
           "type": "paragraph",
@@ -176,7 +176,7 @@
         },
         {
           "type": "paragraph",
-          "text": "**DIM** ducks the output 20 dB so you can talk over the system - tap it again, grab the master fader or type a level to restore. Behind the master strip's three-dot button are master fade in/out times and an auto-stop timer that ends playback after a set duration; with **Repeat** on it cycles play and stop until you stop it."
+          "text": "**DIM** ducks the output 20 dB so you can talk over the system - tap it again, grab the master fader or type a level to restore. The **Timer** key holds master fade in/out times and an auto-stop timer that ends playback after a set duration. On iPad the **Guide** key beside it opens this guide; on the Mac it lives in the Help menu."
         },
         {
           "type": "paragraph",
@@ -206,8 +206,9 @@
     },
     {
       "id": "shortcuts",
-      "title": "Keyboard shortcuts",
+      "title": "Keyboard shortcuts (Mac)",
       "app": true,
+      "mac": true,
       "web": true,
       "blocks": [
         {
