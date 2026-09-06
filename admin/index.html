@@ -290,12 +290,14 @@
         .data-table th.num, .data-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
         .data-table .muted { color: #8A8A90; font-size: 0.78rem; }
 
-        .data-table tr.expandable { cursor: pointer; }
-        .data-table tr.expandable:hover > td { background: rgba(255,255,255,0.06); }
-        .data-table td.exp-chev { width: 14px; padding-right: 0; color: #A2A2A8; font-size: 0.82rem; }
-        .data-table th.exp-chev { width: 14px; padding-right: 0; }
-        .data-table tr.detail-row > td { padding: 0 16px 14px 16px; }
-        .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; padding-top: 12px; }
+        .app-grid { margin-top: 10px; }
+        .app-card { cursor: pointer; }
+        .app-card:hover { border-color: rgba(255,255,255,0.28); }
+        .app-card.summary { grid-column: 1 / -1; cursor: default; background: #2C2C30; }
+        .app-card .pc-head { justify-content: space-between; }
+        .app-card .pc-chev { color: #A2A2A8; font-size: 0.82rem; }
+        .app-card .pc-stats { margin-bottom: 0; }
+        .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; padding-top: 12px; margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.10); }
         .detail-panel { background: #2C2C30; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 14px 12px; }
         .detail-title { font-size: 0.6rem; color: #8A8A90; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
         .detail-line { display: flex; justify-content: space-between; gap: 12px; font-size: 0.8rem; padding: 3px 0; color: #E4E4E7; }
@@ -506,6 +508,15 @@
             .range-row > span { display: none; }
             .collapse-section[data-key="pages"] .data-table th:nth-child(2),
             .collapse-section[data-key="pages"] .data-table td:nth-child(2) { display: none; }
+            .collapse-section[data-key="appstore-countries"] .data-table th:nth-child(3),
+            .collapse-section[data-key="appstore-countries"] .data-table td:nth-child(3),
+            .collapse-section[data-key="appstore-countries"] .data-table th:nth-child(4),
+            .collapse-section[data-key="appstore-countries"] .data-table td:nth-child(4),
+            .collapse-section[data-key="appstore-countries"] .data-table th:nth-child(5),
+            .collapse-section[data-key="appstore-countries"] .data-table td:nth-child(5) { display: none; }
+            .collapse-section[data-key="appstore-countries"] .data-table th,
+            .collapse-section[data-key="appstore-countries"] .data-table td { padding-left: 8px; padding-right: 8px; }
+            .collapse-section[data-key="appstore-countries"] .data-table th { letter-spacing: 0; }
         }
     </style>
 </head>
@@ -663,12 +674,7 @@
 
         <details class="collapse-section" data-key="appstore-apps" open>
             <summary><span class="chev">&#9656;</span><span class="section-title">App Store by App</span><span class="section-note" id="appstore-apps-note"></span></summary>
-            <div class="data-table-wrap">
-                <table class="data-table">
-                    <thead><tr><th class="exp-chev"></th><th>App</th><th class="num">Downloads</th><th class="num">Updates</th><th class="num">Sales</th><th class="num">IAP</th><th class="num">Revenue</th><th class="num">Proceeds</th></tr></thead>
-                    <tbody id="appstore-apps-tbody"><tr><td colspan="8" class="muted">--</td></tr></tbody>
-                </table>
-            </div>
+            <div id="appstore-apps-cards" class="product-grid app-grid"><div class="muted">--</div></div>
         </details>
 
         <details class="collapse-section" data-key="appstore-countries" open>
@@ -2004,6 +2010,9 @@ const DEFAULT_AUD_RATE = 1.55;
 
 const COUNTRY_NAMES = {
     US: 'United States', AU: 'Australia', GB: 'United Kingdom', CA: 'Canada', NZ: 'New Zealand',
+    TH: 'Thailand', AE: 'UAE', CN: 'China', MD: 'Moldova', TR: 'Turkey', MY: 'Malaysia', TW: 'Taiwan',
+    RO: 'Romania', PH: 'Philippines', ID: 'Indonesia', MA: 'Morocco', CL: 'Chile', OM: 'Oman', UA: 'Ukraine',
+    SA: 'Saudi Arabia', KR: 'South Korea', NG: 'Nigeria', RU: 'Russia', HR: 'Croatia',
     DE: 'Germany', FR: 'France', NL: 'Netherlands', IE: 'Ireland', SE: 'Sweden', NO: 'Norway',
     ES: 'Spain', IT: 'Italy', BR: 'Brazil', IN: 'India', JP: 'Japan', SG: 'Singapore',
     MX: 'Mexico', PL: 'Poland', CH: 'Switzerland', AT: 'Austria', BE: 'Belgium', DK: 'Denmark',
@@ -2206,12 +2215,27 @@ function appleDetail(a, rate) {
         + '</div>';
 }
 
+function appleStat(label, value, cls) {
+    return '<div><div class="pc-label">' + label + '</div><div class="pc-num' + (cls ? ' ' + cls : '') + '">' + value + '</div></div>';
+}
+
+function appleStatsRow(r, rate) {
+    return '<div class="pc-stats">'
+        + appleStat('Rev ' + currentCurrency, appleMoney(r.revenue, rate), 'money')
+        + appleStat('Proceeds', appleMoney(r.proceeds, rate), 'money')
+        + appleStat('Downloads', r.downloads.toLocaleString())
+        + appleStat('Updates', r.updates.toLocaleString())
+        + appleStat('Sales', r.sales.toLocaleString())
+        + appleStat('IAP', r.iap.toLocaleString())
+        + '</div>';
+}
+
 function renderAppleApps(stats, key) {
-    const tbody = document.getElementById('appstore-apps-tbody');
+    const container = document.getElementById('appstore-apps-cards');
     const note = document.getElementById('appstore-apps-note');
     const apple = stats.apple && stats.apple[key];
     if (!apple || apple.error) {
-        tbody.innerHTML = '<tr><td colspan="8" class="muted">' + (apple && apple.error ? esc(apple.error) : '--') + '</td></tr>';
+        container.innerHTML = '<div class="muted">' + (apple && apple.error ? esc(apple.error) : '--') + '</div>';
         note.textContent = '';
         return;
     }
@@ -2232,33 +2256,32 @@ function renderAppleApps(stats, key) {
         };
     }).sort(function(x, y) { return y.revenue - x.revenue || y.downloads - x.downloads; });
     if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="8" class="muted">No data yet</td></tr>';
+        container.innerHTML = '<div class="muted">No data yet</div>';
         note.textContent = '';
         return;
     }
-    tbody.innerHTML = rows.map(function(r) {
+    const total = rows.reduce(function(t, r) {
+        return { downloads: t.downloads + r.downloads, updates: t.updates + r.updates, sales: t.sales + r.sales,
+                 iap: t.iap + r.iap, revenue: t.revenue + r.revenue, proceeds: t.proceeds + r.proceeds };
+    }, { downloads: 0, updates: 0, sales: 0, iap: 0, revenue: 0, proceeds: 0 });
+    const summary = '<div class="product-card app-card summary">'
+        + '<div class="pc-head"><span class="pc-name">All apps</span><span class="pc-chev">' + rows.length + ' apps</span></div>'
+        + appleStatsRow(total, rate) + '</div>';
+    container.innerHTML = summary + rows.map(function(r) {
         const open = !!appleExpanded[r.sku];
-        const main = '<tr class="expandable" data-app="' + esc(r.sku) + '">'
-            + '<td class="exp-chev">' + (open ? '&#9662;' : '&#9656;') + '</td>'
-            + '<td>' + esc(r.name) + '</td>'
-            + '<td class="num">' + r.downloads.toLocaleString() + '</td>'
-            + '<td class="num">' + r.updates.toLocaleString() + '</td>'
-            + '<td class="num">' + r.sales.toLocaleString() + '</td>'
-            + '<td class="num">' + r.iap.toLocaleString() + '</td>'
-            + '<td class="num money">' + appleMoney(r.revenue, rate) + '</td>'
-            + '<td class="num money">' + appleMoney(r.proceeds, rate) + '</td></tr>';
-        if (!open) return main;
-        return main + '<tr class="detail-row"><td colspan="8">' + appleDetail(r.app, rate) + '</td></tr>';
+        return '<div class="product-card app-card" data-app="' + esc(r.sku) + '">'
+            + '<div class="pc-head"><span class="pc-name">' + esc(r.name) + '</span><span class="pc-chev">' + (open ? '&#9662;' : '&#9656;') + '</span></div>'
+            + appleStatsRow(r, rate)
+            + (open ? appleDetail(r.app, rate) : '')
+            + '</div>';
     }).join('');
-    const totalDownloads = rows.reduce(function(t, r) { return t + r.downloads; }, 0);
-    const totalRevenue = rows.reduce(function(t, r) { return t + r.revenue; }, 0);
-    note.textContent = rows.length + ' apps · ' + totalDownloads.toLocaleString() + ' downloads · ' + appleMoney(totalRevenue, rate) + ' ' + currentCurrency;
-    if (!tbody.dataset.bound) {
-        tbody.dataset.bound = '1';
-        tbody.addEventListener('click', function(e) {
-            const tr = e.target.closest('tr[data-app]');
-            if (!tr) return;
-            const sku = tr.getAttribute('data-app');
+    note.textContent = appleMoney(total.revenue, rate) + ' ' + currentCurrency;
+    if (!container.dataset.bound) {
+        container.dataset.bound = '1';
+        container.addEventListener('click', function(e) {
+            const card = e.target.closest('[data-app]');
+            if (!card) return;
+            const sku = card.getAttribute('data-app');
             if (appleExpanded[sku]) delete appleExpanded[sku]; else appleExpanded[sku] = true;
             renderAppleApps(cachedStats, currentKey);
         });
