@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Stimulus user guide - BSK Apps",
     "h1": "Stimulus user guide",
-    "dateLine": "Updated for version 1.2",
+    "dateLine": "Updated for version 1.3",
     "description": "A how-to guide for Stimulus: tones, sweeps with hold and scrub, harmonics, noise with band limiting and burst, the Stereo ID and GLITS channel idents, polarity pops, analyzer-matched measurement signals, mixing four generators, and exporting test files.",
     "canonical": "https://bskapps.com/articles/stimulus-guide/",
     "ogTitle": "Stimulus user guide",
@@ -19,7 +19,7 @@
     "icon": "stimulus-icon.png",
     "buyText": "Download on the App Store",
     "buyHref": "https://apps.apple.com/app/id6792156906",
-    "buyNote": "App Store &middot; one purchase covers Mac and iPad"
+    "buyNote": "App Store &middot; one purchase covers Mac, iPad and iPhone"
   },
   "intro": [
     {
@@ -176,7 +176,7 @@
         },
         {
           "type": "paragraph",
-          "text": "**DIM** ducks the output 20 dB so you can talk over the system - tap it again, grab the master fader or type a level to restore. The **Timer** key holds master fade in/out times and an auto-stop timer that ends playback after a set duration. On iPad the **Guide** key beside it opens this guide; on the Mac it lives in the Help menu."
+          "text": "**DIM** ducks the output 20 dB so you can talk over the system - tap it again, grab the master fader or type a level to restore. The **Timer** key holds master fade in/out times and an auto-stop timer that ends playback after a set duration. On the Mac this guide lives in the Help menu."
         },
         {
           "type": "paragraph",
