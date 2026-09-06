@@ -16,9 +16,12 @@ const GSC_PRIVATE_KEY = process.env.GSC_PRIVATE_KEY;
 const GSC_SITE = 'sc-domain:bskapps.com';
 
 let appleDataThrough = null;
+let appleRates = null;
+const APPLE_ARCHIVE_DIR = process.env.APPLE_ARCHIVE_DIR;
 
 // Apple product type identifiers for app updates rather than new downloads
 const APPLE_UPDATE_TYPES = ['7', '7F', '7T', 'F7'];
+const DEFAULT_AUD_RATE = 1.55;
 
 const BUTTONMAKER_PATH = '/buttonmaker/';
 const SOURCE_PATHS = ['/quickerip/', '/labassistant/', '/fetchpuppy/', '/targettrace/', '/buttonmaker/', '/gogames/'];
@@ -72,7 +75,7 @@ async function fetchAppleReport(jwt, reportDate, frequency, vendor) {
         } catch (e) {}
         if (res.status === 404 && /no (sales|reports?) (for|available)/i.test(detail)) {
             console.log('Apple report ' + frequency + ' ' + reportDate + ' [' + vendor + ']: no sales');
-            return null;
+            return emptyReport();
         }
         if (res.status === 404 && /not available yet/i.test(detail)) {
             console.log('Apple report ' + frequency + ' ' + reportDate + ' [' + vendor + ']: not published yet');
@@ -87,7 +90,7 @@ async function fetchAppleReport(jwt, reportDate, frequency, vendor) {
     const lines = tsv.split('\n').filter(function(l) { return l.trim(); });
     if (lines.length < 2) {
         console.log('Apple report ' + frequency + ' ' + reportDate + ' [' + vendor + ']: empty report');
-        return { units: 0, paid_units: 0, free_units: 0, update_units: 0, by_app: {}, proceeds_by_currency: {}, sales_by_currency: {} };
+        return emptyReport();
     }
     const headers = lines[0].split('\t');
     const unitsIdx = headers.indexOf('Units');
@@ -99,12 +102,18 @@ async function fetchAppleReport(jwt, reportDate, frequency, vendor) {
     const skuIdx = headers.indexOf('SKU');
     const titleIdx = headers.indexOf('Title');
     const parentIdx = headers.indexOf('Parent Identifier');
+    const countryIdx = headers.indexOf('Country Code');
     let units = 0;
     let paidUnits = 0;
     let freeUnits = 0;
     let updateUnits = 0;
+    let iapUnits = 0;
+    let appUnits = 0;
+    let salesUsdTotal = 0;
+    let proceedsUsdTotal = 0;
     const byType = {};
     const byApp = {};
+    const byCountry = {};
     const proceedsByCurrency = {};
     const salesByCurrency = {};
     for (let i = 1; i < lines.length; i++) {
@@ -112,41 +121,194 @@ async function fetchAppleReport(jwt, reportDate, frequency, vendor) {
         const u = parseInt(cols[unitsIdx]) || 0;
         units += u;
         const proceedsCur = cols[currencyIdx] || 'USD';
-        const proceeds = parseFloat(cols[proceedsIdx]) || 0;
+        // Apple reports Developer Proceeds and Customer Price per unit, so both scale by Units
+        const proceeds = (parseFloat(cols[proceedsIdx]) || 0) * u;
         proceedsByCurrency[proceedsCur] = (proceedsByCurrency[proceedsCur] || 0) + proceeds;
         const salesCur = (customerCurrencyIdx >= 0 && cols[customerCurrencyIdx]) || 'USD';
         const price = (customerPriceIdx >= 0 ? parseFloat(cols[customerPriceIdx]) : 0) || 0;
-        salesByCurrency[salesCur] = (salesByCurrency[salesCur] || 0) + price * u;
+        const sales = price * u;
+        salesByCurrency[salesCur] = (salesByCurrency[salesCur] || 0) + sales;
+        const salesUsd = usdAmount(sales, salesCur);
+        const proceedsUsd = usdAmount(proceeds, proceedsCur);
+        salesUsdTotal += salesUsd;
+        proceedsUsdTotal += proceedsUsd;
         const type = (typeIdx >= 0 && cols[typeIdx]) || '?';
         const isUpdate = APPLE_UPDATE_TYPES.indexOf(type) >= 0;
+        // Apple pads empty report fields with a single space, so trim before testing them
+        const parent = cell(cols, parentIdx);
+        // Only in-app purchase rows carry a parent app identifier
+        const isIap = !!parent;
         if (isUpdate) { updateUnits += u; }
-        else if (price > 0) { paidUnits += u; }
+        else if (price > 0) {
+            paidUnits += u;
+            if (isIap) { iapUnits += u; } else { appUnits += u; }
+        }
         else { freeUnits += u; }
         const bucket = type + (price > 0 ? ' paid' : ' free');
         byType[bucket] = (byType[bucket] || 0) + u;
-        // Apple pads empty report fields with a single space, so trim before testing them
-        const parent = cell(cols, parentIdx);
-        // In-app purchase rows carry the parent app's SKU, so they roll up under the app
-        const appKey = parent || cell(cols, skuIdx) || '?';
-        if (!byApp[appKey]) byApp[appKey] = { title: '', units: 0, paid_units: 0, free_units: 0, update_units: 0 };
-        const app = byApp[appKey];
-        app.units += u;
-        if (isUpdate) { app.update_units += u; }
-        else if (price > 0) { app.paid_units += u; }
-        else { app.free_units += u; }
+        const country = cell(cols, countryIdx) || '??';
         const title = cell(cols, titleIdx);
+        // In-app purchase rows carry the parent app's SKU, so they roll up under the app
+        const sku = cell(cols, skuIdx);
+        const appKey = parent || sku || '?';
+        if (!byApp[appKey]) byApp[appKey] = emptyApp();
+        const app = byApp[appKey];
+        addUnits(app, u, isUpdate, price > 0, isIap);
+        app.sales_usd += salesUsd;
+        app.proceeds_usd += proceedsUsd;
         if (!parent && title) app.title = title;
+        if (!app.countries[country]) app.countries[country] = emptyCountry();
+        addUnits(app.countries[country], u, isUpdate, price > 0, isIap);
+        app.countries[country].sales_usd += salesUsd;
+        app.countries[country].proceeds_usd += proceedsUsd;
+        if (isIap) {
+            const iapKey = sku || title || '?';
+            if (!app.iap[iapKey]) app.iap[iapKey] = { title: title || iapKey, units: 0, sales_usd: 0, proceeds_usd: 0 };
+            app.iap[iapKey].units += u;
+            app.iap[iapKey].sales_usd += salesUsd;
+            app.iap[iapKey].proceeds_usd += proceedsUsd;
+        }
+        if (!byCountry[country]) byCountry[country] = emptyCountry();
+        addUnits(byCountry[country], u, isUpdate, price > 0, isIap);
+        byCountry[country].sales_usd += salesUsd;
+        byCountry[country].proceeds_usd += proceedsUsd;
     }
     console.log('Apple report ' + frequency + ' ' + reportDate + ' [' + vendor + ']: ' + units + ' units (' + paidUnits + ' paid, ' + freeUnits + ' free, ' + updateUnits + ' updates) ' + JSON.stringify(byType));
     if (units > 0 && frequency !== 'YEARLY' && vendor === APPLE_VENDORS[0]) {
         const month = reportDate.slice(0, 7);
         if (!appleDataThrough || month > appleDataThrough) appleDataThrough = month;
     }
-    return { units, paid_units: paidUnits, free_units: freeUnits, update_units: updateUnits, by_app: byApp, proceeds_by_currency: proceedsByCurrency, sales_by_currency: salesByCurrency };
+    return { units, paid_units: paidUnits, free_units: freeUnits, update_units: updateUnits, iap_units: iapUnits, app_units: appUnits, sales_usd: salesUsdTotal, proceeds_usd: proceedsUsdTotal, by_app: byApp, by_country: byCountry, proceeds_by_currency: proceedsByCurrency, sales_by_currency: salesByCurrency };
 }
 
 function cell(cols, idx) {
     return (idx >= 0 && cols[idx] ? String(cols[idx]) : '').trim();
+}
+
+function archivePath(month) {
+    return APPLE_ARCHIVE_DIR + '/' + month + '.json';
+}
+
+function readArchivedMonth(month) {
+    if (!APPLE_ARCHIVE_DIR) return null;
+    const fs = require('fs');
+    try {
+        return JSON.parse(fs.readFileSync(archivePath(month), 'utf8'));
+    } catch (e) {
+        return null;
+    }
+}
+
+function writeArchivedMonth(month, report) {
+    if (!APPLE_ARCHIVE_DIR) return;
+    const fs = require('fs');
+    try {
+        fs.mkdirSync(APPLE_ARCHIVE_DIR, { recursive: true });
+        fs.writeFileSync(archivePath(month), JSON.stringify(report) + '\n');
+    } catch (e) {
+        console.error('Apple archive write ' + month + ':', e.message);
+    }
+}
+
+function usdAmount(amount, currency) {
+    if (!amount) return 0;
+    if (!currency || currency === 'USD') return amount;
+    const rate = appleRates && appleRates[currency];
+    return rate ? amount / rate : 0;
+}
+
+function emptyCountry() {
+    return { units: 0, paid_units: 0, free_units: 0, update_units: 0, iap_units: 0, app_units: 0, sales_usd: 0, proceeds_usd: 0 };
+}
+
+function emptyApp() {
+    const a = emptyCountry();
+    a.title = '';
+    a.countries = {};
+    a.iap = {};
+    return a;
+}
+
+function emptyReport() {
+    return { units: 0, paid_units: 0, free_units: 0, update_units: 0, iap_units: 0, app_units: 0, sales_usd: 0, proceeds_usd: 0, by_app: {}, by_country: {}, proceeds_by_currency: {}, sales_by_currency: {} };
+}
+
+function addUnits(target, u, isUpdate, isPaid, isIap) {
+    target.units += u;
+    if (isUpdate) { target.update_units += u; return; }
+    if (!isPaid) { target.free_units += u; return; }
+    target.paid_units += u;
+    if (isIap) { target.iap_units += u; } else { target.app_units += u; }
+}
+
+const COUNTRY_FIELDS = ['units', 'paid_units', 'free_units', 'update_units', 'iap_units', 'app_units', 'sales_usd', 'proceeds_usd'];
+
+function mergeCountries(a, b) {
+    const r = {};
+    for (const k in a) { r[k] = Object.assign({}, a[k]); }
+    for (const k in b) {
+        if (!r[k]) { r[k] = Object.assign({}, b[k]); continue; }
+        COUNTRY_FIELDS.forEach(function(f) { r[k][f] = (r[k][f] || 0) + (b[k][f] || 0); });
+    }
+    return r;
+}
+
+const COUNTRY_LIMIT = 25;
+const APP_COUNTRY_LIMIT = 6;
+const APP_IAP_LIMIT = 8;
+
+function money(n) {
+    return Math.round((n || 0) * 100) / 100;
+}
+
+function trimCountries(map, limit) {
+    const keys = Object.keys(map);
+    function top(field) {
+        return keys.slice().sort(function(a, b) { return (map[b][field] || 0) - (map[a][field] || 0); }).slice(0, limit);
+    }
+    // Kept by units and by revenue both, so a small storefront with one big sale is not cut
+    const keep = {};
+    top('units').concat(top('sales_usd')).forEach(function(k) { keep[k] = true; });
+    const out = {};
+    Object.keys(keep).forEach(function(k) {
+        const c = Object.assign({}, map[k]);
+        c.sales_usd = money(c.sales_usd);
+        c.proceeds_usd = money(c.proceeds_usd);
+        out[k] = c;
+    });
+    return out;
+}
+
+function trimByApp(byApp) {
+    const out = {};
+    Object.keys(byApp).forEach(function(k) {
+        const a = Object.assign({}, byApp[k]);
+        a.sales_usd = money(a.sales_usd);
+        a.proceeds_usd = money(a.proceeds_usd);
+        a.countries = trimCountries(a.countries || {}, APP_COUNTRY_LIMIT);
+        const iap = a.iap || {};
+        const iapOut = {};
+        Object.keys(iap).sort(function(x, y) { return (iap[y].units || 0) - (iap[x].units || 0); })
+            .slice(0, APP_IAP_LIMIT).forEach(function(ik) {
+                iapOut[ik] = { title: iap[ik].title, units: iap[ik].units, sales_usd: money(iap[ik].sales_usd), proceeds_usd: money(iap[ik].proceeds_usd) };
+            });
+        a.iap = iapOut;
+        out[k] = a;
+    });
+    return out;
+}
+
+function mergeIap(a, b) {
+    const r = {};
+    for (const k in a) { r[k] = Object.assign({}, a[k]); }
+    for (const k in b) {
+        if (!r[k]) { r[k] = Object.assign({}, b[k]); continue; }
+        r[k].units += b[k].units || 0;
+        r[k].sales_usd += b[k].sales_usd || 0;
+        r[k].proceeds_usd += b[k].proceeds_usd || 0;
+        if (!r[k].title && b[k].title) r[k].title = b[k].title;
+    }
+    return r;
 }
 
 function mergeByApp(a, b) {
@@ -156,10 +318,9 @@ function mergeByApp(a, b) {
         const src = b[k];
         if (!r[k]) { r[k] = Object.assign({}, src); continue; }
         const dst = r[k];
-        dst.units += src.units;
-        dst.paid_units += src.paid_units;
-        dst.free_units += src.free_units;
-        dst.update_units += src.update_units;
+        COUNTRY_FIELDS.forEach(function(f) { dst[f] = (dst[f] || 0) + (src[f] || 0); });
+        dst.countries = mergeCountries(dst.countries || {}, src.countries || {});
+        dst.iap = mergeIap(dst.iap || {}, src.iap || {});
         if (!dst.title && src.title) dst.title = src.title;
     }
     return r;
@@ -176,32 +337,42 @@ function sumAppleReports(list) {
             paid_units: a.paid_units + (r.paid_units || 0),
             free_units: a.free_units + (r.free_units || 0),
             update_units: a.update_units + (r.update_units || 0),
+            iap_units: a.iap_units + (r.iap_units || 0),
+            app_units: a.app_units + (r.app_units || 0),
+            sales_usd: a.sales_usd + (r.sales_usd || 0),
+            proceeds_usd: a.proceeds_usd + (r.proceeds_usd || 0),
+            partial: a.partial || !!r.partial,
             by_app: mergeByApp(a.by_app, r.by_app || {}),
+            by_country: mergeCountries(a.by_country, r.by_country || {}),
             proceeds_by_currency: merged,
             sales_by_currency: mergedSales
         };
-    }, { units: 0, paid_units: 0, free_units: 0, update_units: 0, by_app: {}, proceeds_by_currency: {}, sales_by_currency: {} });
+    }, emptyReport());
 }
 
 // Daily windows only ever cover recent dates, so deprecated vendors cannot hold anything there
 async function fetchAppleReportAllVendors(jwt, reportDate, frequency) {
     const vendors = frequency === 'DAILY' ? APPLE_VENDORS.slice(0, 1) : APPLE_VENDORS;
     const found = [];
+    let partial = false;
     for (let i = 0; i < vendors.length; i++) {
         if (i === 0) {
             const r = await fetchAppleReport(jwt, reportDate, frequency, vendors[i]);
-            if (r) found.push(r);
+            if (r) found.push(r); else partial = true;
         } else {
             try {
                 const r = await fetchAppleReport(jwt, reportDate, frequency, vendors[i]);
                 if (r) found.push(r);
             } catch (e) {
                 console.error('Apple legacy vendor ' + vendors[i] + ' ' + frequency + ' ' + reportDate + ':', e.message);
+                partial = true;
             }
         }
     }
     if (!found.length) return null;
-    return sumAppleReports(found);
+    const summed = sumAppleReports(found);
+    if (partial) summed.partial = true;
+    return summed;
 }
 
 async function fetchExchangeRates() {
@@ -216,6 +387,8 @@ async function fetchExchangeRates() {
 }
 
 async function fetchApple(rates) {
+    appleRates = rates;
+    const ratesUsable = !!(rates && Object.keys(rates).length);
     const jwt = generateAppleJWT();
     const result = {};
     const monthlyCache = {};
@@ -223,6 +396,23 @@ async function fetchApple(rates) {
     function noteFailure(label, e) {
         console.error('Apple ' + label + ':', e.message);
         if (failures.length < 5) failures.push(label + ': ' + e.message);
+    }
+    let ratesNoted = false;
+    function noteRatesOutage() {
+        if (ratesNoted) return;
+        ratesNoted = true;
+        noteFailure('exchange rates', new Error('unavailable, months not archived'));
+    }
+
+    function archivedYear12(y) {
+        const months = [];
+        for (let m = 1; m <= 12; m++) {
+            const key = y + '-' + String(m).padStart(2, '0');
+            const r = readArchivedMonth(key);
+            if (!r) return null;
+            months.push(r);
+        }
+        return sumAppleReports(months);
     }
 
     function dateStr(daysAgo) {
@@ -234,29 +424,21 @@ async function fetchApple(rates) {
         const d = new Date(now.getFullYear(), now.getMonth() - monthsAgo, 1);
         return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
     }
-    function mergeCurrencies(a, b) {
-        const r = Object.assign({}, a);
-        for (const cur in b) { r[cur] = (r[cur] || 0) + b[cur]; }
-        return r;
-    }
-    function toUsd(byCurrency) {
-        let usd = 0;
-        for (const currency in byCurrency) {
-            const amount = byCurrency[currency];
-            usd += currency === 'USD' ? amount : (rates && rates[currency] ? amount / rates[currency] : 0);
-        }
-        return Math.round(usd * 100) / 100;
-    }
     function convertAmounts(r) {
-        const audRate = (rates && rates['AUD']) || 1.55;
-        const salesUsd = toUsd(r.sales_by_currency);
-        const proceedsUsd = toUsd(r.proceeds_by_currency);
+        const audRate = (rates && rates['AUD']) || DEFAULT_AUD_RATE;
+        // Summed from the same rows that feed by_app and by_country, so the tables and the
+        // headline can never disagree, and an archived month keeps the rates it was booked at
+        const salesUsd = money(r.sales_usd || 0);
+        const proceedsUsd = money(r.proceeds_usd || 0);
         return {
             units: r.units,
             paid_units: r.paid_units || 0,
             free_units: r.free_units || 0,
             update_units: r.update_units || 0,
-            by_app: r.by_app || {},
+            iap_units: r.iap_units || 0,
+            app_units: r.app_units || 0,
+            by_app: trimByApp(r.by_app || {}),
+            by_country: trimCountries(r.by_country || {}, COUNTRY_LIMIT),
             sales_usd: salesUsd,
             sales_aud: Math.round(salesUsd * audRate * 100) / 100,
             proceeds_usd: proceedsUsd,
@@ -264,19 +446,9 @@ async function fetchApple(rates) {
         };
     }
     function sumReports(reports) {
-        return reports.reduce(function(a, r) {
-            return {
-                units: a.units + r.units,
-                paid_units: a.paid_units + (r.paid_units || 0),
-                free_units: a.free_units + (r.free_units || 0),
-                update_units: a.update_units + (r.update_units || 0),
-                by_app: mergeByApp(a.by_app, r.by_app || {}),
-                proceeds_by_currency: mergeCurrencies(a.proceeds_by_currency, r.proceeds_by_currency),
-                sales_by_currency: mergeCurrencies(a.sales_by_currency, r.sales_by_currency)
-            };
-        }, { units: 0, paid_units: 0, free_units: 0, update_units: 0, by_app: {}, proceeds_by_currency: {}, sales_by_currency: {} });
+        return sumAppleReports(reports);
     }
-    const empty = { units: 0, paid_units: 0, free_units: 0, update_units: 0, by_app: {}, proceeds_by_currency: {}, sales_by_currency: {} };
+    const empty = emptyReport();
 
     // Fetch last 7 daily reports for 1d and 7d windows
     const daily = [];
@@ -292,14 +464,42 @@ async function fetchApple(rates) {
     result['7d'] = convertAmounts(sumReports(daily));
 
     // Fetch monthly reports for prior complete months
+    // A month older than the last two is settled, so the archived copy is used instead of
+    // re-asking Apple. Apple drops monthly reports after a year; the archive does not.
+    function isSettledMonth(m) { return m < monthStr(2); }
+
+    function noteDataThrough(m, r) {
+        if (r && r.units && (!appleDataThrough || m > appleDataThrough)) appleDataThrough = m;
+    }
+
     async function getMonth(m) {
         if (monthlyCache[m] !== undefined) return monthlyCache[m];
+        const archived = readArchivedMonth(m);
+        if (archived && isSettledMonth(m)) {
+            monthlyCache[m] = archived;
+            noteDataThrough(m, archived);
+            return archived;
+        }
+        let fetched = null;
         try {
-            monthlyCache[m] = await fetchAppleReportAllVendors(jwt, m, 'MONTHLY') || empty;
+            fetched = await fetchAppleReportAllVendors(jwt, m, 'MONTHLY');
         } catch (e) {
             noteFailure('monthly ' + m, e);
-            monthlyCache[m] = empty;
         }
+        // A month is only archived when every vendor answered and the rates that priced it
+        // were real, otherwise a transient outage would be frozen in as permanent truth.
+        // Zero-unit months are archived too, or one quiet month blocks the whole year.
+        const wouldErase = !!(archived && archived.units > 0 && fetched && !fetched.units);
+        if (fetched && !fetched.partial && ratesUsable && !wouldErase) {
+            writeArchivedMonth(m, fetched);
+            monthlyCache[m] = fetched;
+        } else {
+            if (wouldErase) noteFailure('monthly ' + m, new Error('report came back empty, kept the archived month'));
+            if (fetched && fetched.partial) noteFailure('monthly ' + m, new Error('a vendor report was missing, month not archived'));
+            if (fetched && !ratesUsable) noteRatesOutage();
+            monthlyCache[m] = archived || fetched || empty;
+        }
+        noteDataThrough(m, monthlyCache[m]);
         return monthlyCache[m];
     }
 
@@ -343,6 +543,12 @@ async function fetchApple(rates) {
     const yearly = [];
     let misses = 0;
     for (let y = thisYear - 1; y >= thisYear - 10 && misses < 2; y--) {
+        // A fully archived year carries the app/country/IAP detail a yearly report cannot
+        const archivedYear = archivedYear12(y);
+        if (archivedYear) {
+            if (archivedYear.units) { yearly.push(archivedYear); misses = 0; } else { misses++; }
+            continue;
+        }
         let r = null;
         try {
             r = await fetchAppleReportAllVendors(jwt, String(y), 'YEARLY');
@@ -877,13 +1083,16 @@ async function main() {
         stats.lemonsqueezy['all'] = lsError ? { error: lsError } : computeLS(lsOrders, 100000);
     }
 
+    const prior = readPriorStats();
     let exchangeRates = {};
     try {
         exchangeRates = await fetchExchangeRates();
-        stats.exchange_rates = exchangeRates;
     } catch (e) {
         console.error('Exchange rates error:', e.message);
+        exchangeRates = (prior && prior.exchange_rates) || {};
+        if (Object.keys(exchangeRates).length) console.log('Using the previous run\'s exchange rates');
     }
+    if (Object.keys(exchangeRates).length) stats.exchange_rates = exchangeRates;
 
     if (exchangeRates['AUD']) {
         for (const key of Object.keys(stats.lemonsqueezy)) {
@@ -908,7 +1117,6 @@ async function main() {
         }
     }
 
-    const prior = readPriorStats();
     const priorMonthly = (prior && prior.monthly) || {};
     const appleMonthly = (stats.apple && stats.apple.monthly) || {};
     if (stats.apple && stats.apple.monthly) delete stats.apple.monthly;
@@ -924,7 +1132,10 @@ async function main() {
     stats.monthly = { span: MONTHLY_SPAN, sales: salesMonthly, apple: appleSeries, visits: visitsMonthly };
 
     const fs = require('fs');
-    fs.writeFileSync('_data/stats.json', JSON.stringify(stats, null, 2) + '\n');
+    // Compact: the dashboard reads this through an API that only inlines files under 1MB
+    const out = JSON.stringify(stats) + '\n';
+    fs.writeFileSync('_data/stats.json', out);
+    console.log('stats.json size: ' + Math.round(out.length / 1024) + ' KB (dashboard breaks above 1024 KB)');
     console.log('Stats written:', JSON.stringify(stats, null, 2));
 }
 

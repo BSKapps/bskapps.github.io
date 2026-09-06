@@ -290,6 +290,19 @@
         .data-table th.num, .data-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
         .data-table .muted { color: #8A8A90; font-size: 0.78rem; }
 
+        .data-table tr.expandable { cursor: pointer; }
+        .data-table tr.expandable:hover > td { background: rgba(255,255,255,0.06); }
+        .data-table td.exp-chev { width: 14px; padding-right: 0; color: #A2A2A8; font-size: 0.82rem; }
+        .data-table th.exp-chev { width: 14px; padding-right: 0; }
+        .data-table tr.detail-row > td { padding: 0 16px 14px 16px; }
+        .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; padding-top: 12px; }
+        .detail-panel { background: #2C2C30; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 14px 12px; }
+        .detail-title { font-size: 0.6rem; color: #8A8A90; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+        .detail-line { display: flex; justify-content: space-between; gap: 12px; font-size: 0.8rem; padding: 3px 0; color: #E4E4E7; }
+        .detail-line em { color: #8A8A90; font-style: normal; font-size: 0.78rem; }
+        .detail-line .dl-num { color: #A9A9AF; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .data-table td.money { color: #E8C667; }
+
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 16px; }
         .product-card { background: #343B4A; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 16px 18px; }
         .pc-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
@@ -649,11 +662,21 @@
         <div id="product-cards" class="product-grid"></div>
 
         <details class="collapse-section" data-key="appstore-apps" open>
-            <summary><span class="chev">&#9656;</span><span class="section-title">App Store Installs by App</span><span class="section-note" id="appstore-apps-note"></span></summary>
+            <summary><span class="chev">&#9656;</span><span class="section-title">App Store by App</span><span class="section-note" id="appstore-apps-note"></span></summary>
             <div class="data-table-wrap">
                 <table class="data-table">
-                    <thead><tr><th>App</th><th class="num">Downloads</th><th class="num">Updates</th><th class="num">Paid</th><th class="num">Total units</th></tr></thead>
-                    <tbody id="appstore-apps-tbody"><tr><td colspan="5" class="muted">--</td></tr></tbody>
+                    <thead><tr><th class="exp-chev"></th><th>App</th><th class="num">Downloads</th><th class="num">Updates</th><th class="num">Sales</th><th class="num">IAP</th><th class="num">Revenue</th><th class="num">Proceeds</th></tr></thead>
+                    <tbody id="appstore-apps-tbody"><tr><td colspan="8" class="muted">--</td></tr></tbody>
+                </table>
+            </div>
+        </details>
+
+        <details class="collapse-section" data-key="appstore-countries" open>
+            <summary><span class="chev">&#9656;</span><span class="section-title">App Store by Country</span><span class="section-note" id="appstore-countries-note"></span></summary>
+            <div class="data-table-wrap">
+                <table class="data-table">
+                    <thead><tr><th>Country</th><th class="num">Downloads</th><th class="num">Updates</th><th class="num">Sales</th><th class="num">IAP</th><th class="num">Revenue</th><th class="num">Proceeds</th></tr></thead>
+                    <tbody id="appstore-countries-tbody"><tr><td colspan="7" class="muted">--</td></tr></tbody>
                 </table>
             </div>
         </details>
@@ -1501,7 +1524,7 @@ function displayStats() {
     const isAll = key === 'all';
     const ordersLabelSuffix = isAll ? 'All time' : (isFy ? 'FY' : currentRange + 'd');
     const updated = stats.updated ? new Date(stats.updated).toLocaleString() : '';
-    const audRate = (stats.exchange_rates && stats.exchange_rates['AUD']) || 1.55;
+    const audRate = (stats.exchange_rates && stats.exchange_rates['AUD']) || DEFAULT_AUD_RATE;
 
     const rangeLabel = ordersLabelSuffix;
     // Cloudflare refuses ranges wider than 13w2d, so traffic can never be all time
@@ -1564,6 +1587,7 @@ function displayStats() {
 
     renderProductCards(stats, key, audRate);
     renderAppleApps(stats, key);
+    renderAppleCountries(stats, key);
     renderReferrers(stats, key);
     renderFunnel(stats, key);
     renderSearch(stats, key);
@@ -1808,7 +1832,7 @@ async function loadStats() {
             return;
         }
         const file = await res.json();
-        cachedStats = JSON.parse(atob(file.content.replace(/\n/g, '')));
+        cachedStats = JSON.parse(decodeURIComponent(escape(atob(file.content.replace(/\n/g, '')))));
         displayStats();
     } catch (e) {
         document.getElementById('stat-visits').textContent = 'Error: ' + e.message;
@@ -1976,6 +2000,8 @@ const PAGE_LABELS = {
 
 const IGNORE_PATHS = { '/quickip/': true, '/admin/': true };
 
+const DEFAULT_AUD_RATE = 1.55;
+
 const COUNTRY_NAMES = {
     US: 'United States', AU: 'Australia', GB: 'United Kingdom', CA: 'Canada', NZ: 'New Zealand',
     DE: 'Germany', FR: 'France', NL: 'Netherlands', IE: 'Ireland', SE: 'Sweden', NO: 'Norway',
@@ -1985,7 +2011,7 @@ const COUNTRY_NAMES = {
 };
 
 function countryLabel(c) {
-    if (!c) return 'Unknown';
+    if (!c || c === '??') return 'Unknown';
     return COUNTRY_NAMES[c] || c;
 }
 
@@ -2142,39 +2168,141 @@ function renderFunnel(stats, key) {
     tbody.innerHTML = Array.isArray(pages) ? rows : '<tr><td colspan="5" class="muted">--</td></tr>';
 }
 
+const appleExpanded = {};
+
+function appleRate(stats) {
+    if (currentCurrency !== 'AUD') return 1;
+    return (stats.exchange_rates && stats.exchange_rates['AUD']) || DEFAULT_AUD_RATE;
+}
+
+function appleMoney(usd, rate) {
+    return '$' + ((usd || 0) * rate).toFixed(2);
+}
+
+function appleDetail(a, rate) {
+    const countries = a.countries || {};
+    const countryKeys = Object.keys(countries).sort(function(x, y) {
+        return (countries[y].units || 0) - (countries[x].units || 0);
+    });
+    const countryLines = countryKeys.length
+        ? countryKeys.map(function(c) {
+            const d = countries[c];
+            return '<div class="detail-line"><span>' + esc(countryLabel(c)) + '</span><span class="dl-num">'
+                + (d.units || 0).toLocaleString() + ' units &middot; ' + appleMoney(d.sales_usd, rate) + '</span></div>';
+        }).join('')
+        : '<div class="detail-line"><em>No country data</em></div>';
+    const iap = a.iap || {};
+    const iapKeys = Object.keys(iap).sort(function(x, y) { return (iap[y].units || 0) - (iap[x].units || 0); });
+    const iapLines = iapKeys.length
+        ? iapKeys.map(function(k) {
+            const d = iap[k];
+            return '<div class="detail-line"><span>' + esc(d.title || k) + '</span><span class="dl-num">'
+                + (d.units || 0).toLocaleString() + ' &middot; ' + appleMoney(d.sales_usd, rate) + '</span></div>';
+        }).join('')
+        : '<div class="detail-line"><em>No in-app purchases</em></div>';
+    return '<div class="detail-grid">'
+        + '<div class="detail-panel"><div class="detail-title">By country</div>' + countryLines + '</div>'
+        + '<div class="detail-panel"><div class="detail-title">In-app purchases</div>' + iapLines + '</div>'
+        + '</div>';
+}
+
 function renderAppleApps(stats, key) {
     const tbody = document.getElementById('appstore-apps-tbody');
     const note = document.getElementById('appstore-apps-note');
     const apple = stats.apple && stats.apple[key];
     if (!apple || apple.error) {
-        tbody.innerHTML = '<tr><td colspan="5" class="muted">' + (apple && apple.error ? esc(apple.error) : '--') + '</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" class="muted">' + (apple && apple.error ? esc(apple.error) : '--') + '</td></tr>';
         note.textContent = '';
         return;
     }
+    const rate = appleRate(stats);
     const byApp = apple.by_app || {};
     const rows = Object.keys(byApp).map(function(sku) {
         const a = byApp[sku];
         return {
+            sku: sku,
+            app: a,
             name: a.title || sku,
             downloads: a.free_units || 0,
             updates: a.update_units || 0,
-            paid: a.paid_units || 0,
-            units: a.units || 0
+            sales: a.app_units != null ? a.app_units : (a.paid_units || 0),
+            iap: a.iap_units || 0,
+            revenue: a.sales_usd || 0,
+            proceeds: a.proceeds_usd || 0
         };
-    }).sort(function(x, y) { return y.downloads - x.downloads || y.units - x.units; });
+    }).sort(function(x, y) { return y.revenue - x.revenue || y.downloads - x.downloads; });
     if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="5" class="muted">No data yet</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" class="muted">No data yet</td></tr>';
         note.textContent = '';
         return;
     }
     tbody.innerHTML = rows.map(function(r) {
-        return '<tr><td>' + esc(r.name) + '</td><td class="num">' + r.downloads.toLocaleString()
-            + '</td><td class="num">' + r.updates.toLocaleString()
-            + '</td><td class="num">' + r.paid.toLocaleString()
-            + '</td><td class="num">' + r.units.toLocaleString() + '</td></tr>';
+        const open = !!appleExpanded[r.sku];
+        const main = '<tr class="expandable" data-app="' + esc(r.sku) + '">'
+            + '<td class="exp-chev">' + (open ? '&#9662;' : '&#9656;') + '</td>'
+            + '<td>' + esc(r.name) + '</td>'
+            + '<td class="num">' + r.downloads.toLocaleString() + '</td>'
+            + '<td class="num">' + r.updates.toLocaleString() + '</td>'
+            + '<td class="num">' + r.sales.toLocaleString() + '</td>'
+            + '<td class="num">' + r.iap.toLocaleString() + '</td>'
+            + '<td class="num money">' + appleMoney(r.revenue, rate) + '</td>'
+            + '<td class="num money">' + appleMoney(r.proceeds, rate) + '</td></tr>';
+        if (!open) return main;
+        return main + '<tr class="detail-row"><td colspan="8">' + appleDetail(r.app, rate) + '</td></tr>';
     }).join('');
     const totalDownloads = rows.reduce(function(t, r) { return t + r.downloads; }, 0);
-    note.textContent = rows.length + ' apps · ' + totalDownloads.toLocaleString() + ' downloads';
+    const totalRevenue = rows.reduce(function(t, r) { return t + r.revenue; }, 0);
+    note.textContent = rows.length + ' apps · ' + totalDownloads.toLocaleString() + ' downloads · ' + appleMoney(totalRevenue, rate) + ' ' + currentCurrency;
+    if (!tbody.dataset.bound) {
+        tbody.dataset.bound = '1';
+        tbody.addEventListener('click', function(e) {
+            const tr = e.target.closest('tr[data-app]');
+            if (!tr) return;
+            const sku = tr.getAttribute('data-app');
+            if (appleExpanded[sku]) delete appleExpanded[sku]; else appleExpanded[sku] = true;
+            renderAppleApps(cachedStats, currentKey);
+        });
+    }
+}
+
+function renderAppleCountries(stats, key) {
+    const tbody = document.getElementById('appstore-countries-tbody');
+    const note = document.getElementById('appstore-countries-note');
+    const apple = stats.apple && stats.apple[key];
+    if (!apple || apple.error) {
+        tbody.innerHTML = '<tr><td colspan="7" class="muted">' + (apple && apple.error ? esc(apple.error) : '--') + '</td></tr>';
+        note.textContent = '';
+        return;
+    }
+    const rate = appleRate(stats);
+    const byCountry = apple.by_country || {};
+    const rows = Object.keys(byCountry).map(function(c) {
+        const d = byCountry[c];
+        return {
+            name: countryLabel(c),
+            downloads: d.free_units || 0,
+            updates: d.update_units || 0,
+            sales: d.app_units != null ? d.app_units : (d.paid_units || 0),
+            iap: d.iap_units || 0,
+            revenue: d.sales_usd || 0,
+            proceeds: d.proceeds_usd || 0
+        };
+    }).sort(function(x, y) { return y.revenue - x.revenue || y.downloads - x.downloads; });
+    if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="7" class="muted">No data yet</td></tr>';
+        note.textContent = '';
+        return;
+    }
+    tbody.innerHTML = rows.map(function(r) {
+        return '<tr><td>' + esc(r.name) + '</td>'
+            + '<td class="num">' + r.downloads.toLocaleString() + '</td>'
+            + '<td class="num">' + r.updates.toLocaleString() + '</td>'
+            + '<td class="num">' + r.sales.toLocaleString() + '</td>'
+            + '<td class="num">' + r.iap.toLocaleString() + '</td>'
+            + '<td class="num money">' + appleMoney(r.revenue, rate) + '</td>'
+            + '<td class="num money">' + appleMoney(r.proceeds, rate) + '</td></tr>';
+    }).join('');
+    note.textContent = rows.length + ' countries';
 }
 
 function renderReferrers(stats, key) {
