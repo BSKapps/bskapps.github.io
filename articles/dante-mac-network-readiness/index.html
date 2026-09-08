@@ -51,7 +51,7 @@
                 <li>Put the Dante network on a subnet that definitely doesn't overlap with anything else. <code>192.168.10.x</code> or <code>172.16.50.x</code> are popular choices for a reason.</li>
                 <li>Change the Wi-Fi router's LAN subnet at home so it never matches typical show subnets.</li>
             </ul>
-            <p><a href="/quickerip">Quicker IP Pro</a> catches this before it causes problems. When two active adapters share a subnet and both have a gateway configured, it shows a red "Overlap detected" warning next to the subnet field and fires a system notification with the conflicting CIDR. A grey warning means the subnets overlap but only one has a gateway - worth knowing, but less urgent. The full explanation of why the same subnet on two adapters causes routing ambiguity is in <a href="/articles/mac-routing-table">this companion article</a>.</p>
+            <p><a href="/quickerip">Quicker IP Pro</a> catches this before it causes problems. When two active adapters share a subnet and both have a gateway configured, it shows a red "Overlaps" warning naming the other adapter next to the subnet field and fires a system notification with the conflicting CIDR. A grey warning means the subnets overlap but only one has a gateway - worth knowing, but less urgent. The full explanation of why the same subnet on two adapters causes routing ambiguity is in <a href="/articles/mac-routing-table">this companion article</a>.</p>
 
             <h2>Static IP on the Dante subnet</h2>
             <p>On a dedicated Dante network with no DHCP, set the Mac manually to an unused address in the same subnet as the devices, with no gateway. Vendor-supplied sheets win over improvisation. If you juggle more than one non-DHCP network, named presets are worth their weight - <a href="/articles/static-ips-av-networks">longer piece on that here</a>.</p>
@@ -73,7 +73,7 @@
                 <img class="cta-icon" src="/images/quickip-icon.png" alt="" width="64" height="64">
                 <div class="cta-body">
                     <h3>Made for Dante and pro audio prep</h3>
-                    <p>Quicker IP flags Dante and pro-audio readiness issues - subnet conflicts, link speed, multicast, duplex - before they ruin a sound check.</p>
+                    <p>Quicker IP checks what Dante depends on - subnet clashes, link speed, IGMP querier and which device is serving the audio clock - before they ruin a sound check.</p>
                     <div class="cta-actions">
                         <a class="buy-btn" href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0&checkout%5Bcustom%5D%5Bsrc%5D=article-dante-mac-network-readiness" aria-label="Buy Quicker IP">Buy Quicker IP</a>
                         <a class="cta-link" href="/quickerip">See what it does &rarr;</a>

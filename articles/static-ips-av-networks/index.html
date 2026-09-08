@@ -60,7 +60,7 @@
                 <li>A control LAN that has no internet access gets IP and subnet only. No router. No DNS.</li>
                 <li>An audio network on link-local gets nothing at all. Leave Configure IPv4 on "Using DHCP" and let macOS fall through to a 169.254.x.x address automatically. No router, no DNS.</li>
             </ul>
-            <p>If an interface doesn't need a gateway, don't give it one. Two interfaces with gateways will silently fight about which one is the default route and you'll spend an hour on it at the worst possible time. <a href="/quickerip">Quicker IP Pro</a> detects this automatically - a red "Overlap detected" warning appears next to the subnet field of any affected adapter when two active interfaces share a subnet and both have a gateway configured.</p>
+            <p>If an interface doesn't need a gateway, don't give it one. Two interfaces with gateways will silently fight about which one is the default route and you'll spend an hour on it at the worst possible time. <a href="/quickerip">Quicker IP Pro</a> detects this automatically - a red "Overlaps" warning naming the other adapter appears next to the subnet field when two active interfaces share a subnet and both have a gateway configured.</p>
 
             <h2>Switching between systems</h2>
             <p>All of this is fine when the Mac lives in the one system. The moment it travels - same laptop, different venue, different networks - each of those interfaces needs a different configuration. macOS makes that slow. System Settings, Network, interface, Details, TCP/IP, switch from DHCP to Manually, enter four fields, switch to DNS, enter more fields, click OK, back out. Ten steps per interface. Three interfaces, thirty steps. Every show day.</p>

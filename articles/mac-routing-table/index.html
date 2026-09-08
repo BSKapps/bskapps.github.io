@@ -77,8 +77,8 @@ default            192.168.1.1        UGScg     en0
             <h2>How Quicker IP detects this</h2>
             <p><a href="/quickerip">Quicker IP Pro</a> scans all active adapters and checks every pair for subnet overlap. It distinguishes two scenarios:</p>
             <ul>
-                <li><strong>Shared subnet, no gateway conflict</strong> - two adapters on the same subnet, but only one (or neither) has a gateway configured. Local subnet traffic may still route incorrectly between them depending on service order, but the default route is unambiguous. Quicker IP shows this in grey with "Shared subnet - no gateway conflict".</li>
-                <li><strong>Gateway conflict</strong> - two adapters on the same subnet and both have a gateway configured. This is the full problem: both the connected route and the default route are contested. Quicker IP shows this in red with "Overlap detected" and fires a system notification the first time it detects the conflict, including the CIDR of the conflicting subnet.</li>
+                <li><strong>Shared subnet, no gateway conflict</strong> - two adapters on the same subnet, but only one (or neither) has a gateway configured. Local subnet traffic may still route incorrectly between them depending on service order, but the default route is unambiguous. Quicker IP shows this in grey as "Shared with", naming the other adapter.</li>
+                <li><strong>Gateway conflict</strong> - two adapters on the same subnet and both have a gateway configured. This is the full problem: both the connected route and the default route are contested. Quicker IP shows this in red as "Overlaps", naming the other adapter, and fires a system notification the first time it detects the conflict, including the CIDR of the conflicting subnet.</li>
             </ul>
             <p>The warning appears next to the subnet field in each affected adapter's flyout in the menu. A grey warning is worth noting. A red warning means traffic is actively going to the wrong place and you should fix it before the show.</p>
 
