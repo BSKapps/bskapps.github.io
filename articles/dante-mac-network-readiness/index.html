@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dante on a Mac: pre-show network checklist - BSK Apps</title>
-    <meta name="description" content="Which USB Ethernet chipsets work, why Wi-Fi must be off, not just disconnected, how to avoid subnet clashes, and what to verify before the house opens.">
+    <meta name="description" content="Which USB Ethernet chipsets work, why Wi-Fi must be off, how to avoid subnet clashes, and why the clock leader and IGMP querier decide whether it holds.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="canonical" href="https://bskapps.com/articles/dante-mac-network-readiness/">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Dante network readiness on a Mac">
-    <meta property="og:description" content="Which USB Ethernet chipsets work, why Wi-Fi must be off, not just disconnected, how to avoid subnet clashes, and what to verify before the house opens.">
+    <meta property="og:description" content="Which USB Ethernet chipsets work, why Wi-Fi must be off, how to avoid subnet clashes, and why the clock leader and IGMP querier decide whether it holds.">
     <meta property="og:image" content="https://bskapps.com/images/bsk-logo.png">
     <meta property="og:url" content="https://bskapps.com/articles/dante-mac-network-readiness/">
     <link rel="stylesheet" href="/css/site.css?v=20260818b">
@@ -63,6 +63,24 @@
                 <li>Screen saver waking Wi-Fi back on - disable.</li>
                 <li>Any VPN client with a kill switch or "route all traffic" toggle - off during shows.</li>
             </ul>
+
+            <h2>Know which device is serving the clock</h2>
+            <p>Dante elects one device as the clock leader and everything else follows it. You don't configure this, it just happens, which is why most people never think about it until the day it goes wrong.</p>
+
+            <p>Plain Dante uses PTP version 1 (IEEE 1588-2002). You only see PTPv2 if the system has been put into AES67 mode or is managed by Dante Director. That matters when you're reading a clock status somewhere and wondering why it says v1 on a modern network - v1 is correct for ordinary Dante, not a sign that something is out of date.</p>
+
+            <p>The failure worth knowing about is two devices both announcing themselves as leader, usually because a second PTP domain has ended up sharing the same physical network. Audio that ticks or glitches on a rhythm, rather than randomly, is a clock symptom rather than a bandwidth one.</p>
+
+            <p>The practical habit is simply to know the leader's name before doors. A Mac running Dante Virtual Soundcard is follower only and never leads, so it's never the culprit. A console usually is, which also means rebooting the console mid-afternoon hands the clock to an amp rack and looks alarming when it is completely mundane.</p>
+
+            <h2>IGMP snooping needs a querier, or nothing at all</h2>
+            <p>The clock and any multicast flows ride multicast traffic. A managed switch doing IGMP snooping prunes that traffic so it only goes to ports that asked for it, and snooping depends on something on the network periodically asking. That is the querier, and there should be exactly one, typically on a 30 second interval with every switch on the same IGMP version.</p>
+
+            <p>Snooping enabled with no querier is the bad combination. Group memberships age out, the pruning stops matching reality, and multicast quietly stops being delivered several minutes in. It is the classic works-at-soundcheck-dies-later fault, and it looks like a Dante problem when it is a switch problem.</p>
+
+            <p>The part people get wrong is assuming "no querier" is always bad. On unmanaged switches nothing is pruning anything, multicast simply floods every port, and the absence of a querier costs you nothing. No querier only matters when something on that network is snooping. Worth knowing before you go hunting for a fault that isn't there.</p>
+
+            <p>While you're in the switch, leave "filter unregistered multicast" off. It blocks the discovery and clock traffic Dante depends on, and the usual result is devices that never appear in Dante Controller at all.</p>
 
             <h2>Verify before the house opens</h2>
             <p>Open Dante Controller. Every device present, green, and clocked. Run a ten-second test tone from a source you trust to a destination you trust. Look at the status dots, not just the meters. If anything's orange, it will go red under load. We built the <a href="/quickerip">Quicker IP Pro</a> status panel around exactly this check, so a sound op can glance at link state, speed, IP, and activity from the menu bar without opening three different settings panes.</p>
