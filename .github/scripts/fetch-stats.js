@@ -821,28 +821,98 @@ async function fetchCFCountries(days) {
 }
 
 async function fetchAllOrders() {
-    const orders = [];
+    return lsPaged('orders');
+}
+async function lsPaged(resource) {
+    const items = [];
     let page = 1;
     const maxPages = 100;
     while (page <= maxPages) {
         const res = await request({
             hostname: 'api.lemonsqueezy.com',
-            path: '/v1/orders?page[size]=100&page[number]=' + page,
+            path: '/v1/' + resource + '?page[size]=100&page[number]=' + page,
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + LS_KEY,
                 'Accept': 'application/vnd.api+json'
             }
         });
-        if (res.status !== 200) throw new Error('LS API error: ' + res.status);
+        if (res.status !== 200) throw new Error('LS ' + resource + ' error: ' + res.status);
         const data = res.body.data || [];
-        orders.push.apply(orders, data);
+        items.push.apply(items, data);
         const lastPage = res.body.meta && res.body.meta.page && res.body.meta.page.lastPage;
         if (lastPage ? page >= lastPage : data.length < 100) break;
         page++;
     }
-    if (page > maxPages) console.error('LS pagination hit max ' + maxPages + ' pages; orders may be truncated');
-    return orders;
+    if (page > maxPages) console.error('LS ' + resource + ' pagination hit max ' + maxPages + ' pages');
+    return items;
+}
+
+const DISCOUNT_LIMIT = 50;
+
+function computeDiscounts(discounts, redemptions, orders, days) {
+    const cutoff = new Date(Date.now() - days * 86400000);
+    const orderById = {};
+    (orders || []).forEach(function(o) { orderById[String(o.id)] = o; });
+
+    const meta = {};
+    (discounts || []).forEach(function(d) {
+        const a = d.attributes || {};
+        if (!a.code) return;
+        meta[a.code] = {
+            name: a.name || a.code,
+            amount: a.amount,
+            amount_type: a.amount_type,
+            status: a.status || '',
+            max_redemptions: a.is_limited_redemptions ? (a.max_redemptions || 0) : 0
+        };
+    });
+
+    const isSale = function(o) {
+        return o.attributes.status === 'paid' || o.attributes.status === 'partial_refund';
+    };
+    const rows = {};
+    const rowFor = function(code, a) {
+        if (!rows[code]) {
+            const m = meta[code] || {};
+            rows[code] = {
+                code: code,
+                name: m.name || (a && a.discount_name) || code,
+                amount: m.amount != null ? m.amount : (a && a.discount_amount),
+                amount_type: m.amount_type || (a && a.discount_amount_type) || '',
+                status: m.status || '',
+                max_redemptions: m.max_redemptions || 0,
+                used_total: 0,
+                redemptions: 0,
+                discount_usd: 0,
+                products: {}
+            };
+        }
+        return rows[code];
+    };
+    Object.keys(meta).forEach(function(code) { if (meta[code].status !== 'draft') rowFor(code, null); });
+
+    (redemptions || []).forEach(function(r) {
+        const a = r.attributes || {};
+        const code = a.discount_code;
+        if (!code) return;
+        const row = rowFor(code, a);
+        row.used_total += 1;
+        if (!(new Date(a.created_at) >= cutoff)) return;
+        const o = orderById[String(a.order_id)];
+        if (!o || !isSale(o)) return;
+        row.redemptions += 1;
+        row.discount_usd += (o.attributes.discount_total_usd || 0) / 100;
+        const name = (o.attributes.first_order_item || {}).product_name || 'Unknown';
+        row.products[name] = (row.products[name] || 0) + 1;
+    });
+
+    return Object.keys(rows).map(function(code) {
+        rows[code].discount_usd = Math.round(rows[code].discount_usd * 100) / 100;
+        return rows[code];
+    }).sort(function(a, b) {
+        return b.redemptions - a.redemptions || b.used_total - a.used_total || a.code.localeCompare(b.code);
+    }).slice(0, DISCOUNT_LIMIT);
 }
 
 function computeLS(orders, days) {
@@ -869,6 +939,9 @@ function computeLS(orders, days) {
     };
     const paidRecent = recent.filter(function(o) { return !isFree(o); });
     const paidCount = paidRecent.length;
+    const discountUsd = function(o) { return (o.attributes.discount_total_usd || 0) / 100; };
+    const discountedRecent = paidRecent.filter(function(o) { return discountUsd(o) > 0; });
+    const discount_usd = discountedRecent.reduce(function(a, o) { return a + discountUsd(o); }, 0);
     const firstOrderId = {};
     orders.filter(function(o) { return isSale(o) || o.attributes.status === 'refunded'; })
         .sort(function(a, b) {
@@ -891,18 +964,25 @@ function computeLS(orders, days) {
     recent.forEach(function(o) {
         const item = o.attributes.first_order_item || {};
         const name = item.product_name || 'Unknown';
-        if (!by_product[name]) by_product[name] = { orders: 0, paid_orders: 0, free_orders: 0, gross_usd: 0, net_usd: 0 };
+        if (!by_product[name]) by_product[name] = { orders: 0, paid_orders: 0, free_orders: 0, discounted_orders: 0, discount_usd: 0, gross_usd: 0, net_usd: 0 };
         by_product[name].orders += 1;
         if (isFree(o)) by_product[name].free_orders += 1;
-        else by_product[name].paid_orders += 1;
+        else {
+            by_product[name].paid_orders += 1;
+            if (discountUsd(o) > 0) {
+                by_product[name].discounted_orders += 1;
+                by_product[name].discount_usd += discountUsd(o);
+            }
+        }
         by_product[name].gross_usd += (o.attributes.total_usd || 0) / 100 - refundedUsd(o);
         by_product[name].net_usd += ((o.attributes.total_usd || 0) - (o.attributes.tax_usd || 0)) / 100 - refundedUsd(o);
     });
     Object.keys(by_product).forEach(function(name) {
         by_product[name].gross_usd = Math.round(by_product[name].gross_usd * 100) / 100;
         by_product[name].net_usd = Math.round(by_product[name].net_usd * 100) / 100;
+        by_product[name].discount_usd = Math.round(by_product[name].discount_usd * 100) / 100;
     });
-    return { orders: ordersCount, paid_orders: paidCount, free_orders: ordersCount - paidCount, new_customer_orders: newCustomerOrders, returning_customer_orders: paidCount - newCustomerOrders, refunds: refundedRecent.length, refunded_usd: Math.round(refunded_usd * 100) / 100, revenue: Math.round(revenue * 100) / 100, net_revenue_usd: Math.round(net_revenue_usd * 100) / 100, by_product };
+    return { orders: ordersCount, paid_orders: paidCount, free_orders: ordersCount - paidCount, discounted_orders: discountedRecent.length, discount_usd: Math.round(discount_usd * 100) / 100, new_customer_orders: newCustomerOrders, returning_customer_orders: paidCount - newCustomerOrders, refunds: refundedRecent.length, refunded_usd: Math.round(refunded_usd * 100) / 100, revenue: Math.round(revenue * 100) / 100, net_revenue_usd: Math.round(net_revenue_usd * 100) / 100, by_product };
 }
 
 function fyDays() {
@@ -944,6 +1024,7 @@ async function getGSCToken() {
 // Search Console finalises a day two to three days late, so an end date of today
 // returns nothing and would make the 1d key look permanently broken
 const GSC_LAG_DAYS = 3;
+const GSC_QUERY_LIMIT = 200;
 
 async function gscQuery(token, days, dimension, limit) {
     const endMs = Date.now() - GSC_LAG_DAYS * 86400000;
@@ -977,7 +1058,7 @@ function gscRow(r) {
 
 async function fetchGSC(token, days) {
     const pages = (await gscQuery(token, days, 'page', 100)).map(gscRow);
-    const queries = (await gscQuery(token, days, 'query', 25)).map(gscRow);
+    const queries = (await gscQuery(token, days, 'query', GSC_QUERY_LIMIT)).map(gscRow);
     const clicks = pages.reduce(function(a, p) { return a + p.clicks; }, 0);
     const impressions = pages.reduce(function(a, p) { return a + p.impressions; }, 0);
     return {
@@ -990,7 +1071,7 @@ async function fetchGSC(token, days) {
 }
 
 async function main() {
-    const stats = { updated: new Date().toISOString(), cloudflare: {}, pages: {}, inhouse: {}, sources: {}, countries: {}, lemonsqueezy: {}, apple: {}, gsc: {} };
+    const stats = { updated: new Date().toISOString(), cloudflare: {}, pages: {}, inhouse: {}, sources: {}, countries: {}, lemonsqueezy: {}, apple: {}, gsc: {}, discounts: {} };
 
     const fyD = fyDays();
     stats.fyDays = fyD;
@@ -1011,6 +1092,18 @@ async function main() {
         } catch (e) {
             console.error('LS fetch error:', e.message);
             lsError = e.message;
+        }
+    }
+
+    let lsDiscounts = [], lsRedemptions = [], discountError = null;
+    if (LS_KEY && !lsError) {
+        try {
+            lsDiscounts = await lsPaged('discounts');
+            lsRedemptions = await lsPaged('discount-redemptions');
+            console.log('LS discounts:', lsDiscounts.length, 'redemptions:', lsRedemptions.length);
+        } catch (e) {
+            console.error('LS discounts error:', e.message);
+            discountError = e.message;
         }
     }
 
@@ -1076,11 +1169,18 @@ async function main() {
             } else {
                 stats.lemonsqueezy[key] = computeLS(lsOrders, days);
             }
+            if (lsError || discountError) {
+                stats.discounts[key] = { error: lsError || discountError };
+            } else {
+                stats.discounts[key] = computeDiscounts(lsDiscounts, lsRedemptions, lsOrders, days);
+            }
         }
     }
 
     if (LS_KEY) {
         stats.lemonsqueezy['all'] = lsError ? { error: lsError } : computeLS(lsOrders, 100000);
+        if (lsError || discountError) stats.discounts['all'] = { error: lsError || discountError };
+        else stats.discounts['all'] = computeDiscounts(lsDiscounts, lsRedemptions, lsOrders, 100000);
     }
 
     const prior = readPriorStats();

@@ -517,6 +517,12 @@
             .collapse-section[data-key="appstore-countries"] .data-table th,
             .collapse-section[data-key="appstore-countries"] .data-table td { padding-left: 8px; padding-right: 8px; }
             .collapse-section[data-key="appstore-countries"] .data-table th { letter-spacing: 0; }
+            .collapse-section[data-key="discounts"] .data-table th:nth-child(2),
+            .collapse-section[data-key="discounts"] .data-table td:nth-child(2),
+            .collapse-section[data-key="discounts"] .data-table th:nth-child(5),
+            .collapse-section[data-key="discounts"] .data-table td:nth-child(5) { display: none; }
+            .collapse-section[data-key="discounts"] .data-table th,
+            .collapse-section[data-key="discounts"] .data-table td { padding-left: 8px; padding-right: 8px; }
         }
     </style>
 </head>
@@ -687,6 +693,16 @@
             </div>
         </details>
 
+        <details class="collapse-section" data-key="discounts" open>
+            <summary><span class="chev">&#9656;</span><span class="section-title">Discount Codes</span><span class="section-note" id="discounts-note"></span></summary>
+            <div class="data-table-wrap">
+                <table class="data-table">
+                    <thead><tr><th>Code</th><th>Off</th><th class="num">Used all time</th><th class="num">This period</th><th>Products</th><th class="num">Given away</th></tr></thead>
+                    <tbody id="discounts-tbody"><tr><td colspan="6" class="muted">--</td></tr></tbody>
+                </table>
+            </div>
+        </details>
+
         <details class="collapse-section" data-key="countries" open>
             <summary><span class="chev">&#9656;</span><span class="section-title">Top Countries</span></summary>
             <div class="data-table-wrap">
@@ -713,6 +729,26 @@
                 <table class="data-table">
                     <thead><tr><th>Page</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">Position</th></tr></thead>
                     <tbody id="gsc-tbody"><tr><td colspan="4" class="muted">--</td></tr></tbody>
+                </table>
+            </div>
+        </details>
+
+        <details class="collapse-section" data-key="queries" open>
+            <summary><span class="chev">&#9656;</span><span class="section-title">Search Queries</span><span class="section-note" id="queries-note"></span></summary>
+            <div class="data-table-wrap">
+                <table class="data-table">
+                    <thead><tr><th>Query</th><th class="num">Clicks</th><th class="num">Impressions</th><th class="num">CTR</th><th class="num">Position</th></tr></thead>
+                    <tbody id="queries-tbody"><tr><td colspan="5" class="muted">--</td></tr></tbody>
+                </table>
+            </div>
+        </details>
+
+        <details class="collapse-section" data-key="zeroclick" open>
+            <summary><span class="chev">&#9656;</span><span class="section-title">Ranking But Not Clicked</span><span class="section-note" id="zeroclick-note"></span></summary>
+            <div class="data-table-wrap">
+                <table class="data-table">
+                    <thead><tr><th>Page</th><th class="num">Impressions</th><th class="num">Clicks</th><th class="num">Position</th></tr></thead>
+                    <tbody id="zeroclick-tbody"><tr><td colspan="4" class="muted">--</td></tr></tbody>
                 </table>
             </div>
         </details>
@@ -1597,6 +1633,9 @@ function displayStats() {
     renderReferrers(stats, key);
     renderFunnel(stats, key);
     renderSearch(stats, key);
+    renderQueries(stats, key);
+    renderZeroClick(stats, key);
+    renderDiscounts(stats, key, audRate);
 
     const countries = stats.countries && stats.countries[key];
     const countriesTbody = document.getElementById('countries-tbody');
@@ -1633,6 +1672,7 @@ function displayStats() {
         const refundedAmt = currentCurrency === 'AUD' ? (ls.refunded_usd || 0) * audRate : (ls.refunded_usd || 0);
         const orderNotes = [];
         if (ls.free_orders) orderNotes.push(ls.free_orders + ' free');
+        if (ls.discounted_orders) orderNotes.push(ls.discounted_orders + ' paid at a discount');
         if (ls.refunds == null) orderNotes.push('LemonSqueezy');
         else if (ls.refunds > 0) orderNotes.push(ls.refunds + ' refunded this period · $' + refundedAmt.toFixed(2));
         else orderNotes.push('no refunds');
@@ -2121,6 +2161,8 @@ const ARTICLE_APP = {
 };
 
 const MIN_IMPRESSIONS = 10;
+const ZERO_CLICK_MIN_IMPRESSIONS = 20;
+const UTILITY_PAGES = { '/privacy/': true, '/terms/': true, '/contact/': true, '/about/': true, '/refund/': true, '/articles/': true, '/admin/': true };
 
 function renderSearch(stats, key) {
     const tbody = document.getElementById('gsc-tbody');
@@ -2139,6 +2181,86 @@ function renderSearch(stats, key) {
     tbody.innerHTML = rows.length ? rows.map(function(p) {
         return '<tr><td>' + esc(pageLabel(p.path || '')) + '</td><td class="num">' + (p.clicks || 0).toLocaleString() + '</td><td class="num">' + (p.impressions || 0).toLocaleString() + '</td><td class="num">' + (p.position || 0).toFixed(1) + '</td></tr>';
     }).join('') : '<tr><td colspan="4" class="muted">No data yet</td></tr>';
+}
+
+function discountLabel(row, rate) {
+    if (row.amount == null || row.amount === '') return '--';
+    return row.amount_type === 'fixed' ? '$' + (row.amount / 100 * rate).toFixed(2) : row.amount + '%';
+}
+
+function renderDiscounts(stats, key, audRate) {
+    const tbody = document.getElementById('discounts-tbody');
+    const note = document.getElementById('discounts-note');
+    if (!tbody) return;
+    const d = stats.discounts && stats.discounts[key];
+    if (!d || d.error) {
+        if (note) note.textContent = '';
+        tbody.innerHTML = '<tr><td colspan="6" class="muted">' + esc(d && d.error ? d.error : 'No data yet') + '</td></tr>';
+        return;
+    }
+    const rows = Array.isArray(d) ? d : [];
+    const rate = currentCurrency === 'AUD' ? audRate : 1;
+    const given = rows.reduce(function(a, r) { return a + (r.discount_usd || 0); }, 0) * rate;
+    const used = rows.reduce(function(a, r) { return a + (r.redemptions || 0); }, 0);
+    const shown = rows.slice(0, 25);
+    if (note) note.textContent = used + (used === 1 ? ' redemption · $' : ' redemptions · $') + given.toFixed(2) + ' off'
+        + (rows.length > shown.length ? ' · top ' + shown.length + ' of ' + rows.length + ' shown' : '');
+    tbody.innerHTML = rows.length ? shown.map(function(r) {
+        const limit = r.max_redemptions ? (r.used_total || 0) + ' of ' + r.max_redemptions : (r.used_total || 0);
+        const products = Object.keys(r.products || {}).map(function(n) {
+            return r.products[n] > 1 ? n + ' x' + r.products[n] : n;
+        }).join(', ');
+        return '<tr><td>' + esc(r.code) + '</td><td>' + esc(discountLabel(r, rate)) + '</td><td class="num">' + esc(String(limit))
+            + '</td><td class="num">' + (r.redemptions || 0) + '</td><td>' + esc(products || '--')
+            + '</td><td class="num">$' + ((r.discount_usd || 0) * rate).toFixed(2) + '</td></tr>';
+    }).join('') : '<tr><td colspan="6" class="muted">No discount codes</td></tr>';
+}
+
+function renderQueries(stats, key) {
+    const tbody = document.getElementById('queries-tbody');
+    const note = document.getElementById('queries-note');
+    if (!tbody) return;
+    const g = stats.gsc && stats.gsc[key];
+    if (!g || g.error) {
+        if (note) note.textContent = '';
+        tbody.innerHTML = '<tr><td colspan="5" class="muted">' + esc(g && g.error ? g.error : 'No data yet') + '</td></tr>';
+        return;
+    }
+    const all = g.queries || [];
+    const rows = all.slice().sort(function(a, b) {
+        return (b.clicks || 0) - (a.clicks || 0) || (b.impressions || 0) - (a.impressions || 0);
+    }).slice(0, 50);
+    if (note) note.textContent = all.length + (all.length === 1 ? ' query' : ' queries') + (all.length > rows.length ? ', top ' + rows.length + ' shown' : '');
+    tbody.innerHTML = rows.length ? rows.map(function(q) {
+        const imp = q.impressions || 0;
+        const ctr = imp > 0 ? ((q.clicks || 0) / imp * 100).toFixed(1) + '%' : '--';
+        return '<tr><td>' + esc(q.query || '') + '</td><td class="num">' + (q.clicks || 0) + '</td><td class="num">'
+            + imp.toLocaleString() + '</td><td class="num">' + ctr + '</td><td class="num">' + (q.position || 0).toFixed(1) + '</td></tr>';
+    }).join('') : '<tr><td colspan="5" class="muted">No data yet</td></tr>';
+}
+
+function renderZeroClick(stats, key) {
+    const tbody = document.getElementById('zeroclick-tbody');
+    const note = document.getElementById('zeroclick-note');
+    if (!tbody) return;
+    const g = stats.gsc && stats.gsc[key];
+    if (!g || g.error) {
+        if (note) note.textContent = '';
+        tbody.innerHTML = '<tr><td colspan="4" class="muted">' + esc(g && g.error ? g.error : 'No data yet') + '</td></tr>';
+        return;
+    }
+    const rows = (g.pages || []).filter(function(p) {
+        return (p.clicks || 0) === 0 && (p.impressions || 0) >= ZERO_CLICK_MIN_IMPRESSIONS
+            && !UTILITY_PAGES[p.path] && !IGNORE_PATHS[p.path];
+    }).sort(function(a, b) {
+        return (a.position || 999) - (b.position || 999) || (b.impressions || 0) - (a.impressions || 0);
+    }).slice(0, 25);
+    const lost = rows.reduce(function(a, p) { return a + (p.impressions || 0); }, 0);
+    if (note) note.textContent = rows.length ? lost.toLocaleString() + ' impressions, no clicks' : '';
+    tbody.innerHTML = rows.length ? rows.map(function(p) {
+        return '<tr><td>' + esc(pageLabel(p.path || '')) + '</td><td class="num">' + (p.impressions || 0).toLocaleString()
+            + '</td><td class="num">0</td><td class="num">' + (p.position || 0).toFixed(1) + '</td></tr>';
+    }).join('') : '<tr><td colspan="4" class="muted">Nothing ranking without clicks</td></tr>';
 }
 
 function renderFunnel(stats, key) {
@@ -2366,18 +2488,22 @@ function renderProductCards(stats, key, audRate) {
     container.innerHTML = PRODUCTS.map(function(p) {
         const page = pagesArr.find(function(x) { return x.path === p.path; });
         const visits = page ? (page.visits || 0) : 0;
-        let orders = 0, free = 0, gross = 0;
+        let orders = 0, free = 0, gross = 0, discounted = 0;
         Object.keys(lsByProduct).forEach(function(name) {
             const ln = name.toLowerCase();
             if (p.lsMatch.some(function(m) { return ln.indexOf(m) !== -1; })) {
                 const bp = lsByProduct[name];
                 orders += (bp.paid_orders !== undefined ? bp.paid_orders : bp.orders) || 0;
                 free += bp.free_orders || 0;
+                discounted += bp.discounted_orders || 0;
                 gross += bp.gross_usd || 0;
             }
         });
         if (currentCurrency === 'AUD') gross = gross * audRate;
-        const ordersLabel = free > 0 ? 'Orders (+' + free + ' free)' : 'Orders';
+        const orderNotes = [];
+        if (free > 0) orderNotes.push('+' + free + ' free');
+        if (discounted > 0) orderNotes.push(discounted + ' disc');
+        const ordersLabel = orderNotes.length ? 'Orders (' + orderNotes.join(', ') + ')' : 'Orders';
         const conv = visits > 0 ? (orders / visits * 100).toFixed(1) + '%' : '--';
         const perVisit = visits > 0 ? '$' + (gross / visits).toFixed(2) : '--';
         const sline = buildSourceLine(sources[p.path], inhouse[p.path] || 0);
