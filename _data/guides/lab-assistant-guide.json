@@ -208,6 +208,7 @@
           "items": [
             "**Noise removal** with a strength slider.",
             "**Seven-band EQ** (60 Hz to 12 kHz), plus or minus 12 dB per band, with a preview.",
+            "**Dual Mono** renders single-channel files to stereo with identical left and right at -3 dB, so they sit level with stereo cues.",
             "**Trim and fade** per file, with a fade preview; an empty end keeps each file's full length. Trim can instead use **Each cue's QLab trim**, baking each cue's own start and end times into its file; cues without trim times stay full length, and in a replace or overwrite mode the cue's times are reset afterwards.",
             "**Gain**, or **Normalise** to a LUFS or peak target (gain greys out when normalise is on).",
             "**Output**: format (WAV, AIFF, MP3, AAC or FLAC), sample rate, bit depth or bitrate, and channels, with Match Source as the default. Video can be kept (adjusting its sound), converted (MP4 or MOV, H.264 or HEVC, with resolution and frame rate), or have its audio extracted; trimming a video shows the start and end frames.",
