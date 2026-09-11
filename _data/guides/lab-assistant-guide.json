@@ -165,7 +165,29 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Detects each cue's tempo and key, and can reorder cues for smoother transitions. Two independent choices. Under **Reorder cues**, choose **Don't reorder** (just detect), **By BPM** (sort by tempo), **By Key** (order by Camelot-wheel compatibility), or **BPM + Key** (group by compatible key, then sort by tempo within each group). Under **Detect**, tick **BPM**, **Key**, or both; the values show in Results and can be written to cue notes. Picking a reorder automatically ticks the detection it needs and unticks the one it doesn't - re-tick it if you also want that value in the notes. It does not reorder a selection that spans different groups. **Restore Previous Order** puts the cues back in the order they had before the last reorder; the remembered order lasts until Lab Assistant quits."
+          "text": "Detects each cue's tempo and key, and can reorder cues for smoother transitions. Two independent choices. Under **Reorder cues**, choose **Don't reorder** (just detect), **By BPM** (sort by tempo), **By Key** (order by Camelot-wheel compatibility), or **BPM + Key** (group by compatible key, then sort by tempo within each group). Under **Detect**, tick **BPM**, **Key**, or both; the values show in Results and can be written to cue notes. Picking a reorder automatically ticks the detection it needs and unticks the one it doesn't - re-tick it if you also want that value in the notes. It does not reorder a selection that spans different groups. **Restore Previous Order** puts the cues back in the order they had before the last reorder; the remembered order lasts until Lab Assistant quits. To play the sorted cues as a looping playlist, switch on **Group Cues** and choose **Playlist**."
+        }
+      ]
+    },
+    {
+      "id": "group",
+      "title": "Group Cues",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Wraps the selected cues in a new QLab group and sets how the group plays. It suits walk-in and interval music: Levels evens out the tracks, Musical Intelligence orders them, and Group Cues turns them into a looping playlist. Choose a **Mode**: **Timeline** (starts all the cues together), **Playlist** (plays one cue at a time), or **Start First and Enter** (starts the first cue, then steps through the rest with GO). Group Cues needs QLab 5; with a QLab 4 workspace the module is greyed out."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Playlist Options** apply in Playlist mode. **Loop** starts the playlist again after the last cue, **Shuffle** plays the cues in a random order (so it ignores any Musical Intelligence order), and **Crossfade** fades each cue into the next over the time you set with the preset buttons (1s, 2s, 3s, 5s) or type your own."
+        },
+        {
+          "type": "paragraph",
+          "text": "Under **Scope**, choose **All selected cues**, or **Only cues matching the VOG keywords** (the keyword list set in Routing > Multi-Output). Type a **Group Name** for the new group; left blank, it is called Playlist in Playlist mode and Group otherwise."
+        },
+        {
+          "type": "paragraph",
+          "text": "If you select one existing group, or every cue inside one group, Group Cues sets that group's mode and options instead of making a new group, and keeps its name. It skips a selection that spans different groups. Only audio and video cues move into a new group; any other cues you selected stay where they are. In **Run All** it runs after Musical Intelligence and before Numbering, so the sorted order carries into the playlist and the new group is numbered with the rest. The new group is left selected in QLab, so running again changes its settings rather than grouping it twice. Results shows how many cues went into the group and their combined length."
         }
       ]
     },
