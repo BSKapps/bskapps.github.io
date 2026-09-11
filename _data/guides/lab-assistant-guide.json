@@ -208,7 +208,7 @@
           "items": [
             "**Noise removal** with a strength slider.",
             "**Seven-band EQ** (60 Hz to 12 kHz), plus or minus 12 dB per band, with a preview.",
-            "**Dual Mono** renders single-channel files to stereo with identical left and right at -3 dB, so they sit level with stereo cues.",
+            "**Dual Mono** renders single-channel files to stereo with identical left and right, padded 3 dB so they sit level with stereo cues. With Output channels set to Mono the file stays mono and no pad is applied.",
             "**Trim and fade** per file, with a fade preview; an empty end keeps each file's full length. Trim can instead use **Each cue's QLab trim**, baking each cue's own start and end times into its file; cues without trim times stay full length, and in a replace or overwrite mode the cue's times are reset afterwards.",
             "**Gain**, or **Normalise** to a LUFS or peak target (gain greys out when normalise is on).",
             "**Output**: format (WAV, AIFF, MP3, AAC or FLAC), sample rate, bit depth or bitrate, and channels, with Match Source as the default. Video can be kept (adjusting its sound), converted (MP4 or MOV, H.264 or HEVC, with resolution and frame rate), or have its audio extracted; trimming a video shows the start and end frames.",
@@ -249,7 +249,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Open Settings from the gear in the toolbar (top-right). It holds updates (with auto-check), your licence (activate or deactivate), which modules are visible, the welcome screen, the confirm-before-processing and completion-summary toggles, and an option to minimise to the menu bar. An Email Support button copies a diagnostics report and opens an email to support. Lab Assistant is a one-time purchase with two activations."
+          "text": "Open Settings from the gear in the toolbar (top-right). It holds updates (with auto-check), your licence (activate or deactivate), which modules are visible, the welcome screen, the confirm-before-processing and completion-summary toggles, a completion sound (played through the Mac's sound effects output), and an option to minimise to the menu bar. An Email Support button copies a diagnostics report and opens an email to support. Lab Assistant is a one-time purchase with two activations."
         }
       ]
     }
