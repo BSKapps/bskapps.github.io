@@ -79,10 +79,6 @@
         {
           "type": "paragraph",
           "text": "Turn on the **fader offset** to land cues at -10 dB instead of at unity, so a mixed bag of cues at very different recorded levels all fit under QLab's level cap. If a cue still needs more than the cap allows, the result flags it so you can see where it ran out of room."
-        },
-        {
-          "type": "paragraph",
-          "text": "**VOG Boost** adds a set amount (default +3 dB, from -6 to +12) to the fader of every cue matching the VOG keywords, so voice sits above music at the same target. It uses the same keyword list as Routing and Colours, and each boosted cue says so in Results."
         }
       ]
     },
