@@ -313,6 +313,7 @@
         .pc-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(66px, 1fr)); gap: 10px 8px; margin-bottom: 12px; }
         .pc-stats > div { min-width: 0; }
         .pc-num.per { color: #8FBCE8; }
+        .pc-sub { font-size: 0.8rem; color: #8A8A90; margin-top: 4px; }
         .pc-label { font-size: 0.58rem; white-space: nowrap; color: #A2A2A8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
         .pc-num { font-size: 1.02rem; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
         .pc-num.money { color: #E8C667; }
@@ -2503,7 +2504,7 @@ function renderProductCards(stats, key, audRate) {
         const orderNotes = [];
         if (free > 0) orderNotes.push('+' + free + ' free');
         if (discounted > 0) orderNotes.push(discounted + ' disc');
-        const ordersLabel = orderNotes.length ? 'Orders (' + orderNotes.join(', ') + ')' : 'Orders';
+        const ordersSub = orderNotes.length ? '<div class="pc-sub">' + orderNotes.join(' · ') + '</div>' : '';
         const conv = visits > 0 ? (orders / visits * 100).toFixed(1) + '%' : '--';
         const perVisit = visits > 0 ? '$' + (gross / visits).toFixed(2) : '--';
         const sline = buildSourceLine(sources[p.path], inhouse[p.path] || 0);
@@ -2511,7 +2512,7 @@ function renderProductCards(stats, key, audRate) {
             + '<div class="pc-head"><img src="/images/' + p.icon + '" alt=""><span class="pc-name">' + esc(p.label) + '</span></div>'
             + '<div class="pc-stats">'
             + '<div><div class="pc-label">Visits</div><div class="pc-num">' + visits.toLocaleString() + '</div></div>'
-            + '<div><div class="pc-label">' + ordersLabel + '</div><div class="pc-num">' + orders.toLocaleString() + '</div></div>'
+            + '<div><div class="pc-label">Orders</div><div class="pc-num">' + orders.toLocaleString() + '</div>' + ordersSub + '</div>'
             + '<div><div class="pc-label">Rev ' + currentCurrency + '</div><div class="pc-num money">$' + Math.round(gross).toLocaleString() + '</div></div>'
             + '<div><div class="pc-label">Conv</div><div class="pc-num conv">' + conv + '</div></div>'
             + '<div><div class="pc-label">Per visit</div><div class="pc-num per">' + perVisit + '</div></div>'
