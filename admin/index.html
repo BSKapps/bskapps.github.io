@@ -698,7 +698,7 @@
             <summary><span class="chev">&#9656;</span><span class="section-title">Discount Codes</span><span class="section-note" id="discounts-note"></span></summary>
             <div class="data-table-wrap">
                 <table class="data-table">
-                    <thead><tr><th>Code</th><th>Off</th><th class="num">Used all time</th><th class="num">This period</th><th>Products</th><th class="num">Given away</th></tr></thead>
+                    <thead><tr><th>Code</th><th>Off</th><th class="num">Used all time</th><th class="num">This period</th><th class="num">Products</th><th class="num">Given away</th></tr></thead>
                     <tbody id="discounts-tbody"><tr><td colspan="6" class="muted">--</td></tr></tbody>
                 </table>
             </div>
@@ -2079,10 +2079,10 @@ function esc(s) {
 }
 
 const PRODUCTS = [
-    { label: 'Quicker IP', path: '/quickerip/', icon: 'quickip-icon.png', lsMatch: ['quicker ip', 'quickip'] },
-    { label: 'Lab Assistant', path: '/labassistant/', icon: 'labassistant-icon.png', lsMatch: ['lab assistant'] },
-    { label: 'Fetch Puppy', path: '/fetchpuppy/', icon: 'fetchpuppy-icon.png', lsMatch: ['fetch puppy'] },
-    { label: 'Target Trace', path: '/targettrace/', icon: 'targettrace-icon.png', lsMatch: ['target trace'] }
+    { label: 'Quicker IP', short: 'QIP', path: '/quickerip/', icon: 'quickip-icon.png', lsMatch: ['quicker ip', 'quickip'] },
+    { label: 'Lab Assistant', short: 'LA', path: '/labassistant/', icon: 'labassistant-icon.png', lsMatch: ['lab assistant'] },
+    { label: 'Fetch Puppy', short: 'FP', path: '/fetchpuppy/', icon: 'fetchpuppy-icon.png', lsMatch: ['fetch puppy'] },
+    { label: 'Target Trace', short: 'TT', path: '/targettrace/', icon: 'targettrace-icon.png', lsMatch: ['target trace'] }
 ];
 
 const INHOUSE_ADS = ['/tools/companion/', '/tools/reaper/', '/quickerip/', '/labassistant/', '/targettrace/', '/fetchpuppy/', '/'];
@@ -2184,6 +2184,14 @@ function renderSearch(stats, key) {
     }).join('') : '<tr><td colspan="4" class="muted">No data yet</td></tr>';
 }
 
+function productShort(name) {
+    const ln = String(name).toLowerCase();
+    const hit = PRODUCTS.find(function(p) {
+        return p.short && p.lsMatch.some(function(m) { return ln.indexOf(m) !== -1; });
+    });
+    return hit ? hit.short : name;
+}
+
 function discountLabel(row, rate) {
     if (row.amount == null || row.amount === '') return '--';
     return row.amount_type === 'fixed' ? '$' + (row.amount / 100 * rate).toFixed(2) : row.amount + '%';
@@ -2208,11 +2216,16 @@ function renderDiscounts(stats, key, audRate) {
         + (rows.length > shown.length ? ' · top ' + shown.length + ' of ' + rows.length + ' shown' : '');
     tbody.innerHTML = rows.length ? shown.map(function(r) {
         const limit = r.max_redemptions ? (r.used_total || 0) + ' of ' + r.max_redemptions : (r.used_total || 0);
-        const products = Object.keys(r.products || {}).map(function(n) {
-            return r.products[n] > 1 ? n + ' x' + r.products[n] : n;
+        const counts = {};
+        Object.keys(r.products || {}).forEach(function(n) {
+            const s = productShort(n);
+            counts[s] = (counts[s] || 0) + r.products[n];
+        });
+        const products = Object.keys(counts).map(function(s) {
+            return counts[s] > 1 ? s + ' x' + counts[s] : s;
         }).join(', ');
         return '<tr><td>' + esc(r.code) + '</td><td>' + esc(discountLabel(r, rate)) + '</td><td class="num">' + esc(String(limit))
-            + '</td><td class="num">' + (r.redemptions || 0) + '</td><td>' + esc(products || '--')
+            + '</td><td class="num">' + (r.redemptions || 0) + '</td><td class="num">' + esc(products || '--')
             + '</td><td class="num">$' + ((r.discount_usd || 0) * rate).toFixed(2) + '</td></tr>';
     }).join('') : '<tr><td colspan="6" class="muted">No discount codes</td></tr>';
 }
