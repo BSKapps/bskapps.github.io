@@ -175,7 +175,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Wraps the selected cues in a new QLab group and sets how the group plays. It suits walk-in and interval music: Levels evens out the tracks, Musical Intelligence orders them, and Group Cues turns them into a looping playlist. Choose a **Mode**, the same five QLab offers: **Timeline** (every cue starts at once), **Playlist** (one cue after another), **Start first child and enter into group** (the first cue plays, then each GO plays the next), **Start first child and go to next cue** (the first cue plays, then the playhead moves past the group), or **Start random child** (one cue picked at random plays, each cue once before any repeats, then the playhead moves past the group). Playlist needs QLab 5; on a QLab 4 workspace the other four modes still work, and a run set to Playlist is skipped."
+          "text": "Wraps the selected cues in a new QLab group and sets how the group plays. It suits walk-in and interval music: Levels evens out the tracks, Musical Intelligence orders them, and Group Cues turns them into a looping playlist. Choose a **Mode**, the same five QLab offers: **Timeline** (every cue starts at once), **Playlist** (one cue after another), **Start first child and enter into group** (the first cue plays, then each GO plays the next), **Start first child and go to next cue** (the first cue plays, then the playhead moves past the group), or **Start random child** (one cue picked at random plays, each cue once before any repeats, then the playhead moves past the group). Playlist needs QLab 5; on a QLab 4 workspace the other four modes are still available, and a run set to Playlist is skipped."
         },
         {
           "type": "paragraph",
