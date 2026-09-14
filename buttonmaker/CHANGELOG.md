@@ -2,6 +2,9 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v148 - 2026-09-15
+- The icon search now falls back to backup icon servers when the main one cannot be reached, so thumbnails and picks keep working.
+
 ## v147 - 2026-09-05
 - The design name field is no longer squashed on a window between 821 and 999 pixels wide. The header wraps to two lines there.
 

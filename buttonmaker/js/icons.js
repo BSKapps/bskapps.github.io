@@ -1,6 +1,37 @@
-import { state, emit, editTargets } from './state.js?v=147';
+import { state, emit, editTargets } from './state.js?v=148';
 
-const API = 'https://api.iconify.design';
+const HOSTS = ['https://api.iconify.design', 'https://api.simplesvg.com', 'https://api.unisvg.com'];
+const THUMB_COLOR = '#E4E4E7';
+let preferredHost = 0;
+
+async function fetchApi(path) {
+  let lastErr = null;
+  for (let n = 0; n < HOSTS.length; n++) {
+    const host = (preferredHost + n) % HOSTS.length;
+    try {
+      const res = await fetch(HOSTS[host] + path);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      preferredHost = host;
+      return res;
+    } catch (e) {
+      lastErr = e;
+    }
+  }
+  throw lastErr;
+}
+
+async function fetchIconSvg(id) {
+  const [prefix, name] = id.split(':');
+  const res = await fetchApi('/' + prefix + '.json?icons=' + encodeURIComponent(name));
+  const data = await res.json();
+  const ic = data && data.icons && data.icons[name];
+  if (!ic) throw new Error('missing ' + id);
+  const w = ic.width || data.width || 16;
+  const h = ic.height || data.height || 16;
+  const left = ic.left || data.left || 0;
+  const top = ic.top || data.top || 0;
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="' + left + ' ' + top + ' ' + w + ' ' + h + '">' + ic.body + '</svg>';
+}
 
 const STARTER = [
   'mdi:play', 'mdi:pause', 'mdi:stop', 'mdi:record', 'mdi:skip-next', 'mdi:skip-previous',
@@ -135,7 +166,16 @@ function renderIcons(ids, results) {
     btn.title = id;
     const img = document.createElement('img');
     img.loading = 'lazy';
-    img.src = API + '/' + id.replace(':', '/') + '.svg?color=%23E4E4E7';
+    img.addEventListener('error', () => {
+      if (img.dataset.retried) return;
+      img.dataset.retried = '1';
+      fetchIconSvg(id)
+        .then((svg) => {
+          img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg.replaceAll('currentColor', THUMB_COLOR));
+        })
+        .catch(() => {});
+    });
+    img.src = HOSTS[0] + '/' + id.replace(':', '/') + '.svg?color=' + encodeURIComponent(THUMB_COLOR);
     btn.appendChild(img);
     btn.addEventListener('click', () => pickIcon(id));
     results.appendChild(btn);
@@ -153,7 +193,7 @@ async function runSearch(query, results, status) {
   status.textContent = 'Searching...';
   const picks = AV_PICKS[query.toLowerCase()] || [];
   try {
-    const res = await fetch(API + '/search?query=' + encodeURIComponent(query) + '&limit=96');
+    const res = await fetchApi('/search?query=' + encodeURIComponent(query) + '&limit=96');
     const data = await res.json();
     if (lastQuery !== query) return;
     const found = (data.icons || []).filter((id) => !picks.includes(id));
@@ -179,8 +219,7 @@ async function pickIcon(id) {
   const status = document.getElementById('iconStatus');
   status.textContent = 'Loading ' + id + '...';
   try {
-    const res = await fetch(API + '/' + id.replace(':', '/') + '.svg');
-    const svg = await res.text();
+    const svg = await fetchIconSvg(id);
     pickTarget(id, svg);
     document.getElementById('iconModal').classList.add('hidden');
   } catch (e) {
