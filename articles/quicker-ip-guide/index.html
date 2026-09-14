@@ -64,6 +64,7 @@
                 <li><strong>IPv4: Off</strong> - switches IPv4 off on this adapter while leaving the link and IPv6 up, so it stays connected but takes no part in IPv4. Use it to keep an adapter on the network (internet over IPv6, AirPlay, Wi-Fi location) while removing it from IPv4 routing - handy in multi-adapter and AV/Dante systems where you want one interface to own IPv4 - or to stop self-assigned 169.254 addresses and IPv4 subnet or gateway clashes. It does not stop traffic; IPv6 keeps working. The adapter's status dot turns orange to show it is still live over IPv6, or red if there is no IPv6 either, so you can tell at a glance whether anything is still getting through. You can ask the app to confirm first in Settings, Alerts.</li>
                 <li><strong>Renew DHCP</strong> - forces a fresh lease. You get a notice telling you whether the address changed.</li>
                 <li><strong>Restore</strong> - after turning IPv4 off or applying a preset, returns the adapter to its previous settings.</li>
+                <li><strong>Add Address</strong> - puts a second address on a wired port as its own service, ordered below the first with no gateway. Use it when one switch carries two subnets, such as a Yamaha console's Mixer Control and Device Control, or auto-IP Dante gear beside static gear. The new service appears as its own adapter row; rename or delete it through Edit Service.</li>
             </ul>
 
             <h2>DNS per adapter</h2>
