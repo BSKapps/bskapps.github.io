@@ -60,7 +60,7 @@
         "Overlay curves to compare - each at its own Smaart offset and tolerance band, with Match type filter",
         "Save directly to Smaart TargetCurves folder",
         "Export as REW house curve",
-        "Keyboard shortcuts - D for draw, V for Split View, T / S to switch curve type, Cmd+F to flatten a selection"
+        "Keyboard shortcuts - D for draw, V for Split View, T / S to switch curve type, Cmd+F to flatten a selection, Option-drag to move around the graph"
       ],
       "description": "Build target curves from presets, draw them freehand, or import and reshape your own measurements. Target Trace gives you a visual editor for Smaart .crv files with full control. Use target overlays, tolerance bands, weighting. With one-click export back to Smaart or REW."
     },

@@ -118,7 +118,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Arrow keys and the scroll wheel pan and zoom frequency; hold Shift to zoom the dB axis. The toolbar has zoom in, zoom out and reset buttons, and a trackpad pinch zooms frequency. Hovering a point shows its frequency and level. **Split View** (V) adds a read-only second pane showing the curve in the opposite mode while you edit. The dB grid matches Smaart's defaults - a labelled line every 3 dB in Transfer Function and every 12 dB in Spectrum - in both the main and split-view panes."
+          "text": "Arrow keys and the scroll wheel pan and zoom frequency; hold Shift to zoom the dB axis. **Hold Option and drag to move the graph in any direction**, up and down as well as left and right; Option with a two-finger scroll or the scroll wheel does the same. The toolbar has zoom in, zoom out and reset buttons, and a trackpad pinch zooms frequency. Hovering a point shows its frequency and level. **Split View** (V) adds a read-only second pane showing the curve in the opposite mode while you edit. The dB grid matches Smaart's defaults - a labelled line every 3 dB in Transfer Function and every 12 dB in Spectrum - in both the main and split-view panes."
         }
       ]
     },
@@ -148,7 +148,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "**New from Preset** (P) offers Flat, Tilt, 9 dB Haystack, 15 dB Haystack and X-Curve (Cinema). Tilt has adjustable tilt amount and pivot frequency, and both Tilt and Flat can add an optional sub bump. Applying a preset replaces the current curve, names it \"My Curve\" and can be undone."
+          "text": "**New from Preset** - the button at the top of the library sidebar, File > New from Preset, or press P - offers Flat, Tilt, 9 dB Haystack, 15 dB Haystack and X-Curve (Cinema). Tilt has adjustable tilt amount and pivot frequency, and both Tilt and Flat can add an optional sub bump. Applying a preset replaces the current curve, names it \"My Curve\" and can be undone."
         }
       ]
     },
@@ -209,7 +209,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Cmd-Z undoes any edit, including loads and preset applies, and Cmd-Shift-Z redoes the last undone edit; text edits bundle into one undo per field. Handy keys: D draw, T/S modes, V split, P presets, Cmd-A select all, Delete to remove, Option-arrows to nudge a point, Cmd-up/down to shift the whole curve (hold to repeat), Cmd-F to flatten the selected points. The Help menu has a full Keyboard Shortcuts reference."
+          "text": "Cmd-Z undoes any edit, including loads and preset applies, and Cmd-Shift-Z redoes the last undone edit; text edits bundle into one undo per field. Handy keys: D draw, T/S modes, V split, P presets, Cmd-A select all, Delete to remove, Option-arrows to nudge a point, Option-drag to move the graph, Cmd-up/down to shift the whole curve (hold to repeat), Cmd-F to flatten the selected points. The Help menu has a full Keyboard Shortcuts reference."
         }
       ]
     },
