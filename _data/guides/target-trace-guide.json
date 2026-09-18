@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Target Trace user guide - BSK Apps",
     "h1": "Target Trace user guide",
-    "dateLine": "Updated for version 1.3.1",
+    "dateLine": "Updated for version 1.4",
     "description": "A how-to guide for Target Trace: drawing and editing target curves, TF and Spectrum modes, smoothing and weighting, the Smaart library, presets, and exporting .crv and REW files.",
     "canonical": "https://bskapps.com/articles/target-trace-guide/",
     "ogTitle": "Target Trace user guide",
@@ -118,7 +118,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Arrow keys and the scroll wheel pan and zoom frequency; hold Shift to zoom the dB axis. **Hold Option and drag to move the graph in any direction**, up and down as well as left and right; Option with a two-finger scroll or the scroll wheel does the same. The toolbar has zoom in, zoom out and reset buttons, and a trackpad pinch zooms frequency. Hovering a point shows its frequency and level. **Split View** (V) adds a read-only second pane showing the curve in the opposite mode while you edit. The dB grid matches Smaart's defaults - a labelled line every 3 dB in Transfer Function and every 12 dB in Spectrum - in both the main and split-view panes."
+          "text": "Arrow keys and the scroll wheel pan and zoom frequency; hold Shift to zoom the dB axis. **Hold Option and drag to move the graph in any direction**, up and down as well as left and right; Option with a two-finger scroll or the scroll wheel does the same, and over the Split View pane it moves that pane's own level axis. The toolbar has zoom in, zoom out and reset buttons, and a trackpad pinch zooms frequency. Hovering a point shows its frequency and level. **Split View** (V) adds a read-only second pane showing the curve in the opposite mode while you edit. The dB grid matches Smaart's defaults - a labelled line every 3 dB in Transfer Function and every 12 dB in Spectrum - in both the main and split-view panes."
         }
       ]
     },
@@ -195,7 +195,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Press Cmd-S to save. The dialog offers two formats: **Smaart (.crv)** keeps all the metadata (colour, type, tolerance, smoothing band) and the points; **REW House Curve (.txt)** writes just the frequency and dB columns for use in REW. Saving into your Smaart TargetCurves folder updates the library automatically. REW .txt files are an export only and cannot be loaded back in."
+          "text": "Press Cmd-S to save. The dialog offers two formats: **Smaart (.crv)** keeps all the metadata (colour, type, tolerance, smoothing band) and the points; **REW House Curve (.txt)** writes just the frequency and dB columns for use in REW. Saving into your Smaart TargetCurves folder updates the library automatically. REW .txt files are an export only and cannot be loaded back in. Closing the window or quitting with unsaved changes asks first."
         },
         {
           "type": "paragraph",
