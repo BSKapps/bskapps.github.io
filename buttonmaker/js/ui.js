@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, editTarget, editTargets, buttonCount } from './state.js?v=148';
-import { triggerIconUpload } from './icons.js?v=148';
-import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=148';
-import { noteDesignsEdited } from './effects.js?v=148';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, editTarget, editTargets, buttonCount } from './state.js?v=149';
+import { triggerIconUpload } from './icons.js?v=149';
+import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=149';
+import { noteDesignsEdited } from './effects.js?v=149';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -552,6 +552,7 @@ export function initUI() {
   bindRange('shapeRadius', (v) => applyEdit((d) => (d.shape.radius = v)), 'shapeRadiusVal');
   bindRange('shapeBorder', (v) => applyEdit((d) => (d.shape.border = v)), 'shapeBorderVal', 0.5);
   bindColor('shapeBorderColor', (v) => applyEdit((d) => (d.shape.borderColor = v)));
+  bindRange('shapeBorderOpacity', (v) => applyEdit((d) => (d.shape.borderOpacity = v)), 'shapeBorderOpacityVal');
   bindRange('shapeRotate', (v) => applyEdit((d) => (d.shape.rotation = v)), 'shapeRotateVal');
   bindRange('shapeZoom', (v) => applyEdit((d) => (d.shape.zoom = v)), 'shapeZoomVal');
 
@@ -596,6 +597,13 @@ export function initUI() {
   bindSeriesNum('seriesFrom', 'from');
   bindSeriesNum('seriesTo', 'to');
   bindSelect('exportSize', (v) => (state.export.size = Number(v)));
+  document.getElementById('reaperCustom').addEventListener('change', (e) => {
+    reaperColours().custom = e.target.checked;
+    syncReaperInputs();
+    emit();
+  });
+  bindColor('reaperHover', (v) => (reaperColours().hover = v));
+  bindColor('reaperPressed', (v) => (reaperColours().pressed = v));
 
   renderTextLayerChips();
   renderIconLayerChips();
@@ -805,6 +813,7 @@ export function syncInputsFromState() {
   setRange('shapeRadius', d.shape.radius, 'shapeRadiusVal');
   setRange('shapeBorder', d.shape.border, 'shapeBorderVal');
   setVal('shapeBorderColor', d.shape.borderColor);
+  setRange('shapeBorderOpacity', d.shape.borderOpacity === undefined ? 100 : d.shape.borderOpacity, 'shapeBorderOpacityVal');
   const edges = d.shape.edges || { top: true, bottom: true, left: true, right: true };
   for (const edge of ['top', 'bottom', 'left', 'right']) {
     document.getElementById('edge' + edge[0].toUpperCase() + edge.slice(1)).checked = edges[edge] !== false;
@@ -820,6 +829,7 @@ export function syncInputsFromState() {
   document.getElementById('bgOpacityRow').classList.toggle('hidden', d.bg.mode === 'image');
   placeBgInvert(d.bg.mode);
   document.getElementById('bgInvert').checked = !!d.bg.invert;
+  syncReaperInputs();
   setSeg('textAlign', t.align);
 
   setVal('seriesFrom', state.series.from);
@@ -869,6 +879,21 @@ function updateEditBanner() {
     banner.classList.remove('one');
     bLabel.textContent = '';
     bAll.classList.add('hidden');
+  }
+}
+
+function reaperColours() {
+  if (!state.design.reaper) state.design.reaper = defaultDesign().reaper;
+  return state.design.reaper;
+}
+
+function syncReaperInputs() {
+  const r = reaperColours();
+  document.getElementById('reaperCustom').checked = !!r.custom;
+  for (const id of ['reaperHover', 'reaperPressed']) {
+    const el = document.getElementById(id);
+    el.disabled = !r.custom;
+    setVal(id, id === 'reaperHover' ? r.hover : r.pressed);
   }
 }
 

@@ -1,8 +1,8 @@
-import { state, emit, deepClone, defaultDesign } from './state.js?v=148';
-import { renderDesign } from './renderer.js?v=148';
-import { numberSet, variantsFor } from './series.js?v=148';
-import { releaseSelection } from './ui.js?v=148';
-import { newId } from './effects.js?v=148';
+import { state, emit, deepClone, defaultDesign, isDefaultDesign, adoptDesign } from './state.js?v=149';
+import { renderDesign } from './renderer.js?v=149';
+import { numberSet, variantsFor } from './series.js?v=149';
+import { releaseSelection } from './ui.js?v=149';
+import { newId } from './effects.js?v=149';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -694,7 +694,7 @@ function fillNameFromPreset(preset) {
 }
 
 function isBlankDesign() {
-  return JSON.stringify(state.design) === JSON.stringify(defaultDesign());
+  return isDefaultDesign(state.design);
 }
 
 function addVariantToSet(v, preset) {
@@ -702,7 +702,7 @@ function addVariantToSet(v, preset) {
   if (state.series.mode === 'off') {
     releaseSelection();
     if (isBlankDesign()) {
-      Object.assign(state.design, deepClone(v.design));
+      adoptDesign(deepClone(v.design));
       state.ui.activeText = 0;
       state.ui.activeIcon = 0;
       fillNameFromPreset(preset);

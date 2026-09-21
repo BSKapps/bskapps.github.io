@@ -1,12 +1,12 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer } from '../js/state.js?v=148';
-import { seriesVariants, safeFileName, variantFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=148';
-import { buildCompanionPage } from '../js/companion.js?v=148';
-import { renderToDataUrl } from '../js/renderer.js?v=148';
-import { selectListItem, releaseSelection, removeListItem } from '../js/ui.js?v=148';
-import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=148';
-import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=148';
-import { invertHex, mixHex } from '../js/color.js?v=148';
-import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=148';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer, isDefaultDesign, adoptDesign } from '../js/state.js?v=149';
+import { seriesVariants, safeFileName, variantFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=149';
+import { buildCompanionPage } from '../js/companion.js?v=149';
+import { renderToDataUrl, renderDesign } from '../js/renderer.js?v=149';
+import { selectListItem, releaseSelection, removeListItem } from '../js/ui.js?v=149';
+import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=149';
+import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=149';
+import { invertHex, mixHex } from '../js/color.js?v=149';
+import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=149';
 
 const results = [];
 
@@ -521,6 +521,52 @@ async function runAsync() {
   check('reaper strip is 90x30 (three 30px cells)', offStrip.width === 90 && offStrip.height === 30);
   const strip45 = await buildStrip(stripBase, 45);
   check('reaper 1.5x strip is 135x45', strip45.width === 135 && strip45.height === 45);
+  const stripPx = (cv, x, y) => Array.from(cv.getContext('2d').getImageData(x, y, 1, 1).data);
+  const plainStrip = defaultDesign();
+  plainStrip.bg.color = '#404040';
+  plainStrip.texts[0].value = '';
+  plainStrip.icons = [];
+  const customStrip = await buildStrip(plainStrip, 30, { custom: true, hover: '#ff0000', pressed: '#0000ff' });
+  check('custom reaper colours leave the off cell on the background colour', stripPx(customStrip, 15, 15).join() === '64,64,64,255');
+  check('custom reaper colours fill the hover cell', stripPx(customStrip, 45, 15).join() === '255,0,0,255');
+  check('custom reaper colours fill the pressed cell', stripPx(customStrip, 75, 15).join() === '0,0,255,255');
+  const autoStrip = await buildStrip(plainStrip, 30, { custom: false, hover: '#ff0000', pressed: '#0000ff' });
+  const autoHover = stripPx(autoStrip, 45, 15);
+  check('unticked reaper colours keep the automatic lift', autoHover[0] === autoHover[1] && autoHover[0] > 64 && autoHover[0] < 90);
+  check('custom reaper colours do not mutate the design', plainStrip.bg.color === '#404040' && plainStrip.bg.mode === 'solid');
+
+  const gapDesign = defaultDesign();
+  gapDesign.bg.color = '#404040';
+  gapDesign.texts[0].value = '';
+  gapDesign.icons = [];
+  gapDesign.shape.border = 8;
+  gapDesign.shape.borderColor = '#ffffff';
+  const edgePx = async (d) => {
+    const cv = document.createElement('canvas');
+    cv.width = 72;
+    cv.height = 72;
+    await renderDesign(cv, d, {});
+    return [stripPx(cv, 2, 36), stripPx(cv, 36, 36)];
+  };
+  delete gapDesign.shape.borderOpacity;
+  const [solidEdge] = await edgePx(gapDesign);
+  check('border with no opacity field draws solid', solidEdge.join() === '255,255,255,255');
+  gapDesign.shape.borderOpacity = 0;
+  const [gapEdge, gapCentre] = await edgePx(gapDesign);
+  check('border opacity 0 cuts a see-through gap', gapEdge[3] === 0);
+  check('border opacity 0 leaves the middle of the button alone', gapCentre.join() === '64,64,64,255');
+  gapDesign.shape.borderOpacity = 50;
+  const [halfEdge] = await edgePx(gapDesign);
+  check('border opacity 50 is half see-through white', halfEdge[0] === 255 && halfEdge[3] > 120 && halfEdge[3] < 135);
+  resetState();
+  state.design.reaper = { custom: true, hover: '#ff0000', pressed: '#0000ff' };
+  check('ticking reaper colours leaves a fresh design counted as blank', isDefaultDesign(state.design));
+  const stale = defaultDesign();
+  stale.bg.color = '#123456';
+  adoptDesign(stale);
+  check('adopting a set button keeps the live reaper colours', state.design.bg.color === '#123456' && state.design.reaper.custom === true && state.design.reaper.hover === '#ff0000');
+  resetState();
+  check('normalizeDesign backfills border opacity and reaper colours', normalizeDesign({ shape: { border: 2 } }).shape.borderOpacity === 100 && normalizeDesign({}).reaper.custom === false);
 
   check('invertHex flips a colour', invertHex('#000000') === '#ffffff' && invertHex('#204060') === '#dfbf9f');
   check('mixHex blends halfway', mixHex('#000000', '#ffffff', 0.5) === '#808080');

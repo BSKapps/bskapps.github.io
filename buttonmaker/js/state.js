@@ -1,4 +1,4 @@
-export const APP_VERSION = '148';
+export const APP_VERSION = '149';
 
 export function defaultTextLayer() {
   return {
@@ -68,12 +68,25 @@ export function defaultDesign() {
       radius: 0,
       border: 0,
       borderColor: '#ffffff',
+      borderOpacity: 100,
       edges: { top: true, bottom: true, left: true, right: true },
       rotation: 0,
       zoom: 100,
       squircle: false
-    }
+    },
+    reaper: { custom: false, hover: '#1f5a34', pressed: '#2f7d49' }
   };
+}
+
+export function isDefaultDesign(design) {
+  const strip = (d) => JSON.stringify(Object.assign({}, d, { reaper: undefined }));
+  return strip(design) === strip(defaultDesign());
+}
+
+export function adoptDesign(design) {
+  const reaper = state.design.reaper;
+  Object.assign(state.design, design);
+  if (reaper) state.design.reaper = reaper;
 }
 
 export function defaultSeries() {

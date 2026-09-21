@@ -1,4 +1,4 @@
-import { invertHex } from './color.js?v=148';
+import { invertHex } from './color.js?v=149';
 
 const imageCache = new Map();
 const CACHE_MAX = 80;
@@ -333,31 +333,44 @@ export async function renderDesign(canvas, design, opts = {}) {
     const allEdges = e.top && e.bottom && e.left && e.right;
     ctx.strokeStyle = design.shape.borderColor;
     ctx.lineWidth = bw;
-    if (allEdges && design.shape.squircle) {
-      squirclePath(ctx, size / 2, size / 2, (size - bw) / 2, (size - bw) / 2);
-      ctx.stroke();
-    } else if (allEdges && radius > 0) {
-      roundedPath(ctx, bw / 2, bw / 2, size - bw, size - bw, Math.max(0, radius - bw / 2));
-      ctx.stroke();
-    } else if (allEdges) {
-      ctx.strokeRect(bw / 2, bw / 2, size - bw, size - bw);
-    } else {
-      ctx.save();
-      if (design.shape.squircle) {
-        squirclePath(ctx, size / 2, size / 2, size / 2, size / 2);
-        ctx.clip();
-      } else if (radius > 0) {
-        roundedPath(ctx, 0, 0, size, size, radius);
-        ctx.clip();
+    const borderAlpha = (design.shape.borderOpacity === undefined ? 100 : design.shape.borderOpacity) / 100;
+    const strokeBorder = () => {
+      if (allEdges && design.shape.squircle) {
+        squirclePath(ctx, size / 2, size / 2, (size - bw) / 2, (size - bw) / 2);
+        ctx.stroke();
+      } else if (allEdges && radius > 0) {
+        roundedPath(ctx, bw / 2, bw / 2, size - bw, size - bw, Math.max(0, radius - bw / 2));
+        ctx.stroke();
+      } else if (allEdges) {
+        ctx.strokeRect(bw / 2, bw / 2, size - bw, size - bw);
+      } else {
+        ctx.save();
+        if (design.shape.squircle) {
+          squirclePath(ctx, size / 2, size / 2, size / 2, size / 2);
+          ctx.clip();
+        } else if (radius > 0) {
+          roundedPath(ctx, 0, 0, size, size, radius);
+          ctx.clip();
+        }
+        const o = bw / 2;
+        ctx.beginPath();
+        if (e.top) { ctx.moveTo(0, o); ctx.lineTo(size, o); }
+        if (e.bottom) { ctx.moveTo(0, size - o); ctx.lineTo(size, size - o); }
+        if (e.left) { ctx.moveTo(o, 0); ctx.lineTo(o, size); }
+        if (e.right) { ctx.moveTo(size - o, 0); ctx.lineTo(size - o, size); }
+        ctx.stroke();
+        ctx.restore();
       }
-      const o = bw / 2;
-      ctx.beginPath();
-      if (e.top) { ctx.moveTo(0, o); ctx.lineTo(size, o); }
-      if (e.bottom) { ctx.moveTo(0, size - o); ctx.lineTo(size, size - o); }
-      if (e.left) { ctx.moveTo(o, 0); ctx.lineTo(o, size); }
-      if (e.right) { ctx.moveTo(size - o, 0); ctx.lineTo(size - o, size); }
-      ctx.stroke();
-      ctx.restore();
+    };
+    if (borderAlpha < 1) {
+      ctx.globalCompositeOperation = 'destination-out';
+      strokeBorder();
+      ctx.globalCompositeOperation = 'source-over';
+    }
+    if (borderAlpha > 0) {
+      ctx.globalAlpha = borderAlpha;
+      strokeBorder();
+      ctx.globalAlpha = 1;
     }
   }
 

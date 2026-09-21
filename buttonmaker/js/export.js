@@ -1,8 +1,8 @@
-import { state, primarySelection, defaultTextLayer } from './state.js?v=148';
-import { renderToDataUrl, renderDesign } from './renderer.js?v=148';
-import { seriesVariants, variantFileName } from './series.js?v=148';
-import { downloadBlob } from './presets.js?v=148';
-import { buildCompanionPage } from './companion.js?v=148';
+import { state, primarySelection, defaultTextLayer } from './state.js?v=149';
+import { renderToDataUrl, renderDesign } from './renderer.js?v=149';
+import { seriesVariants, variantFileName } from './series.js?v=149';
+import { downloadBlob } from './presets.js?v=149';
+import { buildCompanionPage } from './companion.js?v=149';
 
 const SS = 4;
 const STATE_LIFT = [0, 0.05, 0.12];
@@ -31,11 +31,21 @@ function overlay(ctx, size, color, alpha) {
   ctx.restore();
 }
 
-export async function buildStrip(design, cellSize) {
+async function renderCell(design, cellSize, bgColour) {
   const off = document.createElement('canvas');
   off.width = cellSize * SS;
   off.height = cellSize * SS;
-  await renderDesign(off, design, { bakeText: true });
+  let d = design;
+  if (bgColour) {
+    d = Object.assign({}, design, { bg: Object.assign({}, design.bg, { mode: 'solid', color: bgColour, invert: false }) });
+  }
+  await renderDesign(off, d, { bakeText: true });
+  return off;
+}
+
+export async function buildStrip(design, cellSize, stateColours) {
+  const custom = stateColours && stateColours.custom ? [null, stateColours.hover, stateColours.pressed] : null;
+  const off = await renderCell(design, cellSize);
 
   const strip = document.createElement('canvas');
   strip.width = cellSize * 3;
@@ -49,8 +59,12 @@ export async function buildStrip(design, cellSize) {
     const cctx = cell.getContext('2d');
     cctx.imageSmoothingEnabled = true;
     cctx.imageSmoothingQuality = 'high';
-    cctx.drawImage(off, 0, 0, cellSize, cellSize);
-    overlay(cctx, cellSize, '#ffffff', STATE_LIFT[c]);
+    if (custom && custom[c]) {
+      cctx.drawImage(await renderCell(design, cellSize, custom[c]), 0, 0, cellSize, cellSize);
+    } else {
+      cctx.drawImage(off, 0, 0, cellSize, cellSize);
+      overlay(cctx, cellSize, '#ffffff', STATE_LIFT[c]);
+    }
     sctx.drawImage(cell, c * cellSize, 0);
   }
   return strip;
@@ -103,7 +117,7 @@ function uniqueStripName(used, base, reserveOn) {
   return name;
 }
 
-export async function buildReaperZip(zip, variants, links) {
+export async function buildReaperZip(zip, variants, links, stateColours) {
   const skip = links && links.skip ? links.skip : new Set();
   const onStateFor = (links && links.onStateFor) || {};
   const used = new Set();
@@ -113,7 +127,7 @@ export async function buildReaperZip(zip, variants, links) {
     const onIdx = onStateFor[i];
     const name = uniqueStripName(used, variantFileName(v, i), onIdx !== undefined);
     for (const s of REAPER_SIZES) {
-      const base = await buildStrip(v.design, s.cell);
+      const base = await buildStrip(v.design, s.cell, stateColours);
       zip.file('toolbar_icons/' + s.dir + name + '.png', base.toDataURL('image/png').split(',')[1], { base64: true });
       if (onIdx !== undefined && variants[onIdx]) {
         const on = await buildStrip(variants[onIdx].design, s.cell);
@@ -122,6 +136,19 @@ export async function buildReaperZip(zip, variants, links) {
     }
   }
   return zip;
+}
+
+const PREVIEW_CELL = 96;
+
+export async function renderReaperCells(design, isOnState) {
+  const strip = await buildStrip(design, PREVIEW_CELL, isOnState ? null : state.design.reaper);
+  ['reaperCellOff', 'reaperCellHover', 'reaperCellPressed'].forEach((id, c) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const ctx = el.getContext('2d');
+    ctx.clearRect(0, 0, el.width, el.height);
+    ctx.drawImage(strip, c * PREVIEW_CELL, 0, PREVIEW_CELL, PREVIEW_CELL, 0, 0, el.width, el.height);
+  });
 }
 
 export function initExport() {
@@ -177,7 +204,7 @@ async function exportZip() {
 async function exportReaper() {
   const zip = new JSZip();
   const links = state.series.mode === 'list' ? reaperLinks(state.series.items) : null;
-  await buildReaperZip(zip, seriesVariants(), links);
+  await buildReaperZip(zip, seriesVariants(), links, state.design.reaper);
   const blob = await zip.generateAsync({ type: 'blob' });
   downloadBlob(blob, 'reaper-toolbar-icons.zip');
 }

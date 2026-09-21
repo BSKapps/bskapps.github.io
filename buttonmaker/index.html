@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://api.simplesvg.com https://api.unisvg.com https://bskapps.com; connect-src 'self' https://api.iconify.design https://api.simplesvg.com https://api.unisvg.com https://cloudflareinsights.com; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="bm-version" content="148">
+<meta name="bm-version" content="149">
 <title>BSK Button Maker - Free Companion and Stream Deck Designer</title>
 <meta name="description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars, plus app icons. Icon library, presets, and one-click export.">
 <meta property="og:title" content="BSK Button Maker - Free Companion and Stream Deck Designer">
@@ -41,7 +41,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&family=Archivo+Black&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=148">
+<link rel="stylesheet" href="css/style.css?v=149">
 </head>
 <body>
 <header class="app-header">
@@ -84,6 +84,7 @@
       <summary><svg class="card-icon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2,2H8V4H4V8H2V2M16,2H22V8H20V4H16V2M20,16H22V22H16V20H20V16M8,20V22H2V16H4V20H8Z"/></svg><span class="card-title">Border<span class="card-sep">/</span>Shape</span></summary>
       <div class="section-body">
         <div class="row merged-row"><label for="shapeBorder">Border</label><input type="range" id="shapeBorder" min="0" max="8" value="0" step="0.5" data-default="0"><input type="number" class="val" id="shapeBorderVal" value="0"><input type="color" id="shapeBorderColor" value="#ffffff" data-label="Border colour" aria-label="Border colour" title="Border colour"></div>
+        <div class="row"><label for="shapeBorderOpacity">Border opacity</label><input type="range" id="shapeBorderOpacity" min="0" max="100" value="100" data-default="100"><input type="number" class="val" id="shapeBorderOpacityVal" value="100"></div>
         <div class="row"><label>Border edges</label><div class="edge-toggles">
           <label><input type="checkbox" id="edgeTop" checked> T</label>
           <label><input type="checkbox" id="edgeBottom" checked> B</label>
@@ -301,6 +302,14 @@
           <button class="btn primary" id="exportCompanion">Companion Page</button>
           <button class="btn primary" id="exportReaper">REAPER Icons</button>
         </div>
+        <div class="reaper-states">
+          <label class="guide-toggle"><input type="checkbox" id="reaperCustom"> REAPER hover and pressed colours</label>
+          <div class="reaper-cells" id="reaperCells">
+            <div class="reaper-cell"><canvas id="reaperCellOff" width="96" height="96" aria-hidden="true"></canvas><span>Off</span><span class="reaper-src">Background</span></div>
+            <div class="reaper-cell"><canvas id="reaperCellHover" width="96" height="96" aria-hidden="true"></canvas><span>Hover</span><input type="color" id="reaperHover" value="#1f5a34" data-label="REAPER hover"></div>
+            <div class="reaper-cell"><canvas id="reaperCellPressed" width="96" height="96" aria-hidden="true"></canvas><span>Pressed</span><input type="color" id="reaperPressed" value="#2f7d49" data-label="REAPER pressed"></div>
+          </div>
+        </div>
         <div class="row copy-row">
           <button class="btn" id="exportCopy" title="Puts the button image on your clipboard - nothing is downloaded. Paste it straight into Companion or anywhere else.">Copy to Clipboard instead</button>
         </div>
@@ -393,7 +402,7 @@
       <p class="hint"><b>PNG size:</b> 72 px is the exact size of a Companion or Stream Deck key, so it is the smallest file. 144 px suits high-res decks and retina screens. 288 px is sharpest and scales down cleanly to any key, which is why it is the default.</p>
       <p class="hint"><b>App icons:</b> Pick 1024 px for a full-size app icon, and tick Squircle in the Border/Shape card to clip the button to an Apple-style rounded shape with transparent corners. The preview shows the exact shape that exports.</p>
       <p class="hint"><b>File names:</b> a PNG is named after its text, or its icon name if there is no text, otherwise button-1. To name an icon-only button, type the name and drop its text opacity to zero - invisible on the button, used as the file name.</p>
-      <p class="hint"><b>Export for REAPER:</b> In the Download card, click "REAPER Icons" to get toolbar icon strips (normal, hover and active in one PNG) as a ZIP that mirrors REAPER's toolbar_icons folder, with the 150 and 200 hi-DPI copies. Linked on states become a matching name_on strip, so you assign the base icon and REAPER finds the on state. Unzip it there, restart REAPER, and assign each icon in the toolbar editor.</p>
+      <p class="hint"><b>Export for REAPER:</b> In the Download card, click "REAPER Icons" to get toolbar icon strips (normal, hover and active in one PNG) as a ZIP that mirrors REAPER's toolbar_icons folder, with the 150 and 200 hi-DPI copies. Linked on states become a matching name_on strip, so you assign the base icon and REAPER finds the on state. Tick "REAPER hover and pressed colours" to pick the colour a button shows under the mouse and while it is clicked; Off is the Background colour. For a gap between toolbar buttons, add a Border and drag Border opacity to 0. Unzip it there, restart REAPER, and assign each icon in the toolbar editor.</p>
       <p class="hint"><b>On states:</b> In the Sets tab, under "On state", the presets make a button's on or active look. Pick Tint, Highlight, Invert, Dot or Colour and it adds a real, editable on state button to your set, linked to its button - then edit it with the cards on the left. Highlight lifts dark buttons brighter and deepens light ones, so it reads as active on any colour. REAPER export pairs it as name_on, no renaming. Each design card also has its own Invert tick next to its colour, to flip just that part. The swatch under those presets sets the colour used by Tint, Dot and Colour; Highlight and Invert have no colour of their own, so it greys out for them. Tint and Highlight change solid and gradient backgrounds; Invert, Dot and Colour work on any background, including images.</p>
       <p class="hint"><b>Shortcuts:</b> Double-click a slider to reset it. Cmd-Z undoes and Cmd-Shift-Z redoes, up to 50 steps back. In a set, Cmd-A selects every button.</p>
     </div>
@@ -404,7 +413,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair, Cockos or Apple. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=148"></script>
-<script type="module" src="js/app.js?v=148"></script>
+<script src="vendor/jszip.min.js?v=149"></script>
+<script type="module" src="js/app.js?v=149"></script>
 </body>
 </html>

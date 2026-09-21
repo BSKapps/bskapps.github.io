@@ -2,6 +2,10 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v149 - 2026-09-21
+- REAPER icons can now have your own hover and pressed colours. Tick the box under the REAPER Icons button.
+- New Border opacity slider. Set it to 0 for a see-through gap around the button.
+
 ## v148 - 2026-09-15
 - The icon search now falls back to backup icon servers when the main one cannot be reached, so thumbnails and picks keep working.
 

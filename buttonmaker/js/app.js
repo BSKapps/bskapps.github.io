@@ -1,12 +1,12 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection } from './state.js?v=148';
-import { renderDesign } from './renderer.js?v=148';
-import { seriesVariants, numberSet } from './series.js?v=148';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=148';
-import { initIconPicker } from './icons.js?v=148';
-import { initPresets, normalizeDesign } from './presets.js?v=148';
-import { initExport } from './export.js?v=148';
-import { initEffects, updateEffectControls } from './effects.js?v=148';
-import { initColorPopover } from './colorpicker.js?v=148';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection, isDefaultDesign, adoptDesign } from './state.js?v=149';
+import { renderDesign } from './renderer.js?v=149';
+import { seriesVariants, numberSet } from './series.js?v=149';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=149';
+import { initIconPicker } from './icons.js?v=149';
+import { initPresets, normalizeDesign } from './presets.js?v=149';
+import { initExport, renderReaperCells } from './export.js?v=149';
+import { initEffects, updateEffectControls } from './effects.js?v=149';
+import { initColorPopover } from './colorpicker.js?v=149';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -56,6 +56,8 @@ async function renderOnce() {
   const mainVariant = (state.series.mode === 'list' && mainSel !== null && variants[mainSel] ? variants[mainSel] : variants[0])
     || { design: state.design };
   await renderDesign(preview, mainVariant.design, { bakeText: true });
+  const mainItem = state.series.mode === 'list' ? state.series.items[mainSel !== null && variants[mainSel] ? mainSel : 0] : null;
+  await renderReaperCells(mainVariant.design, !!(mainItem && mainItem.onStateOf));
 
   const summary = document.getElementById('exportSummary');
   if (summary) {
@@ -345,7 +347,7 @@ preview.addEventListener('drop', (e) => {
     gridDragIndex = null;
     preview.classList.remove('drop-ready', 'drop-target');
     if (!v) return;
-    Object.assign(state.design, deepClone(v.design));
+    adoptDesign(deepClone(v.design));
     state.ui.activeText = 0;
     state.ui.activeIcon = 0;
     releaseSelection();
@@ -646,7 +648,7 @@ async function loadSharedDesign() {
     history.replaceState(null, '', location.pathname);
     return;
   }
-  const untouched = state.series.mode === 'off' && JSON.stringify(state.design) === JSON.stringify(defaultDesign());
+  const untouched = state.series.mode === 'off' && isDefaultDesign(state.design);
   if (!untouched && !window.confirm('Open the shared design from this link? It replaces your current design and set.')) {
     history.replaceState(null, '', location.pathname);
     return;
