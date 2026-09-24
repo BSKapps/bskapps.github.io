@@ -1,12 +1,12 @@
-import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection, isDefaultDesign, adoptDesign } from './state.js?v=149';
-import { renderDesign } from './renderer.js?v=149';
-import { seriesVariants, numberSet } from './series.js?v=149';
-import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=149';
-import { initIconPicker } from './icons.js?v=149';
-import { initPresets, normalizeDesign } from './presets.js?v=149';
-import { initExport, renderReaperCells } from './export.js?v=149';
-import { initEffects, updateEffectControls } from './effects.js?v=149';
-import { initColorPopover } from './colorpicker.js?v=149';
+import { state, onChange, emit, deepClone, APP_VERSION, defaultDesign, defaultSeries, editTargets, primarySelection, isDefaultDesign, adoptDesign, isWide } from './state.js?v=150';
+import { renderDesign } from './renderer.js?v=150';
+import { seriesVariants, numberSet } from './series.js?v=150';
+import { initUI, syncInputsFromState, renderTextLayerChips, renderIconLayerChips, selectListItem, selectRangeTo, deselectListItem, selectAllListItems, addListItem, removeListItem, seriesForSnapshot, releaseSelection } from './ui.js?v=150';
+import { initIconPicker } from './icons.js?v=150';
+import { initPresets, normalizeDesign } from './presets.js?v=150';
+import { initExport, renderReaperCells } from './export.js?v=150';
+import { initEffects, updateEffectControls } from './effects.js?v=150';
+import { initColorPopover } from './colorpicker.js?v=150';
 
 const preview = document.getElementById('preview');
 const seriesWrap = document.getElementById('seriesPreview');
@@ -55,6 +55,11 @@ async function renderOnce() {
   const mainSel = primarySelection();
   const mainVariant = (state.series.mode === 'list' && mainSel !== null && variants[mainSel] ? variants[mainSel] : variants[0])
     || { design: state.design };
+  const mainWide = isWide(mainVariant.design);
+  const previewW = mainWide ? preview.height * 2 : preview.height;
+  if (preview.width !== previewW) preview.width = previewW;
+  preview.classList.toggle('wide', mainWide);
+  preview.parentElement.classList.toggle('wide', mainWide);
   await renderDesign(preview, mainVariant.design, { bakeText: true });
   const mainItem = state.series.mode === 'list' ? state.series.items[mainSel !== null && variants[mainSel] ? mainSel : 0] : null;
   await renderReaperCells(mainVariant.design, !!(mainItem && mainItem.onStateOf));
@@ -89,8 +94,9 @@ async function renderOnce() {
         else selectListItem(idx, e.metaKey || e.ctrlKey);
       });
       const c = document.createElement('canvas');
-      c.width = 144;
+      c.width = isWide(v.design) ? 288 : 144;
       c.height = 144;
+      c.classList.toggle('wide', isWide(v.design));
       renderDesign(c, v.design, { bakeText: true });
       item.appendChild(c);
       const caption = document.createElement('div');
@@ -192,8 +198,9 @@ async function renderOnce() {
     item.draggable = true;
     item.title = 'Drag onto + to copy this button.';
     const c = document.createElement('canvas');
-    c.width = 144;
+    c.width = isWide(state.design) ? 288 : 144;
     c.height = 144;
+    c.classList.toggle('wide', isWide(state.design));
     renderDesign(c, state.design, { bakeText: true });
     item.appendChild(c);
     const caption = document.createElement('div');
@@ -588,7 +595,12 @@ if (miniPreview && mainPreviewWrap && 'IntersectionObserver' in window) {
       return;
     }
     mctx.clearRect(0, 0, miniPreview.width, miniPreview.height);
-    mctx.drawImage(srcCanvas, 0, 0, miniPreview.width, miniPreview.height);
+    if (srcCanvas.width === srcCanvas.height) {
+      mctx.drawImage(srcCanvas, 0, 0, miniPreview.width, miniPreview.height);
+    } else {
+      const dh = (miniPreview.width * srcCanvas.height) / srcCanvas.width;
+      mctx.drawImage(srcCanvas, 0, (miniPreview.height - dh) / 2, miniPreview.width, dh);
+    }
     miniRaf = miniPreview.classList.contains('visible') ? requestAnimationFrame(miniCopy) : null;
   }
   new IntersectionObserver((entries) => {

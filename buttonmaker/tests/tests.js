@@ -1,12 +1,12 @@
-import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer, isDefaultDesign, adoptDesign } from '../js/state.js?v=149';
-import { seriesVariants, safeFileName, variantFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=149';
-import { buildCompanionPage } from '../js/companion.js?v=149';
-import { renderToDataUrl, renderDesign } from '../js/renderer.js?v=149';
-import { selectListItem, releaseSelection, removeListItem } from '../js/ui.js?v=149';
-import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=149';
-import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=149';
-import { invertHex, mixHex } from '../js/color.js?v=149';
-import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=149';
+import { state, defaultDesign, defaultTextLayer, deepClone, editTarget, editTargets, dotLayer, isDefaultDesign, adoptDesign } from '../js/state.js?v=150';
+import { seriesVariants, safeFileName, variantFileName, numberedRange, numberStep, numberSet, variantsFor } from '../js/series.js?v=150';
+import { buildCompanionPage } from '../js/companion.js?v=150';
+import { renderToDataUrl, renderDesign } from '../js/renderer.js?v=150';
+import { selectListItem, releaseSelection, removeListItem, applyWide } from '../js/ui.js?v=150';
+import { buildStrip, buildReaperZip, buildPngZip, reaperLinks } from '../js/export.js?v=150';
+import { applyEffectToDesign, makeOnState } from '../js/effects.js?v=150';
+import { invertHex, mixHex } from '../js/color.js?v=150';
+import { addSetToCurrent, normalizeDesign } from '../js/presets.js?v=150';
 
 const results = [];
 
@@ -401,6 +401,29 @@ function run() {
   makeOnState({ type: 'tint', color: '#00ff00', strength: 50, elements: { bg: true, icon: true, text: true } });
   check('makeOnState clears a dangling onStateOf and treats the orphan as its own source', state.series.items[0].onStateOf === undefined && state.series.items.length === 2 && state.series.items[1].onStateOf === state.series.items[0].id);
   releaseSelection();
+  resetState();
+  state.series.mode = 'list';
+  state.series.items = [mkItem('A'), mkItem('B')];
+  state.ui.selectedItems = [0];
+  makeOnState({ type: 'invert', elements: { bg: true, icon: true, text: true } });
+  releaseSelection();
+  state.ui.selectedItems = [0];
+  applyWide(true);
+  check('double width on a button carries to its linked on state', state.series.items[0].design.shape.wide === true && state.series.items[1].design.shape.wide === true && state.series.items[2].design.shape.wide === false);
+  state.ui.selectedItems = [1];
+  applyWide(false);
+  check('double width off from the on state carries back to its button', state.series.items[0].design.shape.wide === false && state.series.items[1].design.shape.wide === false);
+  releaseSelection();
+
+  resetState();
+  state.series.mode = 'list';
+  const onOnly = defaultDesign();
+  state.series.items = [{ id: 'src', label: 'A', color: '' }, { label: 'A on', color: '', design: onOnly, onStateOf: 'src' }];
+  state.ui.selectedItems = [1];
+  applyWide(true);
+  releaseSelection();
+  check('double width from an on state gives an inherited button its own double width', !!state.series.items[0].design && state.series.items[0].design.shape.wide === true && state.series.items[1].design.shape.wide === true && state.design.shape.wide === false);
+
   const dl = dotLayer('#1f9d3a');
   check('dotLayer is a currentColor circle in the given colour', dl.svg.includes('currentColor') && dl.color === '#1f9d3a' && dl.align === 'right:top');
 
@@ -657,6 +680,137 @@ async function runAsync() {
 
   const pzOff = fileKeys(await buildPngZip(new JSZip(), variants2, 72));
   check('png zip is one file per button with no _on', pzOff.length === 2 && pzOff.includes('play.png') && pzOff.includes('stop.png') && !pzOff.some((k) => k.endsWith('_on.png')));
+
+  resetState();
+  const fresh = defaultDesign();
+  check('a new design is single width with no finish, no radial and no shadows', fresh.shape.wide === false && fresh.bg.finish === 'none' && fresh.bg.radial === false && fresh.texts[0].shadow === 'none' && fresh.icons[0].shadow === 'none');
+  const healedNew = normalizeDesign({ bg: { mode: 'solid', color: '#222222' }, shape: { radius: 4 }, texts: [{ value: 'X' }], icons: [{ svg: null }] });
+  check('normalizeDesign backfills double width, finish, radial and shadows', healedNew.shape.wide === false && healedNew.bg.finish === 'none' && healedNew.bg.radial === false && healedNew.texts[0].shadow === 'none' && healedNew.icons[0].shadow === 'none');
+
+  const imgSize = (src) => new Promise((res, rej) => {
+    const im = new Image();
+    im.onload = () => res([im.naturalWidth, im.naturalHeight]);
+    im.onerror = rej;
+    im.src = src;
+  });
+  const wideD = defaultDesign();
+  wideD.shape.wide = true;
+  wideD.texts[0].value = 'WIDE';
+  check('a double width PNG is twice as wide as the size picked', (await imgSize(await renderToDataUrl(wideD, 144, {}))).join() === '288,144');
+  check('a single width PNG stays square', (await imgSize(await renderToDataUrl(defaultDesign(), 144, {}))).join() === '144,144');
+  check('the Stream Deck+ size gives a double width button exactly 200 x 100', (await imgSize(await renderToDataUrl(wideD, 100, {}))).join() === '200,100');
+  const w30 = await buildStrip(wideD, 30);
+  const w45 = await buildStrip(wideD, 45);
+  const w60 = await buildStrip(wideD, 60);
+  check('double width reaper strips are 180x30, 270x45 and 360x60', w30.width === 180 && w30.height === 30 && w45.width === 270 && w45.height === 45 && w60.width === 360 && w60.height === 60);
+  const wideZip = await buildReaperZip(new JSZip(), [
+    { design: wideD, label: 'Play', companionText: 'Play' },
+    { design: defaultDesign(), label: 'Play on', companionText: 'Play on' }
+  ], { skip: new Set([1]), onStateFor: { 0: 1 } });
+  const zipPngSize = async (path) => imgSize('data:image/png;base64,' + (await wideZip.file(path).async('base64')));
+  check('a linked on state exports at its button\'s width', (await zipPngSize('toolbar_icons/play_on.png')).join() === '180,30' && (await zipPngSize('toolbar_icons/200/play_on.png')).join() === '360,60');
+
+  const cornerAlphas = async (deg) => {
+    const d = defaultDesign();
+    d.shape.wide = true;
+    d.shape.rotation = deg;
+    d.bg.color = '#404040';
+    d.texts[0].value = '';
+    const cv = document.createElement('canvas');
+    cv.width = 144;
+    cv.height = 72;
+    await renderDesign(cv, d, {});
+    const cx = cv.getContext('2d');
+    return [[0, 0], [143, 0], [0, 71], [143, 71]].map(([x, y]) => cx.getImageData(x, y, 1, 1).data[3]);
+  };
+  check('rotating a double width button leaves no see-through corners', (await cornerAlphas(30)).every((a) => a === 255) && (await cornerAlphas(63)).every((a) => a === 255) && (await cornerAlphas(90)).every((a) => a === 255));
+
+  const wideIcon = defaultDesign();
+  wideIcon.shape.wide = true;
+  wideIcon.bg.color = '#000000';
+  wideIcon.texts[0].value = '';
+  Object.assign(wideIcon.icons[0], { svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M0,0H24V24H0Z"/></svg>', size: 50, align: 'left:center', color: '#ffffff' });
+  const wiCv = document.createElement('canvas');
+  wiCv.width = 144;
+  wiCv.height = 72;
+  await renderDesign(wiCv, wideIcon, {});
+  const wiRed = (x, y) => wiCv.getContext('2d').getImageData(x, y, 1, 1).data[0];
+  check('a left-aligned icon sits at the left edge of a double width button', wiRed(2, 36) > 200 && wiRed(72, 36) < 50);
+
+  const rad = defaultDesign();
+  Object.assign(rad.bg, { mode: 'gradient', gradFrom: '#ff0000', gradTo: '#0000ff', radial: true });
+  rad.texts[0].value = '';
+  const radMid = await centerPixel(rad);
+  check('a radial gradient puts the From colour in the middle', radMid[0] > 200 && radMid[2] < 60);
+  const lin = deepClone(rad);
+  lin.bg.radial = false;
+  check('radial renders differently from the straight gradient', (await renderToDataUrl(rad, 72, {})) !== (await renderToDataUrl(lin, 72, {})));
+
+  const finBase = defaultDesign();
+  finBase.bg.color = '#2d5f9a';
+  finBase.texts[0].value = '';
+  const finUrls = {};
+  for (const f of ['none', 'gloss', 'inner', 'vignette', 'spotlight']) {
+    const d = deepClone(finBase);
+    d.bg.finish = f;
+    finUrls[f] = await renderToDataUrl(d, 72, {});
+  }
+  check('every finish changes the button, and each looks different', new Set(Object.values(finUrls)).size === 5);
+  const noFinishField = deepClone(finBase);
+  delete noFinishField.bg.finish;
+  check('finish None renders exactly like a design saved before finishes existed', (await renderToDataUrl(noFinishField, 72, {})) === finUrls.none);
+
+  const shBase = defaultDesign();
+  shBase.bg.color = '#404040';
+  Object.assign(shBase.texts[0], { value: 'GO', size: 24, align: 'center:bottom' });
+  Object.assign(shBase.icons[0], { svg: playSvg, size: 30, y: -15 });
+  const shUrl = async (fn) => {
+    const d = deepClone(shBase);
+    fn(d);
+    return renderToDataUrl(d, 72, {});
+  };
+  const shNone = await shUrl(() => {});
+  check('text drop shadow and glow each change the render', (await shUrl((d) => { d.texts[0].shadow = 'drop'; })) !== shNone && (await shUrl((d) => { d.texts[0].shadow = 'glow'; d.texts[0].shadowColor = '#ff0000'; })) !== shNone);
+  check('icon drop shadow and glow each change the render', (await shUrl((d) => { d.icons[0].shadow = 'drop'; })) !== shNone && (await shUrl((d) => { d.icons[0].shadow = 'glow'; d.icons[0].shadowColor = '#00ff00'; })) !== shNone);
+  const noShadowFields = deepClone(shBase);
+  for (const l of [noShadowFields.texts[0], noShadowFields.icons[0]]) {
+    delete l.shadow;
+    delete l.shadowColor;
+  }
+  check('shadow None renders exactly like a design saved before shadows existed', (await renderToDataUrl(noShadowFields, 72, {})) === shNone);
+
+  const glowD = defaultDesign();
+  glowD.bg.color = '#000000';
+  glowD.icons = [];
+  Object.assign(glowD.texts[0], { value: 'I', size: 30, align: 'center:center', font: 'Arial', weight: '700' });
+  const glowPx = async (d) => {
+    const cv = document.createElement('canvas');
+    cv.width = 72;
+    cv.height = 72;
+    await renderDesign(cv, d, {});
+    return Array.from(cv.getContext('2d').getImageData(30, 36, 1, 1).data);
+  };
+  const plainI = await glowPx(glowD);
+  const glowOn = deepClone(glowD);
+  glowOn.texts[0].shadow = 'glow';
+  glowOn.texts[0].shadowColor = '#ff0000';
+  const glowI = await glowPx(glowOn);
+  check('text glow lights the space around the letters in its colour', plainI[0] < 10 && glowI[0] > 30 && glowI[1] < glowI[0] / 2);
+  const toneD = defaultDesign();
+  toneD.bg.color = '#000000';
+  toneD.texts[0].value = '';
+  Object.assign(toneD.icons[0], { svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0.2" d="M0,0H24V24H0Z"/></svg>', size: 60, color: '#ffffff' });
+  const tonePx = async (d) => {
+    const cv = document.createElement('canvas');
+    cv.width = 72;
+    cv.height = 72;
+    await renderDesign(cv, d, {});
+    return cv.getContext('2d').getImageData(36, 36, 1, 1).data[0];
+  };
+  const toneShadow = deepClone(toneD);
+  toneShadow.icons[0].shadow = 'drop';
+  toneShadow.icons[0].shadowColor = '#000000';
+  check('a black shadow leaves a see-through icon unchanged on a black button', Math.abs((await tonePx(toneShadow)) - (await tonePx(toneD))) <= 1);
 
   resetState();
 }

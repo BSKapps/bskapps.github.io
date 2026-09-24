@@ -1,8 +1,8 @@
-import { state, emit, deepClone, defaultDesign, isDefaultDesign, adoptDesign } from './state.js?v=149';
-import { renderDesign } from './renderer.js?v=149';
-import { numberSet, variantsFor } from './series.js?v=149';
-import { releaseSelection } from './ui.js?v=149';
-import { newId } from './effects.js?v=149';
+import { state, emit, deepClone, defaultDesign, isDefaultDesign, adoptDesign, isWide } from './state.js?v=150';
+import { renderDesign } from './renderer.js?v=150';
+import { numberSet, variantsFor } from './series.js?v=150';
+import { releaseSelection } from './ui.js?v=150';
+import { newId } from './effects.js?v=150';
 
 const STORE_KEY = 'cbm-presets-v1';
 
@@ -771,8 +771,9 @@ function pickerTile(v, preset) {
   tile.className = 'preset-picker-tile';
   tile.title = 'Add "' + (v.companionText || v.label || (preset && preset.name) || 'button') + '" to your set';
   const c = document.createElement('canvas');
-  c.width = 72;
+  c.width = isWide(v.design) ? 144 : 72;
   c.height = 72;
+  c.classList.toggle('wide', isWide(v.design));
   renderDesign(c, deepClone(v.design));
   tile.appendChild(c);
   tile.addEventListener('click', () => addVariantToSet(v, preset));

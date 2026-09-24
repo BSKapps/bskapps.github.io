@@ -1,7 +1,7 @@
-import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, editTarget, editTargets, buttonCount } from './state.js?v=149';
-import { triggerIconUpload } from './icons.js?v=149';
-import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=149';
-import { noteDesignsEdited } from './effects.js?v=149';
+import { state, emit, deepClone, defaultDesign, defaultTextLayer, defaultIconLayer, dotLayer, editTarget, editTargets, buttonCount, isWide } from './state.js?v=150';
+import { triggerIconUpload } from './icons.js?v=150';
+import { seriesVariants, numberSet, numberedCount, numberedRange } from './series.js?v=150';
+import { noteDesignsEdited } from './effects.js?v=150';
 
 const selectionSnapshots = new Map();
 const materializedHere = new Set();
@@ -270,6 +270,18 @@ const FONT_WEIGHTS = {
   'JetBrains Mono': ['400', '700', '800'],
   'Archivo Black': ['400'],
   'Nunito': ['400', '600', '700', '800'],
+  'Exo 2': ['400', '600', '700', '800'],
+  'Poppins': ['400', '600', '700', '800'],
+  'Lato': ['400', '700'],
+  'Barlow Condensed': ['400', '600', '700', '800'],
+  'Anton': ['400'],
+  'Rajdhani': ['400', '600', '700'],
+  'Orbitron': ['400', '600', '700', '800'],
+  'Teko': ['400', '600', '700'],
+  'Russo One': ['400'],
+  'Share Tech Mono': ['400'],
+  'Press Start 2P': ['400'],
+  'Permanent Marker': ['400'],
   'Arial': ['400', '700'],
   'Helvetica Neue': ['400', '700'],
   'Georgia': ['400', '700']
@@ -403,6 +415,11 @@ export function initUI() {
   bindRange('bgOpacity', (v) => applyEdit((d) => (d.bg.opacity = v)), 'bgOpacityVal');
   bindRange('bgImageDim', (v) => applyEdit((d) => (d.bg.imageDim = v)), 'bgImageDimVal');
   bindRange('bgImageRotate', (v) => applyEdit((d) => (d.bg.imageRotation = v)), 'bgImageRotateVal');
+  document.getElementById('bgRadial').addEventListener('change', (e) => {
+    applyEdit((d) => (d.bg.radial = e.target.checked));
+    emit();
+  });
+  bindSelect('bgFinish', (v) => applyEdit((d) => (d.bg.finish = v)));
 
   document.getElementById('bgImageFile').addEventListener('change', (e) => {
     const file = e.target.files[0];
@@ -437,6 +454,13 @@ export function initUI() {
     });
     emit();
   });
+
+  bindSelect('iconShadow', (v) => applyEdit((d) => {
+    for (const ic of iconLayersOf(d)) ic.shadow = v;
+  }));
+  bindColor('iconShadowColor', (v) => applyEdit((d) => {
+    for (const ic of iconLayersOf(d)) ic.shadowColor = v;
+  }));
 
   document.getElementById('iconUploadSidebar').addEventListener('click', triggerIconUpload);
 
@@ -501,6 +525,10 @@ export function initUI() {
     applyEdit((d) => (d.shape.squircle = e.target.checked));
     emit();
   });
+  document.getElementById('shapeWide').addEventListener('change', (e) => {
+    applyWide(e.target.checked);
+    emit();
+  });
 
   bindSeg('iconAlign', (v) => applyEdit((d) => {
     for (const ic of iconLayersOf(d)) ic.align = v;
@@ -535,6 +563,12 @@ export function initUI() {
   }), 'textOutlineVal', 0.5);
   bindColor('textOutlineColor', (v) => applyEdit((d) => {
     for (const t of textLayersOf(d)) t.outlineColor = v;
+  }));
+  bindSelect('textShadow', (v) => applyEdit((d) => {
+    for (const t of textLayersOf(d)) t.shadow = v;
+  }));
+  bindColor('textShadowColor', (v) => applyEdit((d) => {
+    for (const t of textLayersOf(d)) t.shadowColor = v;
   }));
   bindRange('textOpacity', (v) => applyEdit((d) => {
     for (const t of textLayersOf(d)) t.opacity = v;
@@ -608,6 +642,29 @@ export function initUI() {
   renderTextLayerChips();
   renderIconLayerChips();
   syncInputsFromState();
+}
+
+export function applyWide(on) {
+  const designs = new Set(editTargets());
+  const items = state.series.items;
+  if (state.series.mode === 'list' && state.ui.selectedItems.length) {
+    const partners = new Set();
+    for (const i of state.ui.selectedItems) {
+      const it = items[i];
+      if (!it) continue;
+      if (it.id) items.forEach((o, j) => { if (o && o.onStateOf === it.id) partners.add(j); });
+      if (it.onStateOf) {
+        const j = items.findIndex((o) => o && o.id === it.onStateOf);
+        if (j >= 0) partners.add(j);
+      }
+    }
+    for (const j of partners) {
+      if (materialize(j)) designs.add(items[j].design);
+    }
+  }
+  const list = [...designs];
+  for (const d of list) d.shape.wide = on;
+  noteDesignsEdited(list);
 }
 
 export function convertNumberedToList() {
@@ -779,6 +836,10 @@ export function syncInputsFromState() {
   setVal('bgImageFit', d.bg.imageFit);
   setRange('bgImageDim', d.bg.imageDim, 'bgImageDimVal');
   setRange('bgImageRotate', d.bg.imageRotation || 0, 'bgImageRotateVal');
+  document.getElementById('bgRadial').checked = !!d.bg.radial;
+  document.getElementById('bgAngle').disabled = !!d.bg.radial;
+  document.getElementById('bgAngleVal').disabled = !!d.bg.radial;
+  setVal('bgFinish', d.bg.finish || 'none');
   const ic = refIcon();
   setVal('iconColor', ic.color);
   setRange('iconSize', ic.size, 'iconSizeVal');
@@ -788,6 +849,9 @@ export function syncInputsFromState() {
   setRange('iconRotate', ic.rotation || 0, 'iconRotateVal');
   document.getElementById('iconReverse').checked = !!ic.reverse;
   document.getElementById('iconInvert').checked = !!ic.invert;
+  setVal('iconShadow', ic.shadow || 'none');
+  setVal('iconShadowColor', ic.shadowColor || '#000000');
+  document.getElementById('iconShadowColor').disabled = !ic.shadow || ic.shadow === 'none';
   const t = refText();
   const textField = document.getElementById('textValue');
   const listEditAll = state.series.mode === 'list' && !state.ui.selectedItems.length;
@@ -805,6 +869,9 @@ export function syncInputsFromState() {
   document.getElementById('textInvert').checked = !!t.invert;
   setRange('textOutline', t.outline || 0, 'textOutlineVal');
   setVal('textOutlineColor', t.outlineColor || '#000000');
+  setVal('textShadow', t.shadow || 'none');
+  setVal('textShadowColor', t.shadowColor || '#000000');
+  document.getElementById('textShadowColor').disabled = !t.shadow || t.shadow === 'none';
   setRange('textOpacity', t.opacity === undefined ? 100 : t.opacity, 'textOpacityVal');
   setRange('textX', t.x || 0, 'textXVal');
   setRange('textY', t.y || 0, 'textYVal');
@@ -819,6 +886,7 @@ export function syncInputsFromState() {
     document.getElementById('edge' + edge[0].toUpperCase() + edge.slice(1)).checked = edges[edge] !== false;
   }
   document.getElementById('shapeSquircle').checked = !!d.shape.squircle;
+  document.getElementById('shapeWide').checked = !!d.shape.wide;
   setRange('shapeRotate', d.shape.rotation || 0, 'shapeRotateVal');
   setRange('shapeZoom', d.shape.zoom === undefined ? 100 : d.shape.zoom, 'shapeZoomVal');
 
@@ -850,6 +918,14 @@ export function syncInputsFromState() {
     el.classList.toggle('active', id === iconSrc);
   }
   document.getElementById('exportZip').disabled = buttonCount() <= 1;
+  const anyWide = state.series.mode === 'list'
+    ? state.series.items.some((it) => it && isWide(it.design || state.design))
+    : isWide(state.design);
+  document.querySelector('#exportSize option[value="100"]').disabled = !anyWide;
+  if (!anyWide && state.export.size === 100) {
+    state.export.size = 288;
+    document.getElementById('exportSize').value = '288';
+  }
 
   setSeg('iconAlign', ic.align || 'center:center');
 }

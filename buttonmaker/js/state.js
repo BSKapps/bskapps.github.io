@@ -1,4 +1,4 @@
-export const APP_VERSION = '149';
+export const APP_VERSION = '150';
 
 export function defaultTextLayer() {
   return {
@@ -15,7 +15,9 @@ export function defaultTextLayer() {
     bend: 0,
     invert: false,
     outline: 0,
-    outlineColor: '#000000'
+    outlineColor: '#000000',
+    shadow: 'none',
+    shadowColor: '#000000'
   };
 }
 
@@ -32,7 +34,9 @@ export function defaultIconLayer() {
     opacity: 100,
     rotation: 0,
     reverse: false,
-    invert: false
+    invert: false,
+    shadow: 'none',
+    shadowColor: '#000000'
   };
 }
 
@@ -60,7 +64,9 @@ export function defaultDesign() {
       imageFit: 'cover',
       imageDim: 0,
       imageRotation: 0,
-      invert: false
+      invert: false,
+      radial: false,
+      finish: 'none'
     },
     icons: [defaultIconLayer()],
     texts: [defaultTextLayer()],
@@ -72,10 +78,15 @@ export function defaultDesign() {
       edges: { top: true, bottom: true, left: true, right: true },
       rotation: 0,
       zoom: 100,
-      squircle: false
+      squircle: false,
+      wide: false
     },
     reaper: { custom: false, hover: '#1f5a34', pressed: '#2f7d49' }
   };
+}
+
+export function isWide(design) {
+  return !!(design && design.shape && design.shape.wide);
 }
 
 export function isDefaultDesign(design) {

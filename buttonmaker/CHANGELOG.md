@@ -2,6 +2,15 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v150 - 2026-09-25
+- New Double width tick in Border/Shape makes a button twice as wide, for REAPER double width toolbar buttons and Stream Deck+ dial strips.
+- New 200 x 100 (Stream Deck+ strip) PNG size, the exact size of one Stream Deck+ dial, for double width buttons.
+- New Finish choices at the foot of the Background card: Gloss, Inner shadow, Vignette and Spotlight.
+- Icons and text can now have a drop shadow or a glow, in any colour.
+- Gradients can now be radial, spreading out from the centre.
+- 12 more fonts.
+- The REAPER Pressed preview no longer disappears on dark buttons.
+
 ## v149 - 2026-09-21
 - REAPER icons can now have your own hover and pressed colours. Tick the box under the REAPER Icons button.
 - New Border opacity slider. Set it to 0 for a see-through gap around the button.

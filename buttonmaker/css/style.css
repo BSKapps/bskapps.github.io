@@ -296,6 +296,8 @@ body {
   margin: 0;
 }
 
+.row input[type="range"]:disabled, .row input.val:disabled, .row input[type="color"]:disabled { opacity: 0.4; cursor: default; }
+
 .row input.val:hover, .row input.val:focus {
   border-color: var(--border-strong);
   color: var(--text);
@@ -526,6 +528,8 @@ body {
 }
 
 .preview-frame { position: relative; width: 288px; height: 288px; }
+.preview-frame.wide { width: min(576px, 100%); height: auto; }
+#preview.wide { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; }
 
 .preview-guides {
   position: absolute;
@@ -657,6 +661,10 @@ body {
 .series-preview.tiny { gap: 8px; }
 .series-preview.tiny canvas { width: 48px; height: 48px; }
 .series-preview.tiny .series-add { width: 48px; height: 48px; font-size: 1.1rem; }
+
+.series-preview canvas.wide { width: 192px; }
+.series-preview.compact canvas.wide { width: 128px; }
+.series-preview.tiny canvas.wide { width: 96px; }
 
 .color-pop {
   position: fixed;
@@ -874,6 +882,7 @@ body {
 .preset-picker-tile:active { transform: scale(0.94); }
 
 .preset-picker-tile canvas { display: block; width: 54px; height: 54px; border-radius: 6px; }
+.preset-picker-tile canvas.wide { width: 108px; }
 
 .promo-row {
   display: flex;
@@ -1003,7 +1012,14 @@ body {
 .reaper-states { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
 .reaper-cells { display: flex; gap: 14px; margin: 10px 0 0 20px; }
 .reaper-cell { width: 68px; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 0.78rem; color: var(--muted); }
-.reaper-cell canvas { width: 48px; height: 48px; border-radius: 4px; background: repeating-conic-gradient(#2b2b30 0% 25%, #222226 0% 50%) 0 0 / 12px 12px; }
+.reaper-cell canvas { width: 48px; height: 48px; border-radius: 4px; outline: 1px solid var(--border-strong); background: repeating-conic-gradient(#2b2b30 0% 25%, #222226 0% 50%) 0 0 / 12px 12px; }
+.reaper-cells.wide .reaper-cell { width: 96px; }
+.reaper-cells.wide .reaper-cell canvas { width: 96px; }
+@media (max-width: 820px) {
+  .reaper-cells.wide { gap: 8px; margin-left: 0; }
+  .reaper-cells.wide .reaper-cell { flex: 1 1 0; min-width: 0; max-width: 96px; }
+  .reaper-cells.wide .reaper-cell canvas { width: 100%; height: auto; aspect-ratio: 2 / 1; }
+}
 .reaper-cell input[type="color"] { width: 44px; height: 28px; border: 1px solid var(--border); border-radius: 6px; background: var(--field); padding: 2px; cursor: pointer; }
 .reaper-cell input[type="color"]:disabled { opacity: 0.4; cursor: default; }
 .reaper-src { height: 28px; line-height: 28px; }

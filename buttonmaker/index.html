@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://api.simplesvg.com https://api.unisvg.com https://bskapps.com; connect-src 'self' https://api.iconify.design https://api.simplesvg.com https://api.unisvg.com https://cloudflareinsights.com; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="bm-version" content="149">
+<meta name="bm-version" content="150">
 <title>BSK Button Maker - Free Companion and Stream Deck Designer</title>
 <meta name="description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars, plus app icons. Icon library, presets, and one-click export.">
 <meta property="og:title" content="BSK Button Maker - Free Companion and Stream Deck Designer">
@@ -40,8 +40,8 @@
 <link rel="icon" type="image/png" href="images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&family=Archivo+Black&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=149">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&family=Archivo+Black&family=Nunito:wght@400;600;700;800&family=Exo+2:wght@400;600;700;800&family=Poppins:wght@400;600;700;800&family=Lato:wght@400;700&family=Barlow+Condensed:wght@400;600;700;800&family=Anton&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;600;700;800&family=Teko:wght@400;600;700&family=Russo+One&family=Share+Tech+Mono&family=Press+Start+2P&family=Permanent+Marker&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=150">
 </head>
 <body>
 <header class="app-header">
@@ -94,6 +94,9 @@
         <div class="row merged-row"><label for="shapeRadius">Corners</label><input type="range" id="shapeRadius" min="0" max="35" value="0" data-default="0"><input type="number" class="val" id="shapeRadiusVal" value="0"><label class="inline-check" for="shapeSquircle">Squircle</label><input type="checkbox" id="shapeSquircle" title="Clip to an Apple-style squircle with transparent corners - ideal for 1024 px app icons"></div>
         <div class="row"><label for="shapeRotate">Rotate button</label><input type="range" id="shapeRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="shapeRotateVal" value="0"></div>
         <div class="row"><label for="shapeZoom">Zoom contents</label><input type="range" id="shapeZoom" min="25" max="200" value="100" data-default="100"><input type="number" class="val" id="shapeZoomVal" value="100"></div>
+        <div class="row"><label>Width</label><div class="edge-toggles">
+          <label title="Twice as wide - the shape of a REAPER double width toolbar button or a Stream Deck+ dial strip"><input type="checkbox" id="shapeWide"> Double width</label>
+        </div></div>
       </div>
     </details>
 
@@ -113,7 +116,7 @@
         <div id="bgGradientRows" class="hidden">
           <div class="row"><label for="bgColor2a">From</label><input type="color" id="bgColor2a" value="#16324f" data-label="Gradient from"></div>
           <div class="row" id="bgGradToRow"><label for="bgColor2b">To</label><input type="color" id="bgColor2b" value="#0a0e14" data-label="Gradient to"></div>
-          <div class="row"><label for="bgAngle">Angle</label><input type="range" id="bgAngle" min="0" max="360" value="135" data-default="135"><input type="number" class="val" id="bgAngleVal" value="135"></div>
+          <div class="row merged-row"><label for="bgAngle">Angle</label><input type="range" id="bgAngle" min="0" max="360" value="135" data-default="135"><input type="number" class="val" id="bgAngleVal" value="135"><label class="inline-check" for="bgRadial">Radial</label><input type="checkbox" id="bgRadial" title="Spread the gradient out from the centre"></div>
           <div class="row"><label for="bgBlend">Blend</label><input type="range" id="bgBlend" min="0" max="100" value="100" data-default="100"><input type="number" class="val" id="bgBlendVal" value="100"></div>
         </div>
         <div class="row" id="bgOpacityRow"><label for="bgOpacity">Opacity</label><input type="range" id="bgOpacity" min="0" max="100" value="100" data-default="100"><input type="number" class="val" id="bgOpacityVal" value="100"></div>
@@ -133,6 +136,16 @@
           <div class="row"><label for="bgImageDim">Dim</label><input type="range" id="bgImageDim" min="0" max="80" value="0" data-default="0"><input type="number" class="val" id="bgImageDimVal" value="0"></div>
           <div class="row"><label for="bgImageRotate">Rotate</label><input type="range" id="bgImageRotate" min="-180" max="180" value="0" data-default="0"><input type="number" class="val" id="bgImageRotateVal" value="0"></div>
         </div>
+        <div class="row">
+          <label for="bgFinish">Finish</label>
+          <select id="bgFinish">
+            <option value="none">None</option>
+            <option value="gloss">Gloss</option>
+            <option value="inner">Inner shadow</option>
+            <option value="vignette">Vignette</option>
+            <option value="spotlight">Spotlight</option>
+          </select>
+        </div>
       </div>
     </details>
 
@@ -151,6 +164,15 @@
         </div>
         <div class="row"><label for="iconSize">Size</label><input type="range" id="iconSize" min="10" max="150" value="52" data-default="52"><input type="number" class="val" id="iconSizeVal" value="52"></div>
         <div class="row"><label for="iconColor">Colour</label><input type="color" id="iconColor" value="#ffffff" data-label="Image colour"><label class="inline-check" for="iconInvert">Invert</label><input type="checkbox" id="iconInvert"></div>
+        <div class="row">
+          <label for="iconShadow">Shadow</label>
+          <select id="iconShadow">
+            <option value="none">None</option>
+            <option value="drop">Drop shadow</option>
+            <option value="glow">Glow</option>
+          </select>
+          <input type="color" id="iconShadowColor" value="#000000" data-label="Image shadow colour" aria-label="Shadow colour" title="Shadow colour">
+        </div>
         <div class="row pos-row">
           <label>Position</label>
           <div class="align-grid" id="iconAlign">
@@ -191,6 +213,18 @@
             <option value="JetBrains Mono">JetBrains Mono</option>
             <option value="Archivo Black">Archivo Black</option>
             <option value="Nunito">Nunito</option>
+            <option value="Exo 2">Exo 2</option>
+            <option value="Poppins">Poppins</option>
+            <option value="Lato">Lato</option>
+            <option value="Barlow Condensed">Barlow Condensed</option>
+            <option value="Anton">Anton</option>
+            <option value="Rajdhani">Rajdhani</option>
+            <option value="Orbitron">Orbitron</option>
+            <option value="Teko">Teko</option>
+            <option value="Russo One">Russo One</option>
+            <option value="Share Tech Mono">Share Tech Mono</option>
+            <option value="Press Start 2P">Press Start 2P</option>
+            <option value="Permanent Marker">Permanent Marker</option>
             <option value="Arial">Arial</option>
             <option value="Helvetica Neue">Helvetica Neue</option>
             <option value="Georgia">Georgia</option>
@@ -206,6 +240,15 @@
         <div class="row"><label for="textSize">Size</label><input type="range" id="textSize" min="6" max="96" value="11" data-default="11"><input type="number" class="val" id="textSizeVal" value="11"></div>
         <div class="row"><label for="textColor">Colour</label><input type="color" id="textColor" value="#ffffff" data-label="Text colour"><label class="inline-check" for="textInvert">Invert</label><input type="checkbox" id="textInvert"></div>
         <div class="row merged-row"><label for="textOutline">Outline</label><input type="range" id="textOutline" min="0" max="6" step="0.5" value="0" data-default="0"><input type="number" class="val" id="textOutlineVal" value="0"><input type="color" id="textOutlineColor" value="#000000" data-label="Text outline colour" aria-label="Outline colour" title="Outline colour"></div>
+        <div class="row">
+          <label for="textShadow">Shadow</label>
+          <select id="textShadow">
+            <option value="none">None</option>
+            <option value="drop">Drop shadow</option>
+            <option value="glow">Glow</option>
+          </select>
+          <input type="color" id="textShadowColor" value="#000000" data-label="Text shadow colour" aria-label="Shadow colour" title="Shadow colour">
+        </div>
         <div class="row pos-row">
           <label>Position</label>
           <div class="align-grid" id="textAlign">
@@ -291,11 +334,12 @@
         <div class="row download-row">
           <button class="btn primary" id="exportPng">PNG</button>
           <button class="btn primary" id="exportZip">Set as ZIP</button>
-          <select id="exportSize" aria-label="PNG size" title="PNG size - 288 px is a safe button default; pick 1024 px for app icons">
+          <select id="exportSize" aria-label="PNG size" title="PNG size - 288 px is a safe button default; pick 1024 px for app icons, or 200 x 100 for one Stream Deck+ dial on a double width button">
             <option value="72">72 px</option>
             <option value="144">144 px</option>
             <option value="288" selected>288 px</option>
             <option value="1024">1024 px (app icon)</option>
+            <option value="100">200 x 100 (Stream Deck+ strip)</option>
           </select>
         </div>
         <div class="row download-row">
@@ -314,7 +358,7 @@
           <button class="btn" id="exportCopy" title="Puts the button image on your clipboard - nothing is downloaded. Paste it straight into Companion or anywhere else.">Copy to Clipboard instead</button>
         </div>
         <p class="hint" id="exportSummary"></p>
-        <p class="hint">The four buttons above save a file. "Copy to Clipboard" puts the previewed button straight on your clipboard to paste. 288 px is a safe button default; pick 1024 px for app icons, and the size applies to PNG, ZIP and the clipboard.</p>
+        <p class="hint">The four buttons above save a file. "Copy to Clipboard" puts the previewed button straight on your clipboard to paste. 288 px is a safe button default; pick 1024 px for app icons, and the size applies to PNG, ZIP and the clipboard. 200 x 100 (Stream Deck+ strip) is the exact size of one Stream Deck+ dial, for double width buttons; square buttons in the same set come out 100 x 100, the strip's height.</p>
       </div>
     </details>
     <details class="section promo-card" open>
@@ -401,6 +445,8 @@
       <p class="hint"><b>Half-point sizes:</b> The Size boxes for text and image take half points - type a value like 32.5 for finer control at larger sizes. The sliders still move a point at a time.</p>
       <p class="hint"><b>PNG size:</b> 72 px is the exact size of a Companion or Stream Deck key, so it is the smallest file. 144 px suits high-res decks and retina screens. 288 px is sharpest and scales down cleanly to any key, which is why it is the default.</p>
       <p class="hint"><b>App icons:</b> Pick 1024 px for a full-size app icon, and tick Squircle in the Border/Shape card to clip the button to an Apple-style rounded shape with transparent corners. The preview shows the exact shape that exports.</p>
+      <p class="hint"><b>Double width:</b> Tick Double width in the Border/Shape card to make the button twice as wide - the shape of a REAPER double width toolbar button, or of one Stream Deck+ dial on the touch strip. The PNG comes out twice as wide as the pixel size you pick, while 200 x 100 (Stream Deck+ strip) gives exactly 200 x 100, the size of one dial. REAPER Icons export 180 x 30 strips with 270 x 45 and 360 x 60 hi-DPI copies. A button and its on state always share a width. Companion keys are square, so Companion Page shrinks a double width button to fit.</p>
+      <p class="hint"><b>Finish and shadows:</b> Finish, at the foot of the Background card, lays Gloss, an Inner shadow, a Vignette or a Spotlight over the whole button. Shadow in the Icon and Text cards adds a Drop shadow or a Glow, in the colour beside it. Tick Radial next to a gradient's Angle to spread the gradient out from the centre.</p>
       <p class="hint"><b>File names:</b> a PNG is named after its text, or its icon name if there is no text, otherwise button-1. To name an icon-only button, type the name and drop its text opacity to zero - invisible on the button, used as the file name.</p>
       <p class="hint"><b>Export for REAPER:</b> In the Download card, click "REAPER Icons" to get toolbar icon strips (normal, hover and active in one PNG) as a ZIP that mirrors REAPER's toolbar_icons folder, with the 150 and 200 hi-DPI copies. Linked on states become a matching name_on strip, so you assign the base icon and REAPER finds the on state. Tick "REAPER hover and pressed colours" to pick the colour a button shows under the mouse and while it is clicked; Off is the Background colour. For a gap between toolbar buttons, add a Border and drag Border opacity to 0. Unzip it there, restart REAPER, and assign each icon in the toolbar editor.</p>
       <p class="hint"><b>On states:</b> In the Sets tab, under "On state", the presets make a button's on or active look. Pick Tint, Highlight, Invert, Dot or Colour and it adds a real, editable on state button to your set, linked to its button - then edit it with the cards on the left. Highlight lifts dark buttons brighter and deepens light ones, so it reads as active on any colour. REAPER export pairs it as name_on, no renaming. Each design card also has its own Invert tick next to its colour, to flip just that part. The swatch under those presets sets the colour used by Tint, Dot and Colour; Highlight and Invert have no colour of their own, so it greys out for them. Tint and Highlight change solid and gradient backgrounds; Invert, Dot and Colour work on any background, including images.</p>
@@ -413,7 +459,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair, Cockos or Apple. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=149"></script>
-<script type="module" src="js/app.js?v=149"></script>
+<script src="vendor/jszip.min.js?v=150"></script>
+<script type="module" src="js/app.js?v=150"></script>
 </body>
 </html>

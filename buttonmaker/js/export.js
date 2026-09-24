@@ -1,8 +1,8 @@
-import { state, primarySelection, defaultTextLayer } from './state.js?v=149';
-import { renderToDataUrl, renderDesign } from './renderer.js?v=149';
-import { seriesVariants, variantFileName } from './series.js?v=149';
-import { downloadBlob } from './presets.js?v=149';
-import { buildCompanionPage } from './companion.js?v=149';
+import { state, primarySelection, defaultTextLayer, isWide } from './state.js?v=150';
+import { renderToDataUrl, renderDesign } from './renderer.js?v=150';
+import { seriesVariants, variantFileName } from './series.js?v=150';
+import { downloadBlob } from './presets.js?v=150';
+import { buildCompanionPage } from './companion.js?v=150';
 
 const SS = 4;
 const STATE_LIFT = [0, 0.05, 0.12];
@@ -21,19 +21,19 @@ function dataUrlToBlob(dataUrl) {
   return new Blob([arr], { type: mime });
 }
 
-function overlay(ctx, size, color, alpha) {
+function overlay(ctx, w, h, color, alpha) {
   if (!alpha) return;
   ctx.save();
   ctx.globalCompositeOperation = 'source-atop';
   ctx.globalAlpha = alpha;
   ctx.fillStyle = color;
-  ctx.fillRect(0, 0, size, size);
+  ctx.fillRect(0, 0, w, h);
   ctx.restore();
 }
 
-async function renderCell(design, cellSize, bgColour) {
+async function renderCell(design, cellSize, bgColour, wide) {
   const off = document.createElement('canvas');
-  off.width = cellSize * SS;
+  off.width = cellSize * SS * (wide ? 2 : 1);
   off.height = cellSize * SS;
   let d = design;
   if (bgColour) {
@@ -43,29 +43,30 @@ async function renderCell(design, cellSize, bgColour) {
   return off;
 }
 
-export async function buildStrip(design, cellSize, stateColours) {
+export async function buildStrip(design, cellSize, stateColours, wide = isWide(design)) {
   const custom = stateColours && stateColours.custom ? [null, stateColours.hover, stateColours.pressed] : null;
-  const off = await renderCell(design, cellSize);
+  const cellW = wide ? cellSize * 2 : cellSize;
+  const off = await renderCell(design, cellSize, undefined, wide);
 
   const strip = document.createElement('canvas');
-  strip.width = cellSize * 3;
+  strip.width = cellW * 3;
   strip.height = cellSize;
   const sctx = strip.getContext('2d');
 
   for (let c = 0; c < 3; c++) {
     const cell = document.createElement('canvas');
-    cell.width = cellSize;
+    cell.width = cellW;
     cell.height = cellSize;
     const cctx = cell.getContext('2d');
     cctx.imageSmoothingEnabled = true;
     cctx.imageSmoothingQuality = 'high';
     if (custom && custom[c]) {
-      cctx.drawImage(await renderCell(design, cellSize, custom[c]), 0, 0, cellSize, cellSize);
+      cctx.drawImage(await renderCell(design, cellSize, custom[c], wide), 0, 0, cellW, cellSize);
     } else {
-      cctx.drawImage(off, 0, 0, cellSize, cellSize);
-      overlay(cctx, cellSize, '#ffffff', STATE_LIFT[c]);
+      cctx.drawImage(off, 0, 0, cellW, cellSize);
+      overlay(cctx, cellW, cellSize, '#ffffff', STATE_LIFT[c]);
     }
-    sctx.drawImage(cell, c * cellSize, 0);
+    sctx.drawImage(cell, c * cellW, 0);
   }
   return strip;
 }
@@ -130,7 +131,7 @@ export async function buildReaperZip(zip, variants, links, stateColours) {
       const base = await buildStrip(v.design, s.cell, stateColours);
       zip.file('toolbar_icons/' + s.dir + name + '.png', base.toDataURL('image/png').split(',')[1], { base64: true });
       if (onIdx !== undefined && variants[onIdx]) {
-        const on = await buildStrip(variants[onIdx].design, s.cell);
+        const on = await buildStrip(variants[onIdx].design, s.cell, undefined, isWide(v.design));
         zip.file('toolbar_icons/' + s.dir + name + '_on.png', on.toDataURL('image/png').split(',')[1], { base64: true });
       }
     }
@@ -142,12 +143,16 @@ const PREVIEW_CELL = 96;
 
 export async function renderReaperCells(design, isOnState) {
   const strip = await buildStrip(design, PREVIEW_CELL, isOnState ? null : state.design.reaper);
+  const cellW = strip.width / 3;
+  const cells = document.getElementById('reaperCells');
+  if (cells) cells.classList.toggle('wide', cellW > PREVIEW_CELL);
   ['reaperCellOff', 'reaperCellHover', 'reaperCellPressed'].forEach((id, c) => {
     const el = document.getElementById(id);
     if (!el) return;
+    if (el.width !== cellW) el.width = cellW;
     const ctx = el.getContext('2d');
     ctx.clearRect(0, 0, el.width, el.height);
-    ctx.drawImage(strip, c * PREVIEW_CELL, 0, PREVIEW_CELL, PREVIEW_CELL, 0, 0, el.width, el.height);
+    ctx.drawImage(strip, c * cellW, 0, cellW, PREVIEW_CELL, 0, 0, el.width, el.height);
   });
 }
 

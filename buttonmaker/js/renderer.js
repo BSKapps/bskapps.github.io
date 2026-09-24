@@ -1,4 +1,5 @@
-import { invertHex } from './color.js?v=149';
+import { invertHex } from './color.js?v=150';
+import { isWide } from './state.js?v=150';
 
 const imageCache = new Map();
 const CACHE_MAX = 80;
@@ -98,87 +99,188 @@ function squirclePath(ctx, cx, cy, rx, ry) {
   ctx.closePath();
 }
 
+function rotationPad(W, H) {
+  return W === H ? W * 0.21 : (Math.hypot(W, H) - Math.min(W, H)) / 2;
+}
+
+function newLayer(ctx, W, H) {
+  const layer = document.createElement('canvas');
+  layer.width = W;
+  layer.height = H;
+  const lctx = layer.getContext('2d');
+  lctx.setTransform(ctx.getTransform());
+  return { layer, lctx };
+}
+
+function shadowOnly(source, blur, dx, dy, color) {
+  const w = source.width;
+  const out = document.createElement('canvas');
+  out.width = w * 2;
+  out.height = source.height;
+  const o = out.getContext('2d');
+  o.shadowColor = color;
+  o.shadowBlur = blur;
+  o.shadowOffsetX = dx - w;
+  o.shadowOffsetY = dy;
+  o.drawImage(source, w, 0);
+  return out;
+}
+
+function compositeWithShadow(ctx, layer, kind, color, px, alpha) {
+  const glow = kind === 'glow';
+  const shadow = glow ? shadowOnly(layer, px * 0.3, 0, 0, color) : shadowOnly(layer, px * 0.1, px * 0.07, px * 0.07, color);
+  const w = layer.width;
+  const h = layer.height;
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalAlpha = alpha;
+  ctx.drawImage(shadow, 0, 0, w, h, 0, 0, w, h);
+  if (glow) ctx.drawImage(shadow, 0, 0, w, h, 0, 0, w, h);
+  ctx.drawImage(layer, 0, 0);
+  ctx.restore();
+}
+
+function drawFinish(ctx, finish, W, H, radius, squircle) {
+  if (!finish || finish === 'none') return;
+  ctx.save();
+  if (finish === 'gloss') {
+    const g = ctx.createLinearGradient(0, 0, 0, H * 0.5);
+    g.addColorStop(0, 'rgba(255,255,255,0.34)');
+    g.addColorStop(1, 'rgba(255,255,255,0.06)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(W, 0);
+    ctx.lineTo(W, H * 0.4);
+    ctx.quadraticCurveTo(W / 2, H * 0.58, 0, H * 0.4);
+    ctx.closePath();
+    ctx.fill();
+  } else if (finish === 'vignette') {
+    const g = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.hypot(W, H) / 2);
+    g.addColorStop(0.45, 'rgba(0,0,0,0)');
+    g.addColorStop(1, 'rgba(0,0,0,0.6)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+  } else if (finish === 'spotlight') {
+    const g = ctx.createRadialGradient(W / 2, H * 0.12, 0, W / 2, H * 0.12, Math.max(W, H) * 0.75);
+    g.addColorStop(0, 'rgba(255,255,255,0.38)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+  } else if (finish === 'inner') {
+    const m = Math.ceil(H * 0.5);
+    const frame = document.createElement('canvas');
+    frame.width = W + m * 2;
+    frame.height = H + m * 2;
+    const f = frame.getContext('2d');
+    f.fillStyle = '#000000';
+    f.fillRect(0, 0, frame.width, frame.height);
+    f.globalCompositeOperation = 'destination-out';
+    f.translate(m, m);
+    if (squircle) {
+      squirclePath(f, W / 2, H / 2, W / 2, H / 2);
+    } else if (radius > 0) {
+      roundedPath(f, 0, 0, W, H, radius);
+    } else {
+      f.beginPath();
+      f.rect(0, 0, W, H);
+    }
+    f.fill();
+    ctx.drawImage(shadowOnly(frame, H * 0.16, 0, 0, 'rgba(0,0,0,0.75)'), 0, 0, frame.width, frame.height, -m, -m, frame.width, frame.height);
+  }
+  ctx.restore();
+}
+
 export async function renderDesign(canvas, design, opts = {}) {
-  const size = canvas.width;
+  const W = canvas.width;
+  const H = canvas.height;
+  const size = H;
   const u = size / 72;
   const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, size, size);
+  ctx.clearRect(0, 0, W, H);
   ctx.save();
 
   const radius = (design.shape.radius / 100) * size;
   if (design.shape.squircle) {
-    squirclePath(ctx, size / 2, size / 2, size / 2, size / 2);
+    squirclePath(ctx, W / 2, H / 2, W / 2, H / 2);
     ctx.clip();
   } else if (radius > 0) {
-    roundedPath(ctx, 0, 0, size, size, radius);
+    roundedPath(ctx, 0, 0, W, H, radius);
     ctx.clip();
   }
 
   const faceRot = (((design.shape.rotation || 0) % 360) * Math.PI) / 180;
-  const pad = faceRot ? size * 0.21 : 0;
+  const pad = faceRot ? rotationPad(W, H) : 0;
   ctx.save();
   if (faceRot) {
-    ctx.translate(size / 2, size / 2);
+    ctx.translate(W / 2, H / 2);
     ctx.rotate(faceRot);
-    ctx.translate(-size / 2, -size / 2);
+    ctx.translate(-W / 2, -H / 2);
   }
 
   const bg = design.bg;
   const bgInv = bg.invert ? invertHex : (h) => h;
   const bgAlpha = (bg.opacity === undefined ? 100 : bg.opacity) / 100;
   if (bg.mode === 'gradient') {
-    const a = ((bg.angle - 90) * Math.PI) / 180;
-    const cx = size / 2;
-    const cy = size / 2;
-    const len = size * 0.75;
-    const g = ctx.createLinearGradient(
-      cx - Math.cos(a) * len,
-      cy - Math.sin(a) * len,
-      cx + Math.cos(a) * len,
-      cy + Math.sin(a) * len
-    );
+    let g;
+    if (bg.radial) {
+      g = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.hypot(W, H) / 2);
+    } else {
+      const a = ((bg.angle - 90) * Math.PI) / 180;
+      const cx = W / 2;
+      const cy = H / 2;
+      const ac = Math.abs(Math.cos(a));
+      const as = Math.abs(Math.sin(a));
+      const len = W === H ? size * 0.75 : (0.75 * (W * ac + H * as)) / (ac + as);
+      g = ctx.createLinearGradient(
+        cx - Math.cos(a) * len,
+        cy - Math.sin(a) * len,
+        cx + Math.cos(a) * len,
+        cy + Math.sin(a) * len
+      );
+    }
     const blend = bg.blend === undefined ? 100 : bg.blend;
     g.addColorStop(Math.max(0, 0.5 - blend / 200), bgInv(bg.gradFrom));
     g.addColorStop(Math.min(1, 0.5 + blend / 200), bgInv(bg.gradTo));
     ctx.globalAlpha = bgAlpha;
     ctx.fillStyle = g;
-    ctx.fillRect(-pad, -pad, size + pad * 2, size + pad * 2);
+    ctx.fillRect(-pad, -pad, W + pad * 2, H + pad * 2);
     ctx.globalAlpha = 1;
   } else if (bg.mode === 'image' && bg.imageData) {
     ctx.fillStyle = '#000000';
-    ctx.fillRect(-pad, -pad, size + pad * 2, size + pad * 2);
+    ctx.fillRect(-pad, -pad, W + pad * 2, H + pad * 2);
     try {
       const img = await loadImage(bg.imageData);
       const imgRot = ((bg.imageRotation || 0) * Math.PI) / 180;
-      const ipad = imgRot || faceRot ? size * 0.21 : 0;
+      const ipad = imgRot || faceRot ? rotationPad(W, H) : 0;
       ctx.save();
       if (bg.invert) ctx.filter = 'invert(1)';
       if (imgRot) {
-        ctx.translate(size / 2, size / 2);
+        ctx.translate(W / 2, H / 2);
         ctx.rotate(imgRot);
-        ctx.translate(-size / 2, -size / 2);
+        ctx.translate(-W / 2, -H / 2);
       }
-      if (bg.imageFit === 'contain') drawFitted(ctx, img, 0, size, bg.imageFit);
-      else drawFitted(ctx, img, -ipad, size + ipad * 2, bg.imageFit);
+      if (bg.imageFit === 'contain') drawFitted(ctx, img, 0, 0, W, H, bg.imageFit);
+      else drawFitted(ctx, img, -ipad, -ipad, W + ipad * 2, H + ipad * 2, bg.imageFit);
       ctx.restore();
     } catch (e) {}
     if (bg.imageDim > 0) {
       ctx.fillStyle = 'rgba(0,0,0,' + bg.imageDim / 100 + ')';
-      ctx.fillRect(-pad, -pad, size + pad * 2, size + pad * 2);
+      ctx.fillRect(-pad, -pad, W + pad * 2, H + pad * 2);
     }
   } else {
     ctx.globalAlpha = bgAlpha;
     ctx.fillStyle = bgInv(bg.color);
-    ctx.fillRect(-pad, -pad, size + pad * 2, size + pad * 2);
+    ctx.fillRect(-pad, -pad, W + pad * 2, H + pad * 2);
     ctx.globalAlpha = 1;
   }
 
   const zoom = (design.shape.zoom === undefined ? 100 : design.shape.zoom) / 100;
   ctx.save();
   if (zoom !== 1) {
-    ctx.translate(size / 2, size / 2);
+    ctx.translate(W / 2, H / 2);
     ctx.scale(zoom, zoom);
-    ctx.translate(-size / 2, -size / 2);
+    ctx.translate(-W / 2, -H / 2);
   }
 
   const icons = design.icons || (design.icon ? [design.icon] : []);
@@ -210,10 +312,12 @@ export async function renderDesign(canvas, design, opts = {}) {
       const [iah, iav] = (icon.align || 'center:center').split(':');
       const room = 50 - icon.size / 2;
       const iaoff = Math.min(40, room >= 0 ? room : -room);
-      const iax = iah === 'left' ? -iaoff : iah === 'right' ? iaoff : 0;
+      const roomX = 50 - (icon.size * (H / W)) / 2;
+      const iaoffX = Math.min(50 - 10 * (H / W), roomX >= 0 ? roomX : -roomX);
+      const iax = iah === 'left' ? -iaoffX : iah === 'right' ? iaoffX : 0;
       const iay = iav === 'top' ? -iaoff : iav === 'bottom' ? iaoff : 0;
-      let x = size / 2 - w / 2 + ((iax + (icon.x || 0)) / 100) * size;
-      let y = size / 2 - h / 2 + ((iay + (icon.y || 0)) / 100) * size;
+      let x = W / 2 - w / 2 + ((iax + (icon.x || 0)) / 100) * W;
+      let y = H / 2 - h / 2 + ((iay + (icon.y || 0)) / 100) * H;
       if (icon.contentCenter) {
         const cc = contentCentre(img, src);
         if (cc) {
@@ -222,19 +326,28 @@ export async function renderDesign(canvas, design, opts = {}) {
           y -= (cc.cy - 0.5) * h;
         }
       }
-      ctx.globalAlpha = (icon.opacity === undefined ? 100 : icon.opacity) / 100;
+      const iconAlpha = (icon.opacity === undefined ? 100 : icon.opacity) / 100;
+      const ishadow = icon.shadow && icon.shadow !== 'none' ? icon.shadow : null;
+      let ic = ctx;
+      let ilayer = null;
+      if (ishadow) {
+        ({ layer: ilayer, lctx: ic } = newLayer(ctx, W, H));
+      } else {
+        ctx.globalAlpha = iconAlpha;
+      }
       const rot = ((icon.rotation || 0) * Math.PI) / 180;
       if (rot || icon.reverse) {
-        ctx.save();
-        ctx.translate(x + w / 2, y + h / 2);
-        if (rot) ctx.rotate(rot);
-        if (icon.reverse) ctx.scale(-1, 1);
-        ctx.drawImage(img, -w / 2, -h / 2, w, h);
-        ctx.restore();
+        ic.save();
+        ic.translate(x + w / 2, y + h / 2);
+        if (rot) ic.rotate(rot);
+        if (icon.reverse) ic.scale(-1, 1);
+        ic.drawImage(img, -w / 2, -h / 2, w, h);
+        ic.restore();
       } else {
-        ctx.drawImage(img, x, y, w, h);
+        ic.drawImage(img, x, y, w, h);
       }
-      ctx.globalAlpha = 1;
+      if (ishadow) compositeWithShadow(ctx, ilayer, ishadow, icon.shadowColor || '#000000', s * zoom * 0.6, iconAlpha);
+      else ctx.globalAlpha = 1;
     } catch (e) {}
   }
 
@@ -244,88 +357,96 @@ export async function renderDesign(canvas, design, opts = {}) {
       try {
         await document.fonts.load(text.weight + ' 16px "' + text.font + '"', text.value);
       } catch (e) {}
-      ctx.globalAlpha = (text.opacity === undefined ? 100 : text.opacity) / 100;
-      ctx.fillStyle = text.invert ? invertHex(text.color) : text.color;
+      const textAlpha = (text.opacity === undefined ? 100 : text.opacity) / 100;
+      const tshadow = text.shadow && text.shadow !== 'none' ? text.shadow : null;
+      let tc = ctx;
+      let tlayer = null;
+      if (tshadow) ({ layer: tlayer, lctx: tc } = newLayer(ctx, W, H));
+      tc.globalAlpha = tshadow ? 1 : textAlpha;
+      tc.fillStyle = text.invert ? invertHex(text.color) : text.color;
       const ow = (text.outline || 0) * u;
       if (ow) {
-        ctx.strokeStyle = text.invert ? invertHex(text.outlineColor || '#000000') : (text.outlineColor || '#000000');
-        ctx.lineWidth = ow * 2;
-        ctx.lineJoin = 'round';
+        tc.strokeStyle = text.invert ? invertHex(text.outlineColor || '#000000') : (text.outlineColor || '#000000');
+        tc.lineWidth = ow * 2;
+        tc.lineJoin = 'round';
       }
-      ctx.font = text.weight + ' ' + text.size * u + 'px "' + text.font + '", sans-serif';
+      tc.font = text.weight + ' ' + text.size * u + 'px "' + text.font + '", sans-serif';
       const [h, v] = text.align.split(':');
-      ctx.textAlign = h === 'left' ? 'left' : h === 'right' ? 'right' : 'center';
+      tc.textAlign = h === 'left' ? 'left' : h === 'right' ? 'right' : 'center';
       const pad = 5 * u;
-      const x = h === 'left' ? pad : h === 'right' ? size - pad : size / 2;
+      const x = h === 'left' ? pad : h === 'right' ? W - pad : W / 2;
       const lines = text.value.split('\n');
       const lineHeight = text.size * u * 1.15;
       let startY;
       if (v === 'top') {
-        ctx.textBaseline = 'top';
+        tc.textBaseline = 'top';
         startY = pad;
       } else if (v === 'center') {
-        ctx.textBaseline = 'middle';
-        startY = size / 2 - ((lines.length - 1) * lineHeight) / 2;
+        tc.textBaseline = 'middle';
+        startY = H / 2 - ((lines.length - 1) * lineHeight) / 2;
         if (lines.length === 1) {
-          ctx.textBaseline = 'alphabetic';
-          const m = ctx.measureText(lines[0]);
+          tc.textBaseline = 'alphabetic';
+          const m = tc.measureText(lines[0]);
           if (m.actualBoundingBoxAscent !== undefined) {
-            startY = size / 2 + (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2;
+            startY = H / 2 + (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2;
           } else {
-            ctx.textBaseline = 'middle';
+            tc.textBaseline = 'middle';
           }
         }
       } else {
-        ctx.textBaseline = 'bottom';
-        startY = size - pad - (lines.length - 1) * lineHeight;
+        tc.textBaseline = 'bottom';
+        startY = H - pad - (lines.length - 1) * lineHeight;
       }
-      const ox = ((text.x || 0) / 100) * size;
-      const oy = ((text.y || 0) / 100) * size;
+      const ox = ((text.x || 0) / 100) * W;
+      const oy = ((text.y || 0) / 100) * H;
       const rot = ((text.rotation || 0) * Math.PI) / 180;
       if (rot) {
         let maxW = 0;
-        for (const line of lines) maxW = Math.max(maxW, ctx.measureText(line).width);
-        const px = (h === 'left' ? pad + maxW / 2 : h === 'right' ? size - pad - maxW / 2 : size / 2) + ox;
+        for (const line of lines) maxW = Math.max(maxW, tc.measureText(line).width);
+        const px = (h === 'left' ? pad + maxW / 2 : h === 'right' ? W - pad - maxW / 2 : W / 2) + ox;
         let py;
         if (v === 'center') {
-          py = size / 2 + oy;
+          py = H / 2 + oy;
         } else {
           py = startY + ((lines.length - 1) * lineHeight) / 2 + oy;
           if (v === 'top') py += (text.size * u) / 2;
           else py -= (text.size * u) / 2;
         }
-        ctx.save();
-        ctx.translate(px, py);
-        ctx.rotate(rot);
-        ctx.translate(-px, -py);
+        tc.save();
+        tc.translate(px, py);
+        tc.rotate(rot);
+        tc.translate(-px, -py);
       }
       const bend = text.bend || 0;
       if (bend && lines.length === 1) {
         const line = lines[0];
-        const lineW = ctx.measureText(line).width;
-        const ax = (h === 'left' ? pad + lineW / 2 : h === 'right' ? size - pad - lineW / 2 : size / 2) + ox;
-        const ay = (v === 'top' ? pad + (text.size * u) / 2 : v === 'bottom' ? size - pad - (text.size * u) / 2 : size / 2) + oy;
-        drawArcText(ctx, line, bend, ax, ay, ow);
+        const lineW = tc.measureText(line).width;
+        const ax = (h === 'left' ? pad + lineW / 2 : h === 'right' ? W - pad - lineW / 2 : W / 2) + ox;
+        const ay = (v === 'top' ? pad + (text.size * u) / 2 : v === 'bottom' ? H - pad - (text.size * u) / 2 : H / 2) + oy;
+        drawArcText(tc, line, bend, ax, ay, ow);
       } else {
         lines.forEach((line, i) => {
           let dx = 0;
           if (h === 'center') {
-            const m = ctx.measureText(line);
+            const m = tc.measureText(line);
             if (m.actualBoundingBoxLeft !== undefined) {
               dx = (m.actualBoundingBoxLeft - m.actualBoundingBoxRight) / 2;
             }
           }
-          if (ow) ctx.strokeText(line, x + dx + ox, startY + i * lineHeight + oy);
-          ctx.fillText(line, x + dx + ox, startY + i * lineHeight + oy);
+          if (ow) tc.strokeText(line, x + dx + ox, startY + i * lineHeight + oy);
+          tc.fillText(line, x + dx + ox, startY + i * lineHeight + oy);
         });
       }
-      if (rot) ctx.restore();
-      ctx.globalAlpha = 1;
+      if (rot) tc.restore();
+      if (tshadow) compositeWithShadow(ctx, tlayer, tshadow, text.shadowColor || '#000000', text.size * u * zoom, textAlpha);
+      else ctx.globalAlpha = 1;
     }
   }
 
   ctx.restore();
   ctx.restore();
+
+  drawFinish(ctx, design.bg.finish, W, H, radius, design.shape.squircle);
 
   if (design.shape.border > 0) {
     const bw = design.shape.border * u;
@@ -336,28 +457,28 @@ export async function renderDesign(canvas, design, opts = {}) {
     const borderAlpha = (design.shape.borderOpacity === undefined ? 100 : design.shape.borderOpacity) / 100;
     const strokeBorder = () => {
       if (allEdges && design.shape.squircle) {
-        squirclePath(ctx, size / 2, size / 2, (size - bw) / 2, (size - bw) / 2);
+        squirclePath(ctx, W / 2, H / 2, (W - bw) / 2, (H - bw) / 2);
         ctx.stroke();
       } else if (allEdges && radius > 0) {
-        roundedPath(ctx, bw / 2, bw / 2, size - bw, size - bw, Math.max(0, radius - bw / 2));
+        roundedPath(ctx, bw / 2, bw / 2, W - bw, H - bw, Math.max(0, radius - bw / 2));
         ctx.stroke();
       } else if (allEdges) {
-        ctx.strokeRect(bw / 2, bw / 2, size - bw, size - bw);
+        ctx.strokeRect(bw / 2, bw / 2, W - bw, H - bw);
       } else {
         ctx.save();
         if (design.shape.squircle) {
-          squirclePath(ctx, size / 2, size / 2, size / 2, size / 2);
+          squirclePath(ctx, W / 2, H / 2, W / 2, H / 2);
           ctx.clip();
         } else if (radius > 0) {
-          roundedPath(ctx, 0, 0, size, size, radius);
+          roundedPath(ctx, 0, 0, W, H, radius);
           ctx.clip();
         }
         const o = bw / 2;
         ctx.beginPath();
-        if (e.top) { ctx.moveTo(0, o); ctx.lineTo(size, o); }
-        if (e.bottom) { ctx.moveTo(0, size - o); ctx.lineTo(size, size - o); }
-        if (e.left) { ctx.moveTo(o, 0); ctx.lineTo(o, size); }
-        if (e.right) { ctx.moveTo(size - o, 0); ctx.lineTo(size - o, size); }
+        if (e.top) { ctx.moveTo(0, o); ctx.lineTo(W, o); }
+        if (e.bottom) { ctx.moveTo(0, H - o); ctx.lineTo(W, H - o); }
+        if (e.left) { ctx.moveTo(o, 0); ctx.lineTo(o, H); }
+        if (e.right) { ctx.moveTo(W - o, 0); ctx.lineTo(W - o, H); }
         ctx.stroke();
         ctx.restore();
       }
@@ -407,27 +528,27 @@ function drawArcText(ctx, line, bend, ax, ay, ow) {
   ctx.textBaseline = prevBaseline;
 }
 
-function drawFitted(ctx, img, off, size, fit) {
+function drawFitted(ctx, img, x, y, w, h, fit) {
   if (fit === 'stretch') {
-    ctx.drawImage(img, off, off, size, size);
+    ctx.drawImage(img, x, y, w, h);
     return;
   }
   const ratio = img.width / img.height;
-  let w = size;
-  let h = size;
+  let dw = w;
+  let dh = h;
   if (fit === 'cover') {
-    if (ratio > 1) w = size * ratio;
-    else h = size / ratio;
+    if (ratio > w / h) dw = h * ratio;
+    else dh = w / ratio;
   } else {
-    if (ratio > 1) h = size / ratio;
-    else w = size * ratio;
+    if (ratio > w / h) dh = w / ratio;
+    else dw = h * ratio;
   }
-  ctx.drawImage(img, off + (size - w) / 2, off + (size - h) / 2, w, h);
+  ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
 }
 
 export async function renderToDataUrl(design, size, opts = {}) {
   const canvas = document.createElement('canvas');
-  canvas.width = size;
+  canvas.width = isWide(design) ? size * 2 : size;
   canvas.height = size;
   await renderDesign(canvas, design, opts);
   return canvas.toDataURL('image/png');
