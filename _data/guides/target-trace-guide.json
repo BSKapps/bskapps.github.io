@@ -193,7 +193,7 @@
             "**Lining up:** drag the overlay to move it, and drag its edges or corners to stretch it, until the blue **100**, **1k** and **10k** guides sit on the other app's 100 Hz, 1 kHz and 10 kHz lines and the dashed centre line sits on its 0 dB line.",
             "**Scale** sets the dB value at the top and bottom edges. LA Network Manager uses 24. **Level** moves the trace up or down.",
             "**Invert** flips the trace upside down, so a peak shows as a dip your EQ cut can follow. An inverted trace turns magenta and shows an **INVERTED** tag; a normal trace is yellow.",
-            "**Lock** hides the guides and controls and lets clicks go straight through to the app underneath. To move it again, open Live Grab and press **Unlock** in the Overlay card. **Close** removes it, and so does **Disconnect**.",
+            "**Lock** hides the guides and controls and lets clicks go straight through to the app underneath. To move it again, open Live Grab and press **Unlock** in the Overlay card. **Close** removes it.",
             "The overlay uses the same **Detail** setting as the reference line and remembers where you left it. An RTA trace is centred on 0 dB automatically. If Smaart stops sending, the trace dims and shows **Waiting for Smaart** until it comes back."
           ]
         }
