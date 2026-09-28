@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Stimulus user guide - BSK Apps",
     "h1": "Stimulus user guide",
-    "dateLine": "Updated for version 1.3",
+    "dateLine": "Updated for version 1.4",
     "description": "A how-to guide for Stimulus: tones, sweeps with hold and scrub, harmonics, noise with band limiting and burst, the Stereo ID and GLITS channel idents, polarity pops, analyzer-matched measurement signals, mixing four generators, and exporting test files.",
     "canonical": "https://bskapps.com/articles/stimulus-guide/",
     "ogTitle": "Stimulus user guide",
