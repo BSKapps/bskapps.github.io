@@ -62,7 +62,7 @@
                 <li><strong>DHCP Reserved</strong> - keeps your current address but takes subnet and gateway automatically. Click it, enter the address to hold, then Apply.</li>
                 <li><strong>Static IP</strong> - enter IP, subnet mask and gateway, then Apply. The subnet defaults to 255.255.255.0 and the gateway is optional.</li>
                 <li><strong>IPv4: Off</strong> - switches IPv4 off on this adapter while leaving the link and IPv6 up, so it stays connected but takes no part in IPv4. Use it to keep an adapter on the network (internet over IPv6, AirPlay, Wi-Fi location) while removing it from IPv4 routing - handy in multi-adapter and AV/Dante systems where you want one interface to own IPv4 - or to stop self-assigned 169.254 addresses and IPv4 subnet or gateway clashes. It does not stop traffic; IPv6 keeps working. The adapter's status dot turns orange to show it is still live over IPv6, or red if there is no IPv6 either, so you can tell at a glance whether anything is still getting through.</li>
-                <li><strong>Renew DHCP</strong> - forces a fresh lease. You get a notice telling you whether the address changed.</li>
+                <li><strong>Renew DHCP</strong> - forces a fresh lease, and says so if no DHCP server answers. You get a notice telling you whether the address changed.</li>
                 <li><strong>Restore</strong> - after turning IPv4 off or applying a preset, returns the adapter to its previous settings.</li>
                 <li><strong>Add Address</strong> - puts a second address on a wired port as its own service, ordered below the first with no gateway. Use it when one switch carries two subnets, such as a Yamaha console's Mixer Control and Device Control, or auto-IP Dante gear beside static gear. The new service appears as its own adapter row; rename or delete it through Edit Service.</li>
             </ul>
@@ -83,7 +83,7 @@
             <ul>
                 <li><strong>Save</strong> - expand the adapter, click Save Current as Preset, name it. Saving while on DHCP creates a Reserved preset holding your current address.</li>
                 <li><strong>Apply</strong> - open the Presets submenu and click a preset. A filled dot marks the preset active on that adapter. A preset other adapters hold shows their ports, such as en8, in italics after its name (with a count when more than two); hover the row for the adapter names.</li>
-                <li><strong>Edit</strong> - Edit Presets (in the Presets flyout) lets you rename, change the IP, subnet and gateway, or delete a preset. Drag presets into your preferred order and the menu follows.</li>
+                <li><strong>Edit</strong> - Edit Presets (in the Presets flyout) lets you rename, change the IP, subnet and gateway, or delete a preset. The preset the adapter you opened it from is on is outlined. Drag presets into your preferred order and the menu follows.</li>
                 <li><strong>Restore</strong> - after applying a preset, a Restore item returns the adapter to its earlier settings.</li>
             </ul>
 
@@ -92,7 +92,7 @@
             <ul>
                 <li><strong>Create Location</strong> - name it, and tick "Copy all services from [current location]" if you want to start from your current setup. Duplicate names are rejected.</li>
                 <li><strong>Switch</strong> - open Network Locations and click one. Change notifications are held back for fifteen seconds so the switch does not spam alerts, whether you switch here or in System Settings.</li>
-                <li><strong>Edit Locations</strong> - rename or delete a location, or click New Location to add one. Renaming keeps all its services and settings.</li>
+                <li><strong>Edit Locations</strong> - rename or delete a location, click New Location to add one, or select a location and click Switch to move to it. Renaming keeps all its services and settings.</li>
                 <li><strong>Edit Services</strong> - open it here, or from Edit Service in any adapter's flyout. Drag services to set their priority, rename or delete a service, or click Add Service to add one for new hardware. Each row's switch shows or hides that service in the menu straight away; one service always stays visible. Every row shows its port, such as en8, so two services with the same name on different ports can be told apart, and a long name scrolls when you hover it. The service you opened it from is outlined so you can find it in a long list, and a greyed name is marked (hidden) or (inactive) to say why it is not in the menu. A new order is written to the system when you click Apply.</li>
             </ul>
             <p>Each location keeps its own hidden and expanded services, and renaming a location keeps its preset ticks and Restore rows. Show Inactive Services sits at the top of Edit Services. Off (the default), an inactive adapter leaves the menu until it comes back, and a Show N Inactive Adapters row at the foot of the menu brings them back in one click. On, an inactive adapter stays in the menu greyed-out so you can still pre-set it - apply a preset or a static IP ready for when it reconnects.</p>
