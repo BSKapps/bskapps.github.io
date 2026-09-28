@@ -194,7 +194,7 @@
             "**Scale** sets the dB value at the top and bottom edges. LA Network Manager uses 24. **Level** moves the trace up or down.",
             "**Invert** flips the trace upside down, so a peak shows as a dip your EQ cut can follow. An inverted trace turns magenta and shows an **INVERTED** tag; a normal trace is yellow.",
             "**Hold** freezes a live trace where it is and shows a **HELD** tag. A saved curve shows a **SAVED** tag and never changes.",
-            "**Show** hides the trace and its name without closing it, and ticking it brings the trace straight back. **Control-Option-F** does the same from any app while the floating trace is open, so you never have to leave LA Network Manager.",
+            "**Show** hides the trace and its name without closing it, and ticking it brings the trace straight back. **Control-Option-F** does the same from any app while the floating trace is open, unless another app already uses that shortcut.",
             "**Lock** hides the guides and lets clicks go straight through to the app underneath. A small bar stays in the corner with **Show**, **Invert**, **Hold**, **Lock** and **Close**; untick **Lock** to move it again. **Close** removes the floating trace.",
             "A live trace uses the same **Detail** setting as the reference line, and an RTA trace is centred on 0 dB automatically. The floating trace remembers where you left it. If Smaart stops sending, the trace dims and shows **Waiting for Smaart** until it comes back."
           ]
