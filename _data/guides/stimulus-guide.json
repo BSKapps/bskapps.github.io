@@ -108,7 +108,7 @@
         },
         {
           "type": "paragraph",
-          "text": "**Band limit** restricts any colour to one octave or 1/3 octave around a centre frequency - set the centre with the frequency controls that appear. Band-limited pink on a sub is the classic use."
+          "text": "**Band limit** restricts any colour to one octave or 1/3 octave around a centre frequency - set the centre with the frequency controls below, greyed until a band is picked. Band-limited pink on a sub is the classic use."
         },
         {
           "type": "paragraph",
