@@ -180,6 +180,26 @@
       ]
     },
     {
+      "id": "overlay-window",
+      "title": "Overlay on other apps",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "**Overlay** next to any running measurement in Live Grab shows that trace live in a see-through window that floats over every app. Lay it on another program's EQ graph, such as the EQ page in LA Network Manager, and shape your EQ against the real measurement. The overlay only draws; it never changes anything in the other app."
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "**Lining up:** drag the overlay to move it, and drag its edges or corners to stretch it, until the blue **100**, **1k** and **10k** guides sit on the other app's 100 Hz, 1 kHz and 10 kHz lines and the dashed centre line sits on its 0 dB line.",
+            "**Scale** sets the dB value at the top and bottom edges. LA Network Manager uses 24. **Level** moves the trace up or down.",
+            "**Invert** flips the trace upside down, so a peak shows as a dip your EQ cut can follow. An inverted trace turns magenta and shows an **INVERTED** tag; a normal trace is yellow.",
+            "**Lock** hides the guides and controls and lets clicks go straight through to the app underneath. To move it again, open Live Grab and press **Unlock** in the Overlay card. **Close** removes it, and so does **Disconnect**.",
+            "The overlay uses the same **Detail** setting as the reference line and remembers where you left it. An RTA trace is centred on 0 dB automatically. If Smaart stops sending, the trace dims and shows **Waiting for Smaart** until it comes back."
+          ]
+        }
+      ]
+    },
+    {
       "id": "point-spacing",
       "title": "Point spacing",
       "blocks": [
@@ -195,7 +215,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Press Cmd-S to save. The dialog offers two formats: **Smaart (.crv)** keeps all the metadata (colour, type, tolerance, smoothing band) and the points; **REW House Curve (.txt)** writes just the frequency and dB columns for use in REW. Saving into your Smaart TargetCurves folder updates the library automatically. REW .txt files are an export only and cannot be loaded back in. Closing the window or quitting with unsaved changes asks first."
+          "text": "Press Cmd-S to save. The dialog offers two formats: **Smaart (.crv)** keeps all the metadata (colour, type, tolerance, smoothing band) and the points; **REW House Curve (.txt)** writes just the frequency and dB columns for use in REW. Saving into your Smaart TargetCurves folder updates the library automatically. REW .txt files are an export only and cannot be loaded back in, so exporting one does not count as saving the curve. Closing the window or quitting with unsaved changes asks first."
         },
         {
           "type": "paragraph",
