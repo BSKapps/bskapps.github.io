@@ -180,21 +180,22 @@
       ]
     },
     {
-      "id": "overlay-window",
-      "title": "Overlay on other apps",
+      "id": "floating-trace",
+      "title": "Floating Trace",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "**Overlay** next to any running measurement in Live Grab shows that trace live in a see-through window that floats over every app. Lay it on another program's EQ graph, such as the EQ page in LA Network Manager, and shape your EQ against the real measurement. The overlay only draws; it never changes anything in the other app."
+          "text": "**Float** next to any running measurement in Live Grab shows that trace live in a see-through window that floats over every app. Lay it on another program's EQ graph, such as the EQ page in LA Network Manager, and shape your EQ against the real measurement. The floating trace only draws; it never changes anything in the other app. To float a saved curve instead, right-click it in the library and choose **Float This Curve**."
         },
         {
           "type": "bullets",
           "items": [
-            "**Lining up:** drag the overlay to move it, and drag its edges or corners to stretch it, until the blue **100**, **1k** and **10k** guides sit on the other app's 100 Hz, 1 kHz and 10 kHz lines and the dashed centre line sits on its 0 dB line.",
+            "**Lining up:** drag the floating trace to move it, and drag its edges or corners to stretch it, until the blue **100**, **1k** and **10k** guides sit on the other app's 100 Hz, 1 kHz and 10 kHz lines and the dashed centre line sits on its 0 dB line.",
             "**Scale** sets the dB value at the top and bottom edges. LA Network Manager uses 24. **Level** moves the trace up or down.",
             "**Invert** flips the trace upside down, so a peak shows as a dip your EQ cut can follow. An inverted trace turns magenta and shows an **INVERTED** tag; a normal trace is yellow.",
-            "**Lock** hides the guides and controls and lets clicks go straight through to the app underneath. To move it again, open Live Grab and press **Unlock** in the Overlay card. **Close** removes it.",
-            "The overlay uses the same **Detail** setting as the reference line and remembers where you left it. An RTA trace is centred on 0 dB automatically. If Smaart stops sending, the trace dims and shows **Waiting for Smaart** until it comes back."
+            "**Hold** freezes a live trace where it is and shows a **HELD** tag. A saved curve shows a **SAVED** tag and never changes.",
+            "**Lock** hides the guides and lets clicks go straight through to the app underneath. A small bar stays in the corner with **Invert**, **Hold**, **Lock** and **Close**; untick **Lock** to move it again. **Close** removes the floating trace.",
+            "A live trace uses the same **Detail** setting as the reference line, and an RTA trace is centred on 0 dB automatically. The floating trace remembers where you left it. If Smaart stops sending, the trace dims and shows **Waiting for Smaart** until it comes back."
           ]
         }
       ]
