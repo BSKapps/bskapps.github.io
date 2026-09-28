@@ -192,6 +192,7 @@
           "items": [
             "**Lining up:** drag the floating trace to move it, and drag its edges or corners to stretch it, until the blue **100**, **1k** and **10k** guides sit on the other app's 100 Hz, 1 kHz and 10 kHz lines, and the dashed level lines sit on its level lines (+12, 0 and -12 at a Scale of 24).",
             "**Scale** sets the dB value at the top and bottom edges. LA Network Manager uses 24. **Level** moves the trace up or down.",
+            "**Blanking** hides a live TF trace wherever Smaart's coherence falls below the percentage you pick, the way Smaart's own coherence blanking does. It is set here, not read from Smaart, and it is greyed out for RTA traces and saved curves.",
             "**Invert** flips the trace upside down, so a peak shows as a dip your EQ cut can follow. An inverted trace turns magenta and shows an **INVERTED** tag; a normal trace is yellow.",
             "**Hold** freezes a live trace where it is and shows a **HELD** tag. A saved curve shows a **SAVED** tag and never changes.",
             "**Show** hides the trace and its name without closing it, and ticking it brings the trace straight back. **Control-Option-F** does the same from any app while the floating trace is open, unless another app already uses that shortcut.",
