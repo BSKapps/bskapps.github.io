@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Fetch Puppy user guide - BSK Apps",
     "h1": "Fetch Puppy user guide",
-    "dateLine": "Updated for version 2.7",
+    "dateLine": "Updated for version 2.8",
     "description": "A how-to guide for Fetch Puppy: the download modes, choosing audio and video formats, the queue, output folders, browser cookies, the download engine and settings.",
     "canonical": "https://bskapps.com/articles/fetch-puppy-guide/",
     "ogTitle": "Fetch Puppy user guide",
@@ -43,12 +43,12 @@
         {
           "type": "bullets",
           "items": [
-            "**Spotify** - playlists, albums and tracks. Public links work as-is; private playlists need your own Spotify API credentials (see Settings).",
+            "**Spotify** - playlists, albums and tracks, including spotify.link share links. Public links work as-is, up to the first 100 tracks of a playlist. Your own Spotify API credentials (see Settings) get every track, except on playlists made by Spotify, and are needed for private playlists.",
             "**Apple Music** - playlists, albums and songs, no account needed.",
-            "**YouTube** - videos, shorts and playlists. If a pasted link is both a video and a playlist, Fetch Puppy asks whether you want just the video or the whole playlist. Dragging one video out of a playlist skips the question and fetches just that video; use the playlist's own link when you want the lot.",
-            "**Social Media** - TikTok, Instagram, X, Facebook, Reddit, Vimeo, Twitch, Dailymotion and Snapchat Spotlight. Public posts download as-is; private and age-restricted ones need browser cookies (see Settings).",
-            "**CSV File** - drop a two-column Artist, Title CSV (or click Choose File); each row is matched and downloaded.",
-            "**Search** - type a title, get the top matches with thumbnails, then preview a match right in the app (ad-free, full-length playback with fullscreen) before you download. Live streams are marked Live and can't be previewed. Previewed results stay highlighted so you can find your way back to the one you want."
+            "**YouTube** - videos, shorts and playlists. If a pasted link is both a video and a playlist, Fetch Puppy asks whether you want just the video or the whole playlist. Dragging one video out of a playlist skips the question and fetches just that video; use the playlist's own link when you want the lot. Channel and page links are refused; open a video or playlist and use its link.",
+            "**Social Media** - TikTok, Instagram, X, Facebook, Reddit, Vimeo, Twitch, Dailymotion and Snapchat Spotlight. Public posts download as-is; private and age-restricted ones need browser cookies (see Settings). Profile links are refused; open the video and copy its link.",
+            "**CSV File** - drop a CSV with Artist and Title columns (or click Choose File); each row is matched and downloaded. To find tracks over 10 minutes, add a Duration column (m:ss) under a header row. The tab clears once the download starts.",
+            "**Search** - type a title, get the top matches with thumbnails, then preview a match right in the app (ad-free, full-length playback with fullscreen) before you download. Live streams are marked Live and can't be previewed or downloaded. Previewed results stay highlighted so you can find your way back to the one you want."
           ]
         }
       ]
@@ -91,7 +91,7 @@
         },
         {
           "type": "paragraph",
-          "text": "When an **Audio** track from Spotify or Apple Music cannot be matched exactly, Fetch Puppy still saves the nearest version it can find, tags the row **Closest match** and shows the length of the file you got rather than the length it was aiming for. That usually means a different live take or edit of the same song; hover the tag to see both lengths. Apple Music session and live versions that only exist on Apple Music get the same tag when a different recording is downloaded in their place. Checking the length needs a length to check against, so tracks from a CSV list are never tagged."
+          "text": "When an **Audio** track from Spotify, Apple Music or a CSV list cannot be matched exactly, Fetch Puppy still saves the nearest version it can find, tags the row **Closest match** and shows the length of the file you got. That usually means a different live take or edit of the same song, or a download whose title or artist only partly matches the track; hover the tag to see why. Apple Music session and live versions that only exist on Apple Music get the same tag when a different recording is downloaded in their place. A CSV row is only checked for length when the list has a Duration column."
         },
         {
           "type": "bullets",
@@ -99,7 +99,7 @@
             "**Cancel** a running or queued job from its header, or right-click its tab to cancel and remove it.",
             "**Retry** or **Retry Failed (N)** appear after a job finishes if there is anything to retry.",
             "Right-click a track to remove it from the list.",
-            "**Open Folder** jumps to the files in Finder."
+            "**Open Folder** jumps to the files in Finder, and is there even when the Downloads page is empty."
           ]
         }
       ]
@@ -110,11 +110,11 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Downloads land in **~/Downloads/Fetch Puppy Downloads/** by default; change the base folder in Settings. Singles collect into a folder per source (for example \"Spotify Tracks\"); albums and playlists get their own named folder."
+          "text": "Downloads land in **~/Downloads/Fetch Puppy Downloads/** by default; change the base folder in Settings. Singles collect into a folder per source (for example \"Spotify Tracks\"); albums and playlists get their own named folder. Downloading a playlist or album again replaces each song once its new copy is complete, so a bad file is fixed by downloading it again. Singles folders never replace: a second file with the same name gets a number. Different formats sit side by side, so an MP3 and a WAV of the same song both stay."
         },
         {
           "type": "paragraph",
-          "text": "Two options apply to playlists and albums. **Number tracks in playlists/albums** prepends a two-digit number (01, 02, and so on) to filenames so the order is kept; single tracks are never numbered, and it applies to audio downloads only. **Export track list** saves a CSV of the track list alongside the files. Numbering sits on the Spotify, Apple Music and CSV tabs as well as in Settings - it is one setting shown in both places, so changing it either way changes it everywhere."
+          "text": "Two options apply to playlists and albums. **Number tracks in playlists/albums** puts a number in front of filenames (01, 02, and so on; 001 for YouTube playlists of 100 or more) so the order is kept, for audio and video alike; single tracks are never numbered. **Export track list** saves a CSV of the track list alongside the files. Numbering sits on the Spotify, Apple Music, YouTube and CSV tabs as well as in Settings - it is one setting shown in both places, so changing it either way changes it everywhere."
         }
       ]
     },
@@ -152,7 +152,7 @@
             "**Download options** - output folder, number tracks, export track list, universal format selection, and notify when downloads complete.",
             "**App Updates** - manual check and an auto-check toggle.",
             "**Download Engine** - check for and apply download engine updates.",
-            "**Spotify API Credentials** - optional Client ID and Secret for private playlists and more reliable metadata; stored locally on your Mac (the secret in your keychain), never sent to BSK. For your own private or liked playlists, also add your Spotify account email under User Management in your Spotify developer app, otherwise Spotify denies the login.",
+            "**Spotify API Credentials** - optional Client ID and Secret for private playlists, every track of playlists over 100 tracks (except playlists made by Spotify), and more reliable metadata; stored locally on your Mac (the secret in your keychain), never sent to BSK. For your own private or liked playlists, also add your Spotify account email under User Management in your Spotify developer app, otherwise Spotify denies the login.",
             "**YouTube Browser Cookies** - which browser to read, with setup notes.",
             "**General** - show the welcome page, and minimise to the menu bar when closed.",
             "**Tips & Shortcuts** - a quick reference for drag-and-drop.",
