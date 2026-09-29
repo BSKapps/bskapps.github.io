@@ -195,7 +195,7 @@
             "**Blanking** hides a live TF trace wherever Smaart's coherence falls below the percentage you pick, the way Smaart's own coherence blanking does. It is set here, not read from Smaart, and it is greyed out for RTA traces and saved curves.",
             "**Invert** flips the trace upside down, so a peak shows as a dip your EQ cut can follow. An inverted trace turns magenta and shows an **INVERTED** tag; a normal trace is yellow.",
             "**Hold** freezes a live trace where it is and shows a **HELD** tag. A saved curve shows a **SAVED** tag and never changes.",
-            "**Show** hides the trace and its name without closing it, and ticking it brings the trace straight back. **Control-Option-F** does the same from any app while the floating trace is open, unless another app already uses that shortcut.",
+            "**Show** hides the trace and its name without closing it, and ticking it brings the trace straight back.",
             "To work with just the floating trace, choose **Hide Target Trace** (Cmd-H): the editor tucks away and the floating trace stays on screen. Switch back to Target Trace to bring the editor back.",
             "**Lock** hides the guides and lets clicks go straight through to the app underneath. A small bar stays in the corner with **Show**, **Invert**, **Hold**, **Lock** and **Close**; untick **Lock** to move it again. **Close** removes the floating trace.",
             "A live trace uses the same **Detail** setting as the reference line, and an RTA trace is centred on 0 dB automatically. The floating trace remembers where you left it. If Smaart stops sending, the trace dims and shows **Waiting for Smaart** until it comes back."
