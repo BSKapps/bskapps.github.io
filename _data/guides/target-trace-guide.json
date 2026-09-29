@@ -190,16 +190,17 @@
         {
           "type": "bullets",
           "items": [
-            "**Lining up:** drag the floating trace to move it, and drag its edges or corners to stretch it, until the blue **100**, **1k** and **10k** guides sit on the other app's 100 Hz, 1 kHz and 10 kHz lines, and the dashed level lines sit on its level lines (+12, 0 and -12 at a Scale of 24). Its controls sit just underneath it (above it near the bottom of the screen), so it can shrink to fit a small EQ graph.",
-            "**Scale** sets the dB value at the top and bottom edges. LA Network Manager uses 24; QL Editor uses 20. **Level** moves the trace up or down.",
+            "**Lining up:** drag the floating trace to move it, and drag its edges or corners to stretch it, until the blue **100**, **1k** and **10k** guides sit on the other app's 100 Hz, 1 kHz and 10 kHz lines, and the dashed level lines sit on its level lines (+12, 0 and -12 at a Scale of 24). Its name and controls sit just underneath it (above it near the bottom of the screen), so it can shrink to fit a small EQ graph.",
+            "**Scale** sets the dB value at the top and bottom edges. LA Network Manager uses 24; QL Editor uses 20. **Level** moves the trace up or down and is remembered for each measurement.",
             "**Blanking** hides a live TF trace wherever Smaart's coherence falls below the percentage you pick, the way Smaart's own coherence blanking does. It is set here, not read from Smaart, and it is greyed out for RTA traces and saved curves.",
-            "**Invert** flips the trace upside down, so a peak shows as a dip your EQ cut can follow. An inverted trace turns magenta and shows an **INVERTED** tag; a normal trace is yellow.",
-            "**Hold** freezes a live trace where it is and shows a **HELD** tag. A saved curve shows a **SAVED** tag and never changes.",
+            "**Invert** flips the trace upside down, so a peak shows as a dip your EQ cut can follow. An inverted trace and its name turn magenta; a normal trace is yellow.",
+            "**Hold** freezes a live trace where it is. A saved curve shows **Saved** next to its name and never changes.",
             "**Show** hides the trace and its name without closing it, and ticking it brings the trace straight back.",
             "To work with just the floating trace, close the editor window or choose **Hide Target Trace** (Cmd-H). The floating trace stays on screen, and while the menu bar icon is showing, closing the window keeps Target Trace running in the menu bar with no Dock icon. Choose **Open Target Trace** from the menu bar icon to bring the editor back.",
+    "**Spots:** once the floating trace is lined up, choose **Spots > Save Spot...** from the menu bar icon and give it a name; it starts with the name of the app underneath. Pick a spot later to jump the floating trace back to that position, size and Scale. With **Follow Apps** ticked, switching to an app jumps the floating trace to that app's most recent spot, and it hides in apps that have none.",
     "**Menu bar:** the icon goes away again once Live Grab is disconnected, nothing is floating and the editor window is open. It lists Smaart's measurements under **RTA** and **TF**. Pick a running one to float it, or another to swap; a tick shows the one floating. It also has **Show**, **Invert**, **Hold**, **Lock** and **Close Floating Trace**. It shares Live Grab's connection, so the two always agree: **Connect to Smaart** in the menu connects Live Grab too, using the host, port and password entered there, and **Disconnect from Smaart** disconnects both.",
             "**Lock** hides the guides and lets clicks go straight through to the app underneath. A small bar stays underneath with **Show**, **Invert**, **Hold**, **Lock** and **Close**; untick **Lock** to move it again. **Close** removes the floating trace.",
-            "A live trace uses the same **Detail** setting as the reference line, and an RTA trace is centred on 0 dB automatically. The floating trace remembers where you left it. If Smaart stops sending, the trace dims and shows **Waiting for Smaart** until it comes back."
+            "A live trace uses the same **Detail** setting as the reference line, and an RTA trace is centred on 0 dB automatically. The floating trace remembers where you left it. If Smaart stops sending, the trace dims and its bar shows **Waiting for Smaart** until it comes back."
           ]
         }
       ]
