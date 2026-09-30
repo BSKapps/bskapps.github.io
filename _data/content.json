@@ -17,10 +17,11 @@
         "Save, reorder and load IP presets for any device",
         "Set DNS per adapter - Cloudflare, Google, Quad9 or custom servers",
         "Turn IPv4 off per adapter to keep it live over IPv6 - clean IPv4 separation for multi-NIC and Dante systems",
+        "Network Locations, plus one Edit Services window to reorder, rename, hide and add services",
         "Powerful LAN scanner - see every device, one-click Join to hop onto another subnet",
         "Built-in speed test",
         "Advanced connection diagnostics - bufferbloat (loaded latency) and a live packet-loss monitor",
-        "AV network checks - IGMP querier presence, PTP audio clock and grandmaster, link speed, duplex, MTU and subnet-overlap warnings",
+        "AV network checks - IGMP querier presence, PTP audio clock and clock leader, link speed, duplex, MTU and subnet-overlap warnings",
         "Full Wi-Fi details and live per-adapter speed",
         "Per-adapter error counters you can clear, so only new faults show",
         "Click to copy any IP, subnet, gateway or MAC"
@@ -74,12 +75,14 @@
       "released": "30 September 2026",
       "features": [
         "Search and save from YouTube without ads",
+        "Save whole YouTube playlists and albums, with optional track numbers",
         "Find and save music videos for an entire Spotify or Apple Music playlist",
         "Drag in a Spotify or Apple Music playlist - find every track automatically",
+        "Drop in a CSV track list and it finds every song",
         "Preview and play search results, then save right from the preview",
         "Save videos from TikTok, Instagram, X, Facebook, Reddit and more",
         "Audio conversion to multiple formats with full metadata and artwork",
-        "Multi-source search with smart quality scoring"
+        "Smart track matching across multiple sources, scored for quality"
       ],
       "description": "Search YouTube and save without the ads. Drop in a Spotify or Apple Music playlist and Fetch Puppy finds every track or music video automatically. Grabs video from TikTok, Instagram, X, Facebook, Reddit, and more, and converts to multiple formats."
     },
