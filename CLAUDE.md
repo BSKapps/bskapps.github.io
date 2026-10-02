@@ -68,7 +68,7 @@ Lab Assistant's Mint / Processing Modules sections and QIP's Lite vs Pro table a
 
 - Payments via LemonSqueezy (overlay checkout: lemon.js + `lemonsqueezy-button` class)
 - Checkout URL params: `?dark=1&desc=0&media=0`
-- Buy buttons: flat green `--accent` (#3E8E5F), `.buy-btn.large` on product pages. Homepage tiles have NO buy button - a muted `.tile-price` line and a blue `View ->` instead, so the tile reads as a door not an offer
+- Buy buttons: flat green `--accent` (#367C53), `.buy-btn.large` on product pages. Homepage tiles have NO buy button - a muted `.tile-price` line and a blue `View ->` instead, so the tile reads as a door not an offer
 - Buy notes: "One-time purchase · 2 activations" + version line; all four LemonSqueezy pages and Stimulus add "May be tax deductible for AV professionals."
 - Quicker IP Lite: free on Mac App Store (id6761874418). Badge + plain small-caps "Lite · Free version on App Store" note next to the Pro buy button (`.appstore-col`, `.lite-note`)
 - /quickerip has a Lite vs Pro comparison table (`.compare-table`)

@@ -11,8 +11,9 @@
     --text-faint: #8A8A90;
     --text-on-card: #C6C6CC;
     --heading: #E3E3E6;
-    --accent: #3E8E5F;
-    --accent-hover: #469C6A;
+    --accent: #367C53;
+    --accent-hover: #2F6A47;
+    --accent-text: #469C6A;
     --brand: #6FA3D9;
     --brand-bright: #8FBCE8;
 }
@@ -376,7 +377,7 @@ article .note { background: var(--card); border: 1px solid var(--border-strong);
 .compare-table th { color: var(--heading); font-weight: 600; }
 .compare-table th:not(:first-child), .compare-table td:not(:first-child) { text-align: center; }
 .compare-table td:first-child { color: var(--text-muted); }
-.compare-table .check { color: var(--accent); font-weight: 600; }
+.compare-table .check { color: var(--accent-text); font-weight: 600; }
 .compare-table .no { color: var(--text-faint); }
 .compare-table .price-sub { color: var(--text-faint); font-weight: 400; font-size: 0.8rem; }
 
@@ -434,4 +435,8 @@ footer a:hover { color: var(--heading); }
     .fblock { grid-template-columns: 1fr; gap: 18px; padding: 26px 0; }
     .fblock.flip .fb-text { order: 0; }
     .ref-list { columns: 1; }
+    .back { padding: 14px 0; margin-top: -14px; margin-bottom: 18px; }
+    .nav-links a { display: inline-block; padding: 13px 0; margin: -13px 0; }
+    footer p:first-child a { padding: 11px 0 3px; }
+    footer p:last-child a { padding: 3px 0 11px; }
 }
