@@ -16,7 +16,7 @@
 </head>
 <body>
     <div class="container">
-        <a class="back" href="/articles">&larr; Articles</a>
+        <a class="back" href="/articles/">&larr; Articles</a>
 
         <article>
             <h1>Companion on macOS: network setup and stability</h1>
@@ -24,7 +24,7 @@
 
             <p>Bitfocus Companion runs as a local server on your Mac. It opens connections out to devices on the network - consoles, media servers, QLab, lighting desks - and listens for incoming connections from Stream Decks and remote surfaces. When it works, it's seamless. When it doesn't, the failure mode is usually not Companion itself but the Mac's network configuration underneath it.</p>
 
-            <p>Most of the traps here are the same ones covered in the multi-adapter networking articles: <a href="/articles/static-ips-av-networks">setup and service order</a>, and <a href="/articles/mac-routing-table">how the routing table decides which adapter to use</a>. This article applies those principles specifically to Companion.</p>
+            <p>Most of the traps here are the same ones covered in the multi-adapter networking articles: <a href="/articles/static-ips-av-networks/">setup and service order</a>, and <a href="/articles/mac-routing-table/">how the routing table decides which adapter to use</a>. This article applies those principles specifically to Companion.</p>
 
             <h2>How Companion uses the network</h2>
             <p>Companion has two sides to its networking:</p>
@@ -42,7 +42,7 @@
             <h2>The same-subnet trap</h2>
             <p>This one catches people who set up a dedicated Ethernet adapter for the show LAN but happen to land on the same subnet as their Wi-Fi - usually both end up on 192.168.1.x because that's the default for most consumer gear.</p>
             <p>With two adapters on the same subnet, the routing table has two competing entries for 192.168.1.0/24. The kernel picks one. Companion's traffic to a device at, say, 192.168.1.50 goes out whichever adapter won - which may not be the one physically connected to the device. The module shows as offline even though the device is right there. Flipping the service order or disconnecting Wi-Fi usually makes it start working, which confirms the diagnosis.</p>
-            <p>The reliable fix is different subnets on different adapters. If you can't change the show LAN, turn Wi-Fi off. <a href="/quickerip">Quicker IP Pro</a> shows a red warning when two active adapters share a subnet and both have a gateway - useful for catching this before Companion starts throwing connection errors.</p>
+            <p>The reliable fix is different subnets on different adapters. If you can't change the show LAN, turn Wi-Fi off. <a href="/quickerip/">Quicker IP Pro</a> shows a red warning when two active adapters share a subnet and both have a gateway - useful for catching this before Companion starts throwing connection errors.</p>
 
             <h2>Service order for a Companion system</h2>
             <p>A typical setup has Companion on the same Mac as QLab, with Wi-Fi for general use and one or two wired adapters for the show. A workable service order for show day:</p>
@@ -68,13 +68,13 @@
             <p>Most disconnected-module problems resolve at step one. Companion's reliability on a multi-adapter Mac is really just network configuration in disguise.</p>
         
             <div class="article-cta">
-                <img class="cta-icon" src="/images/quickip-icon.png" alt="" width="64" height="64">
+                <img loading="lazy" class="cta-icon" src="/images/quickip-icon-192.png" alt="" width="64" height="64">
                 <div class="cta-body">
                     <h3>Built for moments like this</h3>
                     <p>Quicker IP shows your active adapters, flags subnet conflicts before Companion does, and lets you switch IP presets in one click. Made for the same problems this article is about.</p>
                     <div class="cta-actions">
                         <a class="buy-btn" href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0&checkout%5Bcustom%5D%5Bsrc%5D=article-companion-macos-network" aria-label="Buy Quicker IP">Buy Quicker IP</a>
-                        <a class="cta-link" href="/quickerip">See what it does &rarr;</a>
+                        <a class="cta-link" href="/quickerip/">See what it does &rarr;</a>
                     </div>
                     <span class="cta-note">One-time purchase &middot; 2 activations</span>
                 </div>
@@ -83,7 +83,7 @@
 
         <footer>
             <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
-            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
+            <p><a href="/contact/">Contact</a> &middot; <a href="/about/">About</a> &middot; <a href="/privacy/">Privacy</a> &middot; <a href="/terms/">Terms</a> &middot; <a href="/refund/">Refund Policy</a></p>
         </footer>
     </div>
 </body>

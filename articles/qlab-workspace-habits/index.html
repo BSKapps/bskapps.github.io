@@ -16,7 +16,7 @@
 </head>
 <body>
     <div class="container">
-        <a class="back" href="/articles">&larr; Articles</a>
+        <a class="back" href="/articles/">&larr; Articles</a>
 
         <article>
             <h1>QLab workspace habits from real shows</h1>
@@ -29,9 +29,9 @@
             <p>Pass every new file through QLab at a known starting point. Same output patch, same master level, same room. Set a consistent cue level based on what you hear, not what the waveform looks like. Do it once per asset, not cue by cue.</p>
 
             <h2>Default new audio cues to -10 dB</h2>
-            <p>In QLab, set the template for new audio cues to start at -10 dB instead of 0 dB. One caveat upfront: it flips which failure mode bites you. New files dragged in at -10 won't blast the room before you check them, but if you ever run a level pass over the workspace - by hand or with <a href="/labassistant">Lab Assistant</a> with a negative offset - anything still sitting at 0 dB ends up punching out well above the rest. The fix is to keep every cue starting at the same reference, so the level pass behaves predictably.</p>
+            <p>In QLab, set the template for new audio cues to start at -10 dB instead of 0 dB. One caveat upfront: it flips which failure mode bites you. New files dragged in at -10 won't blast the room before you check them, but if you ever run a level pass over the workspace - by hand or with <a href="/labassistant/">Lab Assistant</a> with a negative offset - anything still sitting at 0 dB ends up punching out well above the rest. The fix is to keep every cue starting at the same reference, so the level pass behaves predictably.</p>
             <p>The upside is headroom. Quiet tracks have somewhere to go: a quiet voiceover that needed +6 dB to sit right was previously stuck against the 0 dB ceiling, with no clean way to push it. Starting at -10 means you can lift the quiet ones and lower the hot ones without anything pinned to a wall.</p>
-            <p>The dB-offset approach is what Figure 53 themselves recommend for QLab levelling, but in QLab it lives inside a built-in script you have to dig out of the workspace. Lab Assistant exposes the same offset and a full range of LUFS targets as actual controls, so you set the values once and apply them across cues without going scripting. Pick the target and offset that match how you mix and stick with them for the show. There's a longer write-up on why loudness beats peak level for playback: <a href="/articles/qlab-lufs-levels">Setting consistent QLab levels with LUFS</a>.</p>
+            <p>The dB-offset approach is what Figure 53 themselves recommend for QLab levelling, but in QLab it lives inside a built-in script you have to dig out of the workspace. Lab Assistant exposes the same offset and a full range of LUFS targets as actual controls, so you set the values once and apply them across cues without going scripting. Pick the target and offset that match how you mix and stick with them for the show. There's a longer write-up on why loudness beats peak level for playback: <a href="/articles/qlab-lufs-levels/">Setting consistent QLab levels with LUFS</a>.</p>
 
             <h2>Mono files will catch you out</h2>
             <p>This one has caught me out more than once. Most apps play a mono file equally out the left and right outputs - you'd never think about it. QLab doesn't. A mono file gets sent to output 1 only by default. Output 1 might be stage left, stage centre, or an amplifier that isn't even on tonight. You don't catch it from the op position because the audio is playing - you can see the meters, you can hear something near you. It's only when you walk the house that you realise it's coming from one speaker, or from the wrong side, or from an amp that isn't even on tonight.</p>
@@ -40,7 +40,7 @@
                 <li>Check every new audio cue's patch routing. If it's mono, either explicitly route it to the outputs you want or convert it to interleaved stereo. Don't trust defaults.</li>
                 <li>Do a dry run of every audio cue from the house, on the actual system, before tech starts. Not from the op's seat with headphones.</li>
             </ul>
-            <p>This is exactly what the mono-routing module in <a href="/labassistant">Lab Assistant</a> exists for - it walks the workspace and forces every mono cue to play out both outputs, so you don't have to remember to check. Its multi-output routing goes further on bigger systems: it assigns output patches by cue category, so music cues land on the music outputs and effects on the effects outputs across the whole workspace in one pass.</p>
+            <p>This is exactly what the mono-routing module in <a href="/labassistant/">Lab Assistant</a> exists for - it walks the workspace and forces every mono cue to play out both outputs, so you don't have to remember to check. Its multi-output routing goes further on bigger systems: it assigns output patches by cue category, so music cues land on the music outputs and effects on the effects outputs across the whole workspace in one pass.</p>
 
             <h2>Set the Go button minimum time</h2>
             <p>Workspace Settings, General. There's a minimum time between Go presses, and it's worth setting deliberately rather than leaving it. Something like 500 ms protects you against the moment a stage manager's finger slips on the clicker, or your own Spacebar bounces. It won't save you from everything, but it will save you from the class of mistake where you fire cue 50 twice in a second and the show goes red.</p>
@@ -63,7 +63,7 @@
 
             <h2>The clean-up problem</h2>
             <p>Renumbering forty cues, applying consistent fade and stop actions, batching level changes, all by hand, is the job no one wants. It's also what turns a messy workspace into a reliable one.</p>
-            <p>This is exactly why we built <a href="/labassistant">Lab Assistant</a>. It takes a workspace, renumbers on tens, applies consistent fade and continue modes, and batches level changes. What used to be a slow end-of-day chore takes a minute.</p>
+            <p>This is exactly why we built <a href="/labassistant/">Lab Assistant</a>. It takes a workspace, renumbers on tens, applies consistent fade and continue modes, and batches level changes. What used to be a slow end-of-day chore takes a minute.</p>
 
             <h2>Save a clean copy before every run</h2>
             <p>Before the first tech run each day, save a dated copy of the workspace. <code>Show v03 - 2026-04-12.qlab5</code>. If you or the designer wreck something during the run, you have a known-good state ten minutes old. QLab's undo is fine for the last few moves. It's not a recovery strategy for a bad half hour.</p>
@@ -71,13 +71,13 @@
             <p>None of this is clever. It's friction removed and a couple of traps sign-posted. Time you don't spend hunting for a cue or explaining a mono-file mistake during tech is time on the actual show.</p>
         
             <div class="article-cta">
-                <img class="cta-icon" src="/images/labassistant-icon.png" alt="" width="64" height="64">
+                <img loading="lazy" class="cta-icon" src="/images/labassistant-icon-192.png" alt="" width="64" height="64">
                 <div class="cta-body">
                     <h3>Make these habits a one-click job</h3>
                     <p>Lab Assistant takes a QLab workspace and applies consistent levels, mono and multi-output routing, fade and stop, numbering, and continue modes. Mint, built in, converts, cleans, and edits cue audio in place.</p>
                     <div class="cta-actions">
                         <a class="buy-btn" href="https://bskapps.lemonsqueezy.com/checkout/buy/efb96677-ac6d-43c1-8697-e465e62d1d00?dark=1&desc=0&media=0&checkout%5Bcustom%5D%5Bsrc%5D=article-qlab-workspace-habits" aria-label="Buy Lab Assistant">Buy Lab Assistant</a>
-                        <a class="cta-link" href="/labassistant">See what it does &rarr;</a>
+                        <a class="cta-link" href="/labassistant/">See what it does &rarr;</a>
                     </div>
                     <span class="cta-note">One-time purchase &middot; 2 activations</span>
                 </div>
@@ -86,7 +86,7 @@
 
         <footer>
             <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
-            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
+            <p><a href="/contact/">Contact</a> &middot; <a href="/about/">About</a> &middot; <a href="/privacy/">Privacy</a> &middot; <a href="/terms/">Terms</a> &middot; <a href="/refund/">Refund Policy</a></p>
         </footer>
     </div>
 </body>

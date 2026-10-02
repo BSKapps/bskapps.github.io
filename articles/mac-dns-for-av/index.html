@@ -16,7 +16,7 @@
 </head>
 <body>
     <div class="container">
-        <a class="back" href="/articles">&larr; Articles</a>
+        <a class="back" href="/articles/">&larr; Articles</a>
 
         <article>
             <h1>DNS on a Mac: how it works and how to set it per adapter</h1>
@@ -30,7 +30,7 @@
                 <li><strong>From DHCP</strong> - the router hands out DNS servers along with the address. This is the default and what you're using on Wi-Fi and home networks.</li>
                 <li><strong>Manually</strong> - servers typed into the interface's DNS tab, which then override anything DHCP offered on that interface.</li>
             </ul>
-            <p>The catch on a multi-adapter Mac: macOS builds one system-wide resolver configuration from all of those per-interface lists, and the <strong>service order</strong> decides whose DNS wins for general lookups. If your show LAN adapter sits above Wi-Fi in the service order and carries DNS servers that can't reach the internet, every web lookup on the machine dies - while the Wi-Fi is connected and perfectly healthy. This is one of the two classic multi-adapter traps (the other is duplicate gateways, covered in <a href="/articles/static-ips-av-networks">Running multiple network adapters on a Mac</a>).</p>
+            <p>The catch on a multi-adapter Mac: macOS builds one system-wide resolver configuration from all of those per-interface lists, and the <strong>service order</strong> decides whose DNS wins for general lookups. If your show LAN adapter sits above Wi-Fi in the service order and carries DNS servers that can't reach the internet, every web lookup on the machine dies - while the Wi-Fi is connected and perfectly healthy. This is one of the two classic multi-adapter traps (the other is duplicate gateways, covered in <a href="/articles/static-ips-av-networks/">Running multiple network adapters on a Mac</a>).</p>
 
             <h2>The rule: DNS only where the internet is</h2>
             <p>Simple and worth making a habit:</p>
@@ -59,16 +59,16 @@
             <p>Cheap, safe, and the first thing to try when one machine resolves a name wrongly while others are fine.</p>
 
             <h2>Doing this without System Settings archaeology</h2>
-            <p>Per-interface DNS on macOS means clicking through Settings, Network, adapter, Details, DNS - for every adapter, every venue. <a href="/quickerip">Quicker IP</a> puts it in the menu bar: DNS is set per adapter independently of the IP mode, servers that came from DHCP are marked as automatic so you can tell them from deliberate choices at a glance, and switching a venue's DNS is a click from the menu bar instead of a trip through System Settings.</p>
+            <p>Per-interface DNS on macOS means clicking through Settings, Network, adapter, Details, DNS - for every adapter, every venue. <a href="/quickerip/">Quicker IP</a> puts it in the menu bar: DNS is set per adapter independently of the IP mode, servers that came from DHCP are marked as automatic so you can tell them from deliberate choices at a glance, and switching a venue's DNS is a click from the menu bar instead of a trip through System Settings.</p>
 
             <div class="article-cta">
-                <img class="cta-icon" src="/images/quickip-icon.png" alt="" width="64" height="64">
+                <img loading="lazy" class="cta-icon" src="/images/quickip-icon-192.png" alt="" width="64" height="64">
                 <div class="cta-body">
                     <h3>Per-adapter DNS in one click</h3>
                     <p>Quicker IP sets DNS per adapter, shows which servers came from DHCP and which were chosen, and saves IP modes as presets per venue - alongside scanning and Dante checks.</p>
                     <div class="cta-actions">
                         <a class="buy-btn" href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0&checkout%5Bcustom%5D%5Bsrc%5D=article-mac-dns-for-av" aria-label="Buy Quicker IP">Buy Quicker IP</a>
-                        <a class="cta-link" href="/quickerip">See what it does &rarr;</a>
+                        <a class="cta-link" href="/quickerip/">See what it does &rarr;</a>
                     </div>
                     <span class="cta-note">One-time purchase &middot; 2 activations</span>
                 </div>
@@ -77,7 +77,7 @@
 
         <footer>
             <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
-            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
+            <p><a href="/contact/">Contact</a> &middot; <a href="/about/">About</a> &middot; <a href="/privacy/">Privacy</a> &middot; <a href="/terms/">Terms</a> &middot; <a href="/refund/">Refund Policy</a></p>
         </footer>
     </div>
 </body>

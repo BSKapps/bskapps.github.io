@@ -19,7 +19,7 @@
 </head>
 <body>
     <div class="container">
-        <a class="back" href="/articles">&larr; Articles</a>
+        <a class="back" href="/articles/">&larr; Articles</a>
 
         <article>
             <h1>{{ g.web.h1 }}</h1>
@@ -50,7 +50,7 @@
 
             <div class="article-cta">
                 {%- if g.cta.icon %}
-                <img class="cta-icon" src="/images/{{ g.cta.icon }}" alt="" width="64" height="64">
+                <img loading="lazy" class="cta-icon" src="/images/{{ g.cta.icon | replace: '-icon.png', '-icon-192.png' }}" alt="" width="64" height="64">
                 {%- endif %}
                 <div class="cta-body">
                     <h3>{{ g.cta.title }}</h3>
@@ -70,7 +70,7 @@
 
         <footer>
             <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
-            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
+            <p><a href="/contact/">Contact</a> &middot; <a href="/about/">About</a> &middot; <a href="/privacy/">Privacy</a> &middot; <a href="/terms/">Terms</a> &middot; <a href="/refund/">Refund Policy</a></p>
         </footer>
     </div>
 </body>

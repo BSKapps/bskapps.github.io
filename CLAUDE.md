@@ -24,7 +24,7 @@ bskapps.github.io/
 ├── index.html              # Homepage - nav, hero, 2-col product grid (QIP, TT, LA, FP) with screenshot + price line per tile, Free Tools grid, flat 'Also from BSK' links (Stimulus, Articles, Go Games)
 ├── css/site.css            # THE shared stylesheet - all pages link it, all theme tokens live here
 ├── _data/content.json      # App names, subtitles, taglines, prices, versions, DESCRIPTIONS, FEATURES - edited via /admin
-├── CNAME / favicon.png / robots.txt / sitemap.xml / ads.txt
+├── CNAME / favicon.png / robots.txt / sitemap.xml
 ├── images/                 # App icons and logos
 ├── quickerip/              # Product page (hero image + 6 alternating .fblock feature blocks + Lite vs Pro table + features + guide link + closing buy row). No carousel - unlike the other product pages
 ├── labassistant/           # Product page (video + gallery + Mint + Processing Modules sections)
@@ -49,8 +49,8 @@ bskapps.github.io/
 1. **Quicker IP** - Network toolkit. Lite (App Store, free) + Pro (LemonSqueezy, $18.99 USD)
 2. **Lab Assistant** - QLab workspace automation. LemonSqueezy, $14.99 USD
 3. **Fetch Puppy** - Media downloader. LemonSqueezy, $14.99 USD
-4. **Target Trace** - Smaart/REW target curve editor. LemonSqueezy, $12.99 USD
-5. **Go Games** - Solitaire, Sudoku, Minesweeper, Battle Boats. iOS + Mac, free on App Store, $1.99 IAP unlock
+4. **Target Trace** - Smaart/REW target curve editor. LemonSqueezy, $9.99 USD
+5. **Go Games** - Solitaire, Sudoku, Minesweeper, Battle Boats. iOS + Mac, free on App Store, $1.49 IAP unlock
 
 EWP was pulled from the site June 2026 (project shelved). MultiViewPort is DEAD (never worked) - see `.claude/rules/hidden-products.md`.
 
@@ -69,7 +69,7 @@ Lab Assistant's Mint / Processing Modules sections and QIP's Lite vs Pro table a
 - Payments via LemonSqueezy (overlay checkout: lemon.js + `lemonsqueezy-button` class)
 - Checkout URL params: `?dark=1&desc=0&media=0`
 - Buy buttons: flat green `--accent` (#3E8E5F), `.buy-btn.large` on product pages. Homepage tiles have NO buy button - a muted `.tile-price` line and a blue `View ->` instead, so the tile reads as a door not an offer
-- Buy notes: "One-time purchase · 2 activations" + version line; QIP and FP add "May be tax deductible for AV professionals."
+- Buy notes: "One-time purchase · 2 activations" + version line; all four LemonSqueezy pages and Stimulus add "May be tax deductible for AV professionals."
 - Quicker IP Lite: free on Mac App Store (id6761874418). Badge + plain small-caps "Lite · Free version on App Store" note next to the Pro buy button (`.appstore-col`, `.lite-note`)
 - /quickerip has a Lite vs Pro comparison table (`.compare-table`)
 - Buy buttons have aria-labels (e.g. `aria-label="Buy Quicker IP Pro for $18.99 USD"`)
@@ -127,7 +127,7 @@ Do NOT add an Articles link to the footer - articles are reached via the homepag
 
 ## Ads
 
-- NO ads anywhere. AdSense was removed May 2026 after rejection - do not re-add. ads.txt remains for verification only.
+- NO ads anywhere. AdSense was removed May 2026 after rejection - do not re-add. ads.txt is gone (404).
 
 ## Analytics
 

@@ -16,7 +16,7 @@
 </head>
 <body>
     <div class="container">
-        <a class="back" href="/articles">&larr; Articles</a>
+        <a class="back" href="/articles/">&larr; Articles</a>
 
         <article>
             <h1>How macOS routes traffic across multiple adapters</h1>
@@ -24,7 +24,7 @@
 
             <p>Every IP packet your Mac sends has to go out a specific physical adapter. With one adapter, the choice is obvious. With two or three, macOS has to decide - and its decision process is not always obvious to the person who set up the interfaces. Understanding how it works explains a lot of the strange behaviour that shows up in multi-adapter systems.</p>
 
-            <p>This is Part 2 of a companion pair. <a href="/articles/static-ips-av-networks">Part 1</a> covers the practical setup: service order, addressing, and preset switching. This article explains the underlying routing mechanics and why certain configurations break.</p>
+            <p>This is Part 2 of a companion pair. <a href="/articles/static-ips-av-networks/">Part 1</a> covers the practical setup: service order, addressing, and preset switching. This article explains the underlying routing mechanics and why certain configurations break.</p>
 
             <h2>The routing table</h2>
             <p>macOS maintains a routing table: a list of rules that map destination IP ranges to outgoing interfaces. Every packet gets checked against this table before it leaves the machine. The kernel walks the list from most specific to least specific and uses the first match.</p>
@@ -75,7 +75,7 @@ default            192.168.1.1        UGScg     en0
             <p>Which is why the rule holds: if an interface doesn't need a gateway, don't give it one. An audio network, a show control LAN without internet access, a static-IP Dante subnet - none of these need a router field. Leave it empty. That keeps the default route unambiguous and removes one source of conflict.</p>
 
             <h2>How Quicker IP detects this</h2>
-            <p><a href="/quickerip">Quicker IP Pro</a> scans all active adapters and checks every pair for subnet overlap. It distinguishes two scenarios:</p>
+            <p><a href="/quickerip/">Quicker IP Pro</a> scans all active adapters and checks every pair for subnet overlap. It distinguishes two scenarios:</p>
             <ul>
                 <li><strong>Shared subnet, no gateway conflict</strong> - two adapters on the same subnet, but only one (or neither) has a gateway configured. Local subnet traffic may still route incorrectly between them depending on service order, but the default route is unambiguous. Quicker IP shows this in grey as "Shared with", naming the other adapter.</li>
                 <li><strong>Gateway conflict</strong> - two adapters on the same subnet and both have a gateway configured. This is the full problem: both the connected route and the default route are contested. Quicker IP shows this in red as "Overlaps", naming the other adapter, and fires a system notification the first time it detects the conflict, including the CIDR of the conflicting subnet.</li>
@@ -91,13 +91,13 @@ default            192.168.1.1        UGScg     en0
             <p>The underlying cause is almost always that someone assigned static IPs without checking whether the subnet range they chose was already in use elsewhere on the same machine. A fresh venue Wi-Fi on 192.168.1.x is probably the most common trigger. The fix is simple once you know where to look.</p>
         
             <div class="article-cta">
-                <img class="cta-icon" src="/images/quickip-icon.png" alt="" width="64" height="64">
+                <img loading="lazy" class="cta-icon" src="/images/quickip-icon-192.png" alt="" width="64" height="64">
                 <div class="cta-body">
                     <h3>See what your routing table is doing</h3>
                     <p>Quicker IP shows your active adapters, the IPs they hold, and warns when two adapters are competing for the same subnet. The visual version of the netstat output above.</p>
                     <div class="cta-actions">
                         <a class="buy-btn" href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0&checkout%5Bcustom%5D%5Bsrc%5D=article-mac-routing-table" aria-label="Buy Quicker IP">Buy Quicker IP</a>
-                        <a class="cta-link" href="/quickerip">See what it does &rarr;</a>
+                        <a class="cta-link" href="/quickerip/">See what it does &rarr;</a>
                     </div>
                     <span class="cta-note">One-time purchase &middot; 2 activations</span>
                 </div>
@@ -106,7 +106,7 @@ default            192.168.1.1        UGScg     en0
 
         <footer>
             <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
-            <p><a href="/contact">Contact</a> &middot; <a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/refund">Refund Policy</a></p>
+            <p><a href="/contact/">Contact</a> &middot; <a href="/about/">About</a> &middot; <a href="/privacy/">Privacy</a> &middot; <a href="/terms/">Terms</a> &middot; <a href="/refund/">Refund Policy</a></p>
         </footer>
     </div>
 </body>
