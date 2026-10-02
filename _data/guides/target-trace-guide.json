@@ -154,19 +154,19 @@
     },
     {
       "id": "live-grab",
-      "title": "Live Grab",
+      "title": "Live Trace",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "**Live Grab** in the toolbar connects Target Trace to a running Smaart and shows a measured trace live on the editor graph and turns it into an editable target curve. Enable the API in Smaart under **Options > Preferences > API**, then enter the host (use **localhost** when Smaart is on the same computer), the port (default 26000) and the password if you set one, and press **Connect**."
+          "text": "**Live Trace** in the toolbar connects Target Trace to a running Smaart and shows a measured trace live on the editor graph and turns it into an editable target curve. Enable the API in Smaart under **Options > Preferences > API**, then enter the host (use **localhost** when Smaart is on the same computer), the port (default 26000) and the password if you set one, and press **Connect**."
         },
         {
           "type": "bullets",
           "items": [
-            "**Editor** next to any running measurement shows its trace live on the editor graph, in yellow, moving as Smaart measures. A bar at the top of the graph shows its name and whether it is **Live**, **Held**, **Grabbed** or **Waiting for Smaart**.",
-            "**Level** on that bar moves the live trace up or down. The pop-up next to it sets the smoothing, from None to 1/24 octave, as in Smaart.",
+            "**Editor** next to any running measurement shows its trace live on the editor graph, in yellow, moving as Smaart measures. A bar at the top of the graph shows its name and whether it is **Live**, **Held** or **Waiting for Smaart**.",
+            "**Level** on that bar moves the live trace up or down, and **Smoothing** sets the smoothing, from Off to 1/24 octave, as in Smaart.",
             "**Hold** freezes the trace where it is; untick it to go live again.",
-            "**Grab** freezes the trace and makes it your curve, point for point, in green, at the Level you set and ready to edit and save. The editor switches to the matching mode. Untick **Hold** to bring the live trace back over the curve.",
+            "**Grab** makes the trace your curve, point for point, in green, at the Level you set and ready to edit and save, and closes the live trace. The editor switches to the matching mode. Press **Editor** again to compare the live trace with your curve.",
             "**Close** on the bar stops showing the live trace. It also goes when you disconnect or press Clear Curve. The live trace is never saved into the curve unless you Grab it.",
             "A stopped measurement's Editor and Float buttons are greyed; start it in Smaart first."
           ]
@@ -187,7 +187,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "**Float** next to any running measurement in Live Grab shows that trace live in a see-through window that floats over every app. Lay it on another program's EQ graph, such as the EQ page in LA Network Manager, and shape your EQ against the real measurement. The floating trace only draws; it never changes anything in the other app. To float a saved curve instead, right-click it in the library and choose **Float This Curve**. A Target Trace icon in the menu bar lets you connect to Smaart, float and control traces without the editor."
+          "text": "**Float** next to any running measurement in Live Trace shows that trace live in a see-through window that floats over every app. Lay it on another program's EQ graph, such as the EQ page in LA Network Manager, and shape your EQ against the real measurement. The floating trace only draws; it never changes anything in the other app. To float a saved curve instead, right-click it in the library and choose **Float This Curve**. A Target Trace icon in the menu bar lets you connect to Smaart, float and control traces without the editor."
         },
         {
           "type": "bullets",
@@ -199,7 +199,7 @@
             "**Hold** freezes a live trace where it is. A saved curve shows **Saved** next to its name and never changes.",
             "**Show** hides the trace without closing it, and ticking it brings the trace straight back.",
             "To work with just the floating trace, close the editor window or choose **Hide Target Trace** (Cmd-H). The floating trace stays on screen, and closing the window keeps Target Trace running in the menu bar with no Dock icon. Choose **Open Target Trace** from the menu bar icon to bring the editor back.",
-            "**Menu bar:** once connected, the icon lists Smaart's measurements under **RTA** and **TF**. Pick a running one to float it, or another to swap; a tick shows the one floating. It also has **Show**, **Invert**, **Hold**, **Lock** and **Close Floating Trace**. It shares Live Grab's connection, so the two always agree: **Connect to Smaart** in the menu connects Live Grab too, using the host, port and password entered there, and **Disconnect from Smaart** disconnects both. **Grab to Editor** freezes the floating trace and takes it into the editor as the curve, ready to save. Once you have floated a saved curve, the last three are listed under **Target Curves**; pick one to float it again, or hold Option and pick **Remove** to take it off the list.",
+            "**Menu bar:** once connected, the icon lists Smaart's measurements under **RTA** and **TF**. Pick a running one to float it, or another to swap; a tick shows the one floating. It also has **Show**, **Invert**, **Hold**, **Lock** and **Close Floating Trace**. It shares Live Trace's connection, so the two always agree: **Connect to Smaart** in the menu connects Live Trace too, using the host, port and password entered there, and **Disconnect from Smaart** disconnects both. **Grab to Editor** freezes the floating trace and takes it into the editor as the curve, ready to save. Once you have floated a saved curve, the last three are listed under **Target Curves**; pick one to float it again, or hold Option and pick **Remove** to take it off the list.",
             "**Lock** hides the guides, lets clicks go straight through to the app underneath, and ties the floating trace to that window. Move the window and the floating trace moves with it; switch to another app, minimise the window or hide the app and it hides too, then comes back when you return. After resizing the window, untick **Lock**, stretch the floating trace back onto the graph and tick it again. Target Trace remembers that for each window size, so switching an app between its normal size and full screen puts the floating trace back where you lined it up for each. A small bar stays underneath with **Show**, **Invert**, **Hold**, **Lock** and **Close**; untick **Lock** to move it again. **Close** removes the floating trace.",
             "A live trace uses the smoothing chosen on the editor's live trace bar, and an RTA trace is centred on 0 dB automatically. The floating trace remembers where you left it. If Smaart stops sending, the trace dims and its bar shows **Waiting for Smaart** until it comes back."
           ]
