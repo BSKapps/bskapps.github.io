@@ -105,7 +105,7 @@
             "**Colour** and **line weight** (1 to 5 pt) for how the curve draws.",
             "**Tolerance band** (TF only) - a shaded plus/minus dB region around the curve.",
             "**Offset** - a running readout of global dB shifts (Cmd-up/down or the plus/minus buttons). Click it to reset. The offset is a working convenience and is never saved into the file.",
-            "**Smoothing** (Spectrum only) - Off, 1, 1/3, 1/6, 1/12 octave; a display resolution that does not change your points.",
+            "**Smoothing** (Spectrum only) - Off, 1/12, 1/6, 1/3, 1 octave; a display resolution that does not change your points.",
             "**Weighting** (Spectrum only) - Z (none), A or C; a display-only view that shifts the curve to match how loudness is heard. Flipping back to Z restores the raw shape exactly.",
             "**TF Reference SPL** (TF only) - 60 to 100 dB, the level TF maps to."
           ]
@@ -158,13 +158,13 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "**Live Trace** in the toolbar connects Target Trace to a running Smaart and shows a measured trace live on the editor graph and turns it into an editable target curve. Enable the API in Smaart under **Options > Preferences > API**, then enter the host (use **localhost** when Smaart is on the same computer, or the other computer's IP address; on macOS 15 and later, macOS asks the first time to let Target Trace use the local network), the port (default 26000) and the password if you set one, and press **Connect**."
+          "text": "**Live Trace** in the toolbar connects Target Trace to a running Smaart and shows a measured trace live on the editor graph and turns it into an editable target curve. Enable the API in Smaart under **Options > Preferences > API**, then enter the host (use **localhost** when Smaart is on the same computer, or the other computer's IP address or name; on macOS 15 and later, macOS asks the first time to let Target Trace use the local network), the port (default 26000) and the password if you set one, and press **Connect**."
         },
         {
           "type": "bullets",
           "items": [
-            "**Editor** next to any running measurement shows its trace live on the editor graph, in yellow, moving as Smaart measures. A bar at the top of the graph shows its name and whether it is **Live**, **Held** or **Waiting for Smaart**.",
-            "**Level** on that bar moves the live trace up or down, and Target Trace keeps it for each measurement until you quit, even if you close the live trace or reconnect. **Centre** sets Level so a transfer function trace's average from 225 Hz to 8.8 kHz sits on 0 dB, the range Smaart uses for its own averages; it is greyed out for an RTA, which stays at its real level, and when the trace is already centred. **Smoothing** sets the smoothing, from Off to 1/24 octave, as in Smaart.",
+            "**Editor** next to any running measurement shows its trace live on the editor graph, in yellow, moving as Smaart measures. An empty graph switches to that measurement's type, RTA or TF, first; a graph with a curve on it stays as it is. A bar at the top of the graph shows its name and whether it is **Live**, **Held** or **Waiting for Smaart**.",
+            "**Level** on that bar moves the live trace up or down, and Target Trace keeps it for each measurement until you quit, even if you close the live trace or reconnect. The Level value lights up once it has moved; click it to put Level back to 0. **Smoothing** sets the smoothing, Off or 1/24 to 1 octave, as in Smaart.",
             "**Hold** freezes the trace where it is; untick it to go live again.",
             "**Grab** makes the trace your curve, point for point, in green, at the Level you set and ready to edit and save, and closes the live trace. The editor switches to the matching mode. Press **Editor** again to compare the live trace with your curve.",
             "**Close** on the bar stops showing the live trace. It also goes when you disconnect; Clear Curve leaves it running. The live trace is never saved into the curve unless you Grab it.",
@@ -192,8 +192,8 @@
         {
           "type": "bullets",
           "items": [
-            "**Lining up:** drag the floating trace to move it, and drag its edges or corners to stretch it, until the blue **100**, **1k** and **10k** guides sit on the other app's 100 Hz, 1 kHz and 10 kHz lines and its left and right edges, marked **20** and **20k**, sit on 20 Hz and 20 kHz, and the dashed level lines sit on its level lines (+12, 0 and -12 at a Scale of 24). While the move cursor shows over the floating trace, the arrow keys nudge it 1 pt, or 10 pt with Shift. Its name and controls sit just underneath it (above it near the bottom of the screen), so it can shrink to fit a small EQ graph.",
-            "**Scale** sets the dB value at the top and bottom edges. LA Network Manager uses 24; QL Editor uses 20. **Smoothing** sets the floating trace's own smoothing, from Off to 1/24 octave, separate from the editor's live trace. **Level** moves the trace up or down and is remembered for each measurement and saved curve until you quit, even if you close the floating trace or reconnect; **Centre** sets it so the trace's average from 225 Hz to 8.8 kHz sits on the 0 line. Target Trace remembers Scale for each app when you lock, so LA Network Manager and QL Editor each keep their own.",
+            "**Lining up:** drag the floating trace to move it, and drag its edges or corners to stretch it, until the blue **100**, **1k** and **10k** guides sit on the other app's 100 Hz, 1 kHz and 10 kHz lines and its left and right edges, marked **20** and **20k**, sit on 20 Hz and 20 kHz, and the dashed level lines sit on its level lines (+12, 0 and -12 at a Scale of 24). While the move cursor shows over the floating trace, the arrow keys nudge it 1 pt, or 10 pt with Shift. Shift-scroll, or pinch on a trackpad, resizes it without changing its shape; the spot under the pointer stays put. Its name and controls sit just underneath it (above it near the bottom of the screen), so it can shrink to fit a small EQ graph.",
+            "**Scale** sets the dB value at the top and bottom edges. LA Network Manager uses 24; QL Editor uses 20. **Smoothing** sets the floating trace's own smoothing, Off or 1/24 to 1 octave, separate from the editor's live trace. **Level** moves the trace up or down and is remembered for each measurement and saved curve until you quit, even if you close the floating trace or reconnect. The Level value lights up once it has moved; click it to put Level back to 0. Target Trace remembers Scale for each app when you lock, so LA Network Manager and QL Editor each keep their own.",
             "**Blanking** hides a live TF trace wherever Smaart's coherence falls below the percentage you pick, the way Smaart's own coherence blanking does. It is set here, not read from Smaart, and it is greyed out for RTA traces and saved curves.",
             "**Invert** flips the trace upside down, so a peak shows as a dip your EQ cut can follow. An inverted trace and its name turn magenta; a normal trace is yellow.",
             "**Hold** freezes a live trace where it is. A saved curve shows **Saved** next to its name and never changes.",
@@ -212,7 +212,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "The **Point Spacing** section in the properties panel evens out how points are spread across the curve. Pick an octave band (1, 1/3, 1/6, 1/12 or 1/24) and a frequency range, then **Apply** to re-sample the curve onto that grid - a finer band adds points, a coarser one reduces them. **Restore** brings the original points back."
+          "text": "The **Point Spacing** section in the properties panel evens out how points are spread across the curve. Pick an octave band (1, 1/3, 1/6, 1/12 or 1/24) and a frequency range (16 Hz to 22 kHz to start, which covers the whole curve), then **Apply** to re-sample that part of the curve onto the grid - a finer band adds points, a coarser one reduces them. Points outside the range stay as they are. **Restore** brings the original points back."
         }
       ]
     },
