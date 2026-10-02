@@ -148,7 +148,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "**New from Preset** - the button at the top of the library sidebar, File > New from Preset, or press P - offers Flat, Tilt, 9 dB Haystack, 15 dB Haystack and X-Curve (Cinema), the SMPTE ST 202 X-curve with the LFE 10 dB up to 125 Hz, across the whole range. Tilt has adjustable tilt amount and pivot frequency, and both Tilt and Flat can add an optional sub bump. Applying a preset replaces the current curve, names it \"My Curve\" and can be undone."
+          "text": "**New from Preset** - the button at the top of the library sidebar, File > New from Preset, or press P - offers Flat, Tilt, 9 dB Haystack, 15 dB Haystack and X-Curve (Cinema), the SMPTE ST 202 X-curve across the whole range; tick Add LFE target to raise it 10 dB up to 125 Hz for the LFE. Tilt has adjustable tilt amount and pivot frequency, and both Tilt and Flat can add an optional sub bump. Applying a preset replaces the current curve, names it \"My Curve\" and can be undone."
         }
       ]
     },
