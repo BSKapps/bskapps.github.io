@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Target Trace user guide - BSK Apps",
     "h1": "Target Trace user guide",
-    "dateLine": "Updated for version 1.4",
+    "dateLine": "Updated for version 1.5",
     "description": "A how-to guide for Target Trace: drawing and editing target curves, TF and Spectrum modes, smoothing and weighting, the Smaart library, presets, and exporting .crv and REW files.",
     "canonical": "https://bskapps.com/articles/target-trace-guide/",
     "ogTitle": "Target Trace user guide",
@@ -62,7 +62,7 @@
         },
         {
           "type": "paragraph",
-          "text": "**Flatten Selected** (Cmd-F) eases a selected run of three or more points toward the straight line between the outer two, which stay put. Each press flattens the section a step further - the button reads **Flatten More** while the same selection is active - so press once to calm a rough section, or keep pressing to land it dead flat, or on a tilt when the end points sit at different levels."
+          "text": "**Flatten** (Cmd-F) eases a selected run of three or more points toward the straight line between the outer two, which stay put. Each press flattens the section a step further, so press once to calm a rough section, or keep pressing to land it dead flat, or on a tilt when the end points sit at different levels."
         }
       ]
     },
@@ -105,7 +105,7 @@
             "**Colour** and **line weight** (1 to 5 pt) for how the curve draws.",
             "**Tolerance band** (TF only) - a shaded plus/minus dB region around the curve.",
             "**Offset** - a running readout of global dB shifts (Cmd-up/down or the plus/minus buttons). Click it to reset. The offset is a working convenience and is never saved into the file.",
-            "**Smoothing** (Spectrum only) - Off, 1, 1/3, 1/6, 1/12 octave; a display resolution that does not change your points.",
+            "**Smoothing** (Spectrum only) - Off, 1/12, 1/6, 1/3, 1 octave; a display resolution that does not change your points.",
             "**Weighting** (Spectrum only) - Z (none), A or C; a display-only view that shifts the curve to match how loudness is heard. Flipping back to Z restores the raw shape exactly.",
             "**TF Reference SPL** (TF only) - 60 to 100 dB, the level TF maps to."
           ]
@@ -128,7 +128,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "The left sidebar is your library - it lists the .crv files in your Smaart TargetCurves folder. There are two ways to use a curve: **double-click it (or drag it onto the canvas) to load it for editing**, which replaces the current curve; or **tick its checkbox to overlay it** for comparison, drawn dimmed and read-only without changing what you are editing. Drag a curve up or down within the list to reorder it (or use the right-click menu's Move Up, Down, to Top and to Bottom), and right-click to move it to Trash. On first launch Target Trace finds your Smaart TargetCurves folder automatically when there is one; use the folder button to change it, and if the folder goes missing a notice lets you re-pick it. Use the All / RTA / TF buttons to filter the list by type; All shows everything split into an RTA group then a TF group. When Match type is on the list follows the curve you are editing (RTA or TF) and the buttons reflect that; turn Match type off to choose a filter yourself, which returns the list to All."
+          "text": "The left sidebar is your library - it lists the .crv files in your Smaart TargetCurves folder. There are two ways to use a curve: **double-click it (or drag it onto the canvas) to load it for editing**, which replaces the current curve; or **tick its checkbox to overlay it** for comparison, drawn dimmed and read-only without changing what you are editing. Drag a curve up or down within the list to reorder it (or use the right-click menu's Move Up, Down, to Top and to Bottom), and right-click to move it to Trash. On first launch Target Trace finds your Smaart TargetCurves folder automatically when there is one; use the folder button to change it, and if the folder goes missing a notice lets you re-pick it. Use the All / RTA / TF buttons to filter the list by type; All shows everything in an RTA group and a TF group, with the type you are editing first."
         }
       ]
     },
@@ -138,7 +138,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "The overlay controls sit in one panel. **Show overlays** is the master switch; overlaid curves draw dimmed and read-only, so you cannot edit them by accident. Each overlay is drawn the way Smaart shows it, sitting at its own saved offset. **Match type**, when on, shows only the overlays whose type (TF or RTA) matches the pane, and focuses the library list to that type as well; turn it off to show every overlay and browse the full library, which returns the list to All. **Tolerance** shows each TF overlay's own saved plus/minus band, taken from the curve's Tolerance value; RTA overlays never show one, matching Smaart. **Offset** shifts every overlay up or down together so you can line a reference up against your curve and compare its shape; it is view-only and never saved."
+          "text": "The **Overlay Options** panel above the list holds every overlay control. **Show overlays**, its bottom row, is the master switch for every curve ticked below it; overlaid curves draw dimmed and read-only, so you cannot edit them by accident. Turning it off leaves the list as it is. Each overlay is drawn the way Smaart shows it, sitting at its own saved offset. **Match curve type**, when on, shows only the overlays whose type (TF or RTA) matches the pane; the other type's checkboxes are greyed out while it is on, unless Split View shows that type below. Turn it off to show every overlay. **Tolerance** shows each TF overlay's own saved plus/minus band, taken from the curve's Tolerance value; RTA overlays never show one, matching Smaart. It is greyed out with \"No saved bands\" until a ticked TF overlay has one: tick Tolerance band on that curve in the right sidebar and save it. **Offset** shifts every overlay up or down together so you can line a reference up against your curve and compare its shape; it is view-only and never saved."
         }
       ]
     },
@@ -148,25 +148,27 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "**New from Preset** - the button at the top of the library sidebar, File > New from Preset, or press P - offers Flat, Tilt, 9 dB Haystack, 15 dB Haystack and X-Curve (Cinema). Tilt has adjustable tilt amount and pivot frequency, and both Tilt and Flat can add an optional sub bump. Applying a preset replaces the current curve, names it \"My Curve\" and can be undone."
+          "text": "**New from Preset** - the button at the top of the library sidebar, File > New from Preset, or press P - offers Flat, Tilt, 9 dB Haystack, 15 dB Haystack and X-Curve (Cinema), the SMPTE ST 202 X-curve across the whole range; tick Add LFE target to raise it 10 dB up to 125 Hz for the LFE. Tilt has adjustable tilt amount and pivot frequency, and both Tilt and Flat can add an optional sub bump. Applying a preset replaces the current curve, names it \"My Curve\" and can be undone."
         }
       ]
     },
     {
       "id": "live-grab",
-      "title": "Live Grab",
+      "title": "Live Trace",
       "blocks": [
         {
           "type": "paragraph",
-          "text": "**Live Grab** in the toolbar connects Target Trace to a running Smaart and pulls a measured trace straight into the editor as an editable target curve. Enable the API in Smaart under **Options > Preferences > API**, then enter the host (use **localhost** when Smaart is on the same computer), the port (default 26000) and the password if you set one, and press **Connect**."
+          "text": "**Live Trace** in the toolbar connects Target Trace to a running Smaart and shows a measured trace live on the editor graph and turns it into an editable target curve. Enable the API in Smaart under **Options > Preferences > API**, then enter the host (use **localhost** when Smaart is on the same computer, or the other computer's IP address or name; on macOS 15 and later, macOS asks the first time to let Target Trace use the local network), the port (default 26000) and the password if you set one, and press **Connect**."
         },
         {
           "type": "bullets",
           "items": [
-            "**Grab** next to any running measurement takes a snapshot of its trace and turns it into control points, ready to edit and save. The editor switches to the matching mode.",
-            "A grab from a **calibrated RTA** lands at its real SPL on the graph. A transfer function grab is centred on 0 dB.",
-            "The raw trace stays behind the editor as a faint **reference line** so you can see how far your target sits from the measurement. **Detail** sets its resolution, **Refresh** re-grabs, **Clear** removes it. It is never saved into the curve.",
-            "Grab needs the measurement running in Smaart; a stopped measurement's Grab button is greyed."
+            "**Editor** next to any running measurement shows its trace live on the editor graph, in yellow, moving as Smaart measures. An empty graph switches to that measurement's type, RTA or TF, first; a graph with a curve on it stays as it is. A bar at the top of the graph shows its name and whether it is **Live**, **Held** or **Waiting for Smaart**.",
+            "**Level** on that bar moves the live trace up or down, and Target Trace keeps it for each measurement until you quit, even if you close the live trace or reconnect. The Level value lights up once it has moved; click it to put Level back to 0. **Smoothing** sets the smoothing, Off or 1/24 to 1 octave, as in Smaart.",
+            "**Hold** freezes the trace where it is; untick it to go live again.",
+            "**Grab** makes the trace your curve, point for point, in green, at the Level you set and ready to edit and save, and closes the live trace. The editor switches to the matching mode. Press **Editor** again to compare the live trace with your curve.",
+            "**Close** on the bar stops showing the live trace. It also goes when you disconnect; Clear Curve leaves it running. The live trace is never saved into the curve unless you Grab it.",
+            "A stopped measurement's Editor and Float buttons are greyed; start it in Smaart first."
           ]
         },
         {
@@ -175,7 +177,32 @@
         },
         {
           "type": "paragraph",
-          "text": "A grab from a calibrated RTA lands at the measured SPL; a transfer function grab is relative and centres on 0 dB. **TF Ref** is the bridge between the two views: it sets which SPL 0 dB TF maps to. Set TF Ref to your measurement level and the RTA and TF views of the same grab line up."
+          "text": "A calibrated RTA trace sits at its measured SPL, and a transfer function trace sits at the same dB it shows in Smaart. **TF Ref** is the bridge between the two views: it sets which SPL 0 dB TF maps to. Set TF Ref to your measurement level and the RTA and TF views of the same grab line up."
+        }
+      ]
+    },
+    {
+      "id": "floating-trace",
+      "title": "Floating Trace",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "**Float** next to any running measurement in Live Trace shows that trace live in a see-through window that floats over every app. Lay it on another program's EQ graph, such as the EQ page in LA Network Manager, and shape your EQ against the real measurement. The floating trace only draws; it never changes anything in the other app. To float a saved curve instead, right-click it in the library and choose **Float This Curve**. A Target Trace icon in the menu bar lets you connect to Smaart, float and control traces without the editor."
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "**Lining up:** drag the floating trace to move it, and drag its edges or corners to stretch it, until the blue **100**, **1k** and **10k** guides sit on the other app's 100 Hz, 1 kHz and 10 kHz lines and its left and right edges, marked **20** and **20k**, sit on 20 Hz and 20 kHz, and the dashed level lines sit on its level lines (+12, 0 and -12 at a Scale of 24). While the move cursor shows over the floating trace, the arrow keys nudge it 1 pt, or 10 pt with Shift. Shift-scroll, or pinch on a trackpad, resizes it without changing its shape; the spot under the pointer stays put. Its name and controls sit in a bar just underneath it, so it can shrink to fit a small EQ graph; the arrow button next to **Lock** moves the bar above it instead, out of the way of the other app's labels, and it moves to the other side by itself when there is no room.",
+            "**Scale** sets the dB value at the top and bottom edges. LA Network Manager uses 24; QL Editor uses 20. **Smoothing** sets the floating trace's own smoothing, Off or 1/24 to 1 octave, separate from the editor's live trace. **Level** moves the trace up or down and is remembered for each measurement and saved curve until you quit, even if you close the floating trace or reconnect. The Level value lights up once it has moved; click it to put Level back to 0. Target Trace remembers Scale for each app when you lock, so LA Network Manager and QL Editor each keep their own.",
+            "**Blanking** hides a live TF trace wherever Smaart's coherence falls below the percentage you pick, the way Smaart's own coherence blanking does. It is set here, not read from Smaart, and it is greyed out for RTA traces and saved curves.",
+            "**Invert** flips the trace upside down, so a peak shows as a dip your EQ cut can follow. An inverted trace and its name turn magenta; a normal trace is yellow.",
+            "**Hold** freezes a live trace where it is. A saved curve shows **Saved** next to its name and never changes.",
+            "**Show** hides the trace without closing it, and ticking it brings the trace straight back.",
+            "To work with just the floating trace, close the editor window or choose **Hide Target Trace** (Cmd-H). The floating trace stays on screen (unless it is locked to the editor, when it hides with it), and closing the window keeps Target Trace running in the menu bar with no Dock icon. Choose **Open Target Trace** from the menu bar icon to bring the editor back.",
+            "**Menu bar:** once connected, the icon lists Smaart's measurements under **RTA** and **TF**. Pick a running one to float it, or another to swap; a tick shows the one floating. It also has **Show**, **Invert**, **Hold**, **Lock** and **Close Floating Trace**; Show is greyed out while a locked floating trace is hidden. It shares Live Trace's connection, so the two always agree: **Connect to Smaart** in the menu connects Live Trace too, using the host, port and password entered there, and **Disconnect from Smaart** disconnects both. **Grab to Editor** freezes the floating trace and takes it into the editor as the curve, ready to save; for an RTA it is greyed out until Target Trace is connected to Smaart, so the curve lands at its real level. Once you have floated a saved curve, the last three are listed under **Target Curves**; pick one to float it again, or hold Option and pick **Remove** to take it off the list.",
+            "**Lock** hides the guides, lets clicks go straight through to the app underneath, and ties the floating trace to that window, including the Target Trace editor. Move the window and the floating trace moves with it; if another app's window covers it or its bar, or you minimise the window or hide the app, it hides too, then comes back when the window is in view again. After resizing the window, press **Lock** to unlock it, stretch the floating trace back onto the graph and press **Lock** again. Target Trace remembers that for each window size, so switching an app between its normal size and full screen puts the floating trace back where you lined it up for each. A small bar stays with it, says which app it is locked to, and has **Show**, **Invert**, **Hold**, **Lock** and **Close**; **Lock** fills in while locked, and pressing it again lets you move the floating trace. **Close** removes the floating trace.",
+            "An RTA trace is centred on 0 dB automatically. The floating trace remembers where you left it. If Smaart stops sending, the trace dims and its bar shows **Waiting for Smaart** until it comes back."
+          ]
         }
       ]
     },
@@ -185,7 +212,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "The **Point Spacing** section in the properties panel evens out how points are spread across the curve. Pick an octave band (1, 1/3, 1/6 or 1/12) and a frequency range, then **Apply** to re-sample the curve onto that grid - a finer band adds points, a coarser one reduces them. **Restore** brings the original points back."
+          "text": "The **Point Spacing** section in the properties panel evens out how points are spread across the curve. Pick an octave band (1, 1/3, 1/6, 1/12 or 1/24) and a frequency range (16 Hz to 22 kHz to start, which covers the whole curve), then **Apply** to re-sample that part of the curve onto the grid - a finer band adds points, a coarser one reduces them. Points outside the range stay as they are. **Restore** brings the original points back."
         }
       ]
     },
@@ -195,7 +222,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Press Cmd-S to save. The dialog offers two formats: **Smaart (.crv)** keeps all the metadata (colour, type, tolerance, smoothing band) and the points; **REW House Curve (.txt)** writes just the frequency and dB columns for use in REW. Saving into your Smaart TargetCurves folder updates the library automatically. REW .txt files are an export only and cannot be loaded back in. Closing the window or quitting with unsaved changes asks first."
+          "text": "Press Cmd-S to save. The dialog offers two formats: **Smaart (.crv)** keeps all the metadata (colour, type, tolerance, smoothing band) and the points; **REW House Curve (.txt)** writes just the frequency and dB columns for use in REW. Saving into your Smaart TargetCurves folder updates the library automatically. REW .txt files are an export only and cannot be loaded back in, so exporting one does not count as saving the curve. Quitting with unsaved changes asks first. Closing the last editor window keeps your work and just hides Target Trace in the menu bar; closing any other window with unsaved changes asks first."
         },
         {
           "type": "paragraph",
