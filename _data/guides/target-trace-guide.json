@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Target Trace user guide - BSK Apps",
     "h1": "Target Trace user guide",
-    "dateLine": "Updated for version 1.4",
+    "dateLine": "Updated for version 1.5",
     "description": "A how-to guide for Target Trace: drawing and editing target curves, TF and Spectrum modes, smoothing and weighting, the Smaart library, presets, and exporting .crv and REW files.",
     "canonical": "https://bskapps.com/articles/target-trace-guide/",
     "ogTitle": "Target Trace user guide",
@@ -199,7 +199,7 @@
             "**Hold** freezes a live trace where it is. A saved curve shows **Saved** next to its name and never changes.",
             "**Show** hides the trace without closing it, and ticking it brings the trace straight back.",
             "To work with just the floating trace, close the editor window or choose **Hide Target Trace** (Cmd-H). The floating trace stays on screen, and closing the window keeps Target Trace running in the menu bar with no Dock icon. Choose **Open Target Trace** from the menu bar icon to bring the editor back.",
-            "**Menu bar:** once connected, the icon lists Smaart's measurements under **RTA** and **TF**. Pick a running one to float it, or another to swap; a tick shows the one floating. It also has **Show**, **Invert**, **Hold**, **Lock** and **Close Floating Trace**; Show is greyed out while a locked floating trace is hidden. It shares Live Trace's connection, so the two always agree: **Connect to Smaart** in the menu connects Live Trace too, using the host, port and password entered there, and **Disconnect from Smaart** disconnects both. **Grab to Editor** freezes the floating trace and takes it into the editor as the curve, ready to save. Once you have floated a saved curve, the last three are listed under **Target Curves**; pick one to float it again, or hold Option and pick **Remove** to take it off the list.",
+            "**Menu bar:** once connected, the icon lists Smaart's measurements under **RTA** and **TF**. Pick a running one to float it, or another to swap; a tick shows the one floating. It also has **Show**, **Invert**, **Hold**, **Lock** and **Close Floating Trace**; Show is greyed out while a locked floating trace is hidden. It shares Live Trace's connection, so the two always agree: **Connect to Smaart** in the menu connects Live Trace too, using the host, port and password entered there, and **Disconnect from Smaart** disconnects both. **Grab to Editor** freezes the floating trace and takes it into the editor as the curve, ready to save; for an RTA it is greyed out until Target Trace is connected to Smaart, so the curve lands at its real level. Once you have floated a saved curve, the last three are listed under **Target Curves**; pick one to float it again, or hold Option and pick **Remove** to take it off the list.",
             "**Lock** hides the guides, lets clicks go straight through to the app underneath, and ties the floating trace to that window. Move the window and the floating trace moves with it; if another app's window covers it or its bar, or you minimise the window or hide the app, it hides too, then comes back when the window is in view again. After resizing the window, press **Lock** to unlock it, stretch the floating trace back onto the graph and press **Lock** again. Target Trace remembers that for each window size, so switching an app between its normal size and full screen puts the floating trace back where you lined it up for each. A small bar stays underneath, says which app it is locked to, and has **Show**, **Invert**, **Hold**, **Lock** and **Close**; **Lock** fills in while locked, and pressing it again lets you move the floating trace. **Close** removes the floating trace.",
             "An RTA trace is centred on 0 dB automatically. The floating trace remembers where you left it. If Smaart stops sending, the trace dims and its bar shows **Waiting for Smaart** until it comes back."
           ]
@@ -222,7 +222,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Press Cmd-S to save. The dialog offers two formats: **Smaart (.crv)** keeps all the metadata (colour, type, tolerance, smoothing band) and the points; **REW House Curve (.txt)** writes just the frequency and dB columns for use in REW. Saving into your Smaart TargetCurves folder updates the library automatically. REW .txt files are an export only and cannot be loaded back in, so exporting one does not count as saving the curve. Closing the window or quitting with unsaved changes asks first."
+          "text": "Press Cmd-S to save. The dialog offers two formats: **Smaart (.crv)** keeps all the metadata (colour, type, tolerance, smoothing band) and the points; **REW House Curve (.txt)** writes just the frequency and dB columns for use in REW. Saving into your Smaart TargetCurves folder updates the library automatically. REW .txt files are an export only and cannot be loaded back in, so exporting one does not count as saving the curve. Quitting with unsaved changes asks first. Closing the last editor window keeps your work and just hides Target Trace in the menu bar; closing any other window with unsaved changes asks first."
         },
         {
           "type": "paragraph",
