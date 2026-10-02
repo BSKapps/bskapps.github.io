@@ -22,7 +22,7 @@
 
         <article>
             <h1>How to control Spotify from Bitfocus Companion</h1>
-            <p class="date">14 June 2026</p>
+            <p class="date">14 June 2026 &middot; Updated 3 October 2026</p>
 
             <p>If you run a Stream Deck through Bitfocus Companion, you can drive Spotify from it: start a track, pause cleanly, fade the volume, jump to a cue point, and show what is playing on the keys. <a href="/tools/companion/">BSK Spotify for Companion</a> is a free, open-source module that does this through the Spotify Web API. This is a quick overview; the module's page has the full step-by-step setup.</p>
 
@@ -41,20 +41,19 @@
             <p>Bitfocus Companion 4.x, a Spotify Premium account, and a free Spotify Developer app (one per Companion install) for the sign-in. You do not need a paid developer subscription; your normal Spotify account is fine.</p>
 
             <h2>Setting it up</h2>
-            <p>In short:</p>
             <ol>
                 <li>Download the module's <code>.tgz</code> from the latest release (do not extract it).</li>
                 <li>In Companion, open <strong>Modules</strong> and use <strong>Import module package</strong> to load the <code>.tgz</code>.</li>
                 <li>Open <strong>Connections</strong>, add a new connection, and search for <strong>BSK Spotify</strong>.</li>
                 <li>Paste in your Spotify app's Client ID and Client Secret, then click <strong>Authenticate</strong> and sign in.</li>
             </ol>
-            <p>The full walkthrough, including how to create the Spotify Developer app and the exact redirect URI to use, is on the <a href="/tools/companion/">module page</a>.</p>
+            <p>The full walkthrough, including how to create the Spotify Developer app and the exact redirect URI to use, is on the <a href="/tools/companion/">module page</a>. Updates are manual: Companion does not tell you when a new version is out, so re-download the <code>.tgz</code>, import it again, then pick the new version in the connection's settings.</p>
 
             <h2>Using it on the buttons</h2>
             <p>Drop the ready-made presets onto your Stream Deck pages for instant transport, volume and playlist buttons, then swap in the variables to show the current track and time. Build a cue point or bookmark button when you need a song to start from an exact moment in a show.</p>
 
             <h2>If the connection drops mid-show</h2>
-            <p>On macOS the module has an offline fallback: if the Web API drops out, control switches to the local Spotify app and almost everything keeps working. Transport, volume, fades, seek, shuffle and repeat, playing a specific track or playlist, timestamp cues and bookmark resume all still fire, and track info and album art keep updating. Playing a specific song while fully offline needs it downloaded in Spotify first. It recovers automatically when the API comes back. That safety net is the reason it is worth running over a generic web request.</p>
+            <p>On macOS the module has an offline fallback: if the Web API drops out, control switches to the local Spotify app and almost everything keeps working. Transport, volume, fades, seek, shuffle and repeat, playing a specific track or playlist, timestamp cues and bookmark resume all still fire, and track info and album art keep updating. Playing a specific song while fully offline needs it downloaded in Spotify first. It recovers automatically when the API comes back. The fallback is why it beats a plain HTTP button.</p>
 
             <p>It is free and MIT licensed, with the source on GitHub.</p>
 

@@ -3,7 +3,7 @@ if not retval then return end
 
 local file = io.open(filepath, "r")
 if not file then
-    reaper.ShowMessageBox("Could not open file.", "Import Track Names", 0)
+    reaper.ShowMessageBox("Failed to open file.", "Import Track Names", 0)
     return
 end
 

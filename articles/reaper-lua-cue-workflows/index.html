@@ -22,17 +22,17 @@
 
         <article>
             <h1>REAPER Lua scripting for live recording</h1>
-            <p class="date">9 April 2026</p>
+            <p class="date">9 April 2026 &middot; Updated 3 October 2026</p>
 
-            <p>REAPER is an unusually honest DAW. Most of what you do in the UI is driven by actions, and most of those actions are exposed to a scripting language. If you record live shows or sessions and spend any time on prep, learning ten lines of Lua is one of the highest-return things you can do.</p>
+            <p>REAPER exposes almost everything to scripts. Most of what you do in the UI is driven by actions, and most of those actions can be called from a script. If you record live shows or sessions and spend any time on prep, learning ten lines of Lua is one of the highest-return things you can do.</p>
 
             <h2>Why bother</h2>
-            <p>Manual repetition is where you make mistakes. Renaming forty-eight inputs to match a stage patch, colouring each channel group, consolidating every track into a new take. Doing it by hand takes an hour and a quarter of it will be wrong. A script takes the same hour to write the first time, then runs in a second forever after.</p>
+            <p>Manual repetition is where you make mistakes. Renaming forty-eight inputs to match a stage patch, colouring each channel group, consolidating every track into a new take. Doing it by hand takes an hour and you will mistype some. A script takes the same hour to write the first time, then runs in a second forever after.</p>
             <p>You don't need to be a programmer. You need to copy, paste, and read a function reference.</p>
 
             <h2>A real live-recording example: rename tracks from a CSV</h2>
             <p>This example uses Lua, the small scripting language REAPER exposes through ReaScript. The code below is one file you save and run from REAPER's Action List.</p>
-            <p>You turn up to a gig. The FOH engineer hands you their patch list as a CSV. Your REAPER session has forty-eight tracks called <code>Track 1</code> through <code>Track 48</code>. You want them renamed in thirty seconds, not thirty minutes.</p>
+            <p>You turn up to a gig. The FOH engineer hands you their patch list as a CSV. Your REAPER session has forty-eight tracks called <code>Track 1</code> through <code>Track 48</code>. You want them renamed in under a minute.</p>
             <p>Save a file as <code>patch.csv</code> somewhere you'll find it again. One track per line, number then name:</p>
             <pre><code>1,Kick In
 2,Kick Out
@@ -47,8 +47,8 @@
 if not file then return end
 
 for line in file:lines() do
-    local num, name = line:match("(%d+),(.+)")
-    if num and name then
+    local num, name = line:match("(%d+),(.-)\r?$")
+    if num and name ~= "" then
         local track = reaper.GetTrack(0, tonumber(num) - 1)
         if track then
             reaper.GetSetMediaTrackInfo_String(
@@ -59,23 +59,26 @@ end
 
 file:close()
 reaper.UpdateArrange()</code></pre>
-            <p>That's it. Run the action, every track picks up the right name, ready to record. Change the CSV, run it again, names update. The same pattern works for colours, folder assignments, record-arm state, anything REAPER exposes on a track.</p>
+            <p>The <code>\r?</code> at the end of the pattern matters. A CSV saved from Excel or on Windows ends each line with a carriage return before the line feed, and Lua on a Mac keeps it. Without the <code>\r?</code>, every track name carries an invisible character on the end.</p>
+            <p>Run the action, every track picks up the right name, ready to record. Change the CSV, run it again, names update. The same pattern works for colours, folder assignments, record-arm state, anything REAPER exposes on a track.</p>
 
             <h2>Going further</h2>
             <ul>
-                <li>REAPER's built-in ReaScript documentation (Help menu, ReaScript documentation, or the <code>reascripthelp.html</code> file in your REAPER install) lists every function, with Lua and Python examples for each.</li>
+                <li>REAPER's built-in ReaScript documentation (Help &gt; ReaScript documentation, which generates <code>reascripthelp.html</code> and opens it in your browser) lists every API function with its EEL2, Lua and Python prototype.</li>
                 <li>The SWS/S&amp;M extension adds more actions you can drive from scripts.</li>
                 <li>Scripts live in a plain folder. Version them in git if you care about not losing them.</li>
             </ul>
-            <p>We've written a small set of these for common show-audio tasks. They're free, on the <a href="/tools/">free tools page</a>. Use them as-is, or copy the patterns and adapt them to your workflow.</p>
+            <p>We've written a small set of these for common show-audio tasks. They're free, on the <a href="/tools/reaper/">REAPER tools page</a>. One of them, BSK Import: Track Names from CSV or Text, already does the job above: it reads a channel list exported from an Allen &amp; Heath or Yamaha console editor, or a plain text file with one name per line, and renames or creates the tracks. Use them as-is, or copy the patterns and adapt them to your workflow.</p>
 
             <p>Most of what a live recording engineer does before hitting record is deterministic, and anything deterministic can be a script. Don't try to automate everything, just stop doing the boring stuff by hand.</p>
-        
+
+            <p>Related: <a href="/articles/reaper-live-show-recording/">how to record a live show in REAPER</a>.</p>
+
             <div class="article-cta">
                 <div class="cta-body">
                     <h3>Working scripts to start from</h3>
-                    <p>We have published a small set of REAPER Lua scripts for transport control, hardware patching, and live-recording prep. Free, on the tools page.</p>
-                    <a class="cta-link" href="/tools/">Free REAPER Lua scripts &rarr;</a>
+                    <p>We have published a small set of REAPER Lua scripts for transport control, hardware patching, and live-recording prep. Free, on the REAPER tools page.</p>
+                    <a class="cta-link" href="/tools/reaper/">Free REAPER Lua scripts &rarr;</a>
                 </div>
             </div>
         </article>

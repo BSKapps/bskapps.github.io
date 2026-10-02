@@ -7,17 +7,17 @@
   </url>
   <url>
     <loc>https://bskapps.com/quickerip/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://bskapps.com/labassistant/</loc>
-    <lastmod>2026-09-16</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://bskapps.com/fetchpuppy/</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
@@ -27,47 +27,47 @@
   </url>
   <url>
     <loc>https://bskapps.com/stimulus/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://bskapps.com/gogames/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bskapps.com/tools/</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bskapps.com/tools/reaper/</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bskapps.com/tools/companion/</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bskapps.com/buttonmaker/</loc>
-    <lastmod>2026-09-25</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/buttonmaker-guide/</loc>
-    <lastmod>2026-09-25</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/spotify-companion-guide/</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -77,147 +77,152 @@
   </url>
   <url>
     <loc>https://bskapps.com/articles/quicker-ip-guide/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/fetch-puppy-guide/</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/lab-assistant-guide/</loc>
-    <lastmod>2026-08-21</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/stimulus-guide/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/qlab-script-cues-spotify/</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/companion-module-setup/</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/companion-macos-network/</loc>
-    <lastmod>2026-09-08</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/mac-routing-table/</loc>
-    <lastmod>2026-09-08</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/static-ips-av-networks/</loc>
-    <lastmod>2026-09-08</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/mac-dns-for-av/</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/ipv6-on-a-mac/</loc>
-    <lastmod>2026-09-08</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/find-devices-on-network/</loc>
-    <lastmod>2026-09-08</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/dante-mac-network-readiness/</loc>
-    <lastmod>2026-09-08</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/qlab-workspace-habits/</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/qlab-show-prep-checklist/</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/qlab-audio-formats/</loc>
-    <lastmod>2026-09-08</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/qlab-lufs-levels/</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/smaart-target-curves/</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/rew-house-curve/</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-10-03</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://bskapps.com/articles/live-sound-house-curves/</loc>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/show-media-offline/</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/line-check-test-signals/</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/reaper-lua-cue-workflows/</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/reaper-live-show-recording/</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/articles/reaper-virtual-soundcheck/</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bskapps.com/about/</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://bskapps.com/contact/</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://bskapps.com/privacy/</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://bskapps.com/terms/</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://bskapps.com/refund/</loc>
-    <lastmod>2026-08-18</lastmod>
+    <lastmod>2026-10-03</lastmod>
     <priority>0.3</priority>
   </url>
 </urlset>

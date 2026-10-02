@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Running multiple network adapters on a Mac - BSK Apps</title>
-    <meta name="description" content="Run a Mac with multiple network adapters without routing chaos: service order, per-interface DNS, DHCP vs static vs link-local.">
+    <title>Static IPs and Multiple Network Adapters on a Mac for AV - BSK Apps</title>
+    <meta name="description" content="Run a Mac on Wi-Fi plus show and audio networks: DHCP, static or link-local per adapter, which adapter gets the router and DNS, service order, and Locations.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="canonical" href="https://bskapps.com/articles/static-ips-av-networks/">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Running multiple network adapters on a Mac">
-    <meta property="og:description" content="Run a Mac with multiple network adapters without routing chaos: service order, per-interface DNS, DHCP vs static vs link-local.">
+    <meta property="og:title" content="Static IPs and multiple network adapters on a Mac for AV">
+    <meta property="og:description" content="Run a Mac on Wi-Fi plus show and audio networks: DHCP, static or link-local per adapter, which adapter gets the router and DNS, service order, and Locations.">
     <meta property="og:image" content="https://bskapps.com/images/og-home.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -21,12 +21,14 @@
         <a class="back" href="/articles/">&larr; Articles</a>
 
         <article>
-            <h1>Running multiple network adapters on a Mac</h1>
-            <p class="date">18 April 2026</p>
+            <h1>Static IPs and multiple network adapters on a Mac for AV</h1>
+            <p class="date">18 April 2026 &middot; Updated 3 October 2026</p>
+
+            <p>Give each adapter its own subnet. Only the internet adapter gets a router and DNS, and it goes at the top of the service order. Show LANs get an address and a subnet mask, nothing else.</p>
 
             <p>A MacBook used in live production rarely has one network connection. Touring systems, installs, and even small corporate shows often have the same Mac on Wi-Fi, a wired control LAN, and a dedicated audio network at the same time. Each wants its own settings. macOS will happily run all three concurrently, but it will also happily route traffic out the wrong interface if you don't set it up.</p>
 
-            <p>Here's a working approach. If you want to understand the routing mechanics behind why these rules exist, there's a companion piece: <a href="/articles/mac-routing-table/">Part 2 - how macOS routes traffic across multiple adapters</a>.</p>
+            <p>The routing mechanics behind these rules are in <a href="/articles/mac-routing-table/">Part 2 - how macOS routes traffic across multiple adapters</a>.</p>
 
             <h2>Why you end up with multiple adapters</h2>
             <p>Typical setups that push you past a single interface:</p>
@@ -35,25 +37,23 @@
                 <li><strong>One wired Ethernet adapter</strong> for a show control LAN: consoles, media servers, lighting, OSC traffic.</li>
                 <li><strong>A second wired adapter</strong>, often on a Thunderbolt dock or second USB-C port, for the audio network (Dante, AVB, NDI).</li>
             </ul>
-            <p>Three networks, three different subnets, three different rulesets. None of which should be talking to each other.</p>
+            <p>Three networks on three subnets, none talking to each other.</p>
 
             <h2>Pick the right addressing per network</h2>
-            <p>Four options, and which is right depends on the network:</p>
             <ul>
                 <li><strong>DHCP</strong> - router hands out an address. Default for Wi-Fi, home, office, most venue back-of-house. Leave it alone.</li>
-                <li><strong>DHCP reservation</strong> - router is configured to always hand your Mac the same address. Useful when something needs a stable address on a Wi-Fi network.</li>
+                <li><strong>DHCP reservation</strong> - the router is configured to always hand your Mac the same address. Set on the router, not the Mac. Useful when something needs a stable address on a Wi-Fi network.</li>
+                <li><strong>DHCP with manual address</strong> - macOS's "Using DHCP with manual address": you type the address, DHCP supplies the subnet mask and router. Quicker IP Pro calls this DHCP Reserved. Useful when you need a fixed address on a DHCP network and can't touch the router.</li>
                 <li><strong>Static IP</strong> - Mac is set manually. The only option when the network has no DHCP server, or when the vendor has assigned you an address.</li>
-                <li><strong>Link-local (169.254.x.x)</strong> - no DHCP server answers, so the Mac auto-assigns itself an unused address in 169.254.0.0/16. Set Configure IPv4 to "Using DHCP" and leave it. If there's nothing to respond, macOS falls through to link-local on its own after a short delay. This is how most Dante networks actually run day to day: every device falls to link-local, discovery still works, nobody has to configure anything. Don't dismiss it just because it feels like a fallback.</li>
+                <li><strong>Link-local (169.254.x.x)</strong> - no DHCP server answers, so the Mac auto-assigns itself an unused address in 169.254.0.0/16. Set Configure IPv4 to "Using DHCP" and leave it. If there's nothing to respond, macOS falls through to link-local on its own after a short delay. This is how many Dante networks run day to day: Dante devices default to DHCP, fall back to link-local when no server answers, and discovery still works with nobody configuring anything. Don't dismiss it just because it feels like a fallback.</li>
             </ul>
 
-            <h2>Service order depends on the day</h2>
-            <p>System Settings, Network, three-dots menu, Set Service Order. This is the setting that tells macOS which interface to prefer for things like default route and DNS when more than one is active. The right order is not universal.</p>
-            <p>Two common configurations:</p>
-            <ul>
-                <li><strong>Office or prep day</strong>: Wi-Fi on top, so general internet traffic goes out Wi-Fi. Wired networks still work for their own subnets, they just don't try to be the default route. Useful when you need software updates, cloud storage, or remote support while also on a show LAN.</li>
-                <li><strong>Show day</strong>: audio network on top, Wi-Fi below or off entirely. For a lot of systems, the audio interface needs to win any tie-break - discovery, multicast, the lot. Pushing it to the top of the service order keeps macOS from preferring Wi-Fi for traffic that should stay wired.</li>
-            </ul>
-            <p>Having to reorder this by hand every time you switch contexts is where Locations earn their keep. A "Show" Location with audio on top, a "Prep" Location with Wi-Fi on top, and you swap between them instead of dragging rows in System Settings under pressure. <a href="/quickerip/">Quicker IP</a> shows the current service order in the menu bar and lets you switch Location or reorder services from there, so "Show" and "Prep" are one click apart with no System Settings detour.</p>
+            <h2>Service order: internet adapter on top</h2>
+            <p>System Settings, Network, three-dots menu, Set Service Order. Service order decides which adapter that has a router carries the default route, and whose DNS answers most lookups. Adapters with no router - a show control LAN, a Dante network - are reached through their own subnet routes, whatever the order.</p>
+            <p>So put the adapter you want internet through at the top. On a prep day that's usually Wi-Fi, for software updates, cloud storage, or remote support while also on a show LAN. At a venue where the internet arrives on a wired port, it's that port. Show LANs need no router and no DNS, so where they sit doesn't change how show traffic reaches them. Putting the audio adapter on top, as Audinate suggests for Dante, does no harm as long as it has no router.</p>
+            <p>The exception is link-local: macOS keeps a single 169.254 route, on the primary adapter, so a browser, Companion or QLab reaching a 169.254 device can send that traffic out Wi-Fi. Dante Controller is fine because you pick its interface. For anything else, turn Wi-Fi off or put the devices on a DHCP or static subnet.</p>
+            <p>The real trap is two active adapters on the same subnet. macOS picks one route for that subnet and may keep the other only as a route tied to its own adapter, so traffic can leave on the wrong one. Reordering won't fix that; a different subnet will.</p>
+            <p>When the internet adapter changes from day to day, reordering by hand gets old. Locations fix that. A "Show" Location and a "Prep" Location, each with its own adapter settings and service order, and you swap between them instead of dragging rows in System Settings under pressure. <a href="/quickerip/">Quicker IP Pro</a> switches Location from the menu bar and sets service order in its Edit Services panel, so "Show" and "Prep" are one click apart with no System Settings detour.</p>
 
             <h2>Give each adapter only what it needs</h2>
             <p>Each interface has its own IPv4, DNS, and router settings. A common mistake is filling in all of them on every interface, which then fights with itself.</p>
@@ -62,20 +62,21 @@
                 <li>A control LAN that has no internet access gets IP and subnet only. No router. No DNS.</li>
                 <li>An audio network on link-local gets nothing at all. Leave Configure IPv4 on "Using DHCP" and let macOS fall through to a 169.254.x.x address automatically. No router, no DNS.</li>
             </ul>
-            <p>If an interface doesn't need a gateway, don't give it one. Two interfaces with gateways will silently fight about which one is the default route and you'll spend an hour on it at the worst possible time. <a href="/quickerip/">Quicker IP Pro</a> detects this automatically - a red "Overlaps" warning naming the other adapter appears next to the subnet field when two active interfaces share a subnet and both have a gateway configured.</p>
+            <p>If an interface doesn't need a gateway, don't give it one. With two gateways, which one carries the default route comes down to service order, and on the same subnet they fight over that subnet's route too. You'll spend an hour on it at the worst possible time. <a href="/quickerip/">Quicker IP</a> warns you: when two active adapters share a subnet and both have a gateway, Network Info shows a red "Overlaps" warning naming the other adapter and a Gateway Conflict notification names the subnet. When only one or neither has a gateway it shows a grey "Shared with en8, no conflict" - the default route is safe, but traffic to that subnet can still leave on the wrong adapter.</p>
+
+            <h2>Two subnets on one port</h2>
+            <p>Some systems put two subnets on one switch - a Yamaha console's Mixer Control and Device Control, for example, which Yamaha requires on different subnets. macOS can do this with a second network service on the same Ethernet port, given its own address. Quicker IP Pro's Add Address does it from the adapter's flyout: the second address becomes its own service, ordered below the first, with no gateway.</p>
 
             <h2>Switching between systems</h2>
-            <p>All of this is fine when the Mac lives in the one system. The moment it travels - same laptop, different venue, different networks - each of those interfaces needs a different configuration. macOS makes that slow. System Settings, Network, interface, Details, TCP/IP, switch from DHCP to Manually, enter four fields, switch to DNS, enter more fields, click OK, back out. Ten steps per interface. Three interfaces, thirty steps. Every show day.</p>
-            <p>macOS has a built-in feature called Locations (Network pane, three-dots menu) that saves the whole set and lets you swap between them. It works, but it's buried and only stores the top-level config.</p>
-            <p>This is the problem <a href="/quickerip/">Quicker IP</a> is built for. Named presets per network, per interface, switched from the menu bar in one click. No System Settings detour.</p>
-
-            <p>Multiple adapters is the normal state of a touring Mac. Set the service order deliberately, give each interface only what it needs, and have a way to switch configurations quickly when the system moves.</p>
+            <p>All of this is fine when the Mac lives in the one system. The moment it travels - same laptop, different venue, different networks - each of those interfaces needs a different configuration. macOS makes that slow. System Settings, Network, interface, Details, TCP/IP, set Configure IPv4 to Manually, type the address, subnet mask and router, switch to DNS, add servers, click OK, back out. It is a lot of clicks, every venue.</p>
+            <p>macOS has a built-in feature called Locations (System Settings, Network, three-dots menu, Locations) that saves every service's settings and the service order, and lets you swap between them. It works. Building one per venue and keeping it current is the slow part.</p>
+            <p>This is the problem <a href="/quickerip/">Quicker IP Pro</a> is built for. A preset stores one adapter's mode, IP, subnet and gateway, and reapplies it from the menu bar in one click. Network Locations switch whole setups, and each location keeps its own hidden and expanded services in the menu. At a venue you don't know, run a scan: when a device shows on another subnet, Join Subnet finds a free address in that subnet and applies it, saving your previous settings for Restore.</p>
         
             <div class="article-cta">
                 <img loading="lazy" class="cta-icon" src="/images/quickip-icon-192.png" alt="" width="64" height="64">
                 <div class="cta-body">
                     <h3>A faster way to manage AV-network IPs</h3>
-                    <p>Quicker IP saves IP presets per adapter, switches them with one click, and warns when your subnet setup is going to bite you. Built for show-day work.</p>
+                    <p>Quicker IP Pro saves IP presets per adapter and switches them with one click. Built for show-day work.</p>
                     <div class="cta-actions">
                         <a class="buy-btn" href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0&checkout%5Bcustom%5D%5Bsrc%5D=article-static-ips-av-networks" aria-label="Buy Quicker IP">Buy Quicker IP</a>
                         <a class="cta-link" href="/quickerip/">See what it does &rarr;</a>

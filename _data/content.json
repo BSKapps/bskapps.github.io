@@ -47,8 +47,10 @@
       "version": "v1.5",
       "released": "3 October 2026",
       "features": [
-        "Live Trace - pull a live RTA or transfer function trace out of a running Smaart as an editable target curve, calibrated RTAs at real SPL",
-        "Floating Trace - float a live Smaart trace over LA Network Manager, a console editor or any EQ graph, then lock it and EQ against it",
+        "Live Trace - love how the PA sounds right now? Hold the moment and Grab it, and the live Smaart trace becomes your curve, point for point. Calibrated RTAs land at their real SPL",
+        "Floating Trace - one screen? Float the live Smaart trace over LA Network Manager, a console editor or any EQ graph and see your EQ changes in real time, right on your EQ",
+        "Lock it to the app - the trace moves with the window, clicks go straight through to the EQ, and it goes back where you lined it up at each window size",
+        "Save it for later, edit your live grabs at any time",
         "Import Smaart ASCII trace exports - open, drop, or paste with Cmd+V",
         "Flatten (Cmd+F) - ease a rough section toward flat or a tilt, a step per press",
         "Freehand draw mode with pencil cursor",

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Curves for Live Sound: PA Target Shapes - BSK Apps</title>
+    <meta name="description" content="What a house curve is on a live PA, why systems end up with more low end and less top than flat, the usual starting shapes, and how to get one onto the EQ.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://bskapps.com/articles/live-sound-house-curves/">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="House curves for live sound: what shape to tune a PA to">
+    <meta property="og:description" content="Why a live PA does not end up flat, the starting shapes engineers use, and how to capture the sound you like as a curve and put it on the system EQ.">
+    <meta property="og:image" content="https://bskapps.com/images/og-home.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://bskapps.com/articles/live-sound-house-curves/">
+    <link rel="stylesheet" href="/css/site.css?v=20261003b">
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="/articles/">&larr; Articles</a>
+
+        <article>
+            <h1>House curves for live sound: what shape to tune a PA to</h1>
+            <p class="date">3 October 2026</p>
+
+            <p>A house curve is the frequency response you EQ a PA toward instead of flat. On most live systems it rises in the low end and falls away at the top. There is no correct one.</p>
+
+            <h2>Tune first, then tone</h2>
+            <p>Bob McCarthy splits the job in two. Tuning is the objective part: levels, delays, crossovers and zone EQ, so every seat hears the same system. Toning is the global EQ that sets how it sounds, and he treats that as taste rather than something you can get wrong.</p>
+            <p>A house curve belongs to the toning half. Put it on top of a system whose zones do not match and you move the problem around without fixing it. Get the zones matching first.</p>
+
+            <h2>Why a PA does not end up flat</h2>
+            <ul>
+                <li><strong>Air takes the top.</strong> High frequencies lose level over distance, the loss grows with frequency, and it changes with temperature and humidity. L-Acoustics puts it at nearly 50 dB at 20 kHz over 100 m at 20 C and 40% humidity. Line array processors carry air compensation filters for the long-throw boxes - use those for the far seats rather than boosting the whole system.</li>
+                <li><strong>The low end builds.</strong> Subs and low-frequency boxes couple when they sit close together, and most rooms ring on longer at low frequencies than at high ones.</li>
+                <li><strong>Taste and genre.</strong> For music, most engineers want the low end sitting ahead of the mids. How far ahead depends on the show: more for dance and pop, less for speech.</li>
+                <li><strong>Loud shows need less lift than you think.</strong> The ear's response flattens as level rises, so low end that sounds right at a quiet line check can be too much at show level. Judge the curve at show level.</li>
+            </ul>
+
+            <h2>Common starting shapes</h2>
+            <p>These are starting points, not answers. Each one is a preset in Target Trace, so the numbers are the ones it draws.</p>
+            <ul>
+                <li><strong>Haystack.</strong> A low-end lift that rises below about 250 Hz and stays flat above it. Target Trace has two: +9 dB at 30 Hz for a typical large PA, and +15 dB at 30 Hz for high-impact systems.</li>
+                <li><strong>Tilt.</strong> A straight line falling from low to high through a pivot frequency, with the total amount set by you. Add a sub bump when you want extra weight below the tilt.</li>
+                <li><strong>Flat.</strong> A 0 dB reference, with an optional sub bump.</li>
+                <li><strong>X-curve.</strong> The cinema curve from SMPTE ST 202: flat to 2 kHz, then about 3 dB per octave down, steeper above 10 kHz. It is a cinema standard, not a live sound shape - use it for screens.</li>
+            </ul>
+            <p>Pick one, tune to it for a few shows, and move points where your ears disagree. Keep the versions that work for each system and genre.</p>
+
+            <h2>Love the sound of the PA right now?</h2>
+            <p>Start Live Trace in the editor and grab the exact moment you want. The best house curve is often one you already heard: the system is dialled in, the mix sounds right, and you want that shape back at the next venue.</p>
+            <p>Target Trace's Live Trace connects to a running Smaart and draws the measurement live on the editor graph. Press <strong>Editor</strong> next to the measurement and watch it move. When it sounds the way you want, press <strong>Hold</strong> to freeze that moment, then <strong>Grab</strong>. The trace becomes your curve, point for point, ready to edit. Even out the points with Point Spacing. Save it for later, edit your live grabs at any time. Load it as the target at the next show. It saves as a Smaart .crv, with a REW .txt export when you need one.</p>
+            <p>Smaart's API needs to be on for this: Options &gt; Preferences &gt; API, port 26000 by default.</p>
+
+            <h2>Only have one screen and need to see Smaart and your EQ page?</h2>
+            <p>Float the live trace over any app window and lock it to the app. It moves with the app and lets you work as normal, with a live trace calibrated to your EQ page. See your EQ changes in real time, right on your EQ.</p>
+            <p>In Smaart, load the curve as a target over your transfer function and EQ toward it - our <a href="/articles/smaart-target-curves/">Smaart target curve</a> article covers loading one. The EQ lives in another window, the processor's EQ page or the console editor, and on one laptop screen you end up flicking between the two.</p>
+            <ol>
+                <li>With Live Trace connected, press <strong>Float</strong> next to the running transfer function. It opens as a see-through window over every app.</li>
+                <li>Drag and stretch it until its 100, 1k and 10k guides sit on the EQ graph's lines, and set Scale to the graph's range - 24 for LA Network Manager, 20 for QL Editor.</li>
+                <li>Press <strong>Lock</strong>. The trace ties itself to that app's window and clicks go straight through to the EQ underneath, so you work the EQ as normal with the live measurement drawn on its graph. Move the window and the trace moves with it. Switch the app between its normal size and full screen and the trace goes back to where you lined it up for each.</li>
+                <li>Turn on <strong>Invert</strong>. A peak in the measurement now shows as a dip, so your EQ cut follows the line. <strong>Blanking</strong> hides the trace wherever coherence drops below the level you pick.</li>
+                <li>For the tone, right-click your saved house curve in Target Trace, choose <strong>Float This Curve</strong>, and shape the global EQ to follow it.</li>
+            </ol>
+            <p>The floating trace only draws. It never changes anything in the other app.</p>
+
+            <h2>Home and studio rooms</h2>
+            <p>A house curve for a living room or control room is a different job, with different research behind it. See <a href="/articles/rew-house-curve/">house curves in REW</a>.</p>
+
+            <div class="article-cta">
+                <img loading="lazy" class="cta-icon" src="/images/targettrace-icon-192.png" alt="" width="64" height="64">
+                <div class="cta-body">
+                    <h3>Capture the sound you love, then take it anywhere</h3>
+                    <p>Target Trace grabs a live Smaart trace as your curve, floats the live measurement right on your EQ page so you see every change land, starts from Haystack, Tilt or X-curve presets, and saves .crv for Smaart and .txt for REW.</p>
+                    <div class="cta-actions">
+                        <a class="buy-btn" href="https://bskapps.lemonsqueezy.com/checkout/buy/2d6a5745-536e-4e65-9953-ad34ad59fdb7?dark=1&media=0&desc=0&checkout%5Bcustom%5D%5Bsrc%5D=article-live-sound-house-curves" aria-label="Buy Target Trace">Buy Target Trace</a>
+                        <a class="cta-link" href="/targettrace/">See what it does &rarr;</a>
+                    </div>
+                    <span class="cta-note">One-time purchase &middot; 2 activations</span>
+                </div>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2026 <a href="/">BSK Apps</a> &middot; ABN 75 146 604 896</p>
+            <p><a href="/contact/">Contact</a> &middot; <a href="/about/">About</a> &middot; <a href="/privacy/">Privacy</a> &middot; <a href="/terms/">Terms</a> &middot; <a href="/refund/">Refund Policy</a></p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Best audio format for QLab: WAV, AIFF or MP3 - BSK Apps</title>
-    <meta name="description" content="Use WAV or AIFF at 48 kHz. Why VBR MP3s drop out mid-cue, what sample rate to standardise on, and how to convert a whole show in one pass.">
+    <meta name="description" content="Use WAV or AIFF at 48 kHz. Why VBR MP3s misreport length and miss start points in QLab, the sample rate to standardise on, and converting a whole show at once.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="canonical" href="https://bskapps.com/articles/qlab-audio-formats/">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Audio file formats for QLab: what to use and what to avoid">
-    <meta property="og:description" content="Use WAV or AIFF at 48 kHz. Why VBR MP3s drop out mid-cue, what sample rate to standardise on, and how to convert a whole show in one pass.">
+    <meta property="og:description" content="Use WAV or AIFF at 48 kHz. Why VBR MP3s misreport length and miss start points in QLab, the sample rate to standardise on, and converting a whole show at once.">
     <meta property="og:image" content="https://bskapps.com/images/og-home.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -22,23 +22,23 @@
 
         <article>
             <h1>Audio file formats for QLab: what to use and what to avoid</h1>
-            <p class="date">5 July 2026</p>
+            <p class="date">5 July 2026 &middot; Updated 3 October 2026</p>
 
-            <p>QLab will play almost anything you drop on it - WAV, AIFF, CAF, MP3, AAC, and whatever else macOS knows how to decode. That flexibility is great in the rehearsal room and a trap on show day, because "it plays" and "it plays predictably every single time" are different standards. The files a client emails you were made for convenience, not playback.</p>
+            <p>Use WAV or AIFF at 48 kHz, and convert everything else before it goes in the workspace. QLab will play almost anything macOS can decode - WAV, AIFF, CAF, MP3, AAC and more - but "it plays" and "it plays predictably every single time" are different standards. The files a client emails you were made for convenience, not playback.</p>
 
             <h2>The safe choice: uncompressed, at the show's sample rate</h2>
-            <p>For anything that matters, use WAV or AIFF:</p>
+            <p>For anything that matters, use WAV or AIFF. QLab's own documentation recommends AIFF, WAV and CAF most highly.</p>
             <ul>
                 <li><strong>No decoding surprises.</strong> Uncompressed PCM has nothing to unpack - seeking is sample-accurate, durations are exact, and the CPU cost is trivial.</li>
-                <li><strong>48 kHz</strong> is the usual show standard, matching video and most playback systems. Whatever your system runs at, make every file match it - resampling on the fly is work the machine doesn't need to do during a show.</li>
-                <li><strong>16-bit or 24-bit</strong> both fine. 24-bit if the source has it, but nobody has ever lost a show to 16-bit playback.</li>
+                <li><strong>48 kHz</strong> is the usual show standard, matching video and most playback systems. Standardise every file on it and run the interface at the same rate, so every machine plays the workspace the same way. QLab converts other rates on the fly, and Figure 53 call that conversion very efficient, so mixed rates will not strain the Mac. They do advise against rates above 48 kHz unless other gear in the system needs them.</li>
+                <li><strong>16-bit or 24-bit.</strong> Use 24-bit if the source has it. 16-bit is fine for playback.</li>
             </ul>
             <p>Disk space stopped being an argument years ago. A three-hour show's worth of stereo WAVs is a few gigabytes on a machine with hundreds free.</p>
 
             <h2>MP3 and AAC: fine until they aren't</h2>
-            <p>Compressed files mostly work, and for a walk-in playlist nobody will hear the difference. The trouble is behavioural, not sonic:</p>
+            <p>Compressed files mostly work, and for a walk-in playlist nobody will hear the difference. Timing is another matter:</p>
             <ul>
-                <li><strong>VBR MP3s are the classic trap.</strong> Variable bitrate files have no fixed relationship between position in the file and position in time, so reported durations can be wrong and seeks land off-target - a slice or a start-time offset in QLab may not hit where you set it. If a cue's waveform doesn't match what you hear, a VBR MP3 is the first suspect. If MP3 is unavoidable, use constant bitrate (CBR).</li>
+                <li><strong>VBR MP3s are the classic trap.</strong> Variable bitrate files have no fixed relationship between position in the file and position in time, so reported durations can be wrong and seeks land off-target - a slice or a start-time offset in QLab may not hit where you set it. If a cue's waveform doesn't match what you hear, a VBR MP3 is the first suspect. Constant bitrate (CBR) fixes the length and seeking problems but not start timing: QLab's documentation says every MP3 has a variable, unpredictable decode delay when playback begins, so exact timing is impossible. Convert instead.</li>
                 <li><strong>Encoder delay padding.</strong> MP3 and AAC add a short stretch of silence at the front of the file as a by-product of encoding, which matters the moment cues need tight timing against each other.</li>
             </ul>
             <p>The habit that avoids all of it: treat compressed files as source material, and convert them to WAV before they go anywhere near the workspace.</p>
@@ -47,7 +47,8 @@
             <p>Know what each file actually is before it hits your output patch. A mono file in a workspace patched for stereo pairs behaves differently to a stereo file, and a stereo file with identical channels is mono in disguise taking up two channels of routing. There's more on this trap in <a href="/articles/qlab-workspace-habits/">QLab workspace habits from real shows</a>.</p>
 
             <h2>Convert the whole show in one pass</h2>
-            <p>Converting sixty files by hand - open, export, rename, replace - is exactly the kind of prep chore that eats an afternoon. <a href="/labassistant/">Lab Assistant</a> does it in bulk: point it at your files or the workspace, pick the output format and sample rate, and every file comes out consistent. Pair the conversion pass with a <a href="/articles/qlab-lufs-levels/">LUFS levelling pass</a> and the whole workspace starts tech from a known state: same format, same rate, same loudness.</p>
+            <p>Converting sixty files by hand - open, export, rename, replace - takes an afternoon. Mint, the file-processing window in <a href="/labassistant/">Lab Assistant</a>, does it in bulk on the files behind the cues you select. Pick the output format (WAV, AIFF, MP3, AAC or FLAC, with Match Source as the default), the sample rate and bit depth, then an output mode: Copy and Insert makes a new file and a new cue, Save as Copy and Replace makes a new file and points the existing cue at it, and Overwrite replaces the original. Saving the workspace does not protect the files, so copy the audio folder somewhere else before an Overwrite run. Mint converts video too.</p>
+            <p>Pair the conversion pass with a <a href="/articles/qlab-lufs-levels/">LUFS levelling pass</a> and the whole workspace starts tech from a known state: same format, same rate, same loudness.</p>
 
             <div class="article-cta">
                 <img loading="lazy" class="cta-icon" src="/images/labassistant-icon-192.png" alt="" width="64" height="64">

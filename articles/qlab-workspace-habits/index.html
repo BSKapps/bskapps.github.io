@@ -22,33 +22,33 @@
 
         <article>
             <h1>QLab workspace habits from real shows</h1>
-            <p class="date">12 April 2026</p>
+            <p class="date">12 April 2026 &middot; Updated 3 October 2026</p>
 
-            <p>A QLab workspace at the start of tech is a clean thing. Nicely numbered, sensibly named, everything fading how the designer intended. By day five it's three hundred cues deep with inconsistent numbering, a couple of orphaned groups, and at least one cue nobody remembers adding. The habits below are the small disciplines that keep that drift under control, and a few traps that have caught me out personally.</p>
+            <p>At the start of tech the workspace is clean. Nicely numbered, sensibly named, everything fading how the designer intended. By day five it's three hundred cues deep with inconsistent numbering, a couple of orphaned groups, and at least one cue nobody remembers adding. The habits below are the small disciplines that keep that drift under control, and a few traps that have caught us out.</p>
 
             <h2>Assume the levels are never the same</h2>
             <p>Across a season you'll get files from the composer, the sound designer, the foley editor, maybe the director's phone voice-memo. They're never mixed to the same reference. One cue peaks at -1 dBFS, the next sits at -18 dBFS with no explanation. If you trust the filenames and don't listen, the show will be loud in places it shouldn't be.</p>
             <p>Pass every new file through QLab at a known starting point. Same output patch, same master level, same room. Set a consistent cue level based on what you hear, not what the waveform looks like. Do it once per asset, not cue by cue.</p>
 
             <h2>Default new audio cues to -10 dB</h2>
-            <p>In QLab, set the template for new audio cues to start at -10 dB instead of 0 dB. One caveat upfront: it flips which failure mode bites you. New files dragged in at -10 won't blast the room before you check them, but if you ever run a level pass over the workspace - by hand or with <a href="/labassistant/">Lab Assistant</a> with a negative offset - anything still sitting at 0 dB ends up punching out well above the rest. The fix is to keep every cue starting at the same reference, so the level pass behaves predictably.</p>
+            <p>In QLab, set the template for new audio cues to start at -10 dB instead of 0 dB. One caveat upfront: it flips which failure mode bites you. New files dragged in at -10 won't blast the room before you check them, but if you ever run a level pass over the workspace - by hand or with <a href="/labassistant/">Lab Assistant</a> with a negative offset - anything still sitting at 0 dB punches out well above the rest. The fix is to keep every cue starting at the same reference, so the level pass behaves predictably.</p>
             <p>The upside is headroom. Quiet tracks have somewhere to go: a quiet voiceover that needed +6 dB to sit right was previously stuck against the 0 dB ceiling, with no clean way to push it. Starting at -10 means you can lift the quiet ones and lower the hot ones without anything pinned to a wall.</p>
-            <p>The dB-offset approach is what Figure 53 themselves recommend for QLab levelling, but in QLab it lives inside a built-in script you have to dig out of the workspace. Lab Assistant exposes the same offset and a full range of LUFS targets as actual controls, so you set the values once and apply them across cues without going scripting. Pick the target and offset that match how you mix and stick with them for the show. There's a longer write-up on why loudness beats peak level for playback: <a href="/articles/qlab-lufs-levels/">Setting consistent QLab levels with LUFS</a>.</p>
+            <p>Figure 53's <a href="https://qlab.app/cookbook/level-playing-field/">Level Playing Field</a> cookbook example uses the same idea: a downloadable example workspace whose Script cue measures cues with an external command-line tool you install, against a -24 LUFS reference with the fader at -10 dB. Lab Assistant has the offset as a switch and four LUFS presets (-14, -18, -23 and -24), so you set the values once and apply them to the cues you select. Pick the target and offset that match how you mix and stick with them for the show. There's a longer write-up on why loudness beats peak level for playback: <a href="/articles/qlab-lufs-levels/">Setting consistent QLab levels with LUFS</a>.</p>
 
             <h2>Mono files will catch you out</h2>
-            <p>This one has caught me out more than once. Most apps play a mono file equally out the left and right outputs - you'd never think about it. QLab doesn't. A mono file gets sent to output 1 only by default. Output 1 might be stage left, stage centre, or an amplifier that isn't even on tonight. You don't catch it from the op position because the audio is playing - you can see the meters, you can hear something near you. It's only when you walk the house that you realise it's coming from one speaker, or from the wrong side, or from an amp that isn't even on tonight.</p>
+            <p>This one has caught us out more than once. Most apps play a mono file equally out the left and right outputs - you'd never think about it. QLab doesn't. A mono file gets sent to output 1 only by default. Output 1 might be stage left, stage centre, or an amplifier that isn't even on tonight. You don't catch it from the op position because the audio is playing - you can see the meters, you can hear something near you. It's only when you walk the house that you realise it's coming from one speaker, or from the wrong side.</p>
             <p>Two habits that fix it:</p>
             <ul>
                 <li>Check every new audio cue's patch routing. If it's mono, either explicitly route it to the outputs you want or convert it to interleaved stereo. Don't trust defaults.</li>
                 <li>Do a dry run of every audio cue from the house, on the actual system, before tech starts. Not from the op's seat with headphones.</li>
             </ul>
-            <p>This is exactly what the mono-routing module in <a href="/labassistant/">Lab Assistant</a> exists for - it walks the workspace and forces every mono cue to play out both outputs, so you don't have to remember to check. Its multi-output routing goes further on bigger systems: it assigns output patches by cue category, so music cues land on the music outputs and effects on the effects outputs across the whole workspace in one pass.</p>
+            <p>The Routing module in <a href="/labassistant/">Lab Assistant</a> handles this, so you don't have to remember to check. In Mono / Stereo fold mode, "Mono to Dual Mono" sends each mono cue to both outputs of the pair you choose, at -3 dB so it sits level with stereo cues. Multi-output mode goes further on bigger systems: with Auto-Sort by Name on, it sorts cues into Music, VOG and FX by keywords in the cue name or notes and sends each category to its own output pair in one pass.</p>
 
             <h2>Set the Go button minimum time</h2>
             <p>Workspace Settings, General. There's a minimum time between Go presses, and it's worth setting deliberately rather than leaving it. Something like 500 ms protects you against the moment a stage manager's finger slips on the clicker, or your own Spacebar bounces. It won't save you from everything, but it will save you from the class of mistake where you fire cue 50 twice in a second and the show goes red.</p>
 
             <h2>Set a panic fade time before you need it</h2>
-            <p>Workspace Settings, Workspace, has a panic fade duration. The default is short enough to feel like a hard cut. Set it to 3 or 4 seconds. The day you reach for Escape because something has gone catastrophically wrong, you do not want the entire bed of sound to cut instantly and leave the room in silence with everyone staring at the booth. Three to four seconds of fade out lets the house recover gracefully instead of slamming to silence.</p>
+            <p>Panic duration sits in Workspace Settings, General, next to the minimum time between GOs. Set it to 3 or 4 seconds. The day you reach for Escape because something has gone catastrophically wrong, you do not want the entire bed of sound to cut instantly and leave the room in silence with everyone staring at the booth. Three to four seconds of fade out lets the house recover gracefully instead of slamming to silence.</p>
             <p>And if the panic itself is the emergency - a runaway cue, feedback, a wrong file blasting out - double-hit Escape. QLab treats the second press as a hard stop: everything cuts immediately, panic fade ignored. Muscle memory worth practising at home.</p>
 
             <h2>Walk every continue mode by hand</h2>
@@ -65,13 +65,11 @@
 
             <h2>The clean-up problem</h2>
             <p>Renumbering forty cues, applying consistent fade and stop actions, batching level changes, all by hand, is the job no one wants. It's also what turns a messy workspace into a reliable one.</p>
-            <p>This is exactly why we built <a href="/labassistant/">Lab Assistant</a>. It takes a workspace, renumbers on tens, applies consistent fade and continue modes, and batches level changes. What used to be a slow end-of-day chore takes a minute.</p>
+            <p><a href="/labassistant/">Lab Assistant</a> does it in one run. Switch on the modules you want, select the cues and Run All does the lot: Numbering set to Renumber Sequentially with a start and increment of 10 numbers them on tens, Fade and Stop adds the fades, and Levels sets each cue to a LUFS target.</p>
 
             <h2>Save a clean copy before every run</h2>
             <p>Before the first tech run each day, save a dated copy of the workspace. <code>Show v03 - 2026-04-12.qlab5</code>. If you or the designer wreck something during the run, you have a known-good state ten minutes old. QLab's undo is fine for the last few moves. It's not a recovery strategy for a bad half hour.</p>
 
-            <p>None of this is clever. It's friction removed and a couple of traps sign-posted. Time you don't spend hunting for a cue or explaining a mono-file mistake during tech is time on the actual show.</p>
-        
             <div class="article-cta">
                 <img loading="lazy" class="cta-icon" src="/images/labassistant-icon-192.png" alt="" width="64" height="64">
                 <div class="cta-body">

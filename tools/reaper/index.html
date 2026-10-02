@@ -193,7 +193,7 @@
 
         <div class="script-card">
             <h3>BSK Import: Track Names from CSV or Text <span class="badge lua">Lua</span></h3>
-            <p>Imports channel names from a console offline editor export and creates or renames tracks. Detects format automatically - works with Allen &amp; Heath (dLive, Avantis, SQ), Yamaha (CL, QL, Rivage), or any plain text file with one name per line.</p>
+            <p>Imports channel names from a console offline editor export and creates or renames tracks. Detects format automatically - works with Allen &amp; Heath (dLive, Avantis), Yamaha (CL, QL, Rivage), or any plain text file with one name per line.</p>
             <a class="download-link" href="/tools/scripts/BSK_Import_Track_Names.lua" download>Download BSK_Import_Track_Names.lua</a>
         </div>
 
@@ -244,13 +244,13 @@
 
         <div class="script-card setup">
             <h3>Assign scripts to Stream Deck buttons using Bitfocus Companion</h3>
-            <p>Companion's REAPER module uses REAPER's web interface to trigger actions remotely.</p>
+            <p>Companion's REAPER module talks to REAPER over OSC.</p>
             <ol class="steps">
-                <li>Enable REAPER's web interface: <code>Preferences &gt; Control/OSC/web &gt; Web browser interface</code> - enable it and note the port (default 8080).</li>
+                <li>In REAPER, go to <code>Preferences &gt; Control/OSC/web</code> and add a device. Set Control surface mode to <strong>OSC</strong> and Mode to <strong>Configure device IP+local port</strong>. Set Device IP to the Companion machine's IP, Device port to <code>9000</code> and Local listen port to <code>8000</code>.</li>
                 <li>Install your scripts in REAPER as above, then open the Actions list and find each script.</li>
                 <li>Right-click the action and choose <code>Copy selected action command ID</code> - it will look like <code>_RS3a4f...</code>. Note this for each script.</li>
-                <li>In Companion, add a new connection using the <strong>REAPER</strong> module. Set the host to your REAPER machine IP and the port to match.</li>
-                <li>Create a button, add the <strong>Run action</strong> action, and paste the action command ID.</li>
+                <li>In Companion, add a new connection using the <strong>REAPER</strong> module. Set Target IP to your REAPER machine, Target Port to <code>8000</code> and Feedback Port to <code>9000</code> (the module's defaults).</li>
+                <li>Create a button, add the <strong>Custom Action</strong> action, and paste the action command ID.</li>
                 <li>Repeat for each script and assign the buttons to your Stream Deck.</li>
             </ol>
         </div>

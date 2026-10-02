@@ -22,7 +22,7 @@
 
         <article>
             <h1>Finding devices and free IPs on an unfamiliar network</h1>
-            <p class="date">17 April 2026</p>
+            <p class="date">17 April 2026 &middot; Updated 3 October 2026</p>
 
             <p>You turn up to a venue, plug into their network, and need a static IP. Or you're handed a system nobody has documented, and half the devices are unresponsive. Or a console won't see a media server and you need to know whether it's on the network at all. Same question each time: what's on this LAN, and which addresses are free?</p>
 
@@ -35,8 +35,8 @@
 
             <h2>2. Ping sweep - crude and effective</h2>
             <p>To see which addresses respond on the typical <code>192.168.1.x</code> subnet:</p>
-            <pre><code>for i in {1..254}; do ping -c 1 -W 200 192.168.1.$i > /dev/null &amp;&amp; echo "192.168.1.$i up"; done</code></pre>
-            <p>Runs in a few seconds, prints every address that replies. Then run <code>arp -a -n</code> again and you'll have a more complete list. The catch: anything configured to ignore ICMP pings (some IP cameras, a few consoles, anything behind a strict firewall) won't show up. It's a baseline, not a guarantee.</p>
+            <pre><code>( for i in {1..254}; do (ping -c 1 -W 200 192.168.1.$i &gt;/dev/null &amp;&amp; echo "192.168.1.$i up") &amp; done; wait ) | sort -t . -k 4 -n</code></pre>
+            <p>This pings all 254 addresses at once, waits for them, and prints every address that replied, in order. It takes a few seconds. One ping after another would take minutes on a mostly empty subnet, because macOS waits about a second on each address that doesn't answer. Then run <code>arp -a -n</code> again and you'll have a more complete list. The catch: anything configured to ignore ICMP pings (some IP cameras, a few consoles, anything behind a strict firewall) won't show up. It's a baseline, not a guarantee.</p>
 
             <h2>3. Bonjour browser - for anything that announces itself</h2>
             <p>Most modern AV gear (printers, AirPlay devices, QLab instances, Dante devices in Dante Controller) broadcasts its presence via Bonjour. You can see this without installing anything:</p>
@@ -47,8 +47,14 @@
 
             <h2>4. A proper scanner for the show day</h2>
             <p>Terminal sweeps are great when you have five minutes and a coffee. They're not great when you're standing at FOH during a sound check trying to figure out why the media server won't come up.</p>
-            <p>This is why we built a scanner into <a href="/quickerip/">Quicker IP Pro</a>. One click, the current subnet is scanned, and you get a list of every responding device with IP, MAC, vendor name, hostname, and the Bonjour service type. Copy an address with one click, or export the lot to CSV. No terminal, no loops, no typos at 20:25.</p>
-            <p>It's the same information the command-line tools give you, presented in a way that doesn't require you to remember the syntax under pressure.</p>
+            <p><a href="/quickerip/">Quicker IP Pro</a> has a scanner. Click LAN Scan on an adapter and it sweeps that adapter's network, reads the ARP table and listens for Bonjour at the same time. Results come up in columns:</p>
+            <ul>
+                <li><strong>IP and MAC.</strong></li>
+                <li><strong>Vendor</strong>, read from the MAC address.</li>
+                <li><strong>Name</strong> - the device's Bonjour name, with its model where the device advertises one, or its DHCP hostname. Right-click a column heading and choose Show Hostnames to list hostnames instead.</li>
+                <li><strong>Type</strong> - the protocols the device speaks: Dante, SSC, Blackmagic, QLab, NDI, AirPlay, Art-Net, sACN and more.</li>
+            </ul>
+            <p>Click an IP to copy it, or export the lot to CSV. No terminal, no loops, no typos at 20:25.</p>
 
             <h2>Picking a free IP</h2>
             <p>Once you know what's on the network, picking an address is quick. A few rules:</p>
@@ -59,13 +65,18 @@
                 <li>If the network has DHCP, ask the gateway for its lease range. Sit outside it, not inside it. A static address inside a DHCP pool will eventually collide.</li>
             </ol>
 
+            <h2>Finding free addresses with Quicker IP Pro</h2>
+            <p>LAN Scan lists what is on the adapter's wire, including devices on a different subnet or on a 169.254 address. Devices on a different subnet show with an orange address, so a unit left on the wrong subnet stands out. An address in red is claimed by more than one device.</p>
+            <p>For a specific block, Range Scan takes a start and end address, up to 4096 addresses, or a subnet such as 192.168.1.0/24 typed into Start IP. Range Scan also lists devices that ignore ping but answer on their web or SSH port.</p>
+            <p>To get onto an orange device's subnet, right-click it in the results and choose Join Subnet. Quicker IP Pro finds a free address in that subnet and applies it to your adapter, saving your previous settings first; Restore puts them back.</p>
+
             <p>Before configuring anything on a network you didn't set up yourself, spend thirty seconds looking. Saves a lot of pain later.</p>
         
             <div class="article-cta">
                 <img loading="lazy" class="cta-icon" src="/images/quickip-icon-192.png" alt="" width="64" height="64">
                 <div class="cta-body">
                     <h3>Built for finding devices on the network</h3>
-                    <p>Quicker IP scans from the menu bar, names what it finds by make and model, lists the protocols each device speaks, and shows an address in red when two devices claim it.</p>
+                    <p>Quicker IP Pro scans from the menu bar, reads the maker from each MAC address, shows the model where a device advertises it, lists the protocols each device speaks, and shows an address in red when two devices claim it.</p>
                     <div class="cta-actions">
                         <a class="buy-btn" href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0&checkout%5Bcustom%5D%5Bsrc%5D=article-find-devices-on-network" aria-label="Buy Quicker IP">Buy Quicker IP</a>
                         <a class="cta-link" href="/quickerip/">See what it does &rarr;</a>

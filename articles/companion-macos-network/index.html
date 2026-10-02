@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bitfocus Companion on macOS: fix network drops - BSK Apps</title>
-    <meta name="description" content="Why Companion loses modules on a Mac with two adapters: interface binding, service order, and the routing traps behind it.">
+    <meta name="description" content="Why Companion modules go offline on a Mac with Wi-Fi plus a wired adapter: the same-subnet trap, service order, adapters that come up late, and checking routes.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="canonical" href="https://bskapps.com/articles/companion-macos-network/">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Companion on macOS: network setup and stability">
-    <meta property="og:description" content="Why Companion loses modules on a Mac with two adapters: interface binding, service order, and the routing traps behind it.">
+    <meta property="og:title" content="Bitfocus Companion on macOS: network setup and stability">
+    <meta property="og:description" content="Why Companion modules go offline on a Mac with Wi-Fi plus a wired adapter: the same-subnet trap, service order, adapters that come up late, and checking routes.">
     <meta property="og:image" content="https://bskapps.com/images/og-home.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -21,12 +21,14 @@
         <a class="back" href="/articles/">&larr; Articles</a>
 
         <article>
-            <h1>Companion on macOS: network setup and stability</h1>
-            <p class="date">25 April 2026</p>
+            <h1>Bitfocus Companion on macOS: network setup and stability</h1>
+            <p class="date">25 April 2026 &middot; Updated 3 October 2026</p>
 
-            <p>Bitfocus Companion runs as a local server on your Mac. It opens connections out to devices on the network - consoles, media servers, QLab, lighting desks - and listens for incoming connections from Stream Decks and remote surfaces. When it works, it's seamless. When it doesn't, the failure mode is usually not Companion itself but the Mac's network configuration underneath it.</p>
+            <p>Companion modules drop out on a two-adapter Mac when the wired adapter is not up before Companion starts, or when two adapters share a subnet. Bring the wired adapter up first and put each adapter on its own subnet.</p>
 
-            <p>Most of the traps here are the same ones covered in the multi-adapter networking articles: <a href="/articles/static-ips-av-networks/">setup and service order</a>, and <a href="/articles/mac-routing-table/">how the routing table decides which adapter to use</a>. This article applies those principles specifically to Companion.</p>
+            <p>Bitfocus Companion runs as a local server on your Mac. It opens connections out to devices on the network - consoles, media servers, QLab, lighting desks - and listens for incoming connections from Stream Decks and remote surfaces. When it works you never think about it. When it doesn't, the failure mode is usually not Companion itself but the Mac's network configuration underneath it.</p>
+
+            <p>Same traps as in our two networking articles: <a href="/articles/static-ips-av-networks/">setup and service order</a>, and <a href="/articles/mac-routing-table/">how the routing table decides which adapter to use</a>.</p>
 
             <h2>How Companion uses the network</h2>
             <p>Companion has two sides to its networking:</p>
@@ -39,24 +41,25 @@
             <h2>The routing problem in practice</h2>
             <p>Say you have a show control LAN on 192.168.10.x and Wi-Fi on 192.168.1.x. You have a lighting console at 192.168.10.50 and a media server at 192.168.10.80. Companion's modules for those devices have their IPs configured correctly. But if the routing table sends traffic to 192.168.10.x out the wrong adapter - or the 192.168.10.x route doesn't exist because that adapter isn't connected yet when Companion starts - those modules will sit in a disconnected state.</p>
             <p>The most common version of this: Companion launches at startup while the wired adapter is still initialising. The routing table builds without the show LAN route, Companion tries to connect, fails, and marks the modules as offline. They may reconnect automatically once the adapter comes up, or they may not, depending on the module's reconnect behaviour. Restarting Companion after the network is fully up clears it every time - but that's not a great habit to depend on.</p>
-            <p>The fix is making sure the wired adapter is up before Companion launches, and that service order puts it in the right position. If the show LAN is on a dedicated wired interface with no gateway, traffic to 192.168.10.x goes out that interface directly via the connected route. No routing ambiguity, no service order fight.</p>
+            <p>The fix is making sure the wired adapter is up before Companion launches. If the show LAN is on a dedicated wired interface with no gateway, traffic to 192.168.10.x goes out that interface directly via its own subnet route, wherever it sits in the service order. No routing ambiguity.</p>
 
             <h2>The same-subnet trap</h2>
             <p>This one catches people who set up a dedicated Ethernet adapter for the show LAN but happen to land on the same subnet as their Wi-Fi - usually both end up on 192.168.1.x because that's the default for most consumer gear.</p>
-            <p>With two adapters on the same subnet, the routing table has two competing entries for 192.168.1.0/24. The kernel picks one. Companion's traffic to a device at, say, 192.168.1.50 goes out whichever adapter won - which may not be the one physically connected to the device. The module shows as offline even though the device is right there. Flipping the service order or disconnecting Wi-Fi usually makes it start working, which confirms the diagnosis.</p>
-            <p>The reliable fix is different subnets on different adapters. If you can't change the show LAN, turn Wi-Fi off. <a href="/quickerip/">Quicker IP Pro</a> shows a red warning when two active adapters share a subnet and both have a gateway - useful for catching this before Companion starts throwing connection errors.</p>
+            <p>With two adapters on the same subnet, the routing table has two competing entries for 192.168.1.0/24. macOS picks one as the main route and may keep the other only as a route tied to its own adapter. Companion's traffic to a device at, say, 192.168.1.50 goes out whichever adapter won - which may not be the one physically connected to the device. The module shows as offline even though the device is right there. Turning Wi-Fi off usually makes it start working, which confirms the diagnosis.</p>
+            <p>The reliable fix is different subnets on different adapters. If you can't change the show LAN, turn Wi-Fi off. <a href="/quickerip/">Quicker IP</a> shows a red warning when two active adapters share a subnet and both have a gateway, and a grey "Shared with en8, no conflict" when only one or neither does - useful for catching this before Companion starts throwing connection errors.</p>
 
             <h2>Service order for a Companion system</h2>
-            <p>A typical setup has Companion on the same Mac as QLab, with Wi-Fi for general use and one or two wired adapters for the show. A workable service order for show day:</p>
+            <p>A typical setup has Companion on the same Mac as QLab, with Wi-Fi for general use and one or two wired adapters for the show. Service order (System Settings, Network, three-dots menu, Set Service Order) only decides which adapter with a router carries the internet and supplies DNS. Adapters with no router are reached through their own subnet routes, whatever the order. So for show day:</p>
             <ul>
-                <li>Show control LAN (wired) - first, so traffic to devices on that subnet goes out the right adapter</li>
-                <li>Audio network (wired, if applicable) - second</li>
-                <li>Wi-Fi - last, or off entirely during the show</li>
+                <li>Wi-Fi, or whichever adapter you want internet through - at the top, with its router and DNS</li>
+                <li>Show control LAN (wired) - IP and subnet only, no router, no DNS</li>
+                <li>Audio network (wired, if applicable) - no router, no DNS</li>
             </ul>
-            <p>If you are only running Wi-Fi and expect Companion to talk to devices over it, that is fine as long as all the devices are on the same Wi-Fi network and there is no competing wired interface on a conflicting subnet.</p>
+            <p>Or turn Wi-Fi off entirely during the show. If you are only running Wi-Fi and expect Companion to talk to devices over it, that is fine as long as all the devices are on the same Wi-Fi network and there is no competing wired interface on a conflicting subnet.</p>
+            <p>The exception is link-local: macOS keeps a single 169.254 route, on the primary adapter, so a browser, Companion or QLab reaching a 169.254 device can send that traffic out Wi-Fi. Dante Controller is fine because you pick its interface. For anything else, turn Wi-Fi off or put the devices on a DHCP or static subnet.</p>
 
             <h2>Remote surfaces and the Companion satellite</h2>
-            <p>If you are running a Stream Deck on a separate machine - a stage manager's laptop, a FOH operator's computer - that machine runs Companion Satellite and connects back to the main Companion instance over the network. Satellite needs to reach Companion's IP on the satellite port set in Companion's settings.</p>
+            <p>If you are running a Stream Deck on a separate machine - a stage manager's laptop, a FOH operator's computer - that machine runs Companion Satellite and connects back to the main Companion instance over the network. Satellite needs to reach Companion's IP on the Satellite API port: TCP 16622 by default, or 16623 over WebSocket. You enter Companion's address and port in Satellite itself.</p>
             <p>The common failure here is the satellite machine being on a different network segment to the Companion machine. If the main system is on a show control LAN and the satellite is on a venue Wi-Fi, they may not be able to reach each other at all. Either put both on the same subnet, or make sure there is a routed path between them. Companion itself doesn't require anything exotic - it just needs a TCP connection on that port.</p>
 
             <h2>Checking the state</h2>
@@ -67,13 +70,13 @@
                 <li>Is the adapter the route uses actually the one connected to the device? The <code>Netif</code> column in the routing table output shows which interface the route exits on.</li>
                 <li>Did Companion launch before the adapter was fully up? Restart Companion and check if the module reconnects.</li>
             </ul>
-            <p>Most disconnected-module problems resolve at step one. Companion's reliability on a multi-adapter Mac is really just network configuration in disguise.</p>
+            <p>Most disconnected-module problems resolve at step one. On a multi-adapter Mac, a dropped module is almost always routing.</p>
         
             <div class="article-cta">
                 <img loading="lazy" class="cta-icon" src="/images/quickip-icon-192.png" alt="" width="64" height="64">
                 <div class="cta-body">
                     <h3>Built for moments like this</h3>
-                    <p>Quicker IP shows your active adapters, flags subnet conflicts before Companion does, and lets you switch IP presets in one click. Made for the same problems this article is about.</p>
+                    <p>Quicker IP Pro switches IP presets in one click, scans the LAN for your gear and joins a device's subnet with a free address. Made for the same problems this article is about.</p>
                     <div class="cta-actions">
                         <a class="buy-btn" href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0&checkout%5Bcustom%5D%5Bsrc%5D=article-companion-macos-network" aria-label="Buy Quicker IP">Buy Quicker IP</a>
                         <a class="cta-link" href="/quickerip/">See what it does &rarr;</a>

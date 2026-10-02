@@ -22,12 +22,12 @@
 
         <article>
             <h1>Virtual soundcheck in REAPER</h1>
-            <p class="date">7 July 2026</p>
+            <p class="date">7 July 2026 &middot; Updated 3 October 2026</p>
 
-            <p>A virtual soundcheck is simple to describe: record every input channel during a soundcheck or a show, then play those recordings back into the console down the same channels, and mix as if the band were on stage. The band can be at dinner. You can solo the snare for ten minutes without anyone glaring at you. It is the single best use of a multitrack system that most engineers never get around to.</p>
+            <p>A virtual soundcheck is simple to describe: record every input channel during a soundcheck or a show, then play those recordings back into the console down the same channels, and mix as if the band were on stage. The band can be at dinner. You can solo the snare for ten minutes without anyone glaring at you. Most engineers with a multitrack recorder never do it.</p>
 
             <h2>What the console needs</h2>
-            <p>Any desk with a multichannel card or USB interface can do this. Every current platform (dLive, Avantis, SQ, CL, QL, Rivage, Wing, and the rest) has a per-channel or global input switch between the preamp and the card return. Record from the sends, flip the switch, and channel 12 now hears the recording of channel 12 instead of the microphone. Check where your desk taps the send: most send the signal post-preamp, so the recording bakes the preamp gain in. That is fine, just resist re-gaining on playback, and do your fine trim digitally.</p>
+            <p>Any desk with a multichannel card or USB interface can do this. Most current desks (dLive, Avantis, SQ, CL, QL, Rivage, Wing and others) have a per-channel or global input switch between the preamp and the card return. Record from the sends, flip the switch, and channel 12 now hears the recording of channel 12 instead of the microphone. Check where your desk taps the send: most send the signal post-preamp, so the recording bakes the preamp gain in. That is fine; do your fine trim digitally on playback.</p>
 
             <h2>What REAPER needs</h2>
             <p>Two things, and they are the same two things a live recording needs, which is the point.</p>
@@ -35,7 +35,7 @@
                 <li><strong>Inputs patched 1-to-1.</strong> One mono track per console channel, record armed, input N on track N.</li>
                 <li><strong>Outputs patched 1-to-1.</strong> Each track also sends to hardware output N, with the master send off so nothing sums. Track 12 plays back down channel 12 and nowhere else.</li>
             </ul>
-            <p>Patch both directions when you build the session, either from a pre-patched track template or with a script that does the walk for you, and virtual soundcheck stops being a setup job. Record during soundcheck, press play, flip the console to card returns, and you are mixing.</p>
+            <p>Patch both directions when you build the session, either from a pre-patched track template or with a script that does the walk for you, and virtual soundcheck is one switch. Record during soundcheck, press play, flip the console to card returns, and you are mixing.</p>
 
             <h2>A workflow that works</h2>
             <ol class="steps">
@@ -47,18 +47,20 @@
 
             <h2>The traps</h2>
             <ul>
-                <li>Do not touch preamps during playback. The recording is post-preamp; gain changes apply to the next real input, not what you are hearing.</li>
+                <li>Know what a preamp change does on your desk. On most, the recording is post-preamp, so a gain change during playback lands on the next real input, not on what you are hearing. Yamaha systems with Gain Compensation on hold the level sent to the network steady when the analogue gain moves, so check how yours is set before you touch gain.</li>
                 <li>Watch the clock rate. Console and computer must agree on 48 kHz, and the console is usually the leader.</li>
-                <li>Mind the PA. A muted master on the desk does not mute a solo bus routed to wedges on stage while the crew is on it.</li>
+                <li>Check what is soloed to the wedges before anyone is on stage. A muted master does not stop a solo bus feeding them.</li>
                 <li>Label the takes. A folder of sessions called untitled-3 defeats the entire exercise.</li>
             </ul>
 
             <p>The system that does all this is the same system that records the show. Build it once, patched both ways, and every gig you record becomes rehearsal material for the next one.</p>
 
+            <p>Related: <a href="/articles/reaper-live-show-recording/">how to record a live show in REAPER</a>.</p>
+
             <div class="article-cta">
                 <div class="cta-body">
                     <h3>A setup already patched both ways</h3>
-                    <p>Our free REAPER live recording setup includes track templates patched 1-to-1 in and out for up to 128 channels, plus the scripts and toolbars around them. Install it and virtual soundcheck is a switch flip, not a project.</p>
+                    <p>Our free REAPER live recording setup includes track templates patched 1-to-1 in and out for up to 128 channels, plus the scripts and toolbars around them. Install it and virtual soundcheck is a switch flip. Needs REAPER 7 and the free SWS Extension.</p>
                     <a class="cta-link" href="/tools/reaper/">Free REAPER live recording setup &rarr;</a>
                 </div>
             </div>

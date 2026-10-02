@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smaart Target Curve: What It Is and How to Build - BSK Apps</title>
-    <meta name="description" content="What a Smaart target curve actually represents, why flat is not the goal when tuning a PA, the common starting shapes, and how to build and export your own.">
+    <title>Smaart Target Curves: Why Not Flat and What to Use - BSK Apps</title>
+    <meta name="description" content="Why flat is not the goal when tuning a PA in Smaart, the usual starting shapes (0.5-1 dB/octave tilt, +3 to +6 dB low shelf), and how to build your own.">
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="canonical" href="https://bskapps.com/articles/smaart-target-curves/">
     <meta property="og:type" content="article">
@@ -22,34 +22,38 @@
 
         <article>
             <h1>Target curves in Smaart: what they are and how to use one</h1>
-            <p class="date">5 July 2026</p>
+            <p class="date">5 July 2026 &middot; Updated 3 October 2026</p>
 
-            <p>Point a measurement mic at a system, pull up a transfer function in Smaart, and the obvious instinct is to EQ until the trace is flat. Do that to a full-range PA at show level and it will sound thin, harsh, and short on low end. Flat on the analyser is not flat to the ear - which is why system engineers tune to a target curve instead.</p>
+            <p>A Smaart target curve is a reference line you load over your measurement and EQ toward. It is rarely flat, because a PA tuned to a flat trace sounds thin and harsh at show level. The instinct with a transfer function on screen is to EQ until the trace is flat. Flat on the analyser is not flat to the ear.</p>
 
             <h2>What a target curve is</h2>
-            <p>A target curve is the frequency response shape you actually want the system to measure at the mic position - a reference trace you overlay on your measurement and EQ towards. Instead of chasing a flat line, you're chasing a deliberate shape that accounts for how people hear music at performance levels in a real room.</p>
+            <p>A target curve is the frequency response shape you want the system to measure at the mic position - a reference line you overlay on your measurement and EQ towards. Instead of chasing a flat line, you chase a deliberate shape that allows for the room, the distance and what the audience expects to hear.</p>
 
-            <p>Once it is loaded, Smaart draws it alongside your live measurement, which is why people also call it the target trace. It is the same thing: a stored curve sitting on the transfer function as a reference, not a filter or anything that touches the audio.</p>
+            <p>Smaart keeps two kinds of reference: a target curve is a .crv file managed in its Target Curves window, while a target trace is a captured measurement (.srf for spectrum, .trf for transfer function) loaded into the Data Bar like any other trace. Either one sits on the plot as a reference only. Neither is a filter, and neither touches the audio.</p>
 
             <h2>Why flat sounds wrong</h2>
-            <p>A few reasons flat measurements do not equal flat perception:</p>
             <ul>
-                <li><strong>Loudness perception.</strong> At high SPL our hearing is relatively more sensitive to mid frequencies. A system that measures flat at 100 dB reads as bright and bass-light compared to the same material at home listening level.</li>
-                <li><strong>Room and distance.</strong> Recordings are mixed on monitors in controlled rooms at moderate level. A PA in a reverberant room at distance behaves nothing like that reference, and high-frequency energy in the room builds differently to low.</li>
-                <li><strong>Expectation.</strong> Decades of live sound, cinema (the X-curve), and studio practice have converged on the same finding: audiences expect a gentle downward tilt with some low-end support.</li>
+                <li><strong>Air loss.</strong> High frequencies lose energy to the air over distance, and the loss changes with temperature and humidity. Boost the top end until it reads flat at the mix position and the seats nearer the stage get it harsh.</li>
+                <li><strong>Directivity and reflections.</strong> Boxes and arrays are far more directional at high frequencies than low. The low end spills into the walls, ceiling and back of the room and returns as reflected energy, while the top end mostly goes where the boxes point. A mic in the room hears that as a downward tilt. EQ it flat and you are cutting the bottom and boosting the top against what the system does on axis.</li>
+                <li><strong>Expectation.</strong> Audiences at a music show expect a gentle downward tilt with real low-end weight. Cinema settled on a tilted target too: the X-curve.</li>
             </ul>
 
             <h2>Common starting shapes</h2>
-            <p>There is no single correct target - it depends on the system, the room, and the genre - but most working curves are variations on the same idea:</p>
+            <p>There is no correct target. Most working curves start from the same few moves:</p>
             <ul>
                 <li><strong>A downward tilt</strong> through the mids and highs, typically 0.5 to 1 dB per octave.</li>
                 <li><strong>A low-frequency shelf</strong>, often somewhere between +3 and +6 dB below roughly 100-200 Hz, more for EDM and pop, less for speech and corporate.</li>
+                <li><strong>A haystack</strong> - flat through the mids, then a ramp that climbs from a few hundred hertz down to the bottom of the range. It goes by the size of the lift: a 9 dB haystack for a large music system, 15 dB for a high-impact one.</li>
                 <li><strong>A gentle high-frequency roll-off</strong> above 8-10 kHz - partly taste, partly a nod to air absorption over distance.</li>
             </ul>
-            <p>Speech-only systems usually want less of everything: a flatter mid band and restrained low end for intelligibility.</p>
+            <p>Speech-only systems usually want less of everything: a flatter mid band and restrained low end for intelligibility. For more on picking a shape for a live PA, see <a href="/articles/live-sound-house-curves/">house curves for live sound</a>.</p>
 
-            <h2>Using one in Smaart</h2>
-            <p>Smaart lets you load a target curve and display it against your live transfer function trace, so tuning becomes "EQ towards the overlay" rather than remembering a shape in your head. The practical workflow:</p>
+            <h2>Loading a target curve into Smaart</h2>
+            <p>Open the Target Curves window from Options &gt; Target Curves (Alt/Opt+X), pick the Spectrum or Transfer Function tab to match the curve, and press Import. The X key shows and hides target curves on the plot. Transfer function target curves need a measurement-capable edition of Smaart 9.4 or later; before that, a captured TF trace was the only way to overlay a TF reference. From Smaart 9.5 you can also right-click a trace in the Data Bar and choose Export as Target Curve.</p>
+            <p>Smaart reads its TargetCurves folder when it starts. A .crv saved into that folder while Smaart is running does not show up until you restart Smaart or bring it in with Import.</p>
+
+            <h2>Tuning to the curve</h2>
+            <p>With the curve on the plot, tuning becomes "EQ towards the overlay" rather than remembering a shape in your head.</p>
             <ul>
                 <li>Start from a known shape rather than a blank slate - a house curve you like, or a published starting point.</li>
                 <li>Get the system's overall trend to follow the target with broad strokes: crossover alignment and wide EQ first.</li>
@@ -58,8 +62,10 @@
             </ul>
 
             <h2>Building and editing the curve itself</h2>
-            <p>The awkward part has always been authoring the curve. Text files of frequency and magnitude pairs are easy to export but miserable to design by hand, and a curve you sketched for one system usually needs reshaping for the next room.</p>
-            <p>That's the gap <a href="/targettrace/">Target Trace</a> fills: draw and edit target curves visually on a Mac - drag control points, draw freehand, simplify a trace you've imported - then export directly in Smaart and REW formats. Keep a folder of house curves per system or per genre and adapt them per room instead of starting over.</p>
+            <p>Authoring the curve is the slow part. A .crv is two tab-separated columns of frequency and level under a short header, and Rational Acoustics warns that spaces or commas in place of tabs can crash Smaart on import. Text files like that are easy to export but miserable to design by hand, and a curve you sketched for one system usually needs reshaping for the next room.</p>
+            <p><a href="/targettrace/">Target Trace</a> is a Mac app for that job, and it can start from the sound you already have. Love the sound of the PA right now? Start Live Trace in the editor and grab the exact moment you want. With Smaart's API switched on, Hold freezes the trace and Grab turns it into your curve, point for point. Tidy it with Point Spacing (1/1 to 1/24 octave) and save it as a Smaart .crv. Save it for later, edit your live grabs at any time. A REW .txt is an export only, so keep the .crv as the copy you edit.</p>
+            <p>Working on one screen? Float the live trace over your EQ page and Lock it to that app. See your EQ changes in real time, right on your EQ. Locked, the trace moves with the app window and clicks pass straight through to the EQ underneath. Set Scale to 24 for LA Network Manager or 20 for QL Editor, and Target Trace remembers it per app.</p>
+            <p>Starting cold instead? Pick a preset (Flat, Tilt, 9 dB or 15 dB Haystack, X-Curve), drag control points or draw freehand, Flatten a rough section, and tick library curves to overlay them, TF curves with their saved tolerance bands. Keep a folder of house curves per system or per genre and adapt them per room instead of starting over.</p>
 
             <p>Related: <a href="/articles/rew-house-curve/">house curves in REW</a>.</p>
 
@@ -67,7 +73,7 @@
                 <img loading="lazy" class="cta-icon" src="/images/targettrace-icon-192.png" alt="" width="64" height="64">
                 <div class="cta-body">
                     <h3>Design target curves visually</h3>
-                    <p>Target Trace is a Mac app for building and editing target curves - control points, freehand drawing, trace simplification, and direct export for Smaart and REW.</p>
+                    <p>Target Trace builds curves from presets, control points and freehand drawing, and saves .crv for Smaart and .txt for REW.</p>
                     <div class="cta-actions">
                         <a class="buy-btn" href="https://bskapps.lemonsqueezy.com/checkout/buy/2d6a5745-536e-4e65-9953-ad34ad59fdb7?dark=1&media=0&desc=0&checkout%5Bcustom%5D%5Bsrc%5D=article-smaart-target-curves" aria-label="Buy Target Trace">Buy Target Trace</a>
                         <a class="cta-link" href="/targettrace/">See what it does &rarr;</a>

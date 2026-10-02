@@ -22,9 +22,9 @@
 
         <article>
             <h1>A QLab show prep checklist</h1>
-            <p class="date">5 July 2026</p>
+            <p class="date">5 July 2026 &middot; Updated 3 October 2026</p>
 
-            <p>Every QLab operator has a version of this list in their head. Writing it down means the 11pm load-in version of you doesn't have to remember it. This is the sequence for going from "a folder of files the client sent" to a workspace you'd happily hand to another operator, in the order that avoids redoing work.</p>
+            <p>Work through these nine steps in order, from "a folder of files the client sent" to a workspace a cover operator can run cold. The order avoids redoing work, and writing it down means the 11pm load-in version of you doesn't have to remember it.</p>
 
             <h2>1. Chase the files early, expect them late</h2>
             <p>Ask for every asset days before you need it, and ask for the source version - the DAW export, not the phone recording of it. You won't get everything, but whatever arrives early can be fully prepped, leaving show morning for the stragglers only.</p>
@@ -45,16 +45,16 @@
             <p>Renumber on tens so there's room to insert. Name cues for what they are on stage ("Walk-up - J Smith"), not the filename. The test: could a cover operator run this workspace cold?</p>
 
             <h2>7. Set fades, continues, and panic times deliberately</h2>
-            <p>Every fade-out should have a duration someone chose. Auto-continues should exist only where a sequence genuinely wants them. Set the panic (Escape) fade time to something that sounds like a choice rather than a cut. Defaults are for rehearsal; a show file has no accidental settings.</p>
+            <p>Every fade-out should have a duration someone chose. Auto-continues should exist only where a sequence needs them. Set the panic (Escape) fade time, under Workspace Settings &gt; General, to something that sounds like a choice rather than a cut. Defaults are for rehearsal; a show file has no accidental settings.</p>
 
             <h2>8. Test on the show system, at level</h2>
-            <p>The workspace that works on your laptop with headphones has proven nothing about the show Mac and the PA. Run every cue through the real output patch at something near show level, and listen to the first and last seconds of each - that's where the problems live.</p>
+            <p>The workspace that works on your laptop with headphones has proven nothing about the show Mac and the PA. Run every cue through the real output patch at something near show level, and listen closely to the first and last seconds of each.</p>
 
-            <h2>9. Back it up like you mean it</h2>
-            <p>Workspace plus media, bundled, on a drive that isn't the show machine - QLab's "Bundle Workspace" exists for exactly this. Do it again after any late change. The show that loses a machine at 5pm is only saved by the bundle you made at 4.</p>
+            <h2>9. Back it up</h2>
+            <p>Workspace plus media, on a drive that isn't the show machine. In QLab 5, File &gt; Save As with "Save workspace and media to a new project folder" copies every file the cues use into the project folder, and QLab keeps copying new files in as you add them (Workspace Settings &gt; General &gt; File Management). Copy that whole folder. Do it again after any late change. The show that loses a machine at 5pm is only saved by the copy you made at 4.</p>
 
             <h2>The automatable part</h2>
-            <p>Steps 2 through 7 are mechanical - which is why we built <a href="/labassistant/">Lab Assistant</a> to do them in bulk: batch conversion, LUFS levelling, output routing, silence trimming, renumbering, and consistent fades across a whole workspace, in minutes. That moves your time to the steps that actually need ears and judgement: 8 and 9.</p>
+            <p>Much of steps 2 to 7 is mechanical, and that is the part we built <a href="/labassistant/">Lab Assistant</a> for. Select the cues and it converts files (in Mint), levels them to a LUFS target, routes outputs, trims silence, renumbers, sets continue modes, and adds fade and stop so starting one cue fades the others out. It can also wrap walk-in music in a looping playlist group, colour-code cues by type, and save the whole setup as a preset. Naming cues for the stage and choosing the panic time stay with you, along with steps 8 and 9.</p>
 
             <div class="article-cta">
                 <img loading="lazy" class="cta-icon" src="/images/labassistant-icon-192.png" alt="" width="64" height="64">

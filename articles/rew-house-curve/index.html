@@ -22,34 +22,40 @@
 
         <article>
             <h1>House curves in REW: why flat sounds thin and what to use instead</h1>
-            <p class="date">5 July 2026</p>
+            <p class="date">5 July 2026 &middot; Updated 3 October 2026</p>
 
-            <p>REW makes it easy to measure a room, generate EQ filters, and correct the response to flat. It's also the most common way to end up with a system that measures beautifully and sounds worse than before you started - thin, dry, and missing the low end you bought the subwoofer for. The fix is not more EQ. It's telling REW to correct towards the right shape, and that shape is the house curve.</p>
+            <p>A house curve in REW is a text file of frequency and dB offsets that REW adds to its EQ target, so the filters steer the room toward a shape instead of flat. Without one, REW aims at its target type, flat for a full-range speaker, unless you tick Add room curve. A room corrected to flat often measures clean and sounds thin, dry and short of the low end you bought the subwoofer for.</p>
 
             <h2>What a house curve is</h2>
-            <p>A house curve is the in-room frequency response you actually want at the listening position. When you give REW a house curve, its EQ engine generates filters that steer the measured response towards that shape instead of a flat line. Same measurement, same filters, different destination.</p>
+            <p>A house curve is the in-room frequency response you actually want at the listening position. When you give REW a house curve, its EQ engine generates filters that steer the measured response towards that shape instead of a flat line.</p>
 
             <h2>Why flat in-room disappoints</h2>
             <p>Speakers are designed to measure flat <em>anechoically</em> - on-axis, no room. Put a good flat speaker in a normal room and the steady-state response at the listening position naturally tilts downward: the room reinforces low frequencies and absorbs high ones, and you sit in the combined direct-plus-reflected field. That gentle downward slope is what a well-regarded system measures in-room. Force the in-room response flat with EQ and you've effectively boosted the treble and cut the bass relative to what the speaker was voiced to do.</p>
 
             <h2>Common starting shapes</h2>
             <ul>
-                <li><strong>The Harman curve</strong> - from Harman's blind listening research on room corrections: a bass shelf of roughly +4 to +6 dB below about 100-200 Hz and a smooth downward tilt through the highs. Consistently preferred by listeners for music in domestic rooms.</li>
+                <li><strong>The Harman curve</strong> - from Harman listening tests (Olive, Welti and McMullin, AES 2013). Listeners adjusted a flat in-room response and on average preferred about +6 dB of bass below roughly 100 Hz, with slightly less treble. It is a home listening result, from a listening room, not a venue.</li>
                 <li><strong>A simple tilt</strong> - a straight slope of around -0.5 to -1 dB per octave across the band. Less low-end emphasis than Harman; a common choice for nearfield and studio-adjacent setups.</li>
                 <li><strong>Flat-with-bass-shelf</strong> - leave the mids and highs alone and add only the low shelf. Popular for home theatre where the goal is impact without changing tonal character.</li>
             </ul>
-            <p>All of these are starting points. Room size, speaker directivity, listening distance, and taste all move the answer.</p>
+            <p>All of these are starting points. Room size, speaker directivity, listening distance, and taste all move the answer. For a live PA, see <a href="/articles/live-sound-house-curves/">house curves for live sound</a>.</p>
 
             <h2>Loading one into REW</h2>
-            <p>REW accepts a house curve as a plain text file of frequency and gain pairs, set in its preferences. Once loaded, the EQ target follows the curve automatically when you generate filters. Practical notes:</p>
+            <p>REW reads a house curve as a plain text file: a frequency in Hz and an offset in dB on each line, with frequencies in ascending order. Since REW 5.30 you choose the file in the Target settings of the EQ window; older versions set it in Preferences. REW adds the house curve on top of the target type you pick there, and the filters it generates aim at the combined shape.</p>
+            <p>An example file, for illustration only - +6 dB below 100 Hz easing to 0 dB at 300 Hz, then a 3 dB fall to 20 kHz:</p>
+            <pre><code>20 6.0
+100 6.0
+300 0.0
+20000 -3.0</code></pre>
             <ul>
-                <li>REW interpolates between the points you give it, so the file needs enough points to describe the shape smoothly - a handful of points makes angular corners, not a curve.</li>
+                <li>REW interpolates between the points you give it, so the file needs enough points to describe the shape smoothly - a handful of points makes angular corners, not a curve. Tick Use logarithmic interpolation and the lines between points run straight on REW's log frequency axis.</li>
                 <li>Correct the big trends and the low-frequency room modes; don't chase narrow high-frequency dips, which are usually interference effects that EQ makes worse.</li>
                 <li>Re-listen and iterate on the curve, not just the filters. If everything sounds dull, the tilt is too steep; if it's fatiguing, not steep enough.</li>
             </ul>
 
             <h2>Making the curve itself</h2>
-            <p>Hand-writing frequency/gain text files is the weak link - it's hard to visualise what a list of numbers sounds like, and smooth shapes need a lot of points. <a href="/targettrace/">Target Trace</a> is a Mac app built for exactly this: draw the curve visually, drag control points until the shape is right, choose the point spacing, and export a REW-ready house curve file (Smaart too). Import a curve you found online, simplify it, reshape it for your room, and keep versions per system.</p>
+            <p>Hand-writing frequency/gain text files is the weak link - it's hard to visualise what a list of numbers sounds like, and smooth shapes need a lot of points. <a href="/targettrace/">Target Trace</a> is a Mac app built for exactly this: draw the curve visually, drag control points until the shape is right, set Point Spacing from 1/1 to 1/24 octave, and export a REW-ready house curve file (Smaart .crv too). There is no Harman preset; start from the Tilt preset, double-click to add points below 100 Hz, then drag them up into a shelf. You can open an existing Smaart .crv or a Smaart ASCII trace export and reshape it for your room. REW .txt files are export only and do not load back in, so save the .crv as your editable copy and keep versions per system.</p>
+            <p>If you run Smaart too, Target Trace can start from the sound you already have. Love the sound of the PA right now? Start Live Trace in the editor and grab the exact moment you want. Save it for later, edit your live grabs at any time. The .crv is the copy you edit; export a fresh REW house curve from it whenever you need one. On one screen, Float the live trace over your EQ page and Lock it to that app, so it moves with the app window and passes clicks straight through. See your EQ changes in real time, right on your EQ.</p>
 
             <p>Related: <a href="/articles/smaart-target-curves/">target curves in Smaart</a>.</p>
 
@@ -57,7 +63,7 @@
                 <img loading="lazy" class="cta-icon" src="/images/targettrace-icon-192.png" alt="" width="64" height="64">
                 <div class="cta-body">
                     <h3>Draw your house curve, don't type it</h3>
-                    <p>Target Trace builds REW house curves and Smaart target curves visually - control points, freehand drawing, imported-trace simplification, and clean export files.</p>
+                    <p>Target Trace builds REW house curves and Smaart target curves visually - control points, freehand drawing, Point Spacing and clean export files - and with Smaart running it adds Live Trace.</p>
                     <div class="cta-actions">
                         <a class="buy-btn" href="https://bskapps.lemonsqueezy.com/checkout/buy/2d6a5745-536e-4e65-9953-ad34ad59fdb7?dark=1&media=0&desc=0&checkout%5Bcustom%5D%5Bsrc%5D=article-rew-house-curve" aria-label="Buy Target Trace">Buy Target Trace</a>
                         <a class="cta-link" href="/targettrace/">See what it does &rarr;</a>

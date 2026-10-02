@@ -22,30 +22,32 @@
 
         <article>
             <h1>How macOS routes traffic across multiple adapters</h1>
-            <p class="date">25 April 2026</p>
+            <p class="date">25 April 2026 &middot; Updated 3 October 2026</p>
 
-            <p>Every IP packet your Mac sends has to go out a specific physical adapter. With one adapter, the choice is obvious. With two or three, macOS has to decide - and its decision process is not always obvious to the person who set up the interfaces. Understanding how it works explains a lot of the strange behaviour that shows up in multi-adapter systems.</p>
+            <p>macOS sends each packet out the adapter with the most specific matching route. Anything else goes to the default route, which belongs to the highest adapter in Set Service Order that has a router. <code>netstat -rn -f inet</code> shows the table.</p>
+
+            <p>Every IP packet your Mac sends has to go out a specific physical adapter. With one adapter, the choice is obvious. With two or three, macOS has to decide - and its decision process is not always obvious to the person who set up the interfaces.</p>
 
             <p>This is Part 2 of a companion pair. <a href="/articles/static-ips-av-networks/">Part 1</a> covers the practical setup: service order, addressing, and preset switching. This article explains the underlying routing mechanics and why certain configurations break.</p>
 
             <h2>The routing table</h2>
-            <p>macOS maintains a routing table: a list of rules that map destination IP ranges to outgoing interfaces. Every packet gets checked against this table before it leaves the machine. The kernel walks the list from most specific to least specific and uses the first match.</p>
+            <p>macOS maintains a routing table: a list of rules that map destination IP ranges to outgoing interfaces. Every packet gets checked against this table before it leaves the machine, and the most specific rule that matches wins.</p>
             <p>You can read the table at any time:</p>
             <pre><code>netstat -rn -f inet</code></pre>
-            <p>The output looks roughly like this on a Mac with Wi-Fi and one wired adapter:</p>
+            <p>An example, trimmed, from a Mac with Wi-Fi on en0 and one wired adapter on en7 (your addresses, link numbers and adapter names will differ):</p>
             <pre><code>Routing tables
 
 Internet:
-Destination        Gateway            Flags     Netif
-default            192.168.1.1        UGScg     en0
-127                127.0.0.1          UCS       lo0
-127.0.0.1          127.0.0.1          UH        lo0
-169.254            link#4             UCS       en1
-192.168.1          link#4             UCS       en0
-192.168.1.10       link#4             UHS       en0
-192.168.10         link#6             UCS       en2
-192.168.10.5       link#6             UHS       en2</code></pre>
-            <p>Each row is a rule. <code>Destination</code> is the target range. <code>Gateway</code> is either a router IP (for routes that need a next hop) or <code>link#N</code> (meaning: send directly on that interface, no router needed). <code>Netif</code> is the physical adapter.</p>
+Destination        Gateway            Flags               Netif Expire
+default            192.168.1.1        UGScg                 en0
+127                127.0.0.1          UCS                   lo0
+127.0.0.1          127.0.0.1          UH                    lo0
+169.254            link#15            UCS                   en0      !
+192.168.1          link#15            UCS                   en0      !
+192.168.1.10/32    link#15            UCS                   en0      !
+192.168.10         link#21            UCS                   en7      !
+192.168.10.5/32    link#21            UCS                   en7      !</code></pre>
+            <p>Each row is a rule. <code>Destination</code> is the target range. <code>Gateway</code> is either a router IP (for routes that need a next hop) or <code>link#N</code> (meaning: send directly on that interface, no router needed). <code>Netif</code> is the physical adapter. Ignore the Expire column for this.</p>
             <p>Two types of entries matter here:</p>
             <ul>
                 <li><strong>Connected routes</strong> - added automatically when you assign an IP to an interface. If en0 is 192.168.1.10 with a /24 mask, macOS immediately adds a route saying "anything in 192.168.1.0/24, send directly on en0". No gateway involved. The host is assumed to be reachable on the wire.</li>
@@ -53,36 +55,38 @@ default            192.168.1.1        UGScg     en0
             </ul>
 
             <h2>How the default route gets assigned</h2>
-            <p>Only one default route can be active at a time (per address family - IPv4 and IPv6 have separate tables, but the logic is the same). When multiple adapters have a gateway configured, macOS has to pick one to install as the default.</p>
-            <p>The deciding factor is <strong>service order</strong> - the ranked list under System Settings, Network, three-dots menu, Set Service Order. The highest-ranked adapter that is currently up and has a gateway configured wins the default route.</p>
-            <p>This is why service order matters in production systems. If Wi-Fi is above your Ethernet adapter and both have a gateway, all your internet traffic and any "unknown destination" traffic goes out Wi-Fi, even if you physically plugged into a fast wired network. The wired adapter is active and works fine for its own subnet, but it will never see the default-route traffic until you move it above Wi-Fi in the list.</p>
+            <p>macOS keeps one primary default route per address family (IPv4 and IPv6 have separate tables, but the logic is the same). When more than one adapter has a gateway configured, it has to pick which one gets it.</p>
+            <p>The deciding factor is <strong>service order</strong> - the ranked list under System Settings, Network, three-dots menu, Set Service Order. The highest-ranked adapter that is currently up and has a gateway configured gets the primary default route. Adapters with no gateway never compete for it; they are reached through their own subnet routes wherever they sit in the list. The exception is the 169.254 link-local range: macOS keeps a single 169.254 route on the primary adapter (en0 in the table above), so a browser, Companion or QLab reaching a 169.254 device can send that traffic out Wi-Fi. Dante Controller is fine because you pick its interface. For anything else, turn Wi-Fi off or put the devices on a DHCP or static subnet.</p>
+            <p>The other adapters with a gateway may keep a default route of their own, scoped to that adapter. It shows as a second <code>default</code> line with an <code>I</code> in the flags (<code>RTF_IFSCOPE</code> in <code>man netstat</code>), and only traffic tied to that adapter uses it:</p>
+            <pre><code>default            192.168.1.1        UGScg                 en0
+default            192.168.10.1       UGScIg                en7</code></pre>
+            <p>This is why service order matters in production systems. If Wi-Fi is above your Ethernet adapter and both have a gateway, all your internet traffic and any "unknown destination" traffic goes out Wi-Fi, even if you physically plugged into a fast wired network. The wired adapter is active and works fine for its own subnet, but it will never carry the default-route traffic until you move it above Wi-Fi in the list.</p>
             <p>You can check which adapter currently holds the default route with:</p>
             <pre><code>netstat -rn -f inet | grep default</code></pre>
-            <p>Or just look at the Quicker IP Pro menu - it marks the adapter currently carrying the default route with a dot indicator.</p>
+            <p>The line without an <code>I</code> is the primary. Or look at the Quicker IP menu - it marks the adapter currently carrying the default route with a blue status dot.</p>
 
             <h2>Why the same subnet on two adapters breaks things</h2>
-            <p>This is where it gets subtle, and where a lot of show-day confusion comes from.</p>
-            <p>When you assign an IP to an interface, macOS adds a connected route for that entire subnet on that interface. If Wi-Fi is on 192.168.1.50 with a /24 mask, the routing table gets an entry: "192.168.1.0/24 goes via en0". If you then plug in an Ethernet adapter and also put it on 192.168.1.x - say, 192.168.1.100 with a /24 mask - macOS adds a second entry: "192.168.1.0/24 goes via en1".</p>
-            <p>Now the routing table has two rules for the same destination range. The kernel resolves ties using service order, so one adapter wins. But the outcome of that is:</p>
+            <p>When you assign an IP to an interface, macOS adds a connected route for that entire subnet on that interface. If Wi-Fi is on 192.168.1.50 with a /24 mask, the routing table gets an entry: "192.168.1.0/24 goes via en0". If you then plug in an Ethernet adapter and also put it on 192.168.1.x - say, 192.168.1.100 with a /24 mask - macOS needs a second entry: "192.168.1.0/24 goes via en7".</p>
+            <p>Now there are two rules for the same destination range. macOS picks one as the primary route for that subnet and may keep the other only as an interface-scoped route (flag <code>I</code>) for traffic already tied to that adapter. The outcome:</p>
             <ul>
-                <li>Traffic to any device on 192.168.1.x goes out whichever adapter won the tie, regardless of which adapter is physically on the same wire as the device you are trying to reach.</li>
-                <li>If a Dante device is at 192.168.1.20 and it is plugged into the same switch as your Ethernet adapter, but Wi-Fi won the 192.168.1.0/24 route, Dante Controller sends its discovery traffic out Wi-Fi. The Dante device never sees it. The device is physically there, correctly configured, and Dante Controller reports it as offline.</li>
-                <li>The same applies to any unicast traffic: ARP requests, pings, OSC, everything. The kernel does not know that 192.168.1.20 is only reachable via en1. It just follows the route.</li>
+                <li>Traffic to any device on 192.168.1.x goes out whichever adapter holds the primary route, regardless of which adapter is physically on the same wire as the device you are trying to reach.</li>
+                <li>If a Dante device is at 192.168.1.20 and it is plugged into the same switch as your Ethernet adapter, but Wi-Fi holds the 192.168.1.0/24 route, traffic from the Mac to that device can leave on Wi-Fi. The Dante device never sees it. The device is physically there, correctly configured, and Dante Controller reports it as offline.</li>
+                <li>The same applies to any unicast traffic: ARP requests, pings, OSC, everything. The kernel does not know that 192.168.1.20 is only reachable via en7. It just follows the route.</li>
             </ul>
-            <p>The reason this produces "mixed results" rather than a clean failure is that the winner can change. If Wi-Fi drops for a moment and reconnects, service order re-evaluation can change which adapter holds the route. Some traffic gets through before the change, some after. You get intermittent failures that look random but are actually caused by route flapping between two adapters competing for the same subnet.</p>
+            <p>The reason this produces "mixed results" rather than a clean failure is that the winner can change. When either adapter drops and reconnects, the route can move to the other one. Some traffic gets through before the change, some after. You get intermittent failures that look random but come from two adapters competing for the same subnet.</p>
 
             <h2>The gateway makes it worse</h2>
             <p>The connected-route problem above applies whenever two adapters share a subnet - even if neither has a gateway. But the situation gets worse when both adapters have a gateway configured.</p>
-            <p>With two gateways on the same subnet, you now have two adapters competing for both the connected route and the default route. macOS will install one as the default, but the winning adapter for the default route and the winning adapter for the 192.168.1.0/24 connected route are not necessarily the same one. In practice they usually are, because service order governs both, but the interaction can produce edge cases where the default route goes out adapter A and the subnet route goes out adapter B - and then the responses come back on A, and the connection fails because the source interface doesn't match what the remote host saw.</p>
+            <p>With two gateways on the same subnet, the two adapters compete for both the subnet route and the default route, so internet traffic and show traffic can end up on different adapters, and that can change when either link drops.</p>
             <p>Which is why the rule holds: if an interface doesn't need a gateway, don't give it one. An audio network, a show control LAN without internet access, a static-IP Dante subnet - none of these need a router field. Leave it empty. That keeps the default route unambiguous and removes one source of conflict.</p>
 
             <h2>How Quicker IP detects this</h2>
-            <p><a href="/quickerip/">Quicker IP Pro</a> scans all active adapters and checks every pair for subnet overlap. It distinguishes two scenarios:</p>
+            <p><a href="/quickerip/">Quicker IP</a> checks every pair of connected adapters for subnet overlap, leaving out self-assigned 169.254 addresses. It distinguishes two scenarios:</p>
             <ul>
-                <li><strong>Shared subnet, no gateway conflict</strong> - two adapters on the same subnet, but only one (or neither) has a gateway configured. Local subnet traffic may still route incorrectly between them depending on service order, but the default route is unambiguous. Quicker IP shows this in grey as "Shared with", naming the other adapter.</li>
-                <li><strong>Gateway conflict</strong> - two adapters on the same subnet and both have a gateway configured. This is the full problem: both the connected route and the default route are contested. Quicker IP shows this in red as "Overlaps", naming the other adapter, and fires a system notification the first time it detects the conflict, including the CIDR of the conflicting subnet.</li>
+                <li><strong>Shared subnet, no gateway conflict</strong> - two adapters on the same subnet, but only one (or neither) has a gateway configured. Traffic to that subnet can still leave on the wrong adapter, but the default route is unambiguous. Quicker IP shows this in grey as "Shared with en7, no conflict", naming the other adapter.</li>
+                <li><strong>Gateway conflict</strong> - two adapters on the same subnet and both have a gateway configured. This is the full problem: both the subnet route and the default route are contested. Quicker IP shows this in red as "Overlaps en7", naming the other adapter, and sends a Gateway Conflict notification the first time it sees the conflict, giving the CIDR of the clashing subnet.</li>
             </ul>
-            <p>The warning appears next to the subnet field in each affected adapter's flyout in the menu. A grey warning is worth noting. A red warning means traffic is actively going to the wrong place and you should fix it before the show.</p>
+            <p>The warning appears on the Subnet line in each affected adapter's Network Info. A static adapter that is unplugged shows a greyed "Would overlap" note when its configured subnet matches a live one, so you see the clash before the cable goes in. Quicker IP reads the configuration; it doesn't watch traffic. A grey warning still means traffic to that subnet can leave on the wrong adapter. A red one means both routes are contested. Fix either before the show.</p>
 
             <h2>What to do when you see an overlap</h2>
             <ul>
@@ -90,13 +94,13 @@ default            192.168.1.1        UGScg     en0
                 <li><strong>Put them on different subnets.</strong> Change one of the conflicting networks to a range that doesn't collide. 192.168.10.x, 172.16.x.x, 10.x.x.x - anything that doesn't overlap with the other interface. This is the right fix when you need both adapters active simultaneously.</li>
                 <li><strong>Remove the gateway from the adapter that doesn't need it.</strong> If one of the two is a closed network (no internet), clear the router field. This eliminates the gateway conflict and reduces the connected-route problem to a grey warning rather than a red one.</li>
             </ul>
-            <p>The underlying cause is almost always that someone assigned static IPs without checking whether the subnet range they chose was already in use elsewhere on the same machine. A fresh venue Wi-Fi on 192.168.1.x is probably the most common trigger. The fix is simple once you know where to look.</p>
+            <p>The underlying cause is almost always that someone assigned static IPs without checking whether the subnet range they chose was already in use elsewhere on the same machine. A fresh venue Wi-Fi on 192.168.1.x is probably the most common trigger.</p>
         
             <div class="article-cta">
                 <img loading="lazy" class="cta-icon" src="/images/quickip-icon-192.png" alt="" width="64" height="64">
                 <div class="cta-body">
                     <h3>See what your routing table is doing</h3>
-                    <p>Quicker IP shows your active adapters, the IPs they hold, and warns when two adapters are competing for the same subnet. The visual version of the netstat output above.</p>
+                    <p>Quicker IP Pro switches an adapter's IP from a preset in one click and finds a free address on a device's subnet with Join Subnet. Fix what the table shows without opening System Settings.</p>
                     <div class="cta-actions">
                         <a class="buy-btn" href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0&checkout%5Bcustom%5D%5Bsrc%5D=article-mac-routing-table" aria-label="Buy Quicker IP">Buy Quicker IP</a>
                         <a class="cta-link" href="/quickerip/">See what it does &rarr;</a>

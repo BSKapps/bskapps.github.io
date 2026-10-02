@@ -22,78 +22,87 @@
 
         <article>
             <h1>Dante network readiness on a Mac</h1>
-            <p class="date">15 April 2026</p>
+            <p class="date">15 April 2026 &middot; Updated 3 October 2026</p>
 
             <p>Dante is usually reliable. When it isn't, it's almost always the network underneath, not Dante itself. Macs are fine Dante endpoints, but a few defaults need attention before you plug into a show. Treat this as a short pre-show checklist.</p>
+
+            <h2>The checklist</h2>
+            <ol>
+                <li><strong>Adapter:</strong> a CDC-NCM chipset (RTL8156-class) or a Thunderbolt adapter, linked at 1 Gbit/s or faster, full duplex, MTU 1500.</li>
+                <li><strong>Wi-Fi:</strong> off. If it has to stay on, a different subnet, and the Ethernet adapter selected in Dante Controller.</li>
+                <li><strong>Subnets:</strong> no other adapter on the Dante subnet.</li>
+                <li><strong>Address:</strong> a static address with no router, or DHCP and link-local, whichever the devices use.</li>
+                <li><strong>Sleep:</strong> off while on power.</li>
+                <li><strong>Clock:</strong> you know which device is clock leader.</li>
+                <li><strong>IGMP:</strong> one querier if the switches are snooping; none needed on unmanaged switches.</li>
+            </ol>
 
             <h2>Use a USB Ethernet adapter with the right chipset</h2>
             <p>Modern MacBooks have no built-in Ethernet, so you're always using an adapter. Not all adapters are equal, and on macOS the difference is mostly about which USB class the adapter speaks.</p>
 
-            <p>Stick to USB-C / Thunderbolt adapters that macOS handles natively (CDC-NCM class). Avoid older ASIX chipsets that need a kernel extension - they tend to drop packets under sustained audio load.</p>
+            <p>Pick a CDC-NCM adapter: macOS drives that class natively, with no driver download. RTL8156-class chipsets are native NCM.</p>
 
             <p>What works reliably on macOS for Dante:</p>
             <ul>
-                <li><strong>Realtek RTL8156 / RTL8156B</strong> - 2.5 GbE, CDC-NCM, driverless on macOS 12+. The current safe choice for USB-C adapters. Most UGREEN, Anker, and CalDigit adapters at this price point use this chip.</li>
-                <li><strong>Apple USB-C to Gigabit Ethernet</strong> - driverless, deterministic, no surprises.</li>
+                <li><strong>Realtek RTL8156 / RTL8156B</strong> - 2.5 GbE, CDC-NCM, no driver needed on current macOS. The current safe choice for USB-C adapters.</li>
                 <li><strong>Thunderbolt 3 to Thunderbolt 2 adapter chained with a Thunderbolt 2 to Gigabit Ethernet adapter</strong> - goes through the Thunderbolt bus entirely, bypasses USB, and behaves very cleanly on macOS. More cable to manage but a solid option if you already have the adapters from an older system.</li>
             </ul>
-            <p>The older RTL8153 is best avoided for Dante work - Audinate's own guidance flags packet loss issues with that chipset. If you have one already and it's been reliable for you, keep it, but the 8156 is the better buy today.</p>
-            <p>What to avoid: older ASIX parts (AX88772 and similar) that use a vendor-specific protocol and require a kernel extension, any adapter that insists on its own driver download, and random unbranded dongles whose chipset isn't listed anywhere on the packaging.</p>
-            <p>Confirm the negotiation is clean once plugged in. System Settings, Network, pick the adapter, Details, Hardware. You want <code>Speed: 1 Gbit/s</code> or <code>2.5 Gbit/s</code>, <code>Duplex: full-duplex</code>, <code>MTU: Standard (1500)</code> for Dante audio. Anything else, fix it before you trust it. (If you're running Dante Video or other multicast-heavy traffic on the same network, that side may want jumbo frames - separate decision, separate setting.)</p>
+            <p>The RTL8153, the chip in most 1 Gbit/s USB adapters, only supports CDC-ECM. Audinate's Dante Virtual Soundcard FAQ on adapter choice explains that ECM sends audio packets on a longer path through the system than NCM, and advises an RTL8156-based adapter for lower latency. If you have an 8153 adapter already and it's been reliable for you, keep it.</p>
+            <p>What to avoid: any adapter that needs its own driver download (some ASIX chipsets do), and random unbranded dongles whose chipset isn't listed anywhere on the packaging.</p>
+            <p>Confirm the negotiation is clean once plugged in. System Settings, Network, pick the adapter, Details, Hardware. You want a link speed of 1 Gbit/s or 2.5 Gbit/s, full duplex, and MTU Standard (1500) for Dante audio. Anything else, fix it before you trust it.</p>
 
             <h2>Turn Wi-Fi off, not just disconnected</h2>
-            <p>Dante Controller explicitly recommends disabling Wi-Fi on the control machine. There's a good reason. If Wi-Fi is on and the Dante network has no internet path, macOS may send Dante Controller's discovery traffic out the wrong interface, or randomly prefer Wi-Fi for mDNS. You'll see devices appear and disappear, clock sync go yellow, and patch commands silently fail.</p>
-            <p>Switch Wi-Fi off from the menu bar for the duration of the show. Not "disconnect from current network". Off. If you need Wi-Fi at the same time (for cue-firing tablets, phones, a wireless mic receiver with a web UI), put it on a genuinely different subnet and set the Service Order in System Settings so Ethernet is first.</p>
+            <p>Our advice is to turn Wi-Fi off on a Dante Mac. Audinate's macOS tuning notes give two options: drag the Dante service to the top of Set Service Order, or disable unused interfaces, Wi-Fi included. Dante audio isn't supported over Wi-Fi at all. With Wi-Fi on, the usual failures are Wi-Fi sharing the Dante subnet or Dante Controller pointed at the wrong interface. You'll see devices appear and disappear, clock sync go yellow, and patch commands silently fail.</p>
+            <p>Switch Wi-Fi off from the menu bar for the duration of the show. Not "disconnect from current network". Off. If you need Wi-Fi at the same time (for cue-firing tablets, phones, a wireless mic receiver with a web UI), put it on a different subnet and select the Ethernet adapter in Dante Controller's Configure Dante Interfaces dialog. Dante at the top of the service order does no harm as long as the Dante adapter has no router: the internet still goes out the highest adapter that has one. If the Dante network runs link-local (169.254), turning Wi-Fi off matters more: macOS keeps a single 169.254 route, on the primary adapter, so a browser opening a Dante device's web page can go out Wi-Fi. Dante Controller itself is fine because you pick its interface.</p>
 
             <h2>Watch out for subnet clashes</h2>
-            <p>The single most common Dante-on-Mac trap: your Wi-Fi and your Dante network both sit on <code>192.168.1.x</code>. macOS now has two interfaces claiming the same subnet and has to guess which one Dante Controller should talk to. It guesses wrong. You get a nominally working Wi-Fi, a nominally working Ethernet, and a Dante Controller window full of offline devices.</p>
+            <p>The single most common Dante-on-Mac trap: your Wi-Fi and your Dante network both sit on <code>192.168.1.x</code>. macOS now has two interfaces claiming the same subnet and picks one route for it. If it picks Wi-Fi, traffic meant for the Dante devices leaves on the wrong adapter. You get a nominally working Wi-Fi, a nominally working Ethernet, and a Dante Controller window full of offline devices.</p>
             <p>Options, in order of how often they fix it:</p>
             <ul>
                 <li>Turn Wi-Fi off.</li>
                 <li>Put the Dante network on a subnet that definitely doesn't overlap with anything else. <code>192.168.10.x</code> or <code>172.16.50.x</code> are popular choices for a reason.</li>
                 <li>Change the Wi-Fi router's LAN subnet at home so it never matches typical show subnets.</li>
             </ul>
-            <p><a href="/quickerip/">Quicker IP Pro</a> catches this before it causes problems. When two active adapters share a subnet and both have a gateway configured, it shows a red "Overlaps" warning naming the other adapter next to the subnet field and fires a system notification with the conflicting CIDR. A grey warning means the subnets overlap but only one has a gateway - worth knowing, but less urgent. The full explanation of why the same subnet on two adapters causes routing ambiguity is in <a href="/articles/mac-routing-table/">this companion article</a>.</p>
+            <p><a href="/quickerip/">Quicker IP</a> warns you about this. When two active adapters share a subnet and both have a gateway configured, its Network Info shows a red "Overlaps" warning naming the other adapter, and a Gateway Conflict notification gives the clashing subnet. When only one or neither has a gateway it shows a grey "Shared with en8, no conflict" - the default route is safe, but Dante traffic can still leave on the wrong adapter, so fix it too. The full explanation of why the same subnet on two adapters causes routing ambiguity is in <a href="/articles/mac-routing-table/">this companion article</a>.</p>
 
             <h2>Static IP on the Dante subnet</h2>
-            <p>On a dedicated Dante network with no DHCP, set the Mac manually to an unused address in the same subnet as the devices, with no gateway. Vendor-supplied sheets win over improvisation. If you juggle more than one non-DHCP network, named presets are worth their weight - <a href="/articles/static-ips-av-networks/">longer piece on that here</a>.</p>
+            <p>On a dedicated Dante network with no DHCP, set the Mac manually to an unused address in the same subnet as the devices, with no gateway. If the devices are sitting on link-local 169.254 addresses, leave the Mac on DHCP and it falls back to link-local the same way. Vendor-supplied sheets win over improvisation. If you juggle more than one non-DHCP network, named presets are worth their weight - <a href="/articles/static-ips-av-networks/">longer piece on that here</a>.</p>
 
             <h2>Turn off energy-saving traps</h2>
             <ul>
-                <li>Sleep when display is off - Never, on AC.</li>
+                <li>Stop the Mac sleeping on power. On a laptop: System Settings, Battery, Options, turn on "Prevent automatic sleeping on power adapter when the display is off". On a desktop Mac it's under Energy.</li>
                 <li>Wake for network access - off.</li>
-                <li>Screen saver waking Wi-Fi back on - disable.</li>
                 <li>Any VPN client with a kill switch or "route all traffic" toggle - off during shows.</li>
             </ul>
 
             <h2>Know which device is serving the clock</h2>
-            <p>Dante elects one device as the clock leader and everything else follows it. You don't configure this, it just happens, which is why most people never think about it until the day it goes wrong.</p>
+            <p>Dante elects one device as the clock leader and everything else follows it. Unless someone has set a Preferred Leader in Dante Controller, it just happens, which is why most people never think about it until the day it goes wrong.</p>
 
-            <p>Plain Dante uses PTP version 1 (IEEE 1588-2002). You only see PTPv2 if the system has been put into AES67 mode or is managed by Dante Director. That matters when you're reading a clock status somewhere and wondering why it says v1 on a modern network - v1 is correct for ordinary Dante, not a sign that something is out of date.</p>
+            <p>Dante uses PTP version 1 (IEEE 1588-2002) by default. PTPv2 shows up when devices have AES67 (RTP) or SMPTE ST 2110 enabled. That matters when you're reading a clock status somewhere and wondering why it says v1 on a modern network - v1 is correct for ordinary Dante, not a sign that something is out of date.</p>
 
             <p>The failure worth knowing about is two devices both announcing themselves as leader, usually because a second PTP domain has ended up sharing the same physical network. Audio that ticks or glitches on a rhythm, rather than randomly, is a clock symptom rather than a bandwidth one.</p>
 
-            <p>The practical habit is simply to know the leader's name before doors. A Mac running Dante Virtual Soundcard is follower only and never leads, so it's never the culprit. A console usually is, which also means rebooting the console mid-afternoon hands the clock to an amp rack and looks alarming when it is completely mundane.</p>
+            <p>The practical habit is to know the leader's name before doors. Dante Controller's Clock Status tab shows it, and so does the Clock Leader row in <a href="/quickerip/">Quicker IP Pro</a>'s Network Info for the wired adapter, by the same Dante name. A Mac running standard Dante Virtual Soundcard only follows the clock; DVS Pro adds clock leader support, so know which one the system runs. A console usually leads, which also means rebooting the console mid-afternoon hands the clock to an amp rack and looks alarming when it is completely mundane.</p>
 
             <h2>IGMP snooping needs a querier, or nothing at all</h2>
-            <p>The clock and any multicast flows ride multicast traffic. A managed switch doing IGMP snooping prunes that traffic so it only goes to ports that asked for it, and snooping depends on something on the network periodically asking. That is the querier, and there should be exactly one, typically on a 30 second interval with every switch on the same IGMP version.</p>
+            <p>The clock and any multicast flows ride multicast traffic. A managed switch doing IGMP snooping prunes that traffic so it only goes to ports that asked for it, and snooping depends on something on the network periodically asking. That is the querier. Audinate's recommended IGMP snooping setup is exactly one querier per VLAN, with a short query interval (around 30 seconds).</p>
 
             <p>Snooping enabled with no querier is the bad combination. Group memberships age out, the pruning stops matching reality, and multicast quietly stops being delivered several minutes in. It is the classic works-at-soundcheck-dies-later fault, and it looks like a Dante problem when it is a switch problem.</p>
 
-            <p>The part people get wrong is assuming "no querier" is always bad. On unmanaged switches nothing is pruning anything, multicast simply floods every port, and the absence of a querier costs you nothing. No querier only matters when something on that network is snooping. Worth knowing before you go hunting for a fault that isn't there.</p>
+            <p>The part people get wrong is assuming "no querier" is always bad. On unmanaged switches nothing is pruning anything, multicast simply floods every port, and the absence of a querier costs you nothing. No querier only matters when something on that network is snooping. Worth knowing before you go hunting for a fault that isn't there. Quicker IP Pro's IGMP Query row reads "no querier" when nothing on the network is asking.</p>
 
             <p>While you're in the switch, leave "filter unregistered multicast" off. It blocks the discovery and clock traffic Dante depends on, and the usual result is devices that never appear in Dante Controller at all.</p>
 
             <h2>Verify before the house opens</h2>
-            <p>Open Dante Controller. Every device present, green, and clocked. Run a ten-second test tone from a source you trust to a destination you trust. Look at the status dots, not just the meters. If anything's orange, it will go red under load. We built the <a href="/quickerip/">Quicker IP Pro</a> status panel around exactly this check, so a sound op can glance at link state, speed, IP, and activity from the menu bar without opening three different settings panes.</p>
+            <p>Open Dante Controller. Every device present, green, and clocked. Run a ten-second test tone from a source you trust to a destination you trust. Look at the status dots, not just the meters. If anything's orange, it will go red under load. <a href="/quickerip/">Quicker IP Pro</a>'s Network Info shows link speed, duplex, MTU, IGMP querier and clock leader for each wired adapter, from the menu bar, without opening three different settings panes.</p>
 
-            <p>A Mac handles Dante fine, the defaults just work against you in a few specific ways. Run through this list before the crew call.</p>
+            <p>A Mac handles Dante fine, the defaults just work against you in a few specific ways. Run through the checklist at the top before the crew call.</p>
         
             <div class="article-cta">
                 <img loading="lazy" class="cta-icon" src="/images/quickip-icon-192.png" alt="" width="64" height="64">
                 <div class="cta-body">
                     <h3>Made for Dante and pro audio prep</h3>
-                    <p>Quicker IP checks what Dante depends on - subnet clashes, link speed, IGMP querier and which device is serving the audio clock - before they ruin a sound check.</p>
+                    <p>Quicker IP Pro checks what Dante depends on - link speed, IGMP querier and which device is serving the audio clock - before they ruin a sound check.</p>
                     <div class="cta-actions">
                         <a class="buy-btn" href="https://bskapps.lemonsqueezy.com/checkout/buy/a764bb96-1d96-47d7-bba5-081a0613fc2e?dark=1&desc=0&media=0&checkout%5Bcustom%5D%5Bsrc%5D=article-dante-mac-network-readiness" aria-label="Buy Quicker IP">Buy Quicker IP</a>
                         <a class="cta-link" href="/quickerip/">See what it does &rarr;</a>
