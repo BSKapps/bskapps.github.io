@@ -1,5 +1,5 @@
-import { invertHex } from './color.js?v=150';
-import { isWide } from './state.js?v=150';
+import { invertHex } from './color.js?v=151';
+import { isWide } from './state.js?v=151';
 
 const imageCache = new Map();
 const CACHE_MAX = 80;

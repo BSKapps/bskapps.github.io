@@ -2,6 +2,11 @@
 
 Internal version log. The app version lives in js/state.js (APP_VERSION), index.html (the bm-version meta tag) and every ?v= asset URL - all three move together on each release.
 
+## v151 - 2026-10-03
+- The "More by BSK Apps" card is now "Mac apps for AV and live sound", with Stimulus added and new Quicker IP, Target Trace and Fetch Puppy lines.
+- A Quicker IP link sits beside Help and tips in the side panel.
+- App icons on the cards load as small copies, only when scrolled to.
+
 ## v150 - 2026-09-25
 - New Double width tick in Border/Shape makes a button twice as wide, for REAPER double width toolbar buttons and Stream Deck+ dial strips.
 - New 200 x 100 (Stream Deck+ strip) PNG size, the exact size of one Stream Deck+ dial, for double width buttons.

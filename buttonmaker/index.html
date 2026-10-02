@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://api.simplesvg.com https://api.unisvg.com https://bskapps.com; connect-src 'self' https://api.iconify.design https://api.simplesvg.com https://api.unisvg.com https://cloudflareinsights.com; object-src 'none'; base-uri 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="bm-version" content="150">
+<meta name="bm-version" content="151">
 <title>BSK Button Maker - Free Companion and Stream Deck Designer</title>
 <meta name="description" content="Free button designer for Bitfocus Companion, Stream Deck and REAPER toolbars, plus app icons. Icon library, presets, and one-click export.">
 <meta property="og:title" content="BSK Button Maker - Free Companion and Stream Deck Designer">
@@ -41,7 +41,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@400;600;700&family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@400;700&family=JetBrains+Mono:wght@400;500;700;800&family=Archivo+Black&family=Nunito:wght@400;600;700;800&family=Exo+2:wght@400;600;700;800&family=Poppins:wght@400;600;700;800&family=Lato:wght@400;700&family=Barlow+Condensed:wght@400;600;700;800&family=Anton&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;600;700;800&family=Teko:wght@400;600;700&family=Russo+One&family=Share+Tech+Mono&family=Press+Start+2P&family=Permanent+Marker&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=150">
+<link rel="stylesheet" href="css/style.css?v=151">
 </head>
 <body>
 <header class="app-header">
@@ -306,6 +306,7 @@
 
     <div class="panel-foot">
       <button type="button" class="btn ghost small" id="openHelpBtn">Help and tips</button>
+      <a class="panel-promo" href="https://bskapps.com/quickerip/">Mac on a show network? <b>Quicker IP</b></a>
     </div>
 
   </aside>
@@ -362,23 +363,27 @@
       </div>
     </details>
     <details class="section promo-card" open>
-      <summary tabindex="-1">More by BSK Apps</summary>
+      <summary tabindex="-1">Mac apps for AV and live sound</summary>
       <div class="section-body">
         <a class="promo-row" href="https://bskapps.com/quickerip/">
-          <img src="https://bskapps.com/images/quickip-icon.png" alt="" width="40" height="40">
-          <span class="promo-text"><b>Quicker IP</b>Switch IP configs, scan the LAN and check the show network from the menu bar.</span>
+          <img src="https://bskapps.com/images/quickip-icon-192.png" alt="" width="40" height="40" loading="lazy" decoding="async">
+          <span class="promo-text"><b>Quicker IP</b>Switch IPs in one click with presets, scan the LAN and monitor the network.</span>
         </a>
         <a class="promo-row" href="https://bskapps.com/labassistant/">
-          <img src="https://bskapps.com/images/labassistant-icon.png" alt="" width="40" height="40">
+          <img src="https://bskapps.com/images/labassistant-icon-192.png" alt="" width="40" height="40" loading="lazy" decoding="async">
           <span class="promo-text"><b>Lab Assistant</b>Auto levels, auto top and tail, and routing for a whole QLab workspace.</span>
         </a>
         <a class="promo-row" href="https://bskapps.com/targettrace/">
-          <img src="https://bskapps.com/images/targettrace-icon.png" alt="" width="40" height="40">
-          <span class="promo-text"><b>Target Trace</b>Build target curves for Smaart or REW, from scratch or your own measurements.</span>
+          <img src="https://bskapps.com/images/targettrace-icon-192.png" alt="" width="40" height="40" loading="lazy" decoding="async">
+          <span class="promo-text"><b>Target Trace</b>Turn a live Smaart trace into a target curve, or float it over your EQ. Saves for Smaart and REW.</span>
+        </a>
+        <a class="promo-row" href="https://bskapps.com/stimulus/">
+          <img src="https://bskapps.com/images/stimulus-icon-192.png" alt="" width="40" height="40" loading="lazy" decoding="async">
+          <span class="promo-text"><b>Stimulus</b>Test signals for line checks and system checks: tones, sweeps, noise, stereo idents and polarity pops.</span>
         </a>
         <a class="promo-row" href="https://bskapps.com/fetchpuppy/">
-          <img src="https://bskapps.com/images/fetchpuppy-icon.png" alt="" width="40" height="40">
-          <span class="promo-text"><b>Fetch Puppy</b>Find and save music and video - YouTube, Spotify playlists, TikTok and more.</span>
+          <img src="https://bskapps.com/images/fetchpuppy-icon-192.png" alt="" width="40" height="40" loading="lazy" decoding="async">
+          <span class="promo-text"><b>Fetch Puppy</b>Find and download music and video - YouTube, Spotify playlists, TikTok and more.</span>
         </a>
         <p class="promo-all"><a href="https://bskapps.com/">See all BSK apps &rarr;</a></p>
       </div>
@@ -459,7 +464,7 @@
   <p>Free tool by <a href="https://bskapps.com">BSK Apps</a>. Not affiliated with Bitfocus, Elgato, Corsair, Cockos or Apple. Icons from the Iconify project, individual icon licences apply.</p>
 </footer>
 
-<script src="vendor/jszip.min.js?v=150"></script>
-<script type="module" src="js/app.js?v=150"></script>
+<script src="vendor/jszip.min.js?v=151"></script>
+<script type="module" src="js/app.js?v=151"></script>
 </body>
 </html>

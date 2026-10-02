@@ -1,4 +1,4 @@
-import { state, emit, editTargets } from './state.js?v=150';
+import { state, emit, editTargets } from './state.js?v=151';
 
 const HOSTS = ['https://api.iconify.design', 'https://api.simplesvg.com', 'https://api.unisvg.com'];
 const THUMB_COLOR = '#E4E4E7';

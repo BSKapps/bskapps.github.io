@@ -111,8 +111,11 @@ body {
 .promo-card > summary { pointer-events: none; }
 .promo-card > summary::after { display: none; }
 
-.panel-foot { flex-shrink: 0; margin-top: auto; padding-top: 10px; }
+.panel-foot { flex-shrink: 0; margin-top: auto; padding-top: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 12px; }
 .panel-foot .btn { width: auto; margin: 0; }
+.panel-promo { font-size: 0.8rem; color: var(--muted); text-decoration: none; }
+.panel-promo b { color: var(--brand); font-weight: 600; }
+.panel-promo:hover b { color: var(--brand-bright); }
 
 .card-sets .number-range input[type="number"] { flex: 0 0 62px; }
 .card-sets .row .set-go { flex: 0 0 auto; width: auto; margin: 0; }
