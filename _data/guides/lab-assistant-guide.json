@@ -96,7 +96,7 @@
         },
         {
           "type": "paragraph",
-          "text": "**Multi-output routing** sends cues to any output or pair. Sending to a pair keeps stereo cues left/right and plays mono cues out both outputs at -3 dB; sending to a single output sums everything to that one output (stereo summed to mono at -6 dB). It can also sort automatically by name: turn on **Auto-Sort by Name** and Lab Assistant classifies cues into Music, VOG and FX categories by keywords in the cue name or notes, then routes each to its own output pair. Each category row shows the keywords it matches, and **Edit Keywords** opens the Keywords module, where you edit the keywords and rename the categories. **Max Outputs** (default 8) sets how many outputs the routing menus offer - set it to your device's size, as higher counts like 32 or 64 take a little longer to apply across large cue lists. After a run, hover a result row to re-route and re-colour a cue directly from Results."
+          "text": "**Multi-output routing** sends cues to any output or pair. Sending to a pair keeps stereo cues left/right and plays mono cues out both outputs at -3 dB; sending to a single output sums everything to that one output (stereo summed to mono at -6 dB). It can also sort automatically by name: turn on **Auto-Sort by Name** and Lab Assistant classifies cues into Music, VOG and SFX categories by keywords in the cue name or notes, then routes each to its own output pair. Each category row shows the keywords it matches, and **Edit Keywords** opens the Keywords module, where you edit the keywords and rename the categories. **Max Outputs** (default 8) sets how many outputs the routing menus offer - set it to your device's size, as higher counts like 32 or 64 take a little longer to apply across large cue lists. After a run, hover a result row to re-route and re-colour a cue directly from Results."
         }
       ]
     },
@@ -155,7 +155,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "**Apply Colours** colour-codes cues by type (stereo, mono, looped, for audio and video), by category (VOG, FX), and by status (warning, error, group), using a colour map you can edit and reset. You can also colour control cues (Fade, MIDI, Script and more). Any type set to None stays uncoloured; with Warning or Error set to None, those cues keep their type colour. Drag a swatch onto a type to reassign it. Under **Keyword Colours**, a checkbox turns the VOG and FX colours on or off; with it off, those cues keep their audio colour. **Edit Keywords** opens the Keywords module. **Clear All Colours** removes colours, groups included."
+          "text": "**Apply Colours** colour-codes cues by type (stereo, mono, looped, for audio and video), by category (VOG, SFX), and by status (warning, error, group), using a colour map you can edit and reset. You can also colour control cues (Fade, MIDI, Script and more). Any type set to None stays uncoloured; with Warning or Error set to None, those cues keep their type colour. Drag a swatch onto a type to reassign it. Under **Keyword Colours**, a checkbox turns the VOG and SFX colours on or off; with it off, those cues keep their audio colour. **Edit Keywords** opens the Keywords module. **Clear All Colours** removes colours, groups included."
         }
       ]
     },
@@ -183,7 +183,7 @@
         },
         {
           "type": "paragraph",
-          "text": "Under **Which Cues**, choose **Every selected cue**, or **Only cues that match** and pick a keyword group, VOG or FX under whatever names you gave them in Keywords (cues whose name or notes match one of that group's keywords; cues that do not match stay where they are). Type a **Group Name** for the new group; left blank, it is called Playlist in Playlist mode and Group otherwise."
+          "text": "Under **Which Cues**, choose **Every selected cue**, or **Only cues that match** and pick a keyword group, VOG or SFX under whatever names you gave them in Keywords (cues whose name or notes match one of that group's keywords; cues that do not match stay where they are). Type a **Group Name** for the new group; left blank, it is called Playlist in Playlist mode and Group otherwise."
         },
         {
           "type": "paragraph",
@@ -197,7 +197,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Write module results into each cue's notes during a run (Levels, Routing, Top and Tail, Musical, and Mint's applied effects), with Write All and Write None controls. You can also tag each cue's category (for example Cat: VOG) at the top of its notes, using the Music/VOG/FX categories from Keywords. You can clear notes from a single module, clear just Lab Assistant's own notes while keeping yours, or clear all notes."
+          "text": "Write module results into each cue's notes during a run (Levels, Routing, Top and Tail, Musical, and Mint's applied effects), with Write All and Write None controls. You can also tag each cue's category (for example Cat: VOG) at the top of its notes, using the Music/VOG/SFX categories from Keywords. You can clear notes from a single module, clear just Lab Assistant's own notes while keeping yours, or clear all notes."
         },
         {
           "type": "paragraph",
@@ -223,7 +223,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Sorts cues into three categories by words in their name or notes: VOG and FX for cues that match one of their keywords, and Music for every cue that matches none. Rename a category to suit your show, type a keyword and press **Add**, remove one with its x, or use **Clear all** and **Reset to Defaults**. **Check Selected Cues** reads the selected cues, following the filter dropdown, and lists each one with the category it lands in and the word that put it there, in its name or its notes. The list updates as you edit keywords and clears when the selection changes. Keywords has no switch or Run button of its own. The modules listed under **Used by** apply it, and each button there opens that module (it is greyed if you hid that module in Settings): Routing's Multi-Output auto-sort, Colour Code's keyword colours, Group Cues' **Only cues that match**, the Notes category tag, and Musical Intelligence, which skips VOG cues."
+          "text": "Sorts cues into three categories by words in their name or notes: VOG and SFX for cues that match one of their keywords, and Music for every cue that matches none. Rename a category to suit your show, type a keyword and press **Add**, remove one with its x, or use **Clear all** and **Reset to Defaults**. **Check Selected Cues** reads the selected cues, following the filter dropdown, and lists each one with the category it lands in and the word that put it there, in its name or its notes. The list updates as you edit keywords and clears when the selection changes. Keywords has no switch or Run button of its own. The modules listed under **Used by** apply it, and each button there opens that module (it is greyed if you hid that module in Settings): Routing's Multi-Output auto-sort, Colour Code's keyword colours, Group Cues' **Only cues that match**, the Notes category tag, and Musical Intelligence, which skips VOG cues."
         }
       ]
     },
