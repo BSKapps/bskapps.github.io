@@ -183,7 +183,7 @@
         },
         {
           "type": "paragraph",
-          "text": "Under **Which Cues**, choose one of three. **Every selected cue** puts them all in one group. **Only cues that match** takes one keyword category, picked in the menu beside it: cues whose name or notes match one of its keywords go into the group, and cues that do not match stay where they are. **A group for each keyword category** sorts a mixed selection in one run: each keyword category's cues go into their own group, named after the category and placed where its first cue was, and cues that match no keyword stay where they are. Type a **Group Name** for the new group; left blank, it is called Playlist in Playlist mode and Group otherwise. With A group for each keyword category the name box is greyed, because each group takes its category's name."
+          "text": "Under **Which Cues**, choose one of three. **Every selected cue** puts them all in one group. **Only cues that match** takes one keyword category, picked in the menu beside it: cues whose name or notes match one of its keywords go into the group, and cues that do not match stay where they are. **A group for each keyword category** sorts a mixed selection in one run: each keyword category's cues go into their own group, named after the category and placed where its first cue was, and cues that match no keyword stay where they are. Type a **Group Name** for the new group; left blank, it is called Playlist in Playlist mode and Group otherwise, or after the keyword category you picked when you use Only cues that match. With A group for each keyword category the name box is greyed, because each group takes its category's name."
         },
         {
           "type": "paragraph",
