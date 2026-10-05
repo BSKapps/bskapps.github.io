@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Lab Assistant user guide - BSK Apps",
     "h1": "Lab Assistant user guide",
-    "dateLine": "Updated for version 2.4",
+    "dateLine": "Updated for version 2.8",
     "description": "A how-to guide for Lab Assistant: connecting to QLab, the processing modules (Levels, Routing, Top and Tail, Numbering, Fade and Stop, Colour, Notes), Mint, and Run All.",
     "canonical": "https://bskapps.com/articles/lab-assistant-guide/",
     "ogTitle": "Lab Assistant user guide",
@@ -54,7 +54,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Each module has an on/off toggle and its own **Run** button, so you can run one job on its own. **Run All** runs every enabled module in sequence across the selected cues. If you don't want a module's job, just leave its sidebar switch off; **Run All** runs only the switched-on modules and skips the rest. A progress bar and elapsed time show during a run, and you can cancel at any point. Numbering is the exception: once it starts writing cue numbers the cancel button greys out and the run finishes, so it can never leave your cues half numbered. You can have Lab Assistant confirm before a run in Settings. Destructive modes (the reset and clear options below) reset to safe settings when the app restarts."
+          "text": "Each module has an on/off switch, and each one that processes cues has its own **Run** button, so you can run one job on its own; Notes and Keyword Categories have a switch only. **Run All** runs every enabled module in sequence across the selected cues. If you don't want a module's job, just leave its sidebar switch off; **Run All** runs only the switched-on modules and skips the rest. A progress bar and elapsed time show during a run, and you can cancel at any point. Numbering is the exception: once it starts writing cue numbers the cancel button greys out and the run finishes, so it can never leave your cues half numbered. You can have Lab Assistant confirm before a run in Settings. Resets and clears are buttons, not modes: Levels, Routing, Top and Tail, Fade and Stop, Numbering, Colour and Notes each have their own **Reset** or **Clear** button, which acts on the selected cues straight away, reports in Results, and asks first unless you switch off **Confirm Before Resetting** in Settings."
         }
       ]
     },
@@ -72,13 +72,12 @@
             "Film / Streaming - -14 LUFS",
             "Theatre / Live Performance - -18 LUFS (default)",
             "EBU R128 Broadcast - -23 LUFS",
-            "US Broadcast (ATSC A/85) - -24 LUFS",
-            "Reset Levels - sets faders back to 0 dB (or -10 dB if the fader offset is on)"
+            "US Broadcast (ATSC A/85) - -24 LUFS"
           ]
         },
         {
           "type": "paragraph",
-          "text": "Turn on the **fader offset** to land cues at -10 dB instead of at unity, so a mixed bag of cues at very different recorded levels all fit under QLab's level cap. If a cue still needs more than the cap allows, the result flags it so you can see where it ran out of room. A clip shorter than 0.4 seconds is too short to measure and keeps its level."
+          "text": "Turn on the **fader offset** to land cues at -10 dB instead of at unity, so a mixed bag of cues at very different recorded levels all fit under QLab's level cap. If a cue still needs more than the cap allows, the result flags it so you can see where it ran out of room. A clip shorter than 0.4 seconds is too short to measure and keeps its level. The **Reset Levels** button sets the faders of the selected cues back to 0 dB (or -10 dB if the fader offset is on)."
         }
       ]
     },
@@ -92,11 +91,11 @@
         },
         {
           "type": "paragraph",
-          "text": "**Mono / Stereo fold** sends cues to a chosen output pair (1/2 up to 63/64): \"Mono to Dual Mono\" feeds a mono cue to both outputs at -3 dB so it sits level with stereo cues, \"All Cues to Dual Mono\" sums stereo to mono (-6 dB) and sends it to both, and \"Reset Routing\" restores channel 1 to output 1 and channel 2 to output 2."
+          "text": "**Mono / Stereo fold** sends cues to a chosen output pair (1/2 up to 63/64): \"Mono to Dual Mono\" feeds a mono cue to both outputs at -3 dB so it sits level with stereo cues, and \"All Cues to Dual Mono\" sums stereo to mono (-6 dB) and sends it to both. The **Reset Routing** button, shown under both modes, puts the selected cues back to channel 1 to output 1 and channel 2 to output 2."
         },
         {
           "type": "paragraph",
-          "text": "**Multi-output routing** sends cues to any output or pair. Sending to a pair keeps stereo cues left/right and plays mono cues out both outputs at -3 dB; sending to a single output sums everything to that one output (stereo summed to mono at -6 dB). It can also sort automatically by name: turn on **Auto-sort by name** and Lab Assistant sorts cues into keyword categories by the keywords in the cue name or notes (Music, VOG and SFX, plus any you add in Keyword Categories), then routes each to its own output. Each keyword category row shows the keywords it matches, and **Edit Keyword Categories** opens the Keyword Categories module, where you edit the keywords and rename the keyword categories. **Max Outputs** (default 8) sets how many outputs the routing menus offer - set it to your device's size, as higher counts like 32 or 64 take a little longer to apply across large cue lists. After a run, hover a result row to re-route and re-colour a cue directly from Results."
+          "text": "**Multi-output routing** sends cues to any output or pair. Sending to a pair keeps stereo cues left/right and plays mono cues out both outputs at -3 dB; sending to a single output sums everything to that one output (stereo summed to mono at -6 dB). It can also sort automatically by name: turn on **Auto-sort by name** and Lab Assistant sorts cues into keyword categories by the keywords in the cue name or notes (Music, VOG and SFX, plus any you add in Keyword Categories), then routes each to its own output. Each keyword category row shows the keywords it matches, and **Edit Keyword Categories** opens the Keyword Categories module, where you edit the keywords and rename the keyword categories. **Max Outputs** (default 8) sets how many outputs the routing menus offer - set it to your device's size, as higher counts like 32 or 64 take a little longer to apply across large cue lists. After a run, hover a result row and use the arrows button to move a cue to a different keyword category, which re-routes and re-colours it directly from Results; the menu shows each keyword category with its output."
         }
       ]
     },
@@ -106,7 +105,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Trims silence from the start and end of each audio cue using QLab's start and end times (audio cues only - video cues are skipped), so playback starts and ends without dead air. Set the **start pad** (default 50 ms) and **end pad** (default 400 ms) to leave a little silence either side. It respects start and end points you have set by hand. The **Reset Start and End Points** mode clears the trim back to the full file."
+          "text": "Trims silence from the start and end of each audio cue using QLab's start and end times (audio cues only - video cues are skipped), so playback starts and ends without dead air. Set the **start pad** (default 50 ms) and **end pad** (default 400 ms) to leave a little silence either side. It respects start and end points you have set by hand. The **Reset Start and End Points** button puts the selected cues back to the full file."
         }
       ]
     },
@@ -116,16 +115,19 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Four modes:"
+          "text": "Three modes:"
         },
         {
           "type": "bullets",
           "items": [
             "**Add Missing Cue Numbers** - numbers only the cues that have none, leaving existing numbers alone.",
-            "**Renumber Sequentially** - clears and renumbers 1, 2, 3, with an optional prefix (for example Q1, Q2), a custom start and a custom increment.",
-            "**Renumber with Group Sub-Numbers** - groups get 1, 2, 3, and their children get 1.01, 1.02, and so on, with the same optional prefix and start number.",
-            "**Clear All Cue Numbers** - removes numbers without reassigning."
+            "**Renumber Cues Sequentially** - clears and renumbers 1, 2, 3, with an optional prefix (for example Q1, Q2), a custom start and a custom increment.",
+            "**Renumber Cues Sequentially with Group Sub-Numbers** - groups get 1, 2, 3, and their children get 1.01, 1.02, and so on, with the same optional prefix and start number."
           ]
+        },
+        {
+          "type": "paragraph",
+          "text": "The **Clear All Cue Numbers** button removes the numbers of the selected cues without assigning new ones."
         }
       ]
     },
@@ -135,7 +137,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Adds fade-and-stop behaviour so starting one cue fades others out. Choose the scope: **Peers** (others in the same group), **List** (the whole cue list), or **All** (everything running). Set the fade time with the preset buttons (0.5s, 1.0s, 2.0s, 3.0s) or type your own. **Reset Fade and Stop** removes the behaviour again."
+          "text": "Adds fade-and-stop behaviour so starting one cue fades others out. Choose the scope: **Peers** (others in the same group), **List** (the whole cue list), or **All** (everything running). Set the fade time with the preset buttons (0.5s, 1.0s, 2.0s, 3.0s) or type your own. The **Reset Fade and Stop** button removes the behaviour from the selected cues again."
         }
       ]
     },
@@ -155,7 +157,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "**Apply Colours** colour-codes cues by type (stereo, mono, looped, for audio and video), by keyword category (VOG, SFX and any you add in Keyword Categories), and by status (warning, error, group), using a colour map you can edit and reset. You can also colour control cues (Fade, MIDI, Script and more). A type set to **None** has its colour cleared, and a type set to **Keep cue's colour** is left exactly as it is in QLab; with Warning or Error set to None, those cues keep their type colour. Drag a swatch onto a type to reassign it. Under **Keyword Category Colours**, a checkbox turns the keyword category colours on or off; with it off, those cues keep their type colour. A keyword category set to None keeps the type colour too, and the same colour can be used on more than one row. **Edit Keyword Categories** opens the Keyword Categories module. **Clear All Colours** removes colours, groups included."
+          "text": "Colour-codes cues by type (stereo, mono, looped, for audio and video), by keyword category (VOG, SFX and any you add in Keyword Categories), and by status (warning, error, group), using a colour map you can edit and reset. You can also colour control cues (Fade, MIDI, Script and more). A type set to **None** has its colour cleared, and a type set to **Keep cue's colour** is left exactly as it is in QLab; with Warning or Error set to None, those cues keep their type colour. Drag a swatch onto a type to reassign it. Under **Keyword Category Colours**, a checkbox turns the keyword category colours on or off; with it off, those cues keep their type colour. A keyword category set to None keeps the type colour too, and the same colour can be used on more than one row. **Edit Keyword Categories** opens the Keyword Categories module. The **Clear All Colours** button removes the colour from the selected cues, groups included."
         }
       ]
     },
@@ -187,7 +189,7 @@
         },
         {
           "type": "paragraph",
-          "text": "If you select one existing group, Group Cues sets that group's mode and options instead of making a new group, and keeps its name. The same happens when the cues all sit in one group and you selected every cue inside it, or the group itself (or a group around it) along with other cues. It skips a selection that spans different groups. With **Only cues that match**, it changes an existing group only when all of its audio and video cues match the chosen keyword category, and skips it otherwise. With **A group for each keyword category**, every new group takes the Mode chosen above (to make one different, select that group and run again), cues that already sit in a group of their own keyword category are left alone so running again does not group them twice, a selected group whose cues all belong to one keyword category is changed in place, and a selected group that holds a mix has its matching cues sorted into category groups inside it. Only audio and video cues move into a new group; any other cues you selected stay where they are, and with **Every selected cue** Results says how many were left outside. The one exception is **Every selected cue** with **Start first child and enter into group**: the other loose cues you selected beside them go in too, fades and stops included, in the same order. Groups you selected stay where they are. In **Run All** it runs after Musical Intelligence and before Numbering, so the sorted order carries into the playlist and the new group is numbered with the rest. The group also takes the Colour Code group colour and the Continue Mode setting when those modules are on. A new group is left selected in QLab, so running again changes its settings rather than grouping it twice. After A group for each keyword category the new groups are left selected, and running again leaves them as they are. Results shows how many cues went into each group and their combined length."
+          "text": "If you select one existing group, Group Cues sets that group's mode and options instead of making a new group, and keeps its name. The same happens when the cues all sit in one group and you selected every cue inside it, or the group itself (or a group around it) along with other cues. When some of the selected cues are loose in the cue list and others already sit in groups, it groups the loose ones and leaves the grouped ones alone, and Results says how many were left alone and names their groups. A selection spread across different groups with no loose cues is skipped. With **Only cues that match**, it changes an existing group only when all of its audio and video cues match the chosen keyword category, and skips it otherwise. Cues already in a group named after that keyword category, or in a group of only that keyword category's cues that you selected whole, are left alone, so Select All and run again does not group them twice. With **A group for each keyword category**, every new group takes the Mode chosen above (to make one different, select that group and run again), cues that already sit in a group of their own keyword category are left alone so running again does not group them twice, a selected group whose cues all belong to one keyword category is changed in place, and a selected group that holds a mix has its matching cues sorted into category groups inside it. Only audio and video cues move into a new group; any other cues you selected stay where they are, and with **Every selected cue** Results names the ones left outside. The one exception is **Every selected cue** with **Start first child and enter into group**: the other loose cues you selected beside them go in too, fades and stops included, in the same order. Groups you selected stay where they are. In **Run All** it runs after Musical Intelligence and before Numbering, so the sorted order carries into the playlist and the new group is numbered with the rest. The group also takes the Colour Code group colour and the Continue Mode setting when those modules are on. A new group is left selected in QLab, so running again changes its settings rather than grouping it twice. After A group for each keyword category the new groups are left selected, and running again leaves them as they are. Results shows how many cues went into each group and their combined length, and names any fades, stops or other cues that went in with them."
         }
       ]
     },
@@ -197,7 +199,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Write module results into each cue's notes during a run (Levels, Routing, Top and Tail, Musical, and Mint's applied effects), with Write All and Write None controls. You can also tag each cue's keyword category (for example Cat: VOG) at the top of its notes, using the keyword categories. You can clear notes from a single module, clear just Lab Assistant's own notes while keeping yours, or clear all notes."
+          "text": "Write module results into each cue's notes during a run (Levels, Routing, Top and Tail, Musical, and Mint's applied effects), with Write All and Write None controls. You can also tag each cue's keyword category (for example Cat: VOG) at the top of its notes, using the keyword categories. Levels, Routing, Top and Tail and keyword category lines are written during **Run All**; running one of those modules on its own does not write them. Notes has no Run button. To clear, tick the lines you want gone under **Clear Notes** and press **Clear Ticked Notes**; **Clear Lab Assistant Notes** removes every line Lab Assistant wrote and keeps yours, and **Clear All Notes** wipes the notes completely."
         },
         {
           "type": "paragraph",
@@ -223,7 +225,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Sorts cues into keyword categories by words in their name or notes: VOG and SFX for cues that match one of their keywords, and Music for every cue that matches none. **Add Keyword Category** adds another with its own keywords, up to five in all, and **Remove Keyword Category** takes one away; VOG is the one that always stays. New installs start with a third, Video (video, mp4, mov, movie). When a cue matches more than one keyword category, the one higher on the page wins. Each added keyword category gets its own output row in Routing, starting on Music's output, and its own colour row in Colour Code, starting on None. Rename a keyword category to suit your show, type a keyword and press **Add**, remove one with its x, or use **Clear all**; VOG and SFX also have **Reset to Defaults**. **Check Selected Cues** reads the selected cues, following the filter dropdown, and lists each one with the keyword category it lands in and the word that put it there, in its name or its notes. The list updates as you edit keywords and clears when the selection changes. Keyword Categories has no switch or Run button of its own. To remove it, untick **Keyword Categories** under Visible Modules in Settings: its page goes, so do the keyword options in Routing, Colour Code, Group Cues and Notes, and cues are no longer sorted by keyword until you tick it again. Nothing you set up is lost. The modules listed under **Used by** apply it, and each button there opens that module (a module you hid in Settings is not listed): Routing's Multi-Output auto-sort, Colour Code's keyword category colours, Group Cues' **Only cues that match** and **A group for each keyword category**, the Notes keyword category tag, and Musical Intelligence, which skips VOG cues."
+          "text": "Sorts cues into keyword categories by words in their name or notes: VOG and SFX for cues that match one of their keywords, and Music for every cue that matches none. **Add Keyword Category** adds another with its own keywords, up to five in all, and **Remove Keyword Category** takes one away; VOG is the one that always stays. New installs start with a third, Video (video, mp4, mov, movie). When a cue matches more than one keyword category, the one higher on the page wins. Each added keyword category gets its own output row in Routing, starting on Music's output, and its own colour row in Colour Code, starting on None. Rename a keyword category to suit your show, type a keyword and press **Add**, remove one with its x, or use **Clear all**; VOG and SFX also have **Reset to Defaults**. **Check Selected Cues** reads the selected cues, following the filter dropdown, and lists each one with the keyword category it lands in and the word that put it there, in its name or its notes. The list updates as you edit keywords and clears when the selection changes. Every keyword category except Music has a tick box beside its name. Untick it to switch that keyword category off and keep its keywords, output and colour: its rows leave Routing, Colour Code, Group Cues and Notes, and its cues land in the next keyword category they match, or in Music. Keyword Categories has a switch in the sidebar and no Run button. Switch it off and cues are no longer sorted by keyword: this page and the keyword options in Routing, Colour Code, Group Cues and Notes stay on screen, greyed. To remove it altogether, untick **Keyword Categories** under Visible Modules in Settings: its page goes, and so do those keyword options. Nothing you set up is lost either way. The modules listed under **Used by** apply it, and each button there opens that module (a module you hid in Settings is not listed): Routing's Multi-Output auto-sort, Colour Code's keyword category colours, Group Cues' **Only cues that match** and **A group for each keyword category**, the Notes keyword category tag, and Musical Intelligence, which skips VOG cues."
         }
       ]
     },
@@ -281,7 +283,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Open Settings from the gear in the toolbar (top-right). It holds updates (with auto-check), your licence (activate or deactivate), which modules are visible, the welcome screen, the confirm-before-processing and completion-summary toggles, a completion sound (played only on the Mac's built-in speakers), and an option to minimise to the menu bar. An Email Support button copies a diagnostics report and opens an email to support. Lab Assistant is a one-time purchase with two activations. A module you hide in Settings disappears completely, including its options on other pages; a module you only switch off in the sidebar leaves those options greyed."
+          "text": "Open Settings from the gear in the toolbar (top-right). It holds updates (with auto-check), your licence (activate or deactivate), which modules are visible, the welcome screen, the confirm-before-processing, confirm-before-resetting and completion-summary toggles, a completion sound (played only on the Mac's built-in speakers), and an option to minimise to the menu bar. An Email Support button copies a diagnostics report and opens an email to support. Lab Assistant is a one-time purchase with two activations. A module you hide in Settings disappears completely, including its options on other pages; a module you only switch off in the sidebar leaves those options greyed."
         }
       ]
     }
