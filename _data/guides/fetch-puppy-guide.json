@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Fetch Puppy user guide - BSK Apps",
     "h1": "Fetch Puppy user guide",
-    "dateLine": "Updated for version 2.8",
+    "dateLine": "Updated for version 2.9",
     "description": "A how-to guide for Fetch Puppy: the download modes, choosing audio and video formats, the queue, output folders, browser cookies, the download engine and settings.",
     "canonical": "https://bskapps.com/articles/fetch-puppy-guide/",
     "ogTitle": "Fetch Puppy user guide",
@@ -115,6 +115,10 @@
         {
           "type": "paragraph",
           "text": "Two options apply to playlists and albums. **Number tracks in playlists/albums** puts a number in front of filenames (01, 02, and so on; 001 for YouTube playlists of 100 or more) so the order is kept, for audio and video alike; single tracks are never numbered. **Export track list** saves a CSV of the track list alongside the files. Numbering sits on the Spotify, Apple Music, YouTube and CSV tabs as well as in Settings - it is one setting shown in both places, so changing it either way changes it everywhere."
+        },
+        {
+          "type": "paragraph",
+          "text": "Spotify, Apple Music and CSV downloads are named Artist - Title. Turn on **Name files Title - Artist** in Settings to swap the order; the rows in Downloads follow it, and numbering still goes in front. YouTube, social and Search downloads keep their own titles. Downloading a playlist or album again after changing this makes new files instead of replacing the old ones."
         }
       ]
     },
@@ -149,7 +153,7 @@
         {
           "type": "bullets",
           "items": [
-            "**Download options** - output folder, number tracks, export track list, universal format selection, and notify when downloads complete.",
+            "**Download options** - output folder, number tracks, name files Title - Artist, export track list, universal format selection, and notify when downloads complete.",
             "**App Updates** - manual check and an auto-check toggle.",
             "**Download Engine** - check for and apply download engine updates.",
             "**Spotify API Credentials** - optional Client ID and Secret for private playlists, every track of playlists over 100 tracks (except playlists made by Spotify), and more reliable metadata; stored locally on your Mac (the secret in your keychain), never sent to BSK. For your own private or liked playlists, also add your Spotify account email under User Management in your Spotify developer app, otherwise Spotify denies the login.",
