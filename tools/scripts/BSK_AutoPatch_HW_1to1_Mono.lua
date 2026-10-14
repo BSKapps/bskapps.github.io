@@ -4,6 +4,11 @@
 -- Master/Parent disabled
 -- Monitoring disabled
 
+if reaper.GetPlayState() & 4 == 4 then
+    reaper.ShowMessageBox("Failed to auto patch: recording is running.\n\nStop first, then patch.", "Auto Patch", 0)
+    return
+end
+
 local trackCount = reaper.CountTracks(0)
 local hwOutputs = reaper.GetNumAudioOutputs()
 local hwInputs = reaper.GetNumAudioInputs()
@@ -69,7 +74,7 @@ for i = 0, trackCount - 1 do
         reaper.SetTrackSendInfo_Value(track, 1, sendIndex, "I_SRCCHAN", 1024)
 
         -- mono output channel
-        reaper.SetTrackSendInfo_Value(track, 1, sendIndex, "I_DSTCHAN", i)
+        reaper.SetTrackSendInfo_Value(track, 1, sendIndex, "I_DSTCHAN", 1024 + i)
 
         -- Pre-FX
         reaper.SetTrackSendInfo_Value(track, 1, sendIndex, "I_SENDMODE", 1)
