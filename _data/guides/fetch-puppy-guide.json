@@ -97,7 +97,7 @@
           "type": "bullets",
           "items": [
             "**Cancel** a running or queued job from its header, or right-click its tab to cancel and remove it.",
-            "**Retry** or **Retry Failed (N)** appear after a job finishes if there is anything to retry.",
+            "**Retry**, **Retry Failed (N)** or **Retry Cancelled (N)** appear after a job finishes if there is anything to retry.",
             "Right-click a track to remove it from the list.",
             "**Open Folder** jumps to the files in Finder, and is there even when the Downloads page is empty."
           ]
@@ -118,7 +118,7 @@
         },
         {
           "type": "paragraph",
-          "text": "Spotify, Apple Music and CSV downloads are named Artist - Title. Turn on **Name files Title - Artist** in Settings to swap the order; the rows in Downloads follow it, and numbering still goes in front. YouTube, social and Search downloads keep their own titles. Downloading a playlist or album again after changing this makes new files instead of replacing the old ones."
+          "text": "Spotify, Apple Music and CSV downloads are named Artist - Title. Turn on **Name files Title - Artist** in Settings or under Options on the Spotify, Apple Music or CSV page to swap the order; the rows in Downloads follow it, and numbering still goes in front. YouTube, social and Search downloads keep their own titles. Downloading a playlist or album again after changing this makes new files instead of replacing the old ones."
         }
       ]
     },
