@@ -1,33 +1,55 @@
 -- Auto Patch Tracks 1:1
 -- Mono hardware inputs and outputs
--- Pre-FX hardware send
--- Master/Parent disabled
--- Monitoring disabled
 
-if reaper.GetPlayState() & 4 == 4 then
-    reaper.ShowMessageBox("Failed to auto patch: recording is running.\n\nStop first, then patch.", "Auto Patch", 0)
+if reaper.GetPlayState() & 5 ~= 0 then
+    reaper.ShowMessageBox("Failed to auto patch: REAPER is playing or recording.\n\nStop first, then patch.", "Auto Patch", 0)
     return
 end
 
 local trackCount = reaper.CountTracks(0)
+
 local hwOutputs = reaper.GetNumAudioOutputs()
 local hwInputs = reaper.GetNumAudioInputs()
 
 if hwOutputs == 0 and hwInputs == 0 then
-    reaper.ShowMessageBox("No audio hardware detected. Check your audio device settings.", "Auto Patch", 0)
+    reaper.ShowMessageBox("Failed to auto patch: no audio device is open.\n\nPreferences > Audio > Device.", "Auto Patch", 0)
     return
 end
 
-local proceed = reaper.ShowMessageBox(
-    "Mono tracks only. A stereo track patches one channel, not both. Use two mono tracks (L and R).\n\nContinue?",
-    "Auto Patch", 1)
-
-if proceed ~= 1 then
-    return
+local function tracksUpTo(n, verb)
+    if n == 0 then return "no track " .. verb .. "s" end
+    if n == 1 then return "only track 1 " .. verb .. "s" end
+    return "only tracks 1-" .. n .. " " .. verb
 end
 
-local inputsPatched = 0
-local outputsPatched = 0
+local function kept(from)
+    if from == trackCount then return "Track " .. from .. " keeps what it has." end
+    return "Tracks " .. from .. "-" .. trackCount .. " keep what they have."
+end
+
+local function count(n, word)
+    if n == 0 then return "no " .. word .. "s" end
+    return n .. " " .. word .. (n == 1 and "" or "s")
+end
+
+local lines = {}
+if hwInputs < trackCount and hwInputs == hwOutputs then
+    lines[1] = "Your interface has " .. count(hwInputs, "input") .. " and " .. count(hwOutputs, "output") .. ", so " .. tracksUpTo(hwInputs, "get") .. " patched. " .. kept(hwInputs + 1)
+else
+    if hwInputs < trackCount then
+        lines[#lines + 1] = "Your interface has " .. count(hwInputs, "input") .. ", so " .. tracksUpTo(hwInputs, "get") .. " an input. " .. kept(hwInputs + 1)
+    end
+    if hwOutputs < trackCount then
+        lines[#lines + 1] = "Your interface has " .. count(hwOutputs, "output") .. ", so " .. tracksUpTo(hwOutputs, "get") .. " an output. " .. kept(hwOutputs + 1)
+    end
+end
+
+local question = "Patch every track 1:1 mono?"
+if #lines > 0 then question = question .. "\n\n" .. table.concat(lines, "\n") end
+
+if reaper.ShowMessageBox(question, "Auto Patch", 1) ~= 1 then
+    return
+end
 
 reaper.Undo_BeginBlock()
 
@@ -40,31 +62,17 @@ for i = 0, trackCount - 1 do
     -------------------------------------------------
     if i < hwInputs then
         reaper.SetMediaTrackInfo_Value(track, "I_RECINPUT", i)
-
-        -------------------------------------------------
-        -- DISABLE MONITORING
-        -------------------------------------------------
-        reaper.SetMediaTrackInfo_Value(track, "I_RECMON", 0)
-
-        inputsPatched = inputsPatched + 1
-    else
-        reaper.SetMediaTrackInfo_Value(track, "I_RECINPUT", -1)
-    end
-
-    -------------------------------------------------
-    -- REMOVE EXISTING HARDWARE OUTPUTS
-    -------------------------------------------------
-    local hwOutCount = reaper.GetTrackNumSends(track, 1)
-    for j = hwOutCount - 1, 0, -1 do
-        reaper.RemoveTrackSend(track, 1, j)
     end
 
     if i < hwOutputs then
 
         -------------------------------------------------
-        -- DISABLE MASTER SEND
+        -- REMOVE EXISTING HARDWARE OUTPUTS
         -------------------------------------------------
-        reaper.SetMediaTrackInfo_Value(track, "B_MAINSEND", 0)
+        local hwOutCount = reaper.GetTrackNumSends(track, 1)
+        for j = hwOutCount - 1, 0, -1 do
+            reaper.RemoveTrackSend(track, 1, j)
+        end
 
         -------------------------------------------------
         -- CREATE HARDWARE OUTPUT
@@ -75,36 +83,11 @@ for i = 0, trackCount - 1 do
 
         -- mono output channel
         reaper.SetTrackSendInfo_Value(track, 1, sendIndex, "I_DSTCHAN", 1024 + i)
-
-        -- Pre-FX
-        reaper.SetTrackSendInfo_Value(track, 1, sendIndex, "I_SENDMODE", 1)
-
-        -- unity gain
-        reaper.SetTrackSendInfo_Value(track, 1, sendIndex, "D_VOL", 1.0)
-
-        outputsPatched = outputsPatched + 1
     end
 end
 
-reaper.Undo_EndBlock("Auto Patch Tracks 1:1 Hardware IO", -1)
+reaper.Undo_EndBlock("Auto Patch Tracks 1:1 Hardware IO", 1)
+local dir = debug.getinfo(1, "S").source:match("^@(.*[/\\])")
+local common = dir .. "BSK_Transport_Common.lua"
+if reaper.file_exists(common) then dofile(common).forgetSetup() end
 reaper.TrackList_AdjustWindows(false)
-
--------------------------------------------------
--- SUMMARY POPUP
--------------------------------------------------
-
-local message =
-"Auto Patch Complete\n\n" ..
-"Hardware inputs available: " .. hwInputs .. "\n" ..
-"Hardware outputs available: " .. hwOutputs .. "\n" ..
-"Track inputs patched: " .. inputsPatched .. "\n" ..
-"Track outputs patched: " .. outputsPatched .. "\n\n" ..
-"Tracks with a patched input:\n" ..
-"  - Mono hardware input assigned 1:1\n" ..
-"  - Record monitoring: disabled\n\n" ..
-"Tracks with a patched output:\n" ..
-"  - Mono hardware output assigned 1:1\n" ..
-"  - Send mode: Pre-Fader/Pre-FX, volume: unity (0dB)\n" ..
-"  - Master/Parent send: disabled"
-
-reaper.ShowMessageBox(message, "Auto Patch", 0)
