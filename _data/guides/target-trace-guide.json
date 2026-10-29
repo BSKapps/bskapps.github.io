@@ -226,7 +226,7 @@
         },
         {
           "type": "paragraph",
-          "text": "Smaart reads its TargetCurves folder when it starts, so a curve saved while Smaart is already running will not appear there until you either restart Smaart or use **Import** in Smaart's Target Curves window. One caution: delete curves from Target Trace, not from Smaart's window - Target Trace moves the file to the Trash where it can be recovered, Smaart deletes it permanently."
+          "text": "Smaart reads its TargetCurves folder when it starts, so a curve saved while Smaart is already running will not appear there until you either restart Smaart or use **Import** in Smaart's Target Curves window. A curve already in Smaart's list picks up a re-save under the same name when you untick and re-tick Show in Smaart's Target Curves window, but its colour swatch there keeps the old colour until Smaart restarts. One caution: delete curves from Target Trace, not from Smaart's window - Target Trace moves the file to the Trash where it can be recovered, Smaart deletes it permanently."
         }
       ]
     },
