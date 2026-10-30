@@ -22,7 +22,7 @@
 
         <article>
             <h1>Target curves in Smaart: what they are and how to use one</h1>
-            <p class="date">5 July 2026 &middot; Updated 3 October 2026</p>
+            <p class="date">5 July 2026 &middot; Updated 30 October 2026</p>
 
             <p>A Smaart target curve is a reference line you load over your measurement and EQ toward. It is rarely flat, because a PA tuned to a flat trace sounds thin and harsh at show level. The instinct with a transfer function on screen is to EQ until the trace is flat. Flat on the analyser is not flat to the ear.</p>
 
@@ -64,8 +64,8 @@
             <h2>Building and editing the curve itself</h2>
             <p>Authoring the curve is the slow part. A .crv is two tab-separated columns of frequency and level under a short header, and Rational Acoustics warns that spaces or commas in place of tabs can crash Smaart on import. Text files like that are easy to export but miserable to design by hand, and a curve you sketched for one system usually needs reshaping for the next room.</p>
             <p><a href="/targettrace/">Target Trace</a> is a Mac app for that job, and it can start from the sound you already have. Love the sound of the PA right now? Start Live Trace in the editor and grab the exact moment you want. With Smaart's API switched on, Hold freezes the trace and Grab turns it into your curve, point for point. Tidy it with Point Spacing (1/1 to 1/24 octave) and save it as a Smaart .crv. Save it for later, edit your live grabs at any time. A REW .txt is an export only, so keep the .crv as the copy you edit.</p>
-            <p>Working on one screen? Float the live trace over your EQ page and Lock it to that app. See your EQ changes in real time, right on your EQ. Locked, the trace moves with the app window and clicks pass straight through to the EQ underneath. Set Scale to 24 for LA Network Manager or 20 for QL Editor, and Target Trace remembers it per app.</p>
-            <p>Starting cold instead? Pick a preset (Flat, Tilt, 9 dB or 15 dB Haystack, X-Curve), drag control points or draw freehand, Flatten a rough section, and tick library curves to overlay them, TF curves with their saved tolerance bands. Keep a folder of house curves per system or per genre and adapt them per room instead of starting over.</p>
+            <p>Working on one screen? Float the live trace over your EQ page and Lock it to that app. See your EQ changes in real time, right on your EQ. Locked, the trace moves with the app window and clicks pass straight through to the EQ underneath. Set Scale to 24 for LA Network Manager or 20 for QL Editor, and Target Trace remembers it per app. Pick a saved TF curve as the float's Target and it draws in white behind the live trace.</p>
+            <p>Starting cold instead? Pick a preset (Flat, Tilt, Haystack, X-Curve), drag control points or draw freehand, Flatten a rough section, and tick library curves to overlay them, TF curves with their saved tolerance bands. Keep a folder of house curves per system or per genre and adapt them per room instead of starting over.</p>
 
             <p>Related: <a href="/articles/rew-house-curve/">house curves in REW</a>.</p>
 
