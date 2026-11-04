@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Target Trace user guide - BSK Apps",
     "h1": "Target Trace user guide",
-    "dateLine": "Updated for version 1.6",
+    "dateLine": "Updated for version 1.7",
     "description": "A how-to guide for Target Trace: drawing and editing target curves, TF and Spectrum modes, smoothing and weighting, the Smaart library, presets, and exporting .crv and REW files.",
     "canonical": "https://bskapps.com/articles/target-trace-guide/",
     "ogTitle": "Target Trace user guide",
@@ -34,7 +34,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "The app opens with an empty curve named \"My Curve\". Start from scratch with the control points and pencil below, or pick a starting shape from **New from Preset** (press P), or load an existing curve from the library or by dragging a .crv file onto the canvas."
+          "text": "The app opens with an empty curve named \"My Curve\". Start from scratch with the control points and pencil below, or pick a starting shape from **Presets** (press P), or load an existing curve from the library or by dragging a .crv file onto the canvas."
         }
       ]
     },
@@ -51,18 +51,18 @@
           "items": [
             "**Add** - double-click an empty spot on the canvas.",
             "**Move** - drag a point. Frequency moves on a log scale, level in dB.",
-            "**Select** - click a point; Cmd-click to add more; Shift-click to select a range; Cmd-A for all.",
+            "**Select** - click a point; Cmd-click to add more; Shift-click to select a range; Cmd-Shift-left/right to extend the selection a point at a time; Cmd-A for all.",
             "**Delete** - select and press Delete, or use the buttons in the Control Points panel. **Clear Curve** in the toolbar empties the whole curve.",
             "**Type a value** - with one point selected, set its exact Freq and Level in the panel. With several selected, set them all to one Level."
           ]
         },
         {
           "type": "paragraph",
-          "text": "Nudge selected points with Option-arrows (left/right by a semitone, up/down by 0.5 dB); add Shift for 0.1 dB steps. Ctrl-click snaps a point to the cursor. A Hide toggle in the Control Points panel hides the dots without changing the curve."
+          "text": "Nudge selected points with Option-arrows (left/right by a semitone, up/down by 0.5 dB); add Shift for smaller steps (1/60 octave, 0.1 dB). Ctrl-click snaps a point to the cursor. A Hide toggle in the Control Points panel hides the dots without changing the curve."
         },
         {
           "type": "paragraph",
-          "text": "**Flatten** (Cmd-F) eases a selected run of three or more points toward the straight line between the outer two, which stay put. Each press flattens the section a step further, so press once to calm a rough section, or keep pressing to land it dead flat, or on a tilt when the end points sit at different levels. **Bend Down** and **Bend Up**, just above it, do the opposite: each press bends the selected points 0.5 dB further into an arc, most in the middle, while the outer two stay put."
+          "text": "**Flatten** (Cmd-F) eases a selected run of three or more points toward the straight line between the outer two, which stay put. Each press flattens the section a step further, so press once to calm a rough section, or keep pressing to land it dead flat, or on a tilt when the end points sit at different levels. **Bend Down** and **Bend Up**, two rows above it, do the opposite: each press bends the selected points 0.5 dB further into an arc, most in the middle, while the outer two stay put. **Tilt Down** and **Tilt Up**, between them, lean a section instead: the left selected point stays put, the last one moves 0.5 dB per press, the points between follow in proportion and keep their shape, and every point to the right of the selection moves with the last one. Tilt works from two points. Shift-click any of these for a smaller step: 0.1 dB on Bend and Tilt, a tenth of the way on Flatten."
         }
       ]
     },
@@ -72,7 +72,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Press **D** or click **Draw** to switch to the pencil, then drag to sketch a curve freehand. On release it is simplified to the current band and merged with any points outside the drawn area. Drawing a fresh shape resets the name to \"My Curve\" and clears the offset readout."
+          "text": "Press **D** or click **Draw** to switch to the pencil, then drag to sketch a curve freehand. On release it is simplified to the current band and merged with any points outside the drawn area. Drawing a fresh shape resets the name to \"My Curve\" and clears the Level readout."
         }
       ]
     },
@@ -104,7 +104,7 @@
             "**Name** - used as the filename when you save. Give the file a different name in the save dialog and the curve takes that name.",
             "**Colour** and **line weight** (1 to 5 pt) for how the curve draws.",
             "**Tolerance band** (TF only) - a shaded plus/minus dB region around the curve.",
-            "**Offset** - a running readout of global dB shifts (Cmd-up/down, the plus/minus buttons, or Option-up/down with every point selected). Click it to reset. The offset is a working convenience and is never saved into the file.",
+            "**Level** - moves the whole curve up or down (Cmd-up/down, the plus/minus buttons, or Option-up/down with every point selected). Hold Shift with any of these for 0.1 dB steps. The number shows how far you have moved it; click it to go back. Saving keeps the curve at its new level. This is separate from the Offset column in Smaart's Target Curves window, which Target Trace leaves alone.",
             "**Smoothing** (Spectrum only) - Off, 1/12, 1/6, 1/3, 1 octave; a display resolution that does not change your points.",
             "**Weighting** (Spectrum only) - Z (none), A or C; a display-only view that shifts the curve to match how loudness is heard. Flipping back to Z restores the raw shape exactly.",
             "**TF Reference SPL** (TF only) - 60 to 100 dB, the level TF maps to."
@@ -118,7 +118,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Arrow keys and the scroll wheel pan and zoom frequency; hold Shift to zoom the dB axis. **Hold Option and drag to move the graph in any direction**, up and down as well as left and right; Option with a two-finger scroll or the scroll wheel does the same, and over the Split View pane it moves that pane's own level axis. The toolbar has zoom in, zoom out and reset buttons, and a trackpad pinch zooms frequency. The **Scale** button after them sets the Transfer Function range: it opens at +42 to -42 dB, or +30 to -30 dB in Split, which looks much closer to Smaart's magnitude pane, and +15 to -15 dB fills the graph. Single view and Split each keep their own Scale. Reset puts back the Scale you picked for that view (20 to 120 dB in Spectrum) and Smaart's octave labels from 31.5 Hz to 16 kHz. Opening a curve that runs past the view widens the graph to show all of it, and never pulls in a range you widened yourself. Hovering a point shows its frequency and level. **Split View** (V) adds a read-only second pane showing the curve in the opposite mode while you edit. The dB grid draws a labelled line every 3 dB in Transfer Function up to +30 to -30, every 6 dB at wider Scales such as the +42 to -42 single view, and every 6 dB in Spectrum, in both the main and split-view panes."
+          "text": "Arrow keys and the scroll wheel pan and zoom frequency; hold Shift to zoom the dB axis. Shift-left/right moves the graph down and up. **Hold Option and drag to move the graph in any direction**, up and down as well as left and right; Option with a two-finger scroll or the scroll wheel does the same, and over the Split View pane it moves that pane's own level axis. The toolbar has zoom in, zoom out and reset buttons, and a trackpad pinch zooms frequency. The **Scale** button after them sets the Transfer Function range: it opens at +42 to -42 dB, or +30 to -30 dB in Split, which looks much closer to Smaart's magnitude pane, and +15 to -15 dB fills the graph. Single view and Split each keep their own Scale. Reset puts back the Scale you picked for that view (20 to 120 dB in Spectrum) and Smaart's octave labels from 31.5 Hz to 16 kHz. Opening a curve that runs past the view widens the graph to show all of it, and never pulls in a range you widened yourself. Hovering a point shows its frequency and level. **Split View** (V) adds a read-only second pane showing the curve in the opposite mode while you edit. The dB grid draws a labelled line every 3 dB in Transfer Function up to +30 to -30, every 6 dB at wider Scales such as the +42 to -42 single view, and every 6 dB in Spectrum, in both the main and split-view panes."
         }
       ]
     },
@@ -148,7 +148,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "**New from Preset** - the button at the top of the library sidebar, File > New from Preset, or press P - offers Flat, Tilt, Haystack and X-Curve (Cinema), the SMPTE ST 202 X-curve across the whole range; tick Add LFE target to raise it 10 dB up to 125 Hz for the LFE. Tilt has adjustable tilt amount and pivot frequency, Haystack has a low-end lift (9 or 15 dB are typical) and the frequency it is flat from, and both Tilt and Flat can add an optional sub bump. Applying a preset replaces the current curve, names it \"My Curve\" and can be undone. The box keeps your settings until you quit, so you can try again from where you left off."
+          "text": "**Presets** - the button at the top of the library sidebar, File > New from Preset, or press P - offers Flat, Tilt, Haystack and X-Curve (Cinema), the SMPTE ST 202 X-curve across the whole range; tick Add LFE target to raise it 10 dB up to 125 Hz for the LFE. Tilt has adjustable tilt amount and pivot frequency, Haystack has a low-end lift (9 or 15 dB are typical) and the frequency it is flat from, and both Tilt and Flat can add an optional sub bump. Applying a preset replaces the current curve, names it \"My Curve\" and can be undone. The box keeps your settings until you quit, so you can try again from where you left off. **My Presets** in the same box holds your own starting curves, kept out of Smaart's Target Curves list: right-click a curve in the library and choose Save as User Preset, or press Save Curve as Preset to keep the curve on the graph. Click one and press Apply Preset; right-click it to rename it or move it to the Trash."
         }
       ]
     },
@@ -173,7 +173,7 @@
         },
         {
           "type": "paragraph",
-          "text": "You can also import a Smaart **ASCII trace export**: open the file, drop it on the graph, or copy a trace in Smaart and paste it with Cmd-V."
+          "text": "You can also import a Smaart **ASCII trace export**: open the file, drop it on the graph, or copy a trace in Smaart and paste it with Cmd-V. A trace at SPL levels comes in as a Transfer Function curve placed by your TF Reference. Cmd-C copies the curve on the graph, and Cmd-V pastes it back at the same levels."
         },
         {
           "type": "paragraph",
@@ -237,7 +237,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Cmd-Z undoes any edit, including loads and preset applies, and Cmd-Shift-Z redoes the last undone edit; text edits bundle into one undo per field. Handy keys: D draw, T/S modes, V split, P presets, Cmd-A select all, Delete to remove, Option-arrows to nudge a point, Option-drag to move the graph, Cmd-up/down to shift the whole curve (hold to repeat), Cmd-F to flatten the selected points. The Help menu has a full Keyboard Shortcuts reference."
+          "text": "Cmd-Z undoes any edit, including loads and preset applies, and Cmd-Shift-Z redoes the last undone edit; text edits bundle into one undo per field. Handy keys: D draw, T/S modes, V split, P presets, Cmd-A select all, Delete to remove, Option-arrows to nudge a point, Option-drag to move the graph, Cmd-up/down to shift the whole curve (hold to repeat), Cmd-F to flatten the selected points, Cmd-C to copy the curve. The Help menu has a full Keyboard Shortcuts reference."
         }
       ]
     },
