@@ -72,7 +72,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Press **D** or click **Draw** to switch to the pencil, then drag to sketch a curve freehand. On release it is simplified to the current band and merged with any points outside the drawn area. Drawing over the whole curve starts a new one named \"My Curve\"; drawing over part of it, like extending it to 20k, keeps its name and leaves the rest of the curve as it was, so saving a library curve overwrites it. Either way the Level readout clears."
+          "text": "Press **D** or click **Draw** to switch to the pencil, then drag to sketch a curve freehand. On release it is simplified to the current band and merged with any points outside the drawn area. Drawing over the whole curve starts a new one named \"My Curve\"; drawing over part of it, like extending it to 20k, keeps its name and leaves the curve away from your stroke as it was, so saving a library curve overwrites it. Either way the Level readout clears."
         }
       ]
     },
