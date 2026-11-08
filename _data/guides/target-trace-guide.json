@@ -62,7 +62,7 @@
         },
         {
           "type": "paragraph",
-          "text": "**Flatten** (Cmd-F) eases a selected run of three or more points toward the straight line between the outer two, which stay put. Each press flattens the section a step further, so press once to calm a rough section, or keep pressing to land it dead flat, or on a tilt when the end points sit at different levels. **Bend Down** and **Bend Up**, two rows above it, do the opposite: each press bends the selected points 0.5 dB further into an arc, most in the middle, while the outer two stay put. **Tilt Down** and **Tilt Up**, between them, lean a section instead: the left selected point stays put, the last one moves 0.5 dB per press, the points between follow in proportion and keep their shape, and every point to the right of the selection moves with the last one. Tilt works from two points. Shift-click any of these for a smaller step: 0.1 dB on Bend and Tilt, a tenth of the way on Flatten."
+          "text": "**Flatten** (Cmd-F) eases a selected run of three or more points toward the straight line between the outer two, which stay put. Each press flattens the section a step further, so press once to calm a rough section, or keep pressing to land it dead flat, or on a tilt when the end points sit at different levels. **Bend Down** and **Bend Up**, two rows above it, do the opposite: each press bends the selected points 0.5 dB further into an arc, most in the middle, while the outer two stay put. **Tilt Down** and **Tilt Up**, between them, lean a section instead: the selected end nearer the middle of the curve stays put, the outer end moves up or down 0.5 dB per press, the points between follow in proportion and keep their shape, and nothing outside the selection moves. Tilt works from two points. Shift-click any of these for a smaller step: 0.1 dB on Bend and Tilt, a tenth of the way on Flatten."
         }
       ]
     },
@@ -72,7 +72,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Press **D** or click **Draw** to switch to the pencil, then drag to sketch a curve freehand. On release it is simplified to the current band and merged with any points outside the drawn area. Drawing a fresh shape resets the name to \"My Curve\" and clears the Level readout."
+          "text": "Press **D** or click **Draw** to switch to the pencil, then drag to sketch a curve freehand. On release it is simplified to the current band and merged with any points outside the drawn area. Drawing over the whole curve starts a new one named \"My Curve\"; drawing over part of it, like extending it to 20k, keeps its name, so Save overwrites it. Either way the Level readout clears."
         }
       ]
     },
