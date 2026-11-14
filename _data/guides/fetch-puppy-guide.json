@@ -118,7 +118,7 @@
         },
         {
           "type": "paragraph",
-          "text": "Spotify, Apple Music and CSV downloads are named Artist - Title. Turn on **Name files Title - Artist** in Settings or under Options on the Spotify, Apple Music or CSV page to swap the order; the rows in Downloads follow it, and numbering still goes in front. An example file name under the checkbox shows what you will get, in the format you have chosen. YouTube, social and Search downloads keep their own titles. Downloading a playlist or album again after changing this makes new files instead of replacing the old ones."
+          "text": "Spotify, Apple Music and CSV downloads are named Artist - Title. Turn on **Name files Title - Artist** in Settings or under Options on the Spotify, Apple Music or CSV page to swap the order; the rows in Downloads follow it, and numbering still goes in front. An example file name under the checkbox shows what you will get. On the Spotify, Apple Music and CSV pages it ends in the format you have chosen. YouTube, social and Search downloads keep their own titles. Downloading a playlist or album again after changing this makes new files instead of replacing the old ones."
         }
       ]
     },
