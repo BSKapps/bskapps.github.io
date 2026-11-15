@@ -4,7 +4,7 @@
   "web": {
     "pageTitle": "Stimulus user guide - BSK Apps",
     "h1": "Stimulus user guide",
-    "dateLine": "Updated for version 1.4",
+    "dateLine": "Updated for version 1.5",
     "description": "A how-to guide for Stimulus: tones, sweeps with hold and scrub, harmonics, noise with band limiting and burst, the Stereo ID and GLITS channel idents, polarity pops, analyzer-matched measurement signals, mixing four generators, and exporting test files.",
     "canonical": "https://bskapps.com/articles/stimulus-guide/",
     "ogTitle": "Stimulus user guide",
@@ -48,7 +48,11 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Type a frequency or use the slider, which runs the full 10 Hz to 22 kHz range, always clamped to what your output device can actually reproduce. The row of recall keys under the field jumps straight to 60 Hz, 100 Hz, 400 Hz, 1 kHz or 10 kHz, and the slider follows."
+          "text": "Type a frequency or use the slider, which runs the full 10 Hz to 22 kHz range, always clamped to what your output device can actually reproduce. The **-1/3 oct** and **+1/3 oct** keys either side of the field step to the next standard 1/3-octave frequency (31.5, 40, 50, 63, 80, 100 and so on). The row of recall keys under the field jumps straight to 60 Hz, 100 Hz, 400 Hz, 1 kHz or 10 kHz, and the slider follows."
+        },
+        {
+          "type": "paragraph",
+          "text": "To make a recall key your own, hold it (right-click on a Mac) and choose **Store ... Here** to save the current frequency on it. **Reset Keys** puts the originals back. The line under the readout names the nearest musical note and how many cents off it you are, for chasing a resonance by ear."
         },
         {
           "type": "paragraph",
@@ -81,6 +85,10 @@
         {
           "type": "paragraph",
           "text": "While a sweep runs, **HOLD** freezes it at the frequency on screen and keeps it sounding as a steady tone. A bright thumb appears on the range slider - drag it (or use the arrow keys) to move the held tone anywhere in the sweep range. Hold again resumes the sweep from wherever you left it."
+        },
+        {
+          "type": "paragraph",
+          "text": "The **-1/3** and **+1/3** keys by the swap key step the held tone along the 1/3-octave grid. They stay greyed until Hold is on."
         },
         {
           "type": "paragraph",
@@ -172,7 +180,11 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Each generator has a level fader, fade in/out times, and an **Output** switch: left channel, right channel, or both (dual mono - no centre dip). The keys beside the fader recall -6, -12 and -18 dBFS in one tap. The master section has its own fader, always-visible meters, and a safety limiter, on by default at -3 dBFS, that hard-clips rather than letting four summed generators overshoot. Below the ceiling it does nothing at all - it is a safety clamp, not a compressor - and the LIM key glows bright while it is actually clamping."
+          "text": "Each generator has a level fader, fade in/out times, and an **Output** switch: left channel, right channel, or both (dual mono - no centre dip). On iPad and Mac the keys beside the fader recall -6, -12 and -18 dBFS in one tap; hold one (right-click on a Mac) to store the current level on it instead. The master section has its own fader, always-visible meters, and a safety limiter, on by default at -3 dBFS, that hard-clips rather than letting four summed generators overshoot. Below the ceiling it does nothing at all - it is a safety clamp, not a compressor - and the LIM key glows bright while it is actually clamping."
+        },
+        {
+          "type": "paragraph",
+          "text": "Under each generator's level a small line shows it in dBu. The master section shows the alignment in use: tap it to switch between -18 dBFS = 0 dBu (EBU), -20 dBFS = +4 dBu (SMPTE) and off, which hides the dBu lines."
         },
         {
           "type": "paragraph",
