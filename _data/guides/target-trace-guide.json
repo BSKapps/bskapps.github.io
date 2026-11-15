@@ -24,7 +24,7 @@
   "intro": [
     {
       "type": "paragraph",
-      "text": "Target Trace is an editor for the target curves used in audio measurement. You shape a curve on a frequency graph and save it as a Smaart .crv file (or a REW house curve). The window has a curve library on the left, the editing canvas in the middle, and a properties panel on the right."
+      "text": "Target Trace is an editor for the target curves used in audio measurement. You shape a curve on a frequency graph and save it as a Smaart .crv file (or a REW house curve). The window has a curve library on the left, the editing canvas in the middle, and a properties panel on the right. The **Virtual EQ** tab, switched at the top of the left sidebar, tries EQ on your stored Smaart traces."
     }
   ],
   "sections": [
@@ -208,6 +208,48 @@
       ]
     },
     {
+      "id": "virtual-eq",
+      "title": "Virtual EQ",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The **Virtual EQ** tab tries EQ on a measurement before you touch the desk. Switch to it at the top of the left sidebar or from the View menu. It reads the Transfer Function traces Smaart stores on disk, draws one against a target curve, and shows what your EQ would do to it. It only reads those files and never changes them."
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "**Saved Traces** in the left sidebar lists your Smaart sessions, newest first. Click a session to open or close it, and click a trace to draw it in yellow. You can also drop a .trf file on the graph. **Clear Trace** in the toolbar takes the trace, its EQ and its Level off the graph; it can't be undone.",
+            "**Target** draws one of your TF target curves in green, or **Editor curve** to use the curve on the Editor's graph, saved or not. Target Trace remembers your Target between launches.",
+            "**Level** moves the trace up or down: type a value, or use the arrows for 1 dB a press. **Auto** sets Level so the trace sits on the target, and **Reset** puts it back to 0. **Smoothing** runs from Off to 1 octave. **Blanking** hides the trace wherever Smaart's coherence was below the percentage you pick, and Auto EQ skips those parts.",
+            "**Lines:** **Before** shows the trace and the target. **After** shows the target and, in orange, the trace with your EQ. Once there is EQ, the other one shows faint behind. Tick boxes show any mix, including the EQ curve on its own in blue. The orange line is smoothed the way Smaart would measure through the EQ.",
+            "**Trace to Editor** makes what Lines shows the Editor's curve, as drawn, so you can save it as a target or keep shaping it. It reads **Trace + EQ to Editor** when the trace with EQ is showing. Cmd-Z in the Editor brings the old curve back."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "virtual-eq-filters",
+      "title": "EQ, Auto EQ and GEQ",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The EQ area under the Virtual EQ graph has two kinds of EQ. **PEQ | GEQ** picks which one shapes the lines, and each keeps its own settings."
+        },
+        {
+          "type": "bullets",
+          "items": [
+            "**PEQ:** **Add Filter** adds a bell at 1 kHz. Each row has a tick box to bypass that filter, a Shape (Bell, Lo Shelf or Hi Shelf), Freq, Gain, Width and **Remove**. **Width as** shows widths as Q or as bandwidth in octaves. Type a value and press Return or Tab, or click away; Esc puts the old value back.",
+            "**GEQ** is a 31-band, 1/3 octave graphic EQ from 20 Hz to 20 kHz. Drag a slider in 0.5 dB steps, or type into the box under it. The slider scale runs from your Max boost at the top to your Max cut at the bottom.",
+            "**Auto EQ** sets Level, then fits the EQ to bring the trace to the target, at the Smoothing showing. It replaces the EQ that is there. The Auto EQ settings in the right sidebar control it: **PEQ filters** (4, 6 or 8), or **GEQ filters** (31 uses every slider, 28 runs 31.5 Hz to 16 kHz for desks with a 28-band GEQ, and 15 moves no more than 15 of the 31 sliders), **Freq range**, **Max boost/cut**, and **Cut only**, where Level lifts the trace and the EQ only cuts.",
+            "Change an Auto EQ setting and Auto EQ fits again straight away, as long as you haven't changed the EQ by hand since. Change Smoothing, Blanking or the Target and the EQ stays as it is, so you can see it at the new setting; Auto EQ pulses to show that a fresh fit would come out differently.",
+            "**Clear All** removes every filter, or sets every slider back to 0, and puts Level back to 0.",
+            "Right-click the graph or the EQ area for **Copy EQ** and **Paste EQ** (Copy GEQ and Paste GEQ in GEQ mode), or use Cmd-C and Cmd-V. Copy puts the settings on the clipboard as text you can paste into notes or a message, and Paste puts them on another trace without changing its Level. A PEQ copy pastes only in PEQ, and a GEQ copy only in GEQ.",
+            "Each trace keeps its own EQ, Level and Lines until you quit, with its own Cmd-Z and Cmd-Shift-Z history. The Auto EQ settings, Blanking and Target are remembered between launches."
+          ]
+        }
+      ]
+    },
+    {
       "id": "point-spacing",
       "title": "Point spacing",
       "blocks": [
@@ -237,7 +279,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Cmd-Z undoes any edit, including loads and preset applies, and Cmd-Shift-Z redoes the last undone edit; text edits bundle into one undo per field. Handy keys: D draw, T/S modes, V split, P presets, Cmd-A select all, Delete to remove, Option-arrows to nudge a point, Option-drag to move the graph, Cmd-up/down to shift the whole curve (hold to repeat), Cmd-F to flatten the selected points, Cmd-C to copy the curve. The Help menu has a full Keyboard Shortcuts reference."
+          "text": "Cmd-Z undoes any edit, including loads and preset applies, and Cmd-Shift-Z redoes the last undone edit; text edits bundle into one undo per field. Handy keys: D draw, T/S modes, V split, P presets, Cmd-A select all, Delete to remove, Option-arrows to nudge a point, Option-drag to move the graph, Cmd-up/down to shift the whole curve (hold to repeat), Cmd-F to flatten the selected points, Cmd-C to copy the curve. The Help menu has a full Keyboard Shortcuts reference. In Virtual EQ, Cmd-Z and Cmd-Shift-Z undo and redo EQ and Level changes, and Cmd-C and Cmd-V copy and paste the EQ."
         }
       ]
     },
