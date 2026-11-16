@@ -24,7 +24,7 @@
   "intro": [
     {
       "type": "paragraph",
-      "text": "Target Trace is an editor for the target curves used in audio measurement. You shape a curve on a frequency graph and save it as a Smaart .crv file (or a REW house curve). The window has a curve library on the left, the editing canvas in the middle, and a properties panel on the right. The **Virtual EQ** tab, switched at the top of the left sidebar, tries EQ on your stored Smaart traces."
+      "text": "Target Trace is an editor for the target curves used in audio measurement. You shape a curve on a frequency graph and save it as a Smaart .crv file (or a REW house curve). The window has a curve library on the left, the editing canvas in the middle, and a properties panel on the right. The **Virtual EQ** tab, switched with Editor | Virtual EQ in the toolbar, tries EQ on your stored Smaart traces."
     }
   ],
   "sections": [
@@ -213,7 +213,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "The **Virtual EQ** tab tries EQ on a measurement before you touch the desk. Switch to it at the top of the left sidebar or from the View menu. It reads the Transfer Function traces Smaart stores on disk, draws one against a target curve, and shows what your EQ would do to it. It only reads those files and never changes them."
+          "text": "The **Virtual EQ** tab tries EQ on a measurement before you touch the desk. Switch to it with Editor | Virtual EQ in the toolbar or from the View menu. It reads the Transfer Function traces Smaart stores on disk, draws one against a target curve, and shows what your EQ would do to it. It only reads those files and never changes them."
         },
         {
           "type": "bullets",
