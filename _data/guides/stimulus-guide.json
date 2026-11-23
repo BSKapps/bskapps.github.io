@@ -236,11 +236,11 @@
         },
         {
           "type": "paragraph",
-          "text": "The first time, the Mac shows a four-digit code: type it on the iPhone or iPad. After that no code is needed. **Forget Devices** on the Mac clears every pairing, so each device needs a new code next time. One iPhone or iPad controls a Mac at a time."
+          "text": "The first time, the Mac shows a four-digit code: type it on the iPhone or iPad. After that no code is needed. The link between the two is encrypted. **Forget Devices** on the Mac clears every pairing, so each device needs a new code next time. One iPhone or iPad controls a Mac at a time."
         },
         {
           "type": "paragraph",
-          "text": "While connected, every control on the iPhone or iPad drives the Mac: the generators, the transport, Sweep Hold, the 1/3-octave keys, the recall keys and the master section. The iPhone also shows the Mac's whole rack, so you can pick, mute or solo any generator. Export stays on the Mac. Tap **Remote**, then **Leave**, and the iPhone or iPad gets its own setup back."
+          "text": "While connected, every control on the iPhone or iPad drives the Mac: the generators, the transport, Sweep Hold, the 1/3-octave keys, the recall keys and the master section. The iPhone also shows the Mac's whole rack, so you can pick, mute or solo any generator. Export stays on the Mac, and so do Player tracks: the iPhone or iPad shows the Mac's list and picks from it, and tracks are added and removed on the Mac. Tap **Remote**, then **Leave**, and the iPhone or iPad gets its own setup back."
         },
         {
           "type": "paragraph",
