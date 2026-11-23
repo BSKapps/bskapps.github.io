@@ -2393,7 +2393,7 @@ function renderAppleApps(stats, key) {
             sku: sku,
             app: a,
             name: a.title || sku,
-            downloads: a.free_units || 0,
+            downloads: (a.free_units || 0) + (a.app_units != null ? a.app_units : (a.paid_units || 0)),
             updates: a.update_units || 0,
             sales: a.app_units != null ? a.app_units : (a.paid_units || 0),
             iap: a.iap_units || 0,
@@ -2449,7 +2449,7 @@ function renderAppleCountries(stats, key) {
         const d = byCountry[c];
         return {
             name: countryLabel(c),
-            downloads: d.free_units || 0,
+            downloads: (d.free_units || 0) + (d.app_units != null ? d.app_units : (d.paid_units || 0)),
             updates: d.update_units || 0,
             sales: d.app_units != null ? d.app_units : (d.paid_units || 0),
             iap: d.iap_units || 0,
