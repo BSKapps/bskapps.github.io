@@ -197,6 +197,28 @@
       ]
     },
     {
+      "id": "remote",
+      "title": "Remote",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "An iPhone or iPad running Stimulus can control Stimulus on a Mac, so you can change what plays through the system while you stand in the room and listen. On the Mac, click **Remote** beside the output device and turn it on. On the iPhone or iPad, tap **Remote** in the master section and pick the Mac."
+        },
+        {
+          "type": "paragraph",
+          "text": "The first time, the Mac shows a four-digit code: type it on the iPhone or iPad. After that no code is needed. **Forget Devices** on the Mac clears every pairing, so each device needs a new code next time. One iPhone or iPad controls a Mac at a time."
+        },
+        {
+          "type": "paragraph",
+          "text": "While connected, every control on the iPhone or iPad drives the Mac: the generators, the transport, Sweep Hold, the 1/3-octave keys, the recall keys and the master section. The iPhone also shows the Mac's whole rack, so you can pick, mute or solo any generator. Export stays on the Mac. Tap **Remote**, then **Leave**, and the iPhone or iPad gets its own setup back."
+        },
+        {
+          "type": "paragraph",
+          "text": "Both devices need Wi-Fi switched on. They connect over a shared network, or directly to each other when there is none. If the connection drops, the Mac keeps playing exactly as it was, the controls grey out and the transport reads Reconnecting until the link comes back."
+        }
+      ]
+    },
+    {
       "id": "saved-state",
       "title": "Saved state",
       "blocks": [
