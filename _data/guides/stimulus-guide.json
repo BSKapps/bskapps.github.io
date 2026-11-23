@@ -197,6 +197,36 @@
       ]
     },
     {
+      "id": "track",
+      "title": "Player",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The **Player** plays WAV and AIFF tracks of your own: a tuning song, a reference mix, a recorded sweep. Each generator plays its own track, so four generators can run four different files, or different sections of the same one, under the same transport, levels, fades, mute and solo as everything else."
+        },
+        {
+          "type": "paragraph",
+          "text": "Tap **Add Track** to pick files, or drop them onto the Player page. On an iPhone or iPad, files sent by AirDrop land in Files, where Add Track finds them. Stimulus keeps its own copy, so a track keeps working after the original is moved or deleted, and stays until you select it and tap **Remove**. Pick a track from the list to play it. The readout shows the track playing, the time into it and its length."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Once** plays the track and stops. **Loop** repeats it. **Play all** carries on down the list from the picked track, then stops; **Loop all** goes round the list again. The track, the play mode and Add Track are locked while playing: stop to change them."
+        },
+        {
+          "type": "paragraph",
+          "text": "**From** and **To** play just a section of the track in Once or Loop, typed as minutes and seconds (1:23.5); To reads End for the whole track, and **Reset** puts both back to the whole track. Change them while a loop plays and the next pass uses the new times, so a loop can be tightened by ear. The cut edges get a short fade so a section loop never clicks."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Output** L+R plays a track in stereo; L or R plays it summed to mono on that side only."
+        },
+        {
+          "type": "paragraph",
+          "text": "**Add to Player** in the Export popover renders the current mix and puts it straight into the list, ready to play back on any generator. The **Name** at the top of the popover names the file, so a render can go in as \"Tom loop\" rather than its automatic name."
+        }
+      ]
+    },
+    {
       "id": "remote",
       "title": "Remote",
       "blocks": [
