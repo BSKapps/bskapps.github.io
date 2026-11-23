@@ -290,7 +290,7 @@
         .data-table th.num, .data-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
         .data-table .muted { color: #8A8A90; font-size: 0.78rem; }
 
-        .app-grid { margin-top: 10px; }
+        .app-grid { margin-top: 10px; align-items: start; }
         .app-card { cursor: pointer; }
         .app-card:hover { border-color: rgba(255,255,255,0.28); }
         .app-card.summary { grid-column: 1 / -1; cursor: default; background: #2C2C30; }
@@ -301,6 +301,7 @@
         .detail-panel { background: #2C2C30; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 14px 12px; }
         .detail-title { font-size: 0.6rem; color: #8A8A90; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
         .detail-line { display: flex; justify-content: space-between; gap: 12px; font-size: 0.8rem; padding: 3px 0; color: #E4E4E7; }
+        .detail-line > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .detail-line em { color: #8A8A90; font-style: normal; font-size: 0.78rem; }
         .detail-line .dl-num { color: #A9A9AF; font-variant-numeric: tabular-nums; white-space: nowrap; }
         .data-table td.money { color: #E8C667; }
@@ -2326,7 +2327,14 @@ function appleMoney(usd, rate) {
     return '$' + ((usd || 0) * rate).toFixed(2);
 }
 
-function appleDetail(a, rate) {
+function padDetailLines(lines, count, reserve) {
+    let out = lines;
+    for (let i = Math.max(count, 1); i < reserve; i++) out += '<div class="detail-line">&nbsp;</div>';
+    return out;
+}
+
+function appleDetail(a, rate, reserve) {
+    reserve = reserve || { countries: 0, iap: 0 };
     const countries = a.countries || {};
     const countryKeys = Object.keys(countries).sort(function(x, y) {
         return (countries[y].units || 0) - (countries[x].units || 0);
@@ -2334,7 +2342,7 @@ function appleDetail(a, rate) {
     const countryLines = countryKeys.length
         ? countryKeys.map(function(c) {
             const d = countries[c];
-            return '<div class="detail-line"><span>' + esc(countryLabel(c)) + '</span><span class="dl-num">'
+            return '<div class="detail-line"><span title="' + esc(countryLabel(c)) + '">' + esc(countryLabel(c)) + '</span><span class="dl-num">'
                 + (d.units || 0).toLocaleString() + ' units &middot; ' + appleMoney(d.sales_usd, rate) + '</span></div>';
         }).join('')
         : '<div class="detail-line"><em>No country data</em></div>';
@@ -2343,13 +2351,13 @@ function appleDetail(a, rate) {
     const iapLines = iapKeys.length
         ? iapKeys.map(function(k) {
             const d = iap[k];
-            return '<div class="detail-line"><span>' + esc(d.title || k) + '</span><span class="dl-num">'
+            return '<div class="detail-line"><span title="' + esc(d.title || k) + '">' + esc(d.title || k) + '</span><span class="dl-num">'
                 + (d.units || 0).toLocaleString() + ' &middot; ' + appleMoney(d.sales_usd, rate) + '</span></div>';
         }).join('')
         : '<div class="detail-line"><em>No in-app purchases</em></div>';
     return '<div class="detail-grid">'
-        + '<div class="detail-panel"><div class="detail-title">By country</div>' + countryLines + '</div>'
-        + '<div class="detail-panel"><div class="detail-title">In-app purchases</div>' + iapLines + '</div>'
+        + '<div class="detail-panel"><div class="detail-title">By country</div>' + padDetailLines(countryLines, countryKeys.length, reserve.countries) + '</div>'
+        + '<div class="detail-panel"><div class="detail-title">In-app purchases</div>' + padDetailLines(iapLines, iapKeys.length, reserve.iap) + '</div>'
         + '</div>';
 }
 
@@ -2407,6 +2415,16 @@ function renderAppleApps(stats, key) {
         const a = allTime[sku] || {};
         return (a.free_units || 0) + (a.app_units != null ? a.app_units : (a.paid_units || 0));
     }
+    function detailReserve(sku) {
+        const reserve = { countries: 0, iap: 0 };
+        Object.keys(stats.apple).forEach(function(k) {
+            const a = stats.apple[k] && stats.apple[k].by_app && stats.apple[k].by_app[sku];
+            if (!a) return;
+            reserve.countries = Math.max(reserve.countries, Object.keys(a.countries || {}).length);
+            reserve.iap = Math.max(reserve.iap, Object.keys(a.iap || {}).length);
+        });
+        return reserve;
+    }
     rows.sort(function(x, y) {
         return allTimeRevenue(y.sku) - allTimeRevenue(x.sku)
             || allTimeDownloads(y.sku) - allTimeDownloads(x.sku)
@@ -2429,7 +2447,7 @@ function renderAppleApps(stats, key) {
         return '<div class="product-card app-card" data-app="' + esc(r.sku) + '">'
             + '<div class="pc-head"><span class="pc-name">' + esc(r.name) + '</span><span class="pc-chev">' + (open ? '&#9662;' : '&#9656;') + '</span></div>'
             + appleStatsRow(r, rate)
-            + (open ? appleDetail(r.app, rate) : '')
+            + (open ? appleDetail(r.app, rate, detailReserve(r.sku)) : '')
             + '</div>';
     }).join('');
     note.textContent = appleMoney(total.revenue, rate) + ' ' + currentCurrency;
