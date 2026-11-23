@@ -2400,7 +2400,18 @@ function renderAppleApps(stats, key) {
             revenue: a.sales_usd || 0,
             proceeds: a.proceeds_usd || 0
         };
-    }).sort(function(x, y) { return y.revenue - x.revenue || y.downloads - x.downloads; });
+    });
+    const allTime = (stats.apple.all && stats.apple.all.by_app) || {};
+    function allTimeRevenue(sku) { return (allTime[sku] && allTime[sku].sales_usd) || 0; }
+    function allTimeDownloads(sku) {
+        const a = allTime[sku] || {};
+        return (a.free_units || 0) + (a.app_units != null ? a.app_units : (a.paid_units || 0));
+    }
+    rows.sort(function(x, y) {
+        return allTimeRevenue(y.sku) - allTimeRevenue(x.sku)
+            || allTimeDownloads(y.sku) - allTimeDownloads(x.sku)
+            || x.name.localeCompare(y.name);
+    });
     if (!rows.length) {
         container.innerHTML = '<div class="muted">No data yet</div>';
         note.textContent = '';
