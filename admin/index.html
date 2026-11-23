@@ -2378,7 +2378,15 @@ function renderAppleApps(stats, key) {
         return;
     }
     const rate = appleRate(stats);
-    const byApp = apple.by_app || {};
+    const byApp = Object.assign({}, apple.by_app || {});
+    Object.keys(stats.apple).forEach(function(k) {
+        const other = stats.apple[k] && stats.apple[k].by_app;
+        if (!other) return;
+        Object.keys(other).forEach(function(sku) {
+            if (!byApp[sku]) byApp[sku] = { title: other[sku].title };
+            else if (!byApp[sku].title && other[sku].title) byApp[sku] = Object.assign({}, byApp[sku], { title: other[sku].title });
+        });
+    });
     const rows = Object.keys(byApp).map(function(sku) {
         const a = byApp[sku];
         return {
