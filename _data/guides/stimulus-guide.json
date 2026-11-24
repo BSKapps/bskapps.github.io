@@ -180,7 +180,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Each generator has a level fader, fade in/out times, and an **Output** switch: left channel, right channel, or both (dual mono - no centre dip). On iPad and Mac the keys beside the fader recall -6, -12 and -18 dBFS in one tap; hold one (right-click on a Mac) to store the current level on it instead. The master section has its own fader, always-visible meters, and a safety limiter, on by default at -3 dBFS, that hard-clips rather than letting four summed generators overshoot. Below the ceiling it does nothing at all - it is a safety clamp, not a compressor - and the LIM key glows bright while it is actually clamping."
+          "text": "Each generator has a level fader, fade in/out times, and an **Output** switch: left channel, right channel, or both (dual mono - no centre dip). On iPad and Mac the keys beside the fader recall -6, -12 and -18 dBFS in one tap; hold one (right-click on a Mac) to store the current level on it instead. Double-tap the **Level** fader in the editor (double-click on a Mac) to set it back to -18 dBFS. The master section has its own fader, always-visible meters, and a safety limiter, on by default at -3 dBFS, that hard-clips rather than letting four summed generators overshoot. Below the ceiling it does nothing at all - it is a safety clamp, not a compressor - and the LIM key glows bright while it is actually clamping."
         },
         {
           "type": "paragraph",
@@ -202,7 +202,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "The **Player** plays WAV and AIFF tracks of your own: a tuning song, a reference mix, a recorded sweep. Each generator plays its own track, so four generators can run four different files, or different sections of the same one, under the same transport, levels, fades, mute and solo as everything else."
+          "text": "The **Player** plays WAV and AIFF tracks of your own: a tuning song, a reference mix, a recorded sweep. Each generator plays its own track, so four generators can run four different files under the same transport, levels, fades, mute and solo as everything else."
         },
         {
           "type": "paragraph",
@@ -214,7 +214,7 @@
         },
         {
           "type": "paragraph",
-          "text": "**From** and **To** play just a section of the track in Once or Loop, typed as minutes and seconds (1:23.5); To reads End for the whole track, and **Reset** puts both back to the whole track. Change them while a loop plays and the next pass uses the new times, so a loop can be tightened by ear. The cut edges get a short fade so a section loop never clicks."
+          "text": "**From** and **To** play just a section of the track in Once or Loop, typed as minutes and seconds (1:23.5); To reads End for the whole track, and **Reset** puts both back to the whole track. Each track keeps its own From and To, so picking a track brings its section back. Change them while a loop plays and the next pass uses the new times, so a loop can be tightened by ear. The cut edges get a short fade so a section loop never clicks."
         },
         {
           "type": "paragraph",
@@ -240,7 +240,7 @@
         },
         {
           "type": "paragraph",
-          "text": "While connected, every control on the iPhone or iPad drives the Mac: the generators, the transport, Sweep Hold, the 1/3-octave keys, the recall keys and the master section. The iPhone also shows the Mac's whole rack, so you can pick, mute or solo any generator. Export stays on the Mac, and so do Player tracks: the iPhone or iPad shows the Mac's list and picks from it, and tracks are added and removed on the Mac. Tap **Remote**, then **Leave**, and the iPhone or iPad gets its own setup back."
+          "text": "While connected, every control on the iPhone or iPad drives the Mac: the generators, the transport, Sweep Hold, the 1/3-octave keys, the recall keys and the master section. The iPhone also shows the Mac's whole rack, so you can pick, mute or solo any generator. The Mac follows the generator you pick, and the iPhone or iPad opens on the one the Mac is showing. Export stays on the Mac, and so do Player tracks: the iPhone or iPad shows the Mac's list and picks from it, and tracks are added and removed on the Mac. Tap **Remote**, then **Leave**, and the iPhone or iPad gets its own setup back."
         },
         {
           "type": "paragraph",
