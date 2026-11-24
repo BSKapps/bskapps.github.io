@@ -206,7 +206,7 @@
         },
         {
           "type": "paragraph",
-          "text": "Tap **Add Track** to pick files. On iPad and Mac you can also drop them onto the Player page. On an iPhone or iPad, files sent by AirDrop land in Files, where Add Track finds them. Stimulus keeps its own copy, so a track keeps working after the original is moved or deleted, and stays until you select it and tap **Remove**. Pick a track from the list to play it. The readout shows the track playing, the time into it and its length."
+          "text": "Tap **Add Track** to pick files. On iPad and Mac you can also drop them onto the Player page. On an iPhone or iPad, files sent by AirDrop land in Files, where Add Track finds them. Stimulus keeps its own copy, so a track keeps working after the original is moved or deleted, and stays until you select it and tap **Remove**. Pick a track from the list to play it. While a track plays, the readout shows the time into it in large digits; stopped, it shows the track's length. The track's name sits under it. While it plays, drag along the line under the readout to jump to any point."
         },
         {
           "type": "paragraph",
