@@ -214,7 +214,7 @@
         },
         {
           "type": "paragraph",
-          "text": "**From** and **To** play just a section of the track in Once or Loop, typed as minutes and seconds (1:23.5); To reads End for the whole track, and **Reset** puts both back to the whole track. Each track keeps its own From and To, so picking a track brings its section back. Change them while a loop plays and the next pass uses the new times, so a loop can be tightened by ear. The cut edges get a short fade so a section loop never clicks."
+          "text": "**From** and **To** play just a section of the track in Once or Loop, typed as minutes and seconds (1:23.5); To reads End for the whole track, and **Reset** puts both back to the whole track. Each track keeps its own From and To, so picking a track brings its section back. Change them while a loop plays and the next pass uses the new times, so a loop can be tightened by ear. The cut edges get a short fade so a section loop never clicks. **Level** sets the track's own level, from -18 to +18 dB on top of the generator's Level, so a quiet track can be matched to a loud one. Each track keeps its own Level, and it works in every play mode, so Play All plays each track at its own level."
         },
         {
           "type": "paragraph",
