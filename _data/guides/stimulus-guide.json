@@ -34,7 +34,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "The editor shows one generator at a time; the rack on the right holds them all. Click a strip to edit it, press **+ Add generator** to spawn another (up to four), hold a strip - or right-click it on a Mac - to remove it, and drag a strip to reorder the rack. Each strip has its own level fader plus **M** (mute), **S** (solo) and the polarity flip. A new generator arrives muted: unmute it when you want it in the mix. The reset control by the generator label returns the whole generator to its defaults, muted. On iPhone Stimulus runs one generator: the editor and master strip, with no rack."
+          "text": "The editor shows one generator at a time; the rack on the right holds them all. Click a strip to edit it, press **+ Add generator** to spawn another (up to four), hold a strip - or right-click it on a Mac - to remove it, and drag a strip to reorder the rack. Each strip has its own level fader plus **M** (mute), **S** (solo) and the polarity flip. A new generator arrives muted: unmute it when you want it in the mix. The reset control by the generator label returns the whole generator to its defaults, muted. On iPhone Stimulus runs one generator with no rack, on one screen: the key at the top picks the generator type, and the meters, **Timer**, **Export**, **Remote** and the transport stay at the bottom."
         },
         {
           "type": "paragraph",
@@ -180,11 +180,11 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Each generator has a level fader, fade in/out times, and an **Output** switch: left channel, right channel, or both (dual mono - no centre dip). On iPad and Mac the keys beside the fader recall -6, -12 and -18 dBFS in one tap; hold one (right-click on a Mac) to store the current level on it instead. Double-tap the **Level** fader in the editor (double-click on a Mac) to set it back to -18 dBFS. The master section has its own fader, always-visible meters, and a safety limiter, on by default at -3 dBFS, that hard-clips rather than letting four summed generators overshoot. Below the ceiling it does nothing at all - it is a safety clamp, not a compressor - and the LIM key glows bright while it is actually clamping."
+          "text": "Each generator has a level, typed in dB, fade in/out times in milliseconds, and an **Output** switch: left channel, right channel, or both (dual mono - no centre dip). The keys beside the level recall -6, -12 and -18 dBFS in one tap; hold one (right-click on a Mac) to store the current level on it instead. The master section has its own fader, always-visible meters, and a safety limiter, on by default at -3 dBFS, that hard-clips rather than letting four summed generators overshoot. Below the ceiling it does nothing at all - it is a safety clamp, not a compressor - and the LIM key glows bright while it is actually clamping."
         },
         {
           "type": "paragraph",
-          "text": "Under each generator's level a small line shows it in dBu. The master section shows the alignment in use: tap it to switch between -18 dBFS = 0 dBu (EBU), -20 dBFS = +4 dBu (SMPTE) and off, which hides the dBu lines."
+          "text": "Each generator's level also shows in dBu: on a line under it on Mac and iPad, beside the Level label on iPhone. The master section shows the alignment in use: tap it to switch between -18 dBFS = 0 dBu (EBU), -20 dBFS = +4 dBu (SMPTE) and off, which hides the dBu readouts."
         },
         {
           "type": "paragraph",
