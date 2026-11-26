@@ -180,7 +180,7 @@
       "blocks": [
         {
           "type": "paragraph",
-          "text": "Each generator has a level, typed in dB, fade in/out times in milliseconds, and an **Output** switch: left channel, right channel, or both (dual mono - no centre dip). The keys beside the level recall -6, -12 and -18 dBFS in one tap; hold one (right-click on a Mac) to store the current level on it instead. The master section has its own fader, always-visible meters, and a safety limiter, on by default at -3 dBFS, that hard-clips rather than letting four summed generators overshoot. Below the ceiling it does nothing at all - it is a safety clamp, not a compressor - and the LIM key glows bright while it is actually clamping."
+          "text": "Each generator has a level, typed in dB, fade in/out times in milliseconds, and an **Output** switch: left channel, right channel, or both (dual mono - no centre dip). The keys beside the level recall -18, -12 and -6 dBFS in one tap; hold one (right-click on a Mac) to store the current level on it instead. The master section has its own fader, always-visible meters, and a safety limiter, on by default at -3 dBFS, that hard-clips rather than letting four summed generators overshoot. Below the ceiling it does nothing at all - it is a safety clamp, not a compressor - and the LIM key glows bright while it is actually clamping."
         },
         {
           "type": "paragraph",
@@ -240,7 +240,7 @@
         },
         {
           "type": "paragraph",
-          "text": "While connected, every control on the iPhone or iPad drives the Mac: the generators, the transport, Hold, the 1/3-octave keys, the recall keys and the master section. The iPhone also shows the Mac's whole rack, so you can pick, mute or solo any generator. The Mac follows the generator you pick, and the iPhone or iPad opens on the one the Mac is showing. Export stays on the Mac, and so do Player tracks: the iPhone or iPad shows the Mac's list and picks from it, and tracks are added and removed on the Mac. Tap **Remote**, then **Leave**, and the iPhone or iPad gets its own setup back."
+          "text": "While connected, every control on the iPhone or iPad drives the Mac: the generators, the transport, Hold, the 1/3-octave keys, the recall keys and the master section. An amber border runs round the screen on both devices while one is in control, and the transport label names the other device. The iPhone also shows the Mac's whole rack, so you can pick, mute or solo any generator. The Mac follows the generator you pick, and the iPhone or iPad opens on the one the Mac is showing. Export stays on the Mac, and so do Player tracks: the iPhone or iPad shows the Mac's list and picks from it, and tracks are added and removed on the Mac. Tap **Remote**, then **Leave**, and the iPhone or iPad gets its own setup back."
         },
         {
           "type": "paragraph",
