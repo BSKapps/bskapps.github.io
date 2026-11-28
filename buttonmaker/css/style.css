@@ -504,6 +504,14 @@ body {
 
 
 .download-card, .promo-card { width: min(860px, 100%); margin-bottom: 0; }
+.cyber-strip { width: min(860px, 100%); background: #367C53; border-radius: var(--radius); padding: 18px 20px; text-align: center; color: #fff; box-sizing: border-box; }
+.cyber-strip[hidden] { display: none; }
+.cyber-head { font-size: 1.5rem; font-weight: 800; line-height: 1.2; }
+.cyber-clock { font-size: 1.7rem; font-weight: 800; font-variant-numeric: tabular-nums; margin-top: 4px; }
+.cyber-line { font-size: 0.95rem; margin-top: 6px; color: #fff; line-height: 1.6; }
+.cyber-line a { color: #fff; font-weight: 700; }
+.cyber-code { font-family: ui-monospace, Menlo, monospace; font-weight: 700; background: rgba(0,0,0,0.25); border: 1px dashed rgba(255,255,255,0.6); border-radius: 6px; padding: 0 8px; letter-spacing: 0.08em; user-select: all; }
+.cyber-ends { font-variant-numeric: tabular-nums; }
 
 
 .download-row { flex-wrap: wrap; }
@@ -950,6 +958,8 @@ body {
   .edit-status { order: 2; width: calc(100% - 24px); margin: 0 12px 12px; }
   .download-card { order: 4; width: calc(100% - 24px); margin: 0 12px 12px; }
   .promo-card { order: 5; width: calc(100% - 24px); margin: 0 12px 12px; }
+  .cyber-strip { order: 5; width: calc(100% - 24px); margin: 0 12px 12px; }
+  .cyber-head { font-size: 1.25rem; }
   .tools-card { order: 7; }
   .dead-preset-input { flex: 1 1 100%; }
   .library-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
